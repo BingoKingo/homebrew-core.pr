@@ -6,18 +6,19 @@ class Yewtube < Formula
   url "https://github.com/mps-youtube/yewtube/archive/refs/tags/v2.10.5.tar.gz"
   sha256 "8100466a5e89c84249d882e2e9ea9ff282a2d4f7f68135157cb942e6eb927b29"
   license "GPL-3.0-or-later"
-  revision 4
+  revision 7
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "8c9b263a9b9e201a7d7ffee92ff67a158c5c5ff5b1de455ad43b35e48d1e7c11"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "63e3dd4b5a3530a20eeac21c6295b4f69e535c9c2b5ad058ea7af8cd70edf8d9"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "68b39cd2abcca1c8d3fdb870a67fdaeb3aa13c3722f74daa221d852705d54c00"
-    sha256 cellar: :any_skip_relocation, sonoma:         "db34ea6eeee8286a7e0d553d201bdf4544c68aebb3801f26f2ba46d592f160fa"
-    sha256 cellar: :any_skip_relocation, ventura:        "2d4076a9227f0b58a28dfaeacdc2dba1b7da975029e8de7512d324a02279260f"
-    sha256 cellar: :any_skip_relocation, monterey:       "8d165e58aa1d74d4a1c5919d54aa8d3fd3528be899d6616f60ade904555aca95"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "d051fc74ab6329469df8331ee0ee205b33650591c12c50524b73699c3a197989"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "872c1323225c91a13fb51f6658506650c17a3c4f6a5dcc0f205b400a8f47a983"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "c91a2258c805bf4c33d8eee39519a0c74017e7233c4f5bc0872107336cb5cf41"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "e9046036c2e629ff96ff49ae91901339c1317f68657325d311ac83bae254fbd3"
+    sha256 cellar: :any_skip_relocation, sonoma:         "74fccd98cd52d9ca658ffa67163cde09c90f7f716015f75ef31b8adc5085870f"
+    sha256 cellar: :any_skip_relocation, ventura:        "e32970c118f8270b8251ea37136826e4a920f7c4f9b95cf84cfc16cfde18f923"
+    sha256 cellar: :any_skip_relocation, monterey:       "b55b413c9a5a0ff3e211b202e2062e4696e6664bc6c430716bae8c1c97b4e4b1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "720dc571b204ba3939140db726ca146e5ba4918c1af4c79989caea87be40458e"
   end
 
+  depends_on "ffmpeg"
   depends_on "mplayer"
   depends_on "python@3.12"
 
@@ -32,8 +33,8 @@ class Yewtube < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/07/b3/e02f4f397c81077ffc52a538e0aec464016f1860c472ed33bd2a1d220cc5/certifi-2024.6.2.tar.gz"
-    sha256 "3cd43f1c6fa7dedc5899d69d3ad0398fd018ad1a17fba83ddaf78aa46c747516"
+    url "https://files.pythonhosted.org/packages/c2/02/a95f2b11e207f68bc64d7aae9666fed2e2b3f307748d5123dffb72a1bbea/certifi-2024.7.4.tar.gz"
+    sha256 "5a1e7645bc0ec61a09e26c36f6106dd4cf40c6db3a1fb6352b0244e7fb057c7b"
   end
 
   resource "charset-normalizer" do
@@ -77,8 +78,8 @@ class Yewtube < Formula
   end
 
   resource "pyperclip" do
-    url "https://files.pythonhosted.org/packages/a7/2c/4c64579f847bd5d539803c8b909e54ba087a79d01bb3aba433a95879a6c5/pyperclip-1.8.2.tar.gz"
-    sha256 "105254a8b04934f0bc84e9c24eb360a591aaf6535c9def5f29d92af107a9bf57"
+    url "https://files.pythonhosted.org/packages/30/23/2f0a3efc4d6a32f3b63cdff36cd398d9701d26cda58e3ab97ac79fb5e60d/pyperclip-1.9.0.tar.gz"
+    sha256 "b7de0142ddc81bfc5c7507eea19da920b92252b548b96186caf94a5e2527d310"
   end
 
   resource "requests" do
@@ -107,8 +108,8 @@ class Yewtube < Formula
   end
 
   resource "yt-dlp" do
-    url "https://files.pythonhosted.org/packages/08/9c/6dc54bc591d50eb9378a0e0442e5b69f28eff1ead4f234b7837b6d582761/yt_dlp-2024.5.27.tar.gz"
-    sha256 "3566c0de240d0cd3d1c2285ce655f72ca38dfc618d634d46818b00d89d5288be"
+    url "https://files.pythonhosted.org/packages/2d/2a/9eeaaf4f3c9253c332d065ae9adf925742f46bf033864754d01a2aae66ec/yt_dlp-2024.7.9.tar.gz"
+    sha256 "e19f00f9e55e90bca1c94bcaf809aa33e51634be9f0de2df84a72d3206934f94"
   end
 
   # Fix SyntaxWarning's on python 3.12

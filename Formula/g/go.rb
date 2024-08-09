@@ -1,9 +1,9 @@
 class Go < Formula
   desc "Open source programming language to build simple/reliable/efficient software"
   homepage "https://go.dev/"
-  url "https://go.dev/dl/go1.22.4.src.tar.gz"
-  mirror "https://fossies.org/linux/misc/go1.22.4.src.tar.gz"
-  sha256 "fed720678e728a7ca30ba8d1ded1caafe27d16028fab0232b8ba8e22008fb784"
+  url "https://go.dev/dl/go1.22.6.src.tar.gz"
+  mirror "https://fossies.org/linux/misc/go1.22.6.src.tar.gz"
+  sha256 "9e48d99d519882579917d8189c17e98c373ce25abaebb98772e2927088992a51"
   license "BSD-3-Clause"
   head "https://go.googlesource.com/go.git", branch: "master"
 
@@ -21,13 +21,13 @@ class Go < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:   "dfabcce1e527cbc83efb0a900a29cf19258543f826267ab599d981a7bac11511"
-    sha256 arm64_ventura:  "0704c08c881216518ef63c601059f2673d674d9301ec7b179564adf888c6003e"
-    sha256 arm64_monterey: "713c8907b0227f00b07edafa549b09cb390c2a9e7a5a9a9b19d301b282c592fa"
-    sha256 sonoma:         "8ca278668026d49a7ec435c203b351c40f3a96b75c1cbe04ad1074b3ccc61a99"
-    sha256 ventura:        "3379c6f57a1abb976f1cb56e71b0bd10fcfd400e4aba92eddc063c4bb581285f"
-    sha256 monterey:       "c04013344e23c6c787d091f5dd40543d738fed86a3d976baeec2e833c6176eec"
-    sha256 x86_64_linux:   "5bf7cba28544183f58efea708718a7030da7fbef09566a15d0975a04a844aa9f"
+    sha256 arm64_sonoma:   "17ef3a73bb9bb81ffe1740b39a1c67aaddfd4a3bd5331e8320ed2d271050bccb"
+    sha256 arm64_ventura:  "e0c90cc0d99346b2fd15bbd2afcda14482c0e8dcca705a8d791e68ed95205e48"
+    sha256 arm64_monterey: "ec24fed844297c26be4a92747679b2b4812a3be5a3994c9c093752b341a12fbd"
+    sha256 sonoma:         "495e61c0368249b6900326eb034c2f68fdca3f0080deae4d6f1910ae444a7e20"
+    sha256 ventura:        "18832c8bc6d0ec271f953cee2f82c9aab2e6b7c0d9372f1a2aabeb87acf4f3d6"
+    sha256 monterey:       "7fee28073754ab9139810898778d0192cd203e9c70376c3a9fe65bdc6ee2374a"
+    sha256 x86_64_linux:   "00dd1e58e304048f0978a73b14ce69f4070e52271a121662c8dc244ad4d1f0f1"
   end
 
   # Don't update this unless this version cannot bootstrap the new version.
@@ -73,7 +73,7 @@ class Go < Formula
       with_env(CC: "cc", CXX: "c++") { system "./make.bash" }
     end
 
-    rm_rf "gobootstrap" # Bootstrap not required beyond compile.
+    rm_r("gobootstrap") # Bootstrap not required beyond compile.
     libexec.install Dir["*"]
     bin.install_symlink Dir[libexec/"bin/go*"]
 
@@ -81,9 +81,9 @@ class Go < Formula
 
     # Remove useless files.
     # Breaks patchelf because folder contains weird debug/test files
-    (libexec/"src/debug/elf/testdata").rmtree
+    rm_r(libexec/"src/debug/elf/testdata")
     # Binaries built for an incompatible architecture
-    (libexec/"src/runtime/pprof/testdata").rmtree
+    rm_r(libexec/"src/runtime/pprof/testdata")
   end
 
   test do

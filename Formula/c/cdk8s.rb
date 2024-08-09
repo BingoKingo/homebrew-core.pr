@@ -1,26 +1,24 @@
-require "language/node"
-
 class Cdk8s < Formula
   desc "Define k8s native apps and abstractions using object-oriented programming"
   homepage "https://cdk8s.io/"
-  url "https://registry.npmjs.org/cdk8s-cli/-/cdk8s-cli-2.198.161.tgz"
-  sha256 "3090833c8d31ffd96df794c2d910ced073a795fcf59fd28736fc91a31aa217be"
+  url "https://registry.npmjs.org/cdk8s-cli/-/cdk8s-cli-2.198.184.tgz"
+  sha256 "8f915405e8f0549a44119abcda5aef9a5542230b05bbccc7332b5773f784e705"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "199b56a8e0d2de4489c3bbb01e6330044890b5985959f700ba0482b20185337e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "199b56a8e0d2de4489c3bbb01e6330044890b5985959f700ba0482b20185337e"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "199b56a8e0d2de4489c3bbb01e6330044890b5985959f700ba0482b20185337e"
-    sha256 cellar: :any_skip_relocation, sonoma:         "9103ce968ce0bc419945c337280e59530a6d9f4f044bd858f2171498f2907d31"
-    sha256 cellar: :any_skip_relocation, ventura:        "9103ce968ce0bc419945c337280e59530a6d9f4f044bd858f2171498f2907d31"
-    sha256 cellar: :any_skip_relocation, monterey:       "9103ce968ce0bc419945c337280e59530a6d9f4f044bd858f2171498f2907d31"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "b01b3aaa11099be913f519c4afda06767dda3879e2bb6fad8bed477e19993e0a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "52374759a914b9d26bf91aebb974cdc94dba7d97a6048ee7051e4e6c550f6fbe"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "52374759a914b9d26bf91aebb974cdc94dba7d97a6048ee7051e4e6c550f6fbe"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "52374759a914b9d26bf91aebb974cdc94dba7d97a6048ee7051e4e6c550f6fbe"
+    sha256 cellar: :any_skip_relocation, sonoma:         "44e8ab41e644aa328593a164f8b4bfee7e1dda020c9aed741ed024d77125cbfc"
+    sha256 cellar: :any_skip_relocation, ventura:        "44e8ab41e644aa328593a164f8b4bfee7e1dda020c9aed741ed024d77125cbfc"
+    sha256 cellar: :any_skip_relocation, monterey:       "44e8ab41e644aa328593a164f8b4bfee7e1dda020c9aed741ed024d77125cbfc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "52374759a914b9d26bf91aebb974cdc94dba7d97a6048ee7051e4e6c550f6fbe"
   end
 
   depends_on "node"
 
   def install
-    system "npm", "install", *Language::Node.std_npm_install_args(libexec)
+    system "npm", "install", *std_npm_args
     bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 

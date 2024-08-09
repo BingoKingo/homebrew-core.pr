@@ -1,8 +1,8 @@
 class Rabbitmq < Formula
   desc "Messaging and streaming broker"
   homepage "https://www.rabbitmq.com"
-  url "https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.13.3/rabbitmq-server-generic-unix-3.13.3.tar.xz"
-  sha256 "ebd7ef9625c5beb1d16d774467489b96b6b637c2fdf1026b5e90a6d56159b4c5"
+  url "https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.13.6/rabbitmq-server-generic-unix-3.13.6.tar.xz"
+  sha256 "7bfc742e3d227e8a2b1ea2a0b5ef3ba4b6a7987d5e220e0fbf0919d29b6ed43c"
   license "MPL-2.0"
 
   livecheck do
@@ -11,13 +11,13 @@ class Rabbitmq < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "e73960e54a1a0c48c8e3ad99ccc8679f530b13f213624b05c84490e8bff52c57"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "e73960e54a1a0c48c8e3ad99ccc8679f530b13f213624b05c84490e8bff52c57"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "e73960e54a1a0c48c8e3ad99ccc8679f530b13f213624b05c84490e8bff52c57"
-    sha256 cellar: :any_skip_relocation, sonoma:         "e73960e54a1a0c48c8e3ad99ccc8679f530b13f213624b05c84490e8bff52c57"
-    sha256 cellar: :any_skip_relocation, ventura:        "e73960e54a1a0c48c8e3ad99ccc8679f530b13f213624b05c84490e8bff52c57"
-    sha256 cellar: :any_skip_relocation, monterey:       "e73960e54a1a0c48c8e3ad99ccc8679f530b13f213624b05c84490e8bff52c57"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "60a6750de359f4cc5d7ad097ba9af40395a56e4d3c7e3fd78ff9339c1177f940"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "4e1cee3de3dd021bb4649fa612c9b26481b8ec2e61fdd4aa610f282b70e4265f"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "4e1cee3de3dd021bb4649fa612c9b26481b8ec2e61fdd4aa610f282b70e4265f"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "4e1cee3de3dd021bb4649fa612c9b26481b8ec2e61fdd4aa610f282b70e4265f"
+    sha256 cellar: :any_skip_relocation, sonoma:         "4e1cee3de3dd021bb4649fa612c9b26481b8ec2e61fdd4aa610f282b70e4265f"
+    sha256 cellar: :any_skip_relocation, ventura:        "4e1cee3de3dd021bb4649fa612c9b26481b8ec2e61fdd4aa610f282b70e4265f"
+    sha256 cellar: :any_skip_relocation, monterey:       "4e1cee3de3dd021bb4649fa612c9b26481b8ec2e61fdd4aa610f282b70e4265f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "b81d73462277de13f6303f0dbd10f3e9748d8fdd6c5ad25b9645f75ebcd0b713"
   end
 
   depends_on "erlang"

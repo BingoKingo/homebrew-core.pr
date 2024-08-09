@@ -4,17 +4,17 @@ class Garble < Formula
   url "https://github.com/burrowers/garble/archive/refs/tags/v0.12.1.tar.gz"
   sha256 "98ade316176d434f298bdb36e4c421e3c4c33668cfd2922d358f7f0403566500"
   license "BSD-3-Clause"
-  revision 4
+  revision 6
   head "https://github.com/burrowers/garble.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "9e394ccd2be6c3b1d1f731d1ff1be0b7046b45feb1859c9e4a96379716ac2b11"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "45330a4ba4325addf692c275ea557949aadf61b29998ab9eaed244105dc7450f"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "90d4954ae32ca4f8f1a571124350b1f592b608d68bf34a541964670e44b59735"
-    sha256 cellar: :any_skip_relocation, sonoma:         "9e6ed3cd23ae631eee39ad5144b178e160af60d9768c68de42c368012e15104c"
-    sha256 cellar: :any_skip_relocation, ventura:        "4b32121194626e8786716e0aa112f71666c48f7358f51d42a996e7cb1ef0b65f"
-    sha256 cellar: :any_skip_relocation, monterey:       "b222a8a90195fc325b517d67c4b2aba962b7cd6eb4528b4e666251dba817dc6a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "be4a5c8a7e3c37ad11850c849c6d662ad519b805548212697bb409c3b5ee97ed"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "ad9d97457e74c332d0b396104fd06bdfb45a575b948cebebd2d1b906f8781577"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "a0710bb8adb3e41b132db1a95d2e6ff48ed9ca366b8e3eb256bcf55f33e28936"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "d7bf92f187d254443ed06f383f677870d2d10d699bd7e06d24735f8ff75e8c57"
+    sha256 cellar: :any_skip_relocation, sonoma:         "98073a96ccd345437b5cab868fda304e1e6dcaa3457ef75165b89e07687de003"
+    sha256 cellar: :any_skip_relocation, ventura:        "c57dcbed5a389285bbcd71891d86844ecf94deed27c334d18e688302e07276ba"
+    sha256 cellar: :any_skip_relocation, monterey:       "e3af2f15ee584c8272750c699fa4423a37fc328bd46027651645ce788ea645ad"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "99293abbb6731948f9fd9d8166e03dc26f964b343b34ba5701b2a4ff01818ce0"
   end
 
   depends_on "go" => [:build, :test]

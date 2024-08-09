@@ -1,19 +1,34 @@
 class Opam < Formula
   desc "OCaml package manager"
   homepage "https://opam.ocaml.org"
-  url "https://github.com/ocaml/opam/releases/download/2.1.6/opam-full-2.1.6.tar.gz"
-  sha256 "d2af5edc85f552e0cf5ec0ddcc949d94f2dc550dc5df595174a06a4eaf8af628"
+  url "https://github.com/ocaml/opam/releases/download/2.2.0/opam-full-2.2.0-2.tar.gz"
+  sha256 "459ed64e6643f05c677563a000e3baa05c76ce528064e9cb9ce6db49fff37c97"
   license "LGPL-2.1-only"
   head "https://github.com/ocaml/opam.git", branch: "master"
 
+  # Upstream sometimes publishes tarballs with a version suffix (e.g. 2.2.0-2)
+  # to an existing tag (e.g. 2.2.0), so we match versions from release assets.
+  livecheck do
+    url :stable
+    regex(/^opam-full[._-]v?(\d+(?:[.-]\d+)+)\.t/i)
+    strategy :github_latest do |json, regex|
+      json["assets"]&.map do |asset|
+        match = asset["name"]&.match(regex)
+        next if match.blank?
+
+        match[1]
+      end
+    end
+  end
+
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "bd28b8b714495d2e9fd0352f88a85cb9d76934d4be096ca6cac4a9659166ad8e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "9852a6d29fc54a99e1b04f1b77560c74474f216f31679fbad8b152d29ce257fb"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "0d70be910bfb8bc6c89e8ee21b5b8c235498cb26947d8b0d30144ee15a18ffac"
-    sha256 cellar: :any_skip_relocation, sonoma:         "b3b3b3c4214bdf6696658afc26b63354b689a7cd3bdf94126e7b3fb5e72a7677"
-    sha256 cellar: :any_skip_relocation, ventura:        "df569da764f1b28815e82f3d66855834c0888f5b2b839bfd90b7ab426f360a73"
-    sha256 cellar: :any_skip_relocation, monterey:       "5861b830e1d5f756ba740b1bc2960e1427f6e276971bbddfc57038924bdf9fe4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "6ef8a0be549a090556a17909a86746cc815021e4593b7fedaa87c938ca98e8ff"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "4861e7c04a42f1ce597dee95261d0f1ef263dd57409d604c072f37b1130e572a"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "b062e1def8db669fb0d05e3bfe9010fa04ebeb2895c6f2654a455f23d3102a62"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "cea5f84d3ed7fd99664c98666abecf5e27bd9104ae74a96c2f5093da3e5ff517"
+    sha256 cellar: :any_skip_relocation, sonoma:         "8132314391b563a60942b95154d9a29f7a477d9ae450c60a024e5bf1c4b84dad"
+    sha256 cellar: :any_skip_relocation, ventura:        "42b105611a773cf59afa1045c98aade3901bdec7f5cde16817f254bc964c36bd"
+    sha256 cellar: :any_skip_relocation, monterey:       "b4477723da457a57ac9e86f35c7bda82b53a56c34cc12250d6b0d70e89d45375"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8f67dea0d72da8b4b64e6c43407f297d617c981e01d09e7fa0ef40a0932edbb4"
   end
 
   depends_on "ocaml" => [:build, :test]
@@ -24,8 +39,7 @@ class Opam < Formula
   def install
     ENV.deparallelize
 
-    system "./configure", "--prefix=#{prefix}", "--mandir=#{man}"
-    system "make", "lib-ext"
+    system "./configure", "--prefix=#{prefix}", "--mandir=#{man}", "--with-vendored-deps", "--with-mccs"
     system "make"
     system "make", "install"
 

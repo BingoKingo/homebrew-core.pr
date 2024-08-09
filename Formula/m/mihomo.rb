@@ -1,18 +1,18 @@
 class Mihomo < Formula
   desc "Another rule-based tunnel in Go, formerly known as ClashMeta"
   homepage "https://wiki.metacubex.one"
-  url "https://github.com/MetaCubeX/mihomo/archive/refs/tags/v1.18.5.tar.gz"
-  sha256 "205f6695ad19e232227c7e31da157860da9b2c4678900af9ebaf7e46c00c68c0"
+  url "https://github.com/MetaCubeX/mihomo/archive/refs/tags/v1.18.7.tar.gz"
+  sha256 "e4ff0d1a8762ff3e259e4999d9808b353c7a58a1dcabe87dccc9c91bdb6814c7"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "69f88643f5dced274ace1aa371bc561d23371a1ddacde58e51fe84e58bfd2b70"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "c9467963ea2d56ac31c7132e16cd922ea018f646f7c5f87b69bb11b1bbfc455f"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "012b33abb9df12bb742c92e7e943e4ddec49ca39a75216744ece182adf79d473"
-    sha256 cellar: :any_skip_relocation, sonoma:         "874640ce9e57cf4bb171d582983a4f06b0a9b973620f21efbd773a00d4922c22"
-    sha256 cellar: :any_skip_relocation, ventura:        "5741fe58ae447106a9928f0007a1ca7de907ade95a9ade22df56523cf3ac9aa2"
-    sha256 cellar: :any_skip_relocation, monterey:       "9b45de5ab452beda122f13470efc6fdddc1253e9370674d55d3155862b2f7ff9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "a2c058f622eeb6ac2608d5cf7eaf9d8fdc52992becb4f2b5cc1b4854cd93498e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "e2df6df3ebfd439150b8f84af11a0784762c00c84273b34b54cefd46fad23485"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "59b174cd3cf6049bbfca92054a9b4604383d7c3cb9f0bd076ba01c45841f3a2c"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "b02dbd14ec8c070e0eefb8d53782ba9e462cae465b656d6def6d334407fd18e5"
+    sha256 cellar: :any_skip_relocation, sonoma:         "1a1bdce0ffabb98827e4cc8872cffd8ae139469370fb433ed781ef1e0d5b863e"
+    sha256 cellar: :any_skip_relocation, ventura:        "e0e9cca3639e784294f6926c0d5e2e23b0eb38fae3436808f4e2df444d4263d2"
+    sha256 cellar: :any_skip_relocation, monterey:       "d3ffeff2a73f3623922803df0c4b597af597e7ed7c108376cc2cd4d25ffb24dc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "3996e627b44b39cae3c0d587e0eb1b3c2027f9fef3f4bf75e29fd8ea33ef684f"
   end
 
   depends_on "go" => :build

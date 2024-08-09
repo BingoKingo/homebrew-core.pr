@@ -1,9 +1,10 @@
 class Inspircd < Formula
   desc "Modular C++ Internet Relay Chat daemon"
   homepage "https://www.inspircd.org/"
-  url "https://github.com/inspircd/inspircd/archive/refs/tags/v4.0.0.tar.gz"
-  sha256 "528199a6c857973611d496e5a4b4d125770525c9f52cbc5f7387ecdfdfcf885c"
+  url "https://github.com/inspircd/inspircd/archive/refs/tags/v4.2.0.tar.gz"
+  sha256 "4b07359c5528489cd312a6e1bd27a6e5161f839c62699f4d3113cb3cb50250bb"
   license "GPL-2.0-only"
+  revision 1
 
   livecheck do
     url :stable
@@ -11,13 +12,13 @@ class Inspircd < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:   "8500f137f88d0c21b1eb7f1c7dee9a71a16c48927311bddd87a78d6f93f6df15"
-    sha256 arm64_ventura:  "d06359e934b94b5424a0bc4bb722faeb3c9a789f96d8e87897cb02eaa3c4c9c8"
-    sha256 arm64_monterey: "94466e60a078280a6994a5ad85c7679330c355a5c336e127f24273e585911fbd"
-    sha256 sonoma:         "12e1becf9cfa3d070b5e5ceb2e7842f7105da1e4592567fb76e6f1f3e5939b35"
-    sha256 ventura:        "070621ac12cc795128c09fcae93293edb40863913d2b69e122795c54c9dda11c"
-    sha256 monterey:       "3f482ee2e69e7e6ad55542748992fe8c501ea1b22ac35dbd4f8c8011efa1dbe4"
-    sha256 x86_64_linux:   "7ce193973d1c834d5e4e1d0dbca842d58a7d0f2c80be7d0069c7fa22d1341627"
+    sha256 arm64_sonoma:   "c5c8f38c981536f79d27db389742ae2e9b2148899779ee5415bcd77db75f393f"
+    sha256 arm64_ventura:  "d13bf8a49b469297c9e106984c1d17a87b452144f4b84af1385f19c9032aff18"
+    sha256 arm64_monterey: "13cd90bd8c8e1e0788df123afca665ccf8a63ff89a3b6993cbe5753999b385ca"
+    sha256 sonoma:         "e43e20260b535df236d185d9185d45fb98bfd3e2e7517278de3d95fc7ed66313"
+    sha256 ventura:        "00efba30a1da75f9782132f8c93db0ce1ccfce1f2c5ea50c06aede04ed739a98"
+    sha256 monterey:       "4aef9bc42dbcaed6e8ca1ecb7bc8da05ce0556c5fbc4f9e04df48659f8d40b10"
+    sha256 x86_64_linux:   "f8a6aba2f020a8e1f6d65fb5e40b365b1e15a3d8ea5524b38385cb78d959d0d5"
   end
 
   depends_on "pkg-config" => :build
@@ -48,6 +49,6 @@ class Inspircd < Formula
   end
 
   test do
-    assert_match("ERROR: Cannot open config file", shell_output("#{bin}/inspircd", 1))
+    assert_match("ERROR: Cannot open config file", shell_output(bin/"inspircd", 1))
   end
 end

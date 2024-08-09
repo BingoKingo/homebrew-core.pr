@@ -1,26 +1,25 @@
-require "language/node"
-
 class Gitmoji < Formula
   desc "Interactive command-line tool for using emoji in commit messages"
   homepage "https://gitmoji.dev"
-  url "https://registry.npmjs.org/gitmoji-cli/-/gitmoji-cli-9.3.0.tgz"
-  sha256 "f749a32d626c624fad489e2d2eaebf6982867a9b1fcf175dd83183edc807b980"
+  url "https://registry.npmjs.org/gitmoji-cli/-/gitmoji-cli-9.4.0.tgz"
+  sha256 "edc4ac35493f321e441ab63aa2cd04f5bd315edeaf0fad952b0344f176bbde95"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "904de78ea2212c2e52479539c863f2872227ab8350a3575e175b227dcd978b71"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "904de78ea2212c2e52479539c863f2872227ab8350a3575e175b227dcd978b71"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "904de78ea2212c2e52479539c863f2872227ab8350a3575e175b227dcd978b71"
-    sha256 cellar: :any_skip_relocation, sonoma:         "d0aee56664d64b363611c9b1ba614a66607f5672a0f1435fb9ef70e78e57a2fb"
-    sha256 cellar: :any_skip_relocation, ventura:        "d0aee56664d64b363611c9b1ba614a66607f5672a0f1435fb9ef70e78e57a2fb"
-    sha256 cellar: :any_skip_relocation, monterey:       "d0aee56664d64b363611c9b1ba614a66607f5672a0f1435fb9ef70e78e57a2fb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "d63bc1f0194b28b4f77342da70435ea314cc89f981a79ee8666d27e0231b0f99"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "20259fe5b567622f215aab554610a0b9dca79b031eba8886621539ec514b845d"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "20259fe5b567622f215aab554610a0b9dca79b031eba8886621539ec514b845d"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "20259fe5b567622f215aab554610a0b9dca79b031eba8886621539ec514b845d"
+    sha256 cellar: :any_skip_relocation, sonoma:         "89a2544cf484c302bd704ed411e0dcae4d789c271a230103c9e9a279a50a41b5"
+    sha256 cellar: :any_skip_relocation, ventura:        "89a2544cf484c302bd704ed411e0dcae4d789c271a230103c9e9a279a50a41b5"
+    sha256 cellar: :any_skip_relocation, monterey:       "89a2544cf484c302bd704ed411e0dcae4d789c271a230103c9e9a279a50a41b5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "1af90b1631b3dbc51a16d76ae3b38c13ebf8c7bd7b6ce7524509cc6f2589bbbb"
   end
 
   depends_on "node"
 
   def install
-    system "npm", "install", *Language::Node.std_npm_install_args(libexec)
+    system "npm", "install", *std_npm_args
     bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 

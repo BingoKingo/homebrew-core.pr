@@ -1,19 +1,19 @@
 class Httpd < Formula
   desc "Apache HTTP server"
   homepage "https://httpd.apache.org/"
-  url "https://dlcdn.apache.org/httpd/httpd-2.4.59.tar.bz2"
-  mirror "https://downloads.apache.org/httpd/httpd-2.4.59.tar.bz2"
-  sha256 "ec51501ec480284ff52f637258135d333230a7d229c3afa6f6c2f9040e321323"
+  url "https://dlcdn.apache.org/httpd/httpd-2.4.62.tar.bz2"
+  mirror "https://downloads.apache.org/httpd/httpd-2.4.62.tar.bz2"
+  sha256 "674188e7bf44ced82da8db522da946849e22080d73d16c93f7f4df89e25729ec"
   license "Apache-2.0"
 
   bottle do
-    sha256 arm64_sonoma:   "e8e72b4403ec512b5bc7c0f717750a273889f96c5456e21ea9ed03f74417eec7"
-    sha256 arm64_ventura:  "657b43add12664424e3f88bfe7ad6e73e8807dae18c02660c082b52fdbb34627"
-    sha256 arm64_monterey: "950499fb2aa635e9675d078e5de3bfcd89e3fc18c9e1ba406f2b119bdd5623e2"
-    sha256 sonoma:         "d32832d750e4f2661e404ecbabc9a1627bdf0df4e8eaef81b69121b82c1652ea"
-    sha256 ventura:        "fbfd8a64065689eee68d8f9bd91c3e8e5fd1eefc37635136e315d0de6703b4d2"
-    sha256 monterey:       "b412e5f023f374ea40fea43650c41dab51cbcf8ccb45b026817e76e77afb163d"
-    sha256 x86_64_linux:   "e93778dca46fee41292c4be4cbac14a0497218d0588a1ee4d06028e7ba4222b7"
+    sha256 arm64_sonoma:   "e07d024239ee944db52ecebb1997c75e15144b343b347788b36dce01803bd7c0"
+    sha256 arm64_ventura:  "d497edfd46070f9f4552a5535901700cd20f885b48f2a45aa8550ad50b1f7ecc"
+    sha256 arm64_monterey: "f830c872c460dfe78c2a95ac3c21a2e0f432fa7f3e4dadacc0d1026e17d11c8a"
+    sha256 sonoma:         "f487133a012b379bfebc45bc90167a27c47e2a2985623b76f336ccb987638e87"
+    sha256 ventura:        "c3069f33e1bb675a6decd0228263f43a909d0351db6059d70bad2778bc83d36b"
+    sha256 monterey:       "ae984f66ee0b60b8955b6e9720ee7733226248f0bb052d195d9f67dc05b61641"
+    sha256 x86_64_linux:   "5a26f97286ecca3915f6a93910f0c624859205eb27f32756867b03708d98212b"
   end
 
   depends_on "apr"
@@ -23,6 +23,7 @@ class Httpd < Formula
   depends_on "openssl@3"
   depends_on "pcre2"
 
+  uses_from_macos "libxcrypt"
   uses_from_macos "libxml2"
   uses_from_macos "zlib"
 

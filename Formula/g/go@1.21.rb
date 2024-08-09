@@ -1,9 +1,9 @@
 class GoAT121 < Formula
   desc "Open source programming language to build simple/reliable/efficient software"
   homepage "https://go.dev/"
-  url "https://go.dev/dl/go1.21.11.src.tar.gz"
-  mirror "https://fossies.org/linux/misc/go1.21.11.src.tar.gz"
-  sha256 "42aee9bf2b6956c75a7ad6aa3f0a51b5821ffeac57f5a2e733a2d6eae1e6d9d2"
+  url "https://go.dev/dl/go1.21.13.src.tar.gz"
+  mirror "https://fossies.org/linux/misc/go1.21.13.src.tar.gz"
+  sha256 "71fb31606a1de48d129d591e8717a63e0c5565ffba09a24ea9f899a13214c34d"
   license "BSD-3-Clause"
 
   livecheck do
@@ -20,13 +20,13 @@ class GoAT121 < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "ee4d82ba61125bf04623911c489dc6a3f8c43b9ac7f97fb05b796522a6707c57"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "11d413d94b5e7f17164135fc15fab46e7184d8c3f8072f186eec2d90a1b82596"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "067bb2d157d50c3ede9ce28c08edd7e5b9cc542c2c1bf5b55e94b44803163ce3"
-    sha256 cellar: :any_skip_relocation, sonoma:         "774b20be72b7723a6792059577b4d8e40cfa73ee40d01308fe37db75e7a74f21"
-    sha256 cellar: :any_skip_relocation, ventura:        "72ffae8533d58fc43869b2aa69397c4ead8a96abd440130a8172b81471f2bb9f"
-    sha256 cellar: :any_skip_relocation, monterey:       "dc2d3f9a9905a4880bac149527057fce4a05ec226c08680a01032fde4b369c2c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "20a0fc8da4f3a8e5aa10c5bd14a06c3cee2e0b791c3d684aaa33df3afece80be"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "753f1a7914bc53660aa8625690faedfe243e1dc0026d0265985321598e188386"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "e70be09433f39ccefc348359ddc317acc74fca91bdfef36be59e07aef4d014f1"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "8c49b9a80d8d0e33df0de46859cf7cc89e27343d0ba7f38d09ffeab8dbb10549"
+    sha256 cellar: :any_skip_relocation, sonoma:         "76bfebd5a396fde119f4046af3d435eb28eac3974475f915e132922502e628b3"
+    sha256 cellar: :any_skip_relocation, ventura:        "1e259f4ba9faf08f6816a32a5404de6fa17f7de93e85de7a12dfdf2a22f1eab6"
+    sha256 cellar: :any_skip_relocation, monterey:       "10591630d63b94757b26c708787b81700ddfc5d5c44280e869a7c8c1cf21574a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "e18ce9e4b70b577f4b87a65b18d27858cfa9aa4886a71626013598050a4a1806"
   end
 
   keg_only :versioned_formula
@@ -49,9 +49,9 @@ class GoAT121 < Formula
 
     # Remove useless files.
     # Breaks patchelf because folder contains weird debug/test files
-    (libexec/"src/debug/elf/testdata").rmtree
+    rm_r(libexec/"src/debug/elf/testdata")
     # Binaries built for an incompatible architecture
-    (libexec/"src/runtime/pprof/testdata").rmtree
+    rm_r(libexec/"src/runtime/pprof/testdata")
   end
 
   test do

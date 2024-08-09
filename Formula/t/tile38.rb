@@ -2,19 +2,19 @@ class Tile38 < Formula
   desc "In-memory geolocation data store, spatial index, and realtime geofence"
   homepage "https://tile38.com/"
   url "https://github.com/tidwall/tile38.git",
-      tag:      "1.33.0",
-      revision: "32462231c00ce294689cbef5771abee7221692d7"
+      tag:      "1.33.2",
+      revision: "a953466318ce1d65a16259099a5b023650bfdf11"
   license "MIT"
   head "https://github.com/tidwall/tile38.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "97a3bd30cb4191f9073c6e92400cd2c9c33686f38df7dae9fdceba0fb41edfe8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "72b17d848eecba487aa36bec0152298983bd5525ef9e0fd0a32e1b6b8001bc5c"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "c1a8fabeb9c92bba22218a7a250047385d65fc8c96b27e95d890d59b220f9a4a"
-    sha256 cellar: :any_skip_relocation, sonoma:         "fb7f94ad7142be220e99dc14e459669407466e73c00343e9a6093579a071fc26"
-    sha256 cellar: :any_skip_relocation, ventura:        "68b6faae42eaf8398d777ee34c6a15621473fc1d385ca372e824398490df1fdd"
-    sha256 cellar: :any_skip_relocation, monterey:       "a27e1549a71d97a9e54da08bf68cd9d86739a5ef2ffa4ea364bb51de91219b0c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "89d9131b8b0920dc3fde3acc387e6505d6039d0a4aeb6283d0a58860cbbb0f47"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "66ff72e4032aa211be1173a923ac68f9daa367d1cefc9df4e745c02635603c6a"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "8f6a68f961b3f7030636d733e044b0833ec28bd4236bb4421ca0e4b81ed96183"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "fdd1f437cc9ecafe562d8f0d07cb519542c6f02ea760ad34b83bbd8a2540009c"
+    sha256 cellar: :any_skip_relocation, sonoma:         "ed920ec06fa86a0e159d29c2d13d5bfa54e9843b1b945d322a741aa06900f431"
+    sha256 cellar: :any_skip_relocation, ventura:        "7735304e07eccf955a7ccdd32c179cec282eb26be81301a833f193a844b0beca"
+    sha256 cellar: :any_skip_relocation, monterey:       "879b3c32fab2f0f954362ef46d6bb9ee0ed933bcd380825fefbc60556996f2b3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "0f3bc0698ba7e4b3a66cac5a6c7b6a640f6ab1a19923e6ebaab90bc80a9fb699"
   end
 
   depends_on "go" => :build
@@ -56,7 +56,7 @@ class Tile38 < Formula
   test do
     port = free_port
     pid = fork do
-      exec "#{bin}/tile38-server", "-q", "-p", port.to_s
+      exec bin/"tile38-server", "-q", "-p", port.to_s
     end
     sleep 2
     # remove `$408` in the first line output

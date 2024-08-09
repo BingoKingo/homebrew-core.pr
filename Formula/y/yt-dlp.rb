@@ -3,19 +3,18 @@ class YtDlp < Formula
 
   desc "Feature-rich command-line audio/video downloader"
   homepage "https://github.com/yt-dlp/yt-dlp"
-  url "https://files.pythonhosted.org/packages/08/9c/6dc54bc591d50eb9378a0e0442e5b69f28eff1ead4f234b7837b6d582761/yt_dlp-2024.5.27.tar.gz"
-  sha256 "3566c0de240d0cd3d1c2285ce655f72ca38dfc618d634d46818b00d89d5288be"
+  url "https://files.pythonhosted.org/packages/d8/28/83ec43b75afd9e9840680757000fc75e68d3d221621090b3ca7601ca8129/yt_dlp-2024.8.6.tar.gz"
+  sha256 "e8551f26bc8bf67b99c12373cc87ed2073436c3437e53290878d0f4b4bb1f663"
   license "Unlicense"
-  revision 1
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "e78db03af42fd544b1ab7daf23bf4ea0f7dafd07827d4559afa1eabb8af44569"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "546a1db4ba55a6162be620bda8f88ad3d71dc2a580ddd5469be9b8050592295a"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "cee6de6f7688d6b85a7cabcf1d772f0bd0625106f679f8f34b09ba5ca8c388ed"
-    sha256 cellar: :any_skip_relocation, sonoma:         "439db6950f770dc92aad28de627d5f6fbb312c7505e566f2c78309aa60183c15"
-    sha256 cellar: :any_skip_relocation, ventura:        "bf2d7098276459ada0db6f4df2ef7b2fb674434f0b5bb56e2dcb1a9ab88c44ee"
-    sha256 cellar: :any_skip_relocation, monterey:       "4f5941f96ee279c89b4cf8120deb4bf1696d2abc48a8a7fd84d647dba5b26cdb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "548390a6e7736eb59992842beb42e2fb164951f7bfd4607857ea4debbdef6c6e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "b797b9c734c968900c690934f542cd13b8e33dd2f8b9d97413511008495542c0"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "1a785f580e0075cff2b1c52cc3b468be99ef38114744d0684e83af000d3f9fcf"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "cd7cf194bec80d202936154aa558384660917741dd69cb374b157d30867a5f8c"
+    sha256 cellar: :any_skip_relocation, sonoma:         "f4cdbd90d33c45a57ab7f1613db0f8f06a652ba8d1b37796f85d6d4607cf9b14"
+    sha256 cellar: :any_skip_relocation, ventura:        "017176aa114602671f31ae0c3b549f63fd7c5ee0e6e01574a85b468f039820b7"
+    sha256 cellar: :any_skip_relocation, monterey:       "fc342e130a8e9eb8bc64da6db261821c3edba7d2e7f9aecfaeead86caa8c7569"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "856e6287992355951c8b5981c142928465b9414d5bf68f64789d8db9a32bfb13"
   end
 
   head do
@@ -81,7 +80,7 @@ class YtDlp < Formula
   end
 
   test do
-    system "#{bin}/yt-dlp", "--simulate", "https://www.youtube.com/watch?v=pOtd1cbOP7k"
-    system "#{bin}/yt-dlp", "--simulate", "--yes-playlist", "https://www.youtube.com/watch?v=pOtd1cbOP7k&list=PLMsZ739TZDoLj9u_nob8jBKSC-mZb0Nhj"
+    system bin/"yt-dlp", "--simulate", "https://www.youtube.com/watch?v=pOtd1cbOP7k"
+    system bin/"yt-dlp", "--simulate", "--yes-playlist", "https://www.youtube.com/watch?v=pOtd1cbOP7k&list=PLMsZ739TZDoLj9u_nob8jBKSC-mZb0Nhj"
   end
 end

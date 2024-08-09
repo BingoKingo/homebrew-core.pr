@@ -1,19 +1,19 @@
 class Enzyme < Formula
   desc "High-performance automatic differentiation of LLVM"
   homepage "https://enzyme.mit.edu"
-  url "https://github.com/EnzymeAD/Enzyme/archive/refs/tags/v0.0.129.tar.gz"
-  sha256 "4aaa693e4c808ac98a6a9731e91d452e9c85ccef301ff020e6d4a13d10486e53"
+  url "https://github.com/EnzymeAD/Enzyme/archive/refs/tags/v0.0.142.tar.gz"
+  sha256 "3201d7b41f7c20b99188ef92516133094357238285bd41c54ef1dbfe44bcf28f"
   license "Apache-2.0" => { with: "LLVM-exception" }
   head "https://github.com/EnzymeAD/Enzyme.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:   "c6dcabcaf7e08e075bd0dd449e425247f7e5877cb0905949f372244de9764c20"
-    sha256 cellar: :any,                 arm64_ventura:  "3a5b988f521e5f01a63c672c5ae40d01660fea492b32e15a808cb6dba968f6f6"
-    sha256 cellar: :any,                 arm64_monterey: "2179154670dd899879d7e1b07ba9bc51303b3ae63447c6411da7cffb2aece076"
-    sha256 cellar: :any,                 sonoma:         "0aad6ee9c5cb93b22259bba60b009776adb780e56bb6ce4b6b7acfa3535eae18"
-    sha256 cellar: :any,                 ventura:        "f29d1a2eb1ea1aa9781ba961548f4ddae4da42e017e0ace3ae53ea04a8658c36"
-    sha256 cellar: :any,                 monterey:       "88e0d148b67a25ef2252867b423ae76ed035c3b0807db5f5ff2b3b69ac39234b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "7511a810e5243c09f6f872c361ef99dd9a56a6dbb6091dff4dcef79b71660170"
+    sha256 cellar: :any,                 arm64_sonoma:   "d4270d8339acc5b2f250da5d37e5eeef8a69e0c2264996120a06a674001e4ba9"
+    sha256 cellar: :any,                 arm64_ventura:  "6f2a1af980c0345859001df3aa3610aa1f9ae9a6f790003ddac66c7b2fafc441"
+    sha256 cellar: :any,                 arm64_monterey: "9cef3e77305a51b8690780845cc04420aadb8eb0a5ebf74af88e7ed025a29210"
+    sha256 cellar: :any,                 sonoma:         "f3b4b5d7afdbbb60ffaaed2f5ac14f3c69f5f9c737db08980d4b06bbf813f270"
+    sha256 cellar: :any,                 ventura:        "711dbacd2365b0e5cfd4e228250ec7867fe668fb1c8763a7cdb618fe275fb247"
+    sha256 cellar: :any,                 monterey:       "4ad2be0b5b5961e734ac114f3af1b59cf5cb95d109aadd1ad084eaf2d325ba0c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "f88f76466e332822f9cf955afda03ea9ccfe1e7ec71c1c7ccff3f8a3dcb1e71b"
   end
 
   depends_on "cmake" => :build

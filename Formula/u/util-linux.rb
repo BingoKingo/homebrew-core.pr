@@ -1,8 +1,8 @@
 class UtilLinux < Formula
   desc "Collection of Linux utilities"
   homepage "https://github.com/util-linux/util-linux"
-  url "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.1.tar.xz"
-  sha256 "59e676aa53ccb44b6c39f0ffe01a8fa274891c91bef1474752fad92461def24f"
+  url "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.2.tar.xz"
+  sha256 "d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3"
   license all_of: [
     "BSD-3-Clause",
     "BSD-4-Clause-UC",
@@ -24,13 +24,14 @@ class UtilLinux < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:   "47e2f20b4278c4e20de4886ce0dc56e61f6cbaaa8a226c04bd412ff171c0ca48"
-    sha256 arm64_ventura:  "e780e389150f94ed154079df0f24aa0220e17eade0082b44ce1aca197a5d88f4"
-    sha256 arm64_monterey: "5d08ea506b31e9ac4fff8bd53a8499d20b13488a6d9b85c8a2e007a75043a59d"
-    sha256 sonoma:         "0be86a08a696b60bf5567edbbf6ab0d325987919d22d511e03ddeec9d099f695"
-    sha256 ventura:        "c694b7cb31490b7d8b6ee108813f2fab2d2f23dfdd5a06cfd0745f37ce3f3a55"
-    sha256 monterey:       "5d8ebdda62cef0f9c5177db92debda32482d338095cd29ea8641a7c49f93669a"
-    sha256 x86_64_linux:   "2471fb33843afa81c3518904e60cc302fe3473eefa41fd5d8c2c3d9aaac149c0"
+    rebuild 1
+    sha256 arm64_sonoma:   "ae2f7c6c2a844f8cbd3522f85e51cb929d03a8c9eed9a66d14a81b2632f9dcb4"
+    sha256 arm64_ventura:  "b933894463178a94495ced95268b2d66ccdc0c9e2e408b7fdc4b5a36016f228a"
+    sha256 arm64_monterey: "4b0c25db0dcd8f13e1d881b7ecf5eb80ebd53453b56fd0c096a2745b97c90d42"
+    sha256 sonoma:         "ad20c2beac16f7d241569f93d0edd5b19f0bb2fafd62c227747ea20d9f615892"
+    sha256 ventura:        "0b62fc43806131f0b9f96916b0887ad85ae47db2418386721fc3da6d3f49dec7"
+    sha256 monterey:       "1fed3dce8f5487a95fab00de380f3ff3320a43b94ad9949a102466bb6fbc3bbd"
+    sha256 x86_64_linux:   "773c91eea7c86a3a5a18ae1b43a43c9346b190ccf7640bb811e4cadb77a42874"
   end
 
   keg_only :shadowed_by_macos, "macOS provides the uuid.h header"
@@ -90,7 +91,7 @@ class UtilLinux < Formula
       args << "--without-python"
     end
 
-    system "./configure", *std_configure_args, *args
+    system "./configure", *args, *std_configure_args.reject { |s| s["--disable-debug"] }
     system "make", "install"
 
     # install completions only for installed programs
