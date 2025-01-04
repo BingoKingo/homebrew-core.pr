@@ -3,18 +3,18 @@ class Streamlink < Formula
 
   desc "CLI for extracting streams from various websites to a video player"
   homepage "https://streamlink.github.io/"
-  url "https://files.pythonhosted.org/packages/69/fd/f649401cd79e1c98d5c26a80571dcfae742260127ca88e1bfe190831b450/streamlink-7.1.0.tar.gz"
-  sha256 "ca5fff4ee3167b35e159ba2a7cf4259da35ee831240985a5e2dc1eefdb1257d9"
+  url "https://files.pythonhosted.org/packages/52/fa/da935fdba0883f8d3bfaf1e19825979e088d626584a1d1f6a986ed1c4eb5/streamlink-7.1.1.tar.gz"
+  sha256 "c1881ed0bba53612d979d9a918b7dec056fc93cd202a5b07a080e5568dbdab4c"
   license "BSD-2-Clause"
   head "https://github.com/streamlink/streamlink.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "2fbed1b77a4b9ae0e728c7f1755fac643cd57c0da5912123ef5215e469e2b1eb"
-    sha256 cellar: :any,                 arm64_sonoma:  "08d9c326d40795f8214818cb7fd63d18ed5061b09eddf2953e344283b0e9d214"
-    sha256 cellar: :any,                 arm64_ventura: "5cfd35132d957b07e6c5e5b2f12dbe78b9a3965fb8e9f5b2483fa9e1fa49d0d4"
-    sha256 cellar: :any,                 sonoma:        "c1a50229bfa716d9c51b393c1ffcce9bfe0d661682c2ca483d045eab35d6b684"
-    sha256 cellar: :any,                 ventura:       "abd9276463db1a797b42665311ccd5cb953de0213dc651b18380d84d94d8e673"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2880b414ec86f665b7be826bafdec9c24255e9452b286be4414dd8d15378d8a5"
+    sha256 cellar: :any,                 arm64_sequoia: "f53f3339f13a3b3e4a9b43dec599037d9a68c812ed3b0a472d6ce39abaf6ad00"
+    sha256 cellar: :any,                 arm64_sonoma:  "172b839b2eccba0187c2fddd3bdef71dde231520eb56c08583469307ab2ea108"
+    sha256 cellar: :any,                 arm64_ventura: "c97d03a4cf7c41c27766739885cd1ea6412643bd0a000b0099a4a3090082ba4e"
+    sha256 cellar: :any,                 sonoma:        "7ee9e09a7458f23d081bef9fcea1f7dfbb9d6d1b0ac058b7f464623306d71572"
+    sha256 cellar: :any,                 ventura:       "52ee6a7008b14f3014801581921584c9360ee0aa2a3fc36ce9a9cdff299c2802"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0f03954a5715914eb4c4023a6788500e1fb13f12ba46f58a521a014667ccee17"
   end
 
   depends_on "certifi"
