@@ -272,6 +272,7 @@ bk
 bkcrack
 bkt
 black
+blades
 blast
 blis
 blisp
@@ -778,6 +779,7 @@ dosbox-x
 dotbot
 dotenv-linter
 dotnet
+dotnet@8
 dotslash
 dotter
 double-conversion
@@ -1551,6 +1553,7 @@ kerl
 kew
 keydb
 keyring
+kfr
 khal
 ki
 kickstart
@@ -1768,6 +1771,7 @@ libopenmpt
 liboqs
 liborigin
 libosinfo
+libosmium
 libp11
 libpaho-mqtt
 libpanel
@@ -1939,6 +1943,7 @@ lynis
 lz4
 lzip
 lziprecover
+lzlib
 macchina
 mackup
 macmon
@@ -1957,6 +1962,7 @@ makedepend
 makensis
 makepkg
 mako
+malcontent
 man-db
 manifest-tool
 manticoresearch
@@ -1970,7 +1976,6 @@ mariadb-connector-odbc
 mariadb@10.11
 mariadb@10.5
 mariadb@10.6
-mariadb@11.2
 mariadb@11.4
 markdown-oxide
 markdownlint-cli
@@ -2360,6 +2365,8 @@ osi
 osinfo-db
 osinfo-db-tools
 osm2pgsql
+osmcoastline
+osmium-tool
 ospray
 osslsigncode
 osv-scanner
@@ -2380,6 +2387,7 @@ packetq
 packmol
 pacparser
 pagmo
+pam-u2f
 pan
 pandoc
 pandoc-crossref
@@ -2487,6 +2495,7 @@ planus
 platformio
 plow
 pluto
+plzip
 pmd
 pmix
 pmtiles
@@ -2507,6 +2516,7 @@ podsync
 poetry
 poke
 policy_sentry
+polkit
 polynote
 ponyc
 popeye
@@ -2842,6 +2852,7 @@ seqkit
 sequin
 sequoia-sq
 ser2net
+serf
 serialosc
 serie
 serpl
@@ -3267,6 +3278,7 @@ unison
 unisonlang
 universal-ctags
 unxip
+uptimed
 urdfdom
 urdfdom_headers
 uriparser
