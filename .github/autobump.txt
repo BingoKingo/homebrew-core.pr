@@ -717,6 +717,7 @@ dhall
 dhall-bash
 dhall-json
 dhall-lsp-server
+dhall-toml
 dhall-yaml
 di
 dialog
@@ -1161,6 +1162,7 @@ gittuf
 gitu
 giza
 gjs
+gkrellm
 glances
 glassfish
 glasskube
@@ -1205,6 +1207,7 @@ goaccess
 goawk
 gobject-introspection
 gocloc
+gocryptfs
 goctl
 godap
 goffice
@@ -1330,6 +1333,7 @@ haskell-stack
 hatari
 hatch
 havn
+hawkeye
 haxe
 hbase
 hblock
@@ -1347,6 +1351,7 @@ helmfile
 helmify
 helmsman
 hermit
+hevi
 hexo
 hexyl
 hfstospell
@@ -1554,6 +1559,7 @@ kcov
 kcptun
 kea
 keep-sorted
+keploy
 kepubify
 kerl
 kew
@@ -1892,6 +1898,7 @@ lightgbm
 lighthouse
 lightning
 lighttpd
+lilv
 lima
 limbo
 link-grammar
@@ -2313,6 +2320,7 @@ opencl-clhpp-headers
 opencl-headers
 opencl-icd-loader
 opencolorio
+opencsg
 opendetex
 opendht
 openexr
@@ -2560,6 +2568,7 @@ primecount
 primesieve
 principalmapper
 prism-cli
+privoxy
 probe-rs-tools
 procps
 procs
@@ -2876,6 +2885,7 @@ serie
 serpl
 service-weaver
 sesh
+sextractor
 sf
 sfcgal
 sfml
@@ -2963,6 +2973,7 @@ soapyremote
 socat
 socket_vmnet
 solana
+solargraph
 solhint
 sollya
 solr
@@ -2975,6 +2986,7 @@ sonobuoy
 sophus
 soplex
 sops
+sord
 sound-touch
 source-to-image
 sourcekitten
@@ -3012,6 +3024,7 @@ squashfuse
 squealer
 squid
 squiid
+sratom
 sratoolkit
 src
 srgn
@@ -3066,6 +3079,7 @@ subversion
 suite-sparse
 sundials
 superfile
+superhtml
 superlu
 surfer
 suricata
@@ -3552,6 +3566,7 @@ zig
 zigmod
 zim
 zipkin
+zix
 zizmor
 zk
 zlib
