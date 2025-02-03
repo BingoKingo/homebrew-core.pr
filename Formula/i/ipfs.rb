@@ -1,9 +1,8 @@
 class Ipfs < Formula
   desc "Peer-to-peer hypermedia protocol"
   homepage "https://ipfs.tech/"
-  url "https://github.com/ipfs/kubo.git",
-      tag:      "v0.32.1",
-      revision: "901745353f3b14b3dbf295a6d3f5f98a5a2ce38f"
+  url "https://github.com/ipfs/kubo/archive/refs/tags/v0.33.0.tar.gz"
+  sha256 "f58da2d4e8552b0d76c95715ec86bf868216fdd539669ea060827a527458cc5f"
   license all_of: [
     "MIT",
     any_of: ["MIT", "Apache-2.0"],
@@ -16,21 +15,25 @@ class Ipfs < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "59616a47887d20d48e2b349b402a5df78d61e9401478a55f2422e4c60cb73667"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "28055da0f805aef41fa41de454be1a6cd54d0b9f53e9e166fb9719e898792f0c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "bbf41acc432ce512fdf264f3cb126520929fe8ed4bbd5c22ee262dda7551a64e"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c557aa0ed4ad4e372fb9c3b99046e0758c0f4ce9093cccef595d182ccbca1846"
-    sha256 cellar: :any_skip_relocation, ventura:       "b92abcb9223dfabd68ffbecf0501e6e8703d07217811f0a59f2caf6041cda26f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fcdd084e1ac3f4f11cbecb0d261da25fb1ac66844771f510be70151173a21dba"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c0cba91012fdd5851f5cf19272b0e2dfd3cfa8c00ad4e064811edc63ccd48c6e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1e97d3b417066f176dba54774b161459191e78758b484936c7e80399827dc502"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "a66f4eb5d588fdbbe2a934fdd12bcb78be95ce38c9bd25f138f93e066726a622"
+    sha256 cellar: :any_skip_relocation, sonoma:        "df5963b38d0ccfa2d6e88b487f0fec4523b099776a06deefc50a4eda78187600"
+    sha256 cellar: :any_skip_relocation, ventura:       "52f1c4f80e03d426e6840fe8683b16b0944e7eeac1817317076e8a30753825eb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a14fd5610a22fbadc9fca0d76f844e3a87166919297ae7031681a8db0ca99028"
   end
 
   depends_on "go" => :build
 
   def install
-    system "make", "build"
-    bin.install "cmd/ipfs/ipfs"
+    ldflags = %W[
+      -s -w
+      -X github.com/ipfs/kubo.CurrentCommit=#{tap.user}
+    ]
+    system "go", "build", *std_go_args(ldflags:), "./cmd/ipfs"
 
-    generate_completions_from_executable(bin/"ipfs", "commands", "completion", shells: [:bash])
+    generate_completions_from_executable(bin/"ipfs", "commands", "completion")
   end
 
   service do
@@ -38,6 +41,6 @@ class Ipfs < Formula
   end
 
   test do
-    assert_match "initializing IPFS node", shell_output(bin/"ipfs init")
+    assert_match "initializing IPFS node", shell_output("#{bin}/ipfs init")
   end
 end
