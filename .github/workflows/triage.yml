@@ -323,6 +323,7 @@ jobs:
                 p11-kit|\
                 pango|\
                 pcre2|\
+                python@3.13|\
                 rav1e|\
                 rust|\
                 shared-mime-info|\
@@ -366,7 +367,7 @@ jobs:
                 libcap|\
                 libva|\
                 libxml2|\
-                python@3.12|\
+                python@3.13|\
                 wayland-protocols|\
                 zlib|\
                 ).rb"

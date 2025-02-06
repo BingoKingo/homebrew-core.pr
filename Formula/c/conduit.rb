@@ -1,8 +1,8 @@
 class Conduit < Formula
   desc "Streams data between data stores. Kafka Connect replacement. No JVM required"
   homepage "https://conduit.io/"
-  url "https://github.com/ConduitIO/conduit/archive/refs/tags/v0.12.3.tar.gz"
-  sha256 "cda35d6ddafa5b4aac7607cd0ba3438658bb806a8c114f28fec3613c007cac03"
+  url "https://github.com/ConduitIO/conduit/archive/refs/tags/v0.13.1.tar.gz"
+  sha256 "929201cb59e28d0e26f442e8a9edc76105c31fb8a1e942457842e6c41d6e72ce"
   license "Apache-2.0"
   head "https://github.com/ConduitIO/conduit.git", branch: "main"
 
@@ -12,12 +12,12 @@ class Conduit < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "68987192d70edccf62cd031b7b3a98c668f2aada0a977535f49318fa86298917"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e32ae6496f7edcfa24ecdcfda79f74c0fbcce94fadc631c52a0fbb30a59d9812"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9123b742930841b6e8a62178faed6d629b3e078c1e6d07b122795b25da021f68"
-    sha256 cellar: :any_skip_relocation, sonoma:        "181108af97da9729aaf4a55e25a2929d0a4f3797adbb7593f032f372352ba2b9"
-    sha256 cellar: :any_skip_relocation, ventura:       "535326d8fd62d4a634f116d2de4cb3c418cf49b3fb3766c99e70bfda658eb613"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "236d33d23dda258b4443464c0898a925b5afe9fd8040511b2b9cc9dd0b48afb3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "afa76727e3da6eac1abbacb894b726516fb8f66f39b87ccf362cbce81d7767d6"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "179b499e5c1b69b5271821d0936d3672c018326a634d04bb6aef809fc1e614ed"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "d4913460f1ff221b7eade8c1a127f663bbfdf31ad0bac5e86900af3e9676cef4"
+    sha256 cellar: :any_skip_relocation, sonoma:        "c7565f9198ad14561fbbf8e6c77251ccb1f1e99b0924c27ace73bab01ef4c0b8"
+    sha256 cellar: :any_skip_relocation, ventura:       "457c5ad176ed11ae25272c690bd16f3af11dcc7b8658fd60425434ab2cbbbc09"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e5b94e77696aa3da2a525528d534bdbcf02068f6df711f91cbf3d635fa4eecc6"
   end
 
   depends_on "go" => :build
@@ -35,11 +35,9 @@ class Conduit < Formula
     File.open("output.txt", "w") do |file|
       # redirect stdout to the file
       $stdout.reopen(file)
-      pid = fork do
-        # Run conduit with random free ports for gRPC and HTTP servers
-        exec bin/"conduit", "--grpc.address", ":0",
-                            "--http.address", ":0"
-      end
+      pid = spawn bin/"conduit", "run", "--api.enabled", "true",
+                                 "--api.grpc.address", ":0",
+                                 "--api.http.address", ":0"
       sleep(5)
       # Kill process
       Process.kill("SIGKILL", pid)
