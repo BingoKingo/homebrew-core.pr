@@ -1,19 +1,19 @@
 class Garble < Formula
   desc "Obfuscate Go builds"
   homepage "https://github.com/burrowers/garble"
-  url "https://github.com/burrowers/garble/archive/refs/tags/v0.14.0.tar.gz"
-  sha256 "9fb75bad82fc89afe08bbdb26c9bbbba8766a1663f8bb585318cf363fd3eedbf"
+  url "https://github.com/burrowers/garble/archive/refs/tags/v0.14.1.tar.gz"
+  sha256 "0eb231e6ad91793f0fcf086fb57a1654f0c2056284a79fb12ac955ade6791737"
   license "BSD-3-Clause"
   revision 1
   head "https://github.com/burrowers/garble.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9abc206d2d2b7eb241c831f4c747c3751cbf0889a55a5f8c43035597dcdfaa6b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9abc206d2d2b7eb241c831f4c747c3751cbf0889a55a5f8c43035597dcdfaa6b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9abc206d2d2b7eb241c831f4c747c3751cbf0889a55a5f8c43035597dcdfaa6b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ccb7bd3ccd7f7b6f72ed7d83be99078b881a4afb7640120e05046e7eb04a4215"
-    sha256 cellar: :any_skip_relocation, ventura:       "ccb7bd3ccd7f7b6f72ed7d83be99078b881a4afb7640120e05046e7eb04a4215"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7bf42f55a4caabbf26e018ee60d7eb8333fb7a51b490cc1b65d6d50169b062e7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "61a5d644ddf1ac9b3b22c53d4e57f555fd58a63866fd0a92ef39a61d18bb266c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "61a5d644ddf1ac9b3b22c53d4e57f555fd58a63866fd0a92ef39a61d18bb266c"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "61a5d644ddf1ac9b3b22c53d4e57f555fd58a63866fd0a92ef39a61d18bb266c"
+    sha256 cellar: :any_skip_relocation, sonoma:        "cd37e6706715d6380b03b0e863f8a63afb3a14412a384f010d33afb339c93ef8"
+    sha256 cellar: :any_skip_relocation, ventura:       "cd37e6706715d6380b03b0e863f8a63afb3a14412a384f010d33afb339c93ef8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "27f096cc5bce2fd93f55a43183c9afd75438acfe71e0b01219552a8d9b9e8280"
   end
 
   depends_on "go" => [:build, :test]

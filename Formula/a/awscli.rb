@@ -3,18 +3,18 @@ class Awscli < Formula
 
   desc "Official Amazon AWS command-line interface"
   homepage "https://aws.amazon.com/cli/"
-  url "https://github.com/aws/aws-cli/archive/refs/tags/2.24.1.tar.gz"
-  sha256 "7ad01f2ae1227371ad77769b8f508d12904168777c9a1c26bbd3fb7d987e478e"
+  url "https://github.com/aws/aws-cli/archive/refs/tags/2.24.3.tar.gz"
+  sha256 "d8df2ffe0d01159900015a947a0b89e4e1633af133a5dcda57f2ceeeaaed8f0a"
   license "Apache-2.0"
   head "https://github.com/aws/aws-cli.git", branch: "v2"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "295b5b8ca8c40b79f42c632c079f58e2bcfaa7a05995ef393d1fc93ef1ceb7c1"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e67a6777f5e4f24d2611934e82a32f6d5f18efdb08109a7c33ddd838364af7b8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "864d0b8a98928dac34577c5888e4e3a08c8a31eaf235dcc921c9c69ce09c3626"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a097ab779303d00bf2bc9118897f74f98f8be0e442b45e5544722f8cc274101e"
-    sha256 cellar: :any_skip_relocation, ventura:       "4a4082117217cd61fa35fed019dd78eb176d8aa5c9f222c413ef6410b2a47986"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f84a665187d5733338a1316f7b5d837df17f63cfc6cc437ff760f95f11b36dae"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a05896d7fdd0d4e7c9e34c1ccd3457cea7465e724abb1fc555cb36e7724facf5"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "53f7312164fc8f8595e5172303d547a4a308b9a1d5d6fe950461f93cfc90b45d"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "67a39f8627be2569c017c35cb9c6d4d285cf24c3f052a471f3cc7ef2738ab546"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d06766aff034540dd56205c3a0562e4b7152a7b4bae710253933a51e647de2b3"
+    sha256 cellar: :any_skip_relocation, ventura:       "39be3c81a9ea3ad7a26dae5d8d89da9dfe05db8d56b3da8ce29db238191b0634"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a3e884baa44352363368255e5cfc135d0e60930cc0874eb5ac65f7710ee9ba5b"
   end
 
   depends_on "cmake" => :build

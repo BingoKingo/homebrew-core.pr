@@ -94,6 +94,9 @@
   "badkeys": {
     "exclude_packages": ["cryptography"]
   },
+  "bagels": {
+    "exclude_packages": ["numpy"]
+  },
   "bandcamp-dl": {
     "exclude_packages": ["certifi"]
   },

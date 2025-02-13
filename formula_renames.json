@@ -16,7 +16,6 @@
   "bison27": "bison@2.7",
   "boot2docker": "docker-machine",
   "bro": "zeek",
-  "camlistore": "perkeep",
   "cdiff": "ydiff",
   "cloog018": "cloog",
   "commonmark": "cmark",

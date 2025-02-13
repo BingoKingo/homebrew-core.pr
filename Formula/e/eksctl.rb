@@ -8,24 +8,19 @@ class Eksctl < Formula
   head "https://github.com/eksctl-io/eksctl.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c837034a688e9ba35d9bb117dd71b73466a18b494101b3ec78e0eef8d88fea37"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "29530c1956323cb5c92e8c36c3c75eecf0c63df6e93aaded3e4fa70fdd8ddac8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "283d4708543ffe32796b7feeade29c1201646f5c69e887289c437ebca5cdbbdd"
-    sha256 cellar: :any_skip_relocation, sonoma:        "580893f1a3bdfd9adfb8010a0360b100b93c512e6a6a19efa41c4f605481f2ec"
-    sha256 cellar: :any_skip_relocation, ventura:       "08f50044e4f75419a55a1a7201a61f67ce262a409b610eef3d518b762dd72cf3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "efcd6814978a781db4e305a197f1f0ea5b3feaa70b0610600bf5b489f6f8caa8"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8bea552f9d81b62d5a53973af929c82f66288b6795bcf7c18db43f19c6b70d5d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b7c28b6dc430756329d46668989a4eba7c125d1e18f2320e91a60420db3f509e"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "80ff5949907f4e87d6c260e1db19db4b926e5cefbb795ab423619a6493374f76"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2ecf18f8c2186895d23712a62101d172cdc71b002cb7376d47fcc03c63d2368a"
+    sha256 cellar: :any_skip_relocation, ventura:       "27bac6b0d8e693739bba37c453ec03ab15a076b1da7e1f6d957ceb416fb1baf2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8d440beb94532a2b45ea204cc96f5350bdf5ad607ba7e50b18ea1c376409b9c3"
   end
 
-  depends_on "counterfeiter" => :build
   depends_on "go" => :build
-  depends_on "go-bindata" => :build
-  depends_on "ifacemaker" => :build
-  depends_on "mockery" => :build
 
   def install
-    ENV["GOBIN"] = HOMEBREW_PREFIX/"bin"
-    ENV.deparallelize # Makefile prerequisites need to be run in order
-    system "make", "build"
+    system "make", "binary"
     bin.install "eksctl"
 
     generate_completions_from_executable(bin/"eksctl", "completion")
