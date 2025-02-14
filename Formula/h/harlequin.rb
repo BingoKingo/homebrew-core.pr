@@ -3,17 +3,17 @@ class Harlequin < Formula
 
   desc "Easy, fast, and beautiful database client for the terminal"
   homepage "https://harlequin.sh"
-  url "https://files.pythonhosted.org/packages/51/13/949231ac99a157445e3e3b6237bb82140036a062444dd7359c43aa09c973/harlequin-2.0.3.tar.gz"
-  sha256 "e991ada24ddfcbf5409af3100f95f29aad7dd7e33dcb0ae833d0078a19a78c41"
+  url "https://files.pythonhosted.org/packages/b1/5e/51ead1fa6392454afd7252ebb9b6a554115dd2c1a5fb3463a64e8407bc73/harlequin-2.0.5.tar.gz"
+  sha256 "ae56df3ba8a0a43ef522c0361e4aa49c7f668248918b07143bef6aa850348311"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "de49bff78e170b9fd067a9bccb3a48d60d3b1afcda5c94e473cd5979e6c2b1d1"
-    sha256 cellar: :any,                 arm64_sonoma:  "bbc273a73779a8b07aa110d9d27bb8e6416a25c87a8cfb1ba4641aca1cf81694"
-    sha256 cellar: :any,                 arm64_ventura: "25ce9cc750c9c2d180ea62f806f34c3236817baa0784031265780e3e89bd79ea"
-    sha256 cellar: :any,                 sonoma:        "237404ab59bd8ea57d5ac5540bef2e5654eeb95db4c36bc5150e8be763648488"
-    sha256 cellar: :any,                 ventura:       "5a38aa26fc76b3d8cf45662b231ceb6f3367984af5c5503619303ae1fe21ede7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "62d9306b2a1ef14dfb22aae9ad1759bbb6c332617bb806cdd2154e1604e51563"
+    sha256 cellar: :any,                 arm64_sequoia: "71e2be60cc1c19bbfef824eaa0476f737610fd64e9eae2a355ef73b213c41753"
+    sha256 cellar: :any,                 arm64_sonoma:  "bfefe1012fd755e1ca0e3aa399bb9395c581a8ed14e7015ba3ced37f33ba0795"
+    sha256 cellar: :any,                 arm64_ventura: "4a0c01c5877b6028d24f6c0c406f11f27f841226fd7838cf4656fa4157d39a9b"
+    sha256 cellar: :any,                 sonoma:        "9d7d021c8ee60b99509bc84092cd94c06cad7331997013e944565dbaa22be226"
+    sha256 cellar: :any,                 ventura:       "9efe1f65553245ab2953b16f47047b2512519b32985a9a1c718dc9d2b2186d84"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1c49f3c046e8a2e794390238c7e297a604af6e7dc810b92c3a7c635a56cfbc5b"
   end
 
   depends_on "cmake" => :build
@@ -33,8 +33,8 @@ class Harlequin < Formula
   end
 
   resource "cython" do
-    url "https://files.pythonhosted.org/packages/84/4d/b720d6000f4ca77f030bd70f12550820f0766b568e43f11af7f7ad9061aa/cython-3.0.11.tar.gz"
-    sha256 "7146dd2af8682b4ca61331851e6aebce9fe5158e75300343f80c07ca80b1faff"
+    url "https://files.pythonhosted.org/packages/5a/25/886e197c97a4b8e254173002cdc141441e878ff29aaa7d9ba560cd6e4866/cython-3.0.12.tar.gz"
+    sha256 "b988bb297ce76c671e28c97d017b95411010f7c77fa6623dd0bb47eed1aee1bc"
   end
 
   resource "duckdb" do
@@ -53,8 +53,8 @@ class Harlequin < Formula
   end
 
   resource "harlequin-postgres" do
-    url "https://files.pythonhosted.org/packages/99/06/7ae3b90f55d454fb6a82844ab92bc385bc96d62ae5fd15f0af12575b011e/harlequin_postgres-1.1.0.tar.gz"
-    sha256 "5e9e863170dcf4a8c7f194a30ae7e3c791226371fd08a9779c5bcff432d1d69d"
+    url "https://files.pythonhosted.org/packages/d9/e6/a8e7474791ca694ae8b1f4ad1aa2eeca7fc1ccec10be20dbdd12be7acce0/harlequin_postgres-1.1.1.tar.gz"
+    sha256 "3ba0981b3b17aa72984bb36ea16dc1eac3398ade23c59fd14ac6f883e1ca369b"
   end
 
   resource "jinja2" do
@@ -174,8 +174,8 @@ class Harlequin < Formula
   end
 
   resource "textual-fastdatatable" do
-    url "https://files.pythonhosted.org/packages/06/cc/93f2131c7b4e388560cc633b5992c54ea56b7f1ef00a1641c0e33f92a722/textual_fastdatatable-0.11.0.tar.gz"
-    sha256 "a2305f5745dc1ab4088a3f0d5c7dcfb8993d711a296954664c3492712fa5cc4b"
+    url "https://files.pythonhosted.org/packages/ef/da/9e86cadf3824df250126616a19d3b79f48f13e0f336605e1a2ab3d5a0aef/textual_fastdatatable-0.12.0.tar.gz"
+    sha256 "56b035e22d694fa902a8b80120765addd6e32f4eee0151ee46fa6ab1deaad59e"
   end
 
   resource "textual-textarea" do

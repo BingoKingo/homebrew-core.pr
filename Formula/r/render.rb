@@ -1,18 +1,19 @@
 class Render < Formula
   desc "Command-line interface for Render"
   homepage "https://github.com/render-oss/cli"
-  url "https://github.com/render-oss/cli/archive/refs/tags/v1.1.2.tar.gz"
-  sha256 "0a9da315b0d5563460161228c0b882ae599936f22774f517c61369029877d5ab"
+  url "https://github.com/render-oss/cli/archive/refs/tags/v2.0.0.tar.gz"
+  sha256 "a7bcc78fd4d38df7a19fcfcd3958dc89ded4353c12b5ed695cd215c6998c9926"
   license "Apache-2.0"
   head "https://github.com/render-oss/cli.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "bf13994b68adf5449485fc63e5c4a0a63ca431c1179e3d929692e21a01c441a9"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bf13994b68adf5449485fc63e5c4a0a63ca431c1179e3d929692e21a01c441a9"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "bf13994b68adf5449485fc63e5c4a0a63ca431c1179e3d929692e21a01c441a9"
-    sha256 cellar: :any_skip_relocation, sonoma:        "23ce39c0bb94ad61e8187ab0afc3e1cf28ec4514bf836d5256f9351d881ddf9d"
-    sha256 cellar: :any_skip_relocation, ventura:       "23ce39c0bb94ad61e8187ab0afc3e1cf28ec4514bf836d5256f9351d881ddf9d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "02fb948e8af3bfa41c8ae09cbca819ab18bd8134b3fe503f14d17e541df6d025"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e96e67b0026c03994984904c9f04b34bfbc1618f00cf2620c42698763b7bb49a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e96e67b0026c03994984904c9f04b34bfbc1618f00cf2620c42698763b7bb49a"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "e96e67b0026c03994984904c9f04b34bfbc1618f00cf2620c42698763b7bb49a"
+    sha256 cellar: :any_skip_relocation, sonoma:        "668d6be46967a7a95f0fe53479f86ebebda33997781fd65f92e0200599c0fe73"
+    sha256 cellar: :any_skip_relocation, ventura:       "668d6be46967a7a95f0fe53479f86ebebda33997781fd65f92e0200599c0fe73"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3bdaed3e1e32be9841660912c4bf07003306532d1952957b2551c821f72017c2"
   end
 
   depends_on "go" => :build
@@ -20,7 +21,7 @@ class Render < Formula
   def install
     ldflags = %W[
       -s -w
-      -X github.com/renderinc/cli/pkg/cfg.Version=#{version}
+      -X github.com/render-oss/cli/pkg/cfg.Version=#{version}
     ]
     system "go", "build", *std_go_args(ldflags:)
   end

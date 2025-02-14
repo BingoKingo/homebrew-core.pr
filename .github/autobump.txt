@@ -198,8 +198,10 @@ b2-tools
 babel
 babl
 bacon
+bacon-ls
 bacula-fd
 badkeys
+bagels
 bagit
 baidupcs-go
 balena-cli
@@ -778,6 +780,7 @@ docker-credential-helper
 docker-credential-helper-ecr
 docker-gen
 docker-machine
+docker-machine-driver-vultr
 docker-slim
 docker-squash
 dockerfile-language-server
@@ -1015,6 +1018,7 @@ flashrom
 flatbuffers
 flawz
 fleet-cli
+flexiblas
 flint
 flit
 flix
@@ -1102,6 +1106,7 @@ gateway-go
 gator
 gatsby-cli
 gau
+gauge
 gawk
 gaze
 gcalcli
@@ -1433,6 +1438,7 @@ ibazel
 icbirc
 icloudpd
 icon
+identme
 ignite
 igraph
 igv
@@ -1565,6 +1571,7 @@ juicefs
 juju
 julia
 jupyterlab
+jupytext
 just
 jwt-cli
 jxl-oxide
@@ -1690,6 +1697,7 @@ latexindent
 latexml
 latino
 lazydocker
+lazyjj
 lbdb
 lc0
 lcm
@@ -2546,6 +2554,7 @@ pike
 piknik
 pillow
 pinact
+pinboard-notes-backup
 pinentry
 pinocchio
 pinot
@@ -2803,6 +2812,7 @@ restic
 restview
 resvg
 retire
+reuse
 reveal-md
 revive
 rex
@@ -2873,6 +2883,7 @@ rustcat
 rustls-ffi
 rustscan
 rustup
+rustywind
 rye
 ryelang
 s-nail
@@ -2892,6 +2903,7 @@ saml2aws
 sbcl
 sbom-tool
 sbt
+sby
 sc-im
 scala
 scala@2.12
@@ -2922,6 +2934,7 @@ scrcpy
 screen
 screenfetch
 scriptisto
+scrypt
 scs
 scummvm
 scummvm-tools
@@ -3085,6 +3098,7 @@ spot
 spotbugs
 spotify_player
 sq
+sql-formatter
 sql-migrate
 sqlancer
 sqlboiler
@@ -3112,6 +3126,7 @@ ssh-audit
 ssh-mitm
 sshs
 sshuttle
+sshx
 ssldump
 sslh
 sslscan
@@ -3282,6 +3297,7 @@ tgui
 thanos
 the-way
 theharvester
+threatcl
 thrift
 thriftgo
 tig
@@ -3619,6 +3635,7 @@ yaegi
 yaf
 yamale
 yaml-language-server
+yamlfix
 yamlfmt
 yamllint
 yara
@@ -3633,6 +3650,7 @@ yices2
 ykman
 yle-dl
 yo
+yor
 yorkie
 yosys
 you-get

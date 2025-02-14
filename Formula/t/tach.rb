@@ -3,18 +3,18 @@ class Tach < Formula
 
   desc "Tool to enforce dependencies using modular architecture"
   homepage "https://docs.gauge.sh/getting-started/introduction"
-  url "https://files.pythonhosted.org/packages/2f/0c/3ebb1b0798c5a109e5cee2b290acaf47f1c40ad892d07af70157443b2c82/tach-0.25.3.tar.gz"
-  sha256 "fc78bda7872a070d6651268c7f978dca98d4155f107fc276553f51c1833e9dd8"
+  url "https://files.pythonhosted.org/packages/5e/90/941e2b80af72610999affda3a5433d83f1212cb80157124702202c80ed75/tach-0.25.5.tar.gz"
+  sha256 "8d3a44ccc0314af6b5cdfc4188ddd63a870d71a5652244973b3cd872d07a2858"
   license "MIT"
   head "https://github.com/gauge-sh/tach.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "dfaa6d2e93293539a7ef00fe51416b92637eb4a4a62bab7fefecb65814d4d2a9"
-    sha256 cellar: :any,                 arm64_sonoma:  "5a2d2c319716e35a9fccc5b80ffb1a5335ff1094089a8ae958b9c590e9926913"
-    sha256 cellar: :any,                 arm64_ventura: "b11db9cb07b807893cad1b2a8218eff92c2010ef6cda722445d3b1cd77f3b763"
-    sha256 cellar: :any,                 sonoma:        "2ed9c67f532904fbf351257b280cb92570c6813d02a03949003aea4e5f9c8c97"
-    sha256 cellar: :any,                 ventura:       "32116f172fd6b6e09e9e9402c89ac7b1daa0a089be2c15abe1609c0cd31bbbb8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dc4fea6b9d4ee74f70dcfc6da8bd14717fda61f91970b2dcae2013d0254f336b"
+    sha256 cellar: :any,                 arm64_sequoia: "c797e515291d474b11c3e10524391108f09676e895ddb2481f159418c3af139d"
+    sha256 cellar: :any,                 arm64_sonoma:  "c4c8da86951b1051963321e5b40bd327445b19f7589ed35e7808d2de0b2f8697"
+    sha256 cellar: :any,                 arm64_ventura: "d6cb94ca6e178d48e27599692ecf68499995e08c107d6a646d4519189b853bef"
+    sha256 cellar: :any,                 sonoma:        "8e30a059ac0bcfd90be0f084499b6e3a90ae931e34432ef4a1baf0aec92f88d7"
+    sha256 cellar: :any,                 ventura:       "3dfc13de6ae98ecb9b06961dbd574d73b08b3a512674b18eb324b71927ff575e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a3ebb1b6cf49496763ce7c55296fc7e37a896d3fe55f233b38ea1dd81ac95664"
   end
 
   depends_on "rust" => :build
