@@ -11,6 +11,7 @@ act
 action-validator
 actionlint
 activemq
+ad
 ada-url
 adapterremoval
 adb-enhanced
@@ -968,6 +969,7 @@ fastd
 fastfec
 fastfetch
 fastlane
+fastly
 fastnetmon
 fastp
 fastqc
@@ -1070,6 +1072,7 @@ fping
 fplll
 fq
 fred
+freebayes
 freeciv
 freeglut
 freeipmi
@@ -1231,6 +1234,7 @@ gnupg
 gnupg-pkcs11-scd
 gnupg@2.2
 gnuplot
+gnuradio
 gnutls
 go
 go-blueprint
@@ -1408,6 +1412,7 @@ himalaya
 hive
 hivemind
 hivex
+hk
 hl
 hledger
 hlint
@@ -1840,6 +1845,7 @@ libnetfilter_conntrack
 libnfs
 libnftnl
 libnghttp3
+libnotify
 libntlm
 libobjc2
 libomp
@@ -2237,6 +2243,7 @@ n
 naabu
 nagios
 nagios-plugins
+nak
 nano
 nanobind
 nanoflann
@@ -2591,6 +2598,7 @@ pipgrip
 pipx
 pivit
 pixi
+pixi-pack
 pixie
 pixman
 pjproject
@@ -2599,6 +2607,7 @@ pkgconf
 pkgdiff
 pkgx
 pkl
+pkl-lsp
 plantuml
 planus
 platformio
@@ -2648,6 +2657,7 @@ powerman-dockerize
 pqiv
 pre-commit
 precious
+premake
 presenterm
 prestd
 prestodb
@@ -3041,6 +3051,7 @@ sip
 sipp
 siril
 sispmctl
+sitefetch
 six
 sjk
 sk
@@ -3079,6 +3090,7 @@ sniffglue
 sniffnet
 snort
 snowflake
+snowflake-cli
 snyk-cli
 soapyremote
 socat

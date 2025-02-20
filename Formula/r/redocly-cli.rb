@@ -1,25 +1,25 @@
 class RedoclyCli < Formula
   desc "Your all-in-one OpenAPI utility"
   homepage "https://redocly.com/docs/cli"
-  url "https://registry.npmjs.org/@redocly/cli/-/cli-1.29.0.tgz"
-  sha256 "7f94ef3cd5b8529535ace5c21b6fdb20b542caf09cd4ab3e41555d000bfa189b"
+  url "https://registry.npmjs.org/@redocly/cli/-/cli-1.30.0.tgz"
+  sha256 "918eead282e2344dd6d94870fa447e0e053b8af220e0e2ddeae148b59ffcf2c7"
   license "MIT"
   head "https://github.com/redocly/redocly-cli.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c628c034900b591dddf0bd84329c0c1e032090f1d68fc332f7231d87cdfdac43"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c628c034900b591dddf0bd84329c0c1e032090f1d68fc332f7231d87cdfdac43"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c628c034900b591dddf0bd84329c0c1e032090f1d68fc332f7231d87cdfdac43"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a44777ef04cb8101c3e3d8f2ab99c11966271c348378de634c37481e9b919ffd"
-    sha256 cellar: :any_skip_relocation, ventura:       "a44777ef04cb8101c3e3d8f2ab99c11966271c348378de634c37481e9b919ffd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c628c034900b591dddf0bd84329c0c1e032090f1d68fc332f7231d87cdfdac43"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7c05aa35c873586a5acd90f51e677278483318d055215bbf7cb16ab171139f02"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7c05aa35c873586a5acd90f51e677278483318d055215bbf7cb16ab171139f02"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "7c05aa35c873586a5acd90f51e677278483318d055215bbf7cb16ab171139f02"
+    sha256 cellar: :any_skip_relocation, sonoma:        "99dfbdf6b026d06d755a8586c68f1b502267bb4be7e089b4ddfcbdaf7519c7a2"
+    sha256 cellar: :any_skip_relocation, ventura:       "99dfbdf6b026d06d755a8586c68f1b502267bb4be7e089b4ddfcbdaf7519c7a2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7c05aa35c873586a5acd90f51e677278483318d055215bbf7cb16ab171139f02"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink libexec/"bin/redocly"
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do
