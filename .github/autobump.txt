@@ -11,6 +11,7 @@ act
 action-validator
 actionlint
 activemq
+ad
 ada-url
 adapterremoval
 adb-enhanced
@@ -857,6 +858,7 @@ dwarfs
 dwarfutils
 dwm
 dxpy
+dyff
 dyld-headers
 dynaconf
 dynare
@@ -968,6 +970,7 @@ fastd
 fastfec
 fastfetch
 fastlane
+fastly
 fastnetmon
 fastp
 fastqc
@@ -1070,6 +1073,7 @@ fping
 fplll
 fq
 fred
+freebayes
 freeciv
 freeglut
 freeipmi
@@ -1231,6 +1235,7 @@ gnupg
 gnupg-pkcs11-scd
 gnupg@2.2
 gnuplot
+gnuradio
 gnutls
 go
 go-blueprint
@@ -1408,6 +1413,7 @@ himalaya
 hive
 hivemind
 hivex
+hk
 hl
 hledger
 hlint
@@ -1473,6 +1479,7 @@ immudb
 imposm3
 inchi
 include-what-you-use
+infisical
 influxdb
 influxdb-cli
 influxdb@1
@@ -1840,6 +1847,7 @@ libnetfilter_conntrack
 libnfs
 libnftnl
 libnghttp3
+libnotify
 libntlm
 libobjc2
 libomp
@@ -2237,6 +2245,7 @@ n
 naabu
 nagios
 nagios-plugins
+nak
 nano
 nanobind
 nanoflann
@@ -2591,6 +2600,7 @@ pipgrip
 pipx
 pivit
 pixi
+pixi-pack
 pixie
 pixman
 pjproject
@@ -2599,6 +2609,7 @@ pkgconf
 pkgdiff
 pkgx
 pkl
+pkl-lsp
 plantuml
 planus
 platformio
@@ -2648,6 +2659,7 @@ powerman-dockerize
 pqiv
 pre-commit
 precious
+premake
 presenterm
 prestd
 prestodb
@@ -3041,6 +3053,7 @@ sip
 sipp
 siril
 sispmctl
+sitefetch
 six
 sjk
 sk
@@ -3079,6 +3092,7 @@ sniffglue
 sniffnet
 snort
 snowflake
+snowflake-cli
 snyk-cli
 soapyremote
 socat
@@ -3510,6 +3524,7 @@ virtualfish
 virtuoso
 virustotal-cli
 vis
+visidata
 vite
 vitess
 viu

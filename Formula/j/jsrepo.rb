@@ -1,24 +1,24 @@
 class Jsrepo < Formula
   desc "Build and distribute your code"
   homepage "https://jsrepo.dev/"
-  url "https://registry.npmjs.org/jsrepo/-/jsrepo-1.37.0.tgz"
-  sha256 "c67e5ee17f9a1b39997d980ccaf2e6b3f00ff3bfd5c426fdba0e5e3203929e06"
+  url "https://registry.npmjs.org/jsrepo/-/jsrepo-1.39.1.tgz"
+  sha256 "99e39f4ae231911f55323e59725892c2eda8fedd0c6aba998575122e1768827d"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e5e2250b164aae1c0d7068f84800f5e39dbadf2028c350913f409e772078df23"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e5e2250b164aae1c0d7068f84800f5e39dbadf2028c350913f409e772078df23"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e5e2250b164aae1c0d7068f84800f5e39dbadf2028c350913f409e772078df23"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8bb05b32116247851d3aa3e9e1cbb78bd268d8c683c40ce920a32e10c469f601"
-    sha256 cellar: :any_skip_relocation, ventura:       "8bb05b32116247851d3aa3e9e1cbb78bd268d8c683c40ce920a32e10c469f601"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e5e2250b164aae1c0d7068f84800f5e39dbadf2028c350913f409e772078df23"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "860bf9af54b00aaaed4477a906448ce1dd7feeb8cf28a5f8a1ba3fa055dc03fd"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "860bf9af54b00aaaed4477a906448ce1dd7feeb8cf28a5f8a1ba3fa055dc03fd"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "860bf9af54b00aaaed4477a906448ce1dd7feeb8cf28a5f8a1ba3fa055dc03fd"
+    sha256 cellar: :any_skip_relocation, sonoma:        "34d2dc6ab1b6c116020e2bcce49da5b638b47c6332ffe163d95d37b229aab7ff"
+    sha256 cellar: :any_skip_relocation, ventura:       "34d2dc6ab1b6c116020e2bcce49da5b638b47c6332ffe163d95d37b229aab7ff"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "63975160ae7bf42c2778d90630de37f4ea0a27d2f19739714bb48e07b0e1f84d"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink libexec/"bin/jsrepo"
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

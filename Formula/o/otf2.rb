@@ -2,7 +2,7 @@ class Otf2 < Formula
   desc "Open Trace Format 2 file handling library"
   homepage "https://www.vi-hps.org/projects/score-p/"
   # TODO: check if we can remove `autoconf` + `automake` at version bump.
-  url "https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-3.0.3/otf2-3.0.3.tar.gz", using: :homebrew_curl
+  url "https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-3.0.3/otf2-3.0.3.tar.gz"
   sha256 "18a3905f7917340387e3edc8e5766f31ab1af41f4ecc5665da6c769ca21c4ee8"
   license "BSD-3-Clause"
 
@@ -90,21 +90,21 @@ class Otf2 < Formula
         otf2_pthread_writer_example
         otf2_reader_example
         otf2_writer_example
-      ].each { |p| assert_predicate workdir/p, :exist? }
+      ].each { |p| assert_path_exists workdir/p }
       system "./otf2_writer_example"
-      assert_predicate workdir/"ArchivePath/ArchiveName.otf2", :exist?
+      assert_path_exists workdir/"ArchivePath/ArchiveName.otf2"
       system "./otf2_reader_example"
       rm_r("./ArchivePath")
       system Formula["open-mpi"].opt_bin/"mpirun", "-n", "2", "./otf2_mpi_writer_example"
-      assert_predicate workdir/"ArchivePath/ArchiveName.otf2", :exist?
+      assert_path_exists workdir/"ArchivePath/ArchiveName.otf2"
       2.times do |n|
-        assert_predicate workdir/"ArchivePath/ArchiveName/#{n}.evt", :exist?
+        assert_path_exists workdir/"ArchivePath/ArchiveName/#{n}.evt"
       end
       system Formula["open-mpi"].opt_bin/"mpirun", "-n", "2", "./otf2_mpi_reader_example"
       system "./otf2_reader_example"
       rm_r("./ArchivePath")
       system "./otf2_pthread_writer_example"
-      assert_predicate workdir/"ArchivePath/ArchiveName.otf2", :exist?
+      assert_path_exists workdir/"ArchivePath/ArchiveName.otf2"
       system "./otf2_reader_example"
     end
 

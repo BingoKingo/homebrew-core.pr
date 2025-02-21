@@ -1,17 +1,17 @@
 class Step < Formula
   desc "Crypto and x509 Swiss-Army-Knife"
   homepage "https://smallstep.com"
-  url "https://github.com/smallstep/cli/releases/download/v0.28.2/step_0.28.2.tar.gz"
-  sha256 "f879ac21a9c7f8e943bbe8447aee42943877bd85b413eb3275a63e10ded08407"
+  url "https://github.com/smallstep/cli/releases/download/v0.28.3/step_0.28.3.tar.gz"
+  sha256 "320d321081d4df326a5d4b376652533f548fd3da8b99fd97f9db17eb03504fd9"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0c6c51186b67ff0656225d8202c403766011c64390101f62fdc0ddd54e7b2de9"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "30bab0a0ffacad99e6c66b88e2ca90067603f895ae26d235f2476a8254f1d655"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "7a4bcbac9b07a17473f15dfd4129af71ee5017ee5dc96b828d236fcc19bb2f03"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ca1b5a970c77ff9fce1e584c571e82b20cff997fe8f385461e2b9d38b9b20557"
-    sha256 cellar: :any_skip_relocation, ventura:       "ab3af98fdbb1d2e0a7408067c59c174aefec80e041743522d9eac16a81d2176d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f975006f1212fd25001974dc5d9de20ec9f9aac7f1de232d141b55026af8724d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "51b4e317228e1db8311e01e72ae7acd012541b0a1069fd5eabbc0fd6c1e90854"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5d4a30085a3c653de59782262130432e81ca4c6fc208d45ed882375bdf1c0647"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "747009a46278a4168be51bb52cc12505a380fc391ed5fc90fe6c4a05057bcb4c"
+    sha256 cellar: :any_skip_relocation, sonoma:        "deb0ba06ff5e82f58b60d6e1358229c6ff488e1563dd08d6050722b6f1bfc329"
+    sha256 cellar: :any_skip_relocation, ventura:       "7335ad12f71140734d51703a4880847c178812876b1fa4b34c64ac76b277fc4e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "402b5ef0381d4c4a155fd1eb5188adaea7c1feb5fbbe1264147582dc3a914a63"
   end
 
   depends_on "go" => :build
@@ -40,14 +40,14 @@ class Step < Formula
   test do
     # Generate a public / private key pair. Creates foo.pub and foo.priv.
     system bin/"step", "crypto", "keypair", "foo.pub", "foo.priv", "--no-password", "--insecure"
-    assert_predicate testpath/"foo.pub", :exist?
-    assert_predicate testpath/"foo.priv", :exist?
+    assert_path_exists testpath/"foo.pub"
+    assert_path_exists testpath/"foo.priv"
 
     # Generate a root certificate and private key with subject baz written to baz.crt and baz.key.
     system bin/"step", "certificate", "create", "--profile", "root-ca",
         "--no-password", "--insecure", "baz", "baz.crt", "baz.key"
-    assert_predicate testpath/"baz.crt", :exist?
-    assert_predicate testpath/"baz.key", :exist?
+    assert_path_exists testpath/"baz.crt"
+    assert_path_exists testpath/"baz.key"
     baz_crt = File.read(testpath/"baz.crt")
     assert_match(/^-----BEGIN CERTIFICATE-----.*/, baz_crt)
     assert_match(/.*-----END CERTIFICATE-----$/, baz_crt)
@@ -63,8 +63,8 @@ class Step < Formula
     system bin/"step", "certificate", "create", "--profile", "intermediate-ca",
         "--no-password", "--insecure", "--ca", "baz.crt", "--ca-key", "baz.key",
         "zap", "zap.crt", "zap.key"
-    assert_predicate testpath/"zap.crt", :exist?
-    assert_predicate testpath/"zap.key", :exist?
+    assert_path_exists testpath/"zap.crt"
+    assert_path_exists testpath/"zap.key"
     zap_crt = File.read(testpath/"zap.crt")
     assert_match(/^-----BEGIN CERTIFICATE-----.*/, zap_crt)
     assert_match(/.*-----END CERTIFICATE-----$/, zap_crt)
@@ -103,8 +103,8 @@ class Step < Formula
       system bin/"step", "ca", "certificate", "--token", token,
           "homebrew-smallstep-leaf", "brew.crt", "brew.key"
 
-      assert_predicate testpath/"brew.crt", :exist?
-      assert_predicate testpath/"brew.key", :exist?
+      assert_path_exists testpath/"brew.crt"
+      assert_path_exists testpath/"brew.key"
       brew_crt = File.read(testpath/"brew.crt")
       assert_match(/^-----BEGIN CERTIFICATE-----.*/, brew_crt)
       assert_match(/.*-----END CERTIFICATE-----$/, brew_crt)
