@@ -4,7 +4,6 @@ class Commitlint < Formula
   url "https://registry.npmjs.org/commitlint/-/commitlint-19.8.1.tgz"
   sha256 "b87082a3113be1c2929db63d727d3765b92f89e103b966996e7cfc560315ef68"
   license "MIT"
-  head "https://github.com/conventional-changelog/commitlint.git", branch: "master"
 
   bottle do
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "a5060996ad29bdfaed43cc556cd7f361c3fb3fb4240fe0f8ed9b3e2634963ec9"

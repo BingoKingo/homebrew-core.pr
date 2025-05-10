@@ -1,19 +1,19 @@
 class FirebaseCli < Formula
   desc "Firebase command-line tools"
   homepage "https://firebase.google.com/docs/cli/"
-  url "https://registry.npmjs.org/firebase-tools/-/firebase-tools-14.2.2.tgz"
-  sha256 "3493b9d12c491d06cf9fb32009edf40d376dccc3d34158dc52af15bb5db5017b"
+  url "https://registry.npmjs.org/firebase-tools/-/firebase-tools-14.3.1.tgz"
+  sha256 "7b591c2e692f857639e01cfb43c47802a03346298eefb473c12bd0cafe20b0a5"
   license "MIT"
   head "https://github.com/firebase/firebase-tools.git", branch: "master"
 
   bottle do
-    sha256                               arm64_sequoia: "2a3f2219175bc0e40c3367892ee6689baa50a83037fdf0c9e99d6665610442b6"
-    sha256                               arm64_sonoma:  "bf203d3ea282162ba10533e05554334a5bf13f93a8f0e58902f62c45555d4d23"
-    sha256                               arm64_ventura: "bdf15eb630c5de33ec975eeb9964bf7c8d7c5562916c8bcf452de30d291d69ba"
-    sha256                               sonoma:        "6edf9ff456ff4e4d63ccadd25843672027dc1ef5dfaab04a5620a0c362944993"
-    sha256                               ventura:       "ee34b5a915c5da280365e7a7f362978c9f2dcf79f2f86af17cfd82d77c467c3d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "edfd1abb96c1cb8975a1600cc6fbb1df34f090f9a0b42d3071ff6197f99fd00f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1b3ebf7d3c0623c6a48acd17a5ed4516dfcdd2c3feb836f5a5011205355dd542"
+    sha256                               arm64_sequoia: "4f287564636504825950c7c2600c8b5f63dd6a711b11c65ebe40ee8e09e867ad"
+    sha256                               arm64_sonoma:  "3347432626b7a0fdc445c623bf42fc80162e4c188315c4fb105e8369fcd6e07f"
+    sha256                               arm64_ventura: "6dfa8a64ddd2ed56f447429619066d5e937e8cc82c190d80b966055685683959"
+    sha256                               sonoma:        "12471bd0c8abd69a31d95c40b936a687be46205ed08d036bab6fadf1c4d5e023"
+    sha256                               ventura:       "e96c07aa83ca9ff349f1d2332ca985d3b9c19c384eb5a8791e0073865e2dd01c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "31235dd38def495136cf67ffcfdac59e04d3e979e8207332798dd29cfdc0b779"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bf6d0550f596984cbc90b0667a39ff54f25e81066c3aa2033e9ee12bf212930b"
   end
 
   depends_on "node"
@@ -29,7 +29,7 @@ class FirebaseCli < Formula
       assert_match "Failed to authenticate", shell_output("#{bin}/firebase init", 1)
     end
 
-    output = pipe_output("#{bin}/firebase login:ci --interactive --no-localhost", "dummy-code")
-    assert_match "Unable to authenticate", output
+    output = shell_output("#{bin}/firebase use dev 2>&1", 1)
+    assert_match "Failed to authenticate, have you run \e[1mfirebase login\e[22m?", output
   end
 end
