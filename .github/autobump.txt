@@ -543,9 +543,11 @@ clang-build-analyzer
 clang-format
 clang-uml
 clangql
+clarinet
 claws-mail
 clazy
 clblast
+clearlooks-phenix
 clhep
 cli11
 cli53
@@ -626,6 +628,7 @@ comtrya
 conan
 conan@1
 concurrencykit
+conda-lock
 conda-zsh-completion
 conduit
 conftest
@@ -919,6 +922,7 @@ dynare
 dynein
 dysk
 dzr
+e2b
 e2fsprogs
 e2tools
 earthly
@@ -1763,6 +1767,7 @@ keploy
 kepubify
 kerl
 kew
+keychain
 keydb
 keyring
 kfr
@@ -1802,6 +1807,7 @@ ksh93
 ksops
 ktexttemplate
 ktfmt
+ktoblzcheck
 ktor
 kty
 kube-bench
@@ -1825,6 +1831,7 @@ kubergrunt
 kubernetes-cli
 kubernetes-cli@1.30
 kubernetes-cli@1.31
+kubernetes-cli@1.32
 kubescape
 kubeseal
 kubeshark
@@ -1876,6 +1883,7 @@ leaf-proxy
 leakcanary-shark
 lean-cli
 leapp-cli
+ledit
 leetcode-cli
 leetgo
 leetup
@@ -2800,6 +2808,7 @@ php@8.1
 php@8.2
 php@8.3
 phpmyadmin
+phpstan
 phpunit
 phylum-cli
 pianobar
@@ -3795,6 +3804,7 @@ vapoursynth
 varnish
 vault-cli
 vc
+vcftools
 vcluster
 vcsh
 vdirsyncer
