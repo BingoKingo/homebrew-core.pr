@@ -1,8 +1,8 @@
 class Dolt < Formula
   desc "Git for Data"
   homepage "https://github.com/dolthub/dolt"
-  url "https://github.com/dolthub/dolt/archive/refs/tags/v1.54.1.tar.gz"
-  sha256 "7380683b9086cbeb360e9fa3472bf2956440a7af4059b473af3f776d0bbee03a"
+  url "https://github.com/dolthub/dolt/archive/refs/tags/v1.56.0.tar.gz"
+  sha256 "9eb61d5bcba5524cca5c7e466a6440c483313f0892ce2e47d14bee0f2b4e0857"
   license "Apache-2.0"
   head "https://github.com/dolthub/dolt.git", branch: "main"
 
@@ -12,13 +12,13 @@ class Dolt < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7d11d767290c6ac37f92eaed582a3e5e68abb0462102d797f9ad7764717648ab"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "553d02c4b5ace6e443799ac645717c1c5dbc0d8ed8eae8495398c9f924f46828"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a1b9fe59f6d927f6d79c4103826130f73aebdbd1670516bc8ff5d8b873f53314"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3cb142fdab47aca3708dd3a4de702ed28de83d162fbc13e30e3cbcc737e9a151"
-    sha256 cellar: :any_skip_relocation, ventura:       "8642af84d8d81fd8a6d352fb5358c4ff89eaec4d603c929495b9abe98b97e366"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f9dd95b67274155650a45ce3a9c594fa638c49fa918c0ebd1aa955becbcf8625"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a5e9ff7772445bee1aa5dbf444a12d2ecd4caa2d6bc6b9eebe5c537ad5b00120"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6fc6ae92b0c3603523c02976e9e7efa49781909e40cef33f7a9044d0ec8977b9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8593268829046829b677ed25a034ffb8a91c393708b1ba9a3df61784611dd8da"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "57fe15a8c1da891e59b7ea4048af916315ef5b254a837fabfff1479ad31bcd84"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d1546081b64522261c82c381984b577f2bab5e42138cc110cf437bc3cd0a1cbf"
+    sha256 cellar: :any_skip_relocation, ventura:       "44a75cdbe3bee8dba21a9dff22218d3fbd35773472358f70798959acfab2d0a9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c504b601c449295427cf8a2b50afbd65c8a2c85a742049c17fb068578236d744"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "821e2c07e8d302b7a3ed9d4697bc55c30c5b3e5de2ba1b07fd64c2d7d504908e"
   end
 
   depends_on "go" => :build

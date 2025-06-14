@@ -48,6 +48,7 @@
   "gnu-cobol": "gnucobol",
   "gnupg2": "gnupg",
   "gold": "binutils",
+  "goplus": "xgo",
   "google-perftools": "gperftools",
   "grakn": "typedb",
   "grpc-swift": "protoc-gen-grpc-swift",

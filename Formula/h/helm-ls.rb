@@ -1,19 +1,19 @@
 class HelmLs < Formula
   desc "Language server for Helm"
   homepage "https://github.com/mrjosh/helm-ls"
-  url "https://github.com/mrjosh/helm-ls/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "8e63cc617848f7559a378fa50507f38a03def59ed320d6d52769773bc2114af3"
+  url "https://github.com/mrjosh/helm-ls/archive/refs/tags/v0.4.1.tar.gz"
+  sha256 "ec657884a80b1a11ebccf9ec887462ccedbb9c7a4352a26da5dcf9ba2fc5bd58"
   license "MIT"
   head "https://github.com/mrjosh/helm-ls.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cd82c179f05acf34735052fca6cd50f819d37f37558594b800c1b4f09429d2e6"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1b2ddb55106dc0bb1b69d58b3c756b7ee66a662f554c7e48f50620fd2a994698"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "18e1557dcda63f114e18dc2c444175d10561f363af4983b496f0c8ed08084535"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c435f2165ded93b57f88bc2f565a1a8be5f4f912503a0fc109ba9f08c0660992"
-    sha256 cellar: :any_skip_relocation, ventura:       "1e082975114561b00e52af3461edf1dd7d643e548c4d671a9e0c69606ff4f4d6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2bf802af978988e242ad96709dd5572226dbb4a68c121970bd8624d980b7a26e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8509e01883ba836a9fb60ef9e72c50c9585dd88c25742fff421bffba916291ee"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9ab50232100dee21f99e4e317068fb86bad9d53ec2c0c13a05efb1da9b53cc1a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f67831fe452bb9b78f1071493813f266cbd5370df38d73f8a8b67d9219eac70c"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "c1725fbbe14d8166ea3c7920de01086846203ee2efa7fa5bc4842b10d91e9445"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d06431b2589e0963ac80e441d4529428a1d0dd0dd635badec19dff583f68bae9"
+    sha256 cellar: :any_skip_relocation, ventura:       "2e186c39f1c27c29e2e6874b9acf96d363e5f51eb1067ac6e6ea1cb1203f0931"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "97abee4c6be9f4f8b3ec7723e67f11dfac64da19e0274f2e580de4814ee46e6b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5359e6a93186883adff4eb82fab27d9b1019f85497df5b13348853cc11d341b2"
   end
 
   depends_on "go" => :build
