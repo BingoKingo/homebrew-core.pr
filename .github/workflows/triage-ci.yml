@@ -24,7 +24,7 @@ env:
 
 jobs:
   comment:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: >
       github.repository_owner == 'Homebrew' &&
       github.event.workflow_run.conclusion == 'failure' &&
@@ -35,13 +35,13 @@ jobs:
     env:
       COMMENT_BODY_FILE: comment.txt
     steps:
-      - uses: Homebrew/actions/find-related-workflow-run-id@master
+      - uses: Homebrew/actions/find-related-workflow-run-id@main
         with:
           run-id: ${{ github.event.workflow_run.id }}
           workflow-name: Triage tasks
 
       - name: Download `event_payload` artifact
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
           name: event_payload
           github-token: ${{ github.token }}

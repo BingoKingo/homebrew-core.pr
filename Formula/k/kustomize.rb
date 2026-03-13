@@ -1,8 +1,8 @@
 class Kustomize < Formula
   desc "Template-free customization of Kubernetes YAML manifests"
   homepage "https://github.com/kubernetes-sigs/kustomize"
-  url "https://github.com/kubernetes-sigs/kustomize/archive/refs/tags/kustomize/v5.6.0.tar.gz"
-  sha256 "80822d3227c0dbbd38bff19c4630f4fa7eccbacd0ff269a1795a63aa3a45714f"
+  url "https://github.com/kubernetes-sigs/kustomize/archive/refs/tags/kustomize/v5.8.1.tar.gz"
+  sha256 "4ea5a974c46ad6efcde4fd9c339ab1bd278a80b6872dda2d1a366936e4638475"
   license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/kustomize.git", branch: "master"
 
@@ -12,13 +12,12 @@ class Kustomize < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "dd6b8ee41eaa7b659064ed70af60dd3c79b4064465f66074cf9d5dfc5301dcaa"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3e8887e642d4af6754b15728feaebd0e326d45547ebd1a6a53ae299d88cce48a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ec32849849c7f51ee4606b6beaad41c83a0e49cdf2b2ce641c201eecaddb83ac"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ce706ccba85d5dc14c50cbd7c91dc99ab27489e5d4fb67880da064d4546f88c9"
-    sha256 cellar: :any_skip_relocation, ventura:       "9f0d69b382c07d38e432cd49d1f141d2e456e87f31f5d8d4d7674ab2c833dea2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9ddbb6a01895d449ad69ae591edcb1001c37b549181a1c8daec166c72f4c1d98"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f480a2f4d778df050f01c6344d9777c8ce2ee729e44694695732ff064050e2a6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "2ccbddce9b9a74b5117932a76fe8a196c58d81deadfa90e160c1e8fcbc076d16"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1c4ad95901cff98eddc678ac7b33dd4067de2f4f7a10903b73dd646afd3d4935"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f0a293154bd4ec5cc58c684ac0e3eda80e6b7d17d1a29476099d1fa76310fea9"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2f0e0ebfaa6965bedfbc6d7cc46165f045ce5ccec5c420b70091766aee4bf4fd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "53e8e30f0150ab2641f5ff89d4cf42222b234887fb684bb998273034145c8bdb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "99e8592d6db38d12c0b2af3daccfb446ecec021b98e7cc99728988bc4d904beb"
   end
 
   depends_on "go" => :build
@@ -32,7 +31,7 @@ class Kustomize < Formula
 
     system "go", "build", *std_go_args(ldflags:), "./kustomize"
 
-    generate_completions_from_executable(bin/"kustomize", "completion")
+    generate_completions_from_executable(bin/"kustomize", shell_parameter_format: :cobra)
   end
 
   test do

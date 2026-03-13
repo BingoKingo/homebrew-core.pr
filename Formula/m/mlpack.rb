@@ -1,19 +1,18 @@
 class Mlpack < Formula
   desc "Scalable C++ machine learning library"
   homepage "https://www.mlpack.org"
-  url "https://mlpack.org/files/mlpack-4.6.2.tar.gz"
-  sha256 "2fe772da383a935645ced07a07b51942ca178d38129df3bf685890bc3c1752cf"
+  url "https://mlpack.org/files/mlpack-4.7.0.tar.gz"
+  sha256 "a3f0fb530e51d51f8d7eceb7998b4699906d628000b158ada80541465595324e"
   license all_of: ["BSD-3-Clause", "MPL-2.0", "BSL-1.0", "MIT"]
   head "https://github.com/mlpack/mlpack.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "87d4f5a4302156c12ad5da5ee62eec7452fc8b349b6e1d05df1cac7533f6c7b8"
-    sha256 cellar: :any,                 arm64_sonoma:  "4c580314cc58e6bc4c04db0ab99879fd160bd70bab73e2947e83cd96015f8862"
-    sha256 cellar: :any,                 arm64_ventura: "1532059fed0f7386245634600d530316cd95cd9feee65035827d59a1cece22bc"
-    sha256 cellar: :any,                 sonoma:        "20313ef032c389344b54f3575b9a1b66e97210312f6524920c1c1978998a86f0"
-    sha256 cellar: :any,                 ventura:       "c6d37fb700c00e29ed57b56c189a42075147fbe58ab291db202f97dca826b5bf"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3bb9c75a232e157e6e8e3599da1a24659181cb8d37baebc119518fd86bc935e2"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e03bdd94e227e2904ddbcee6d449899391c5f89f555ceeb30d5b68a4fff22ac1"
+    sha256 cellar: :any,                 arm64_tahoe:   "9b331d69b57ed9d4d0019c88e06df3279b143bfcee03f081675d6224e611e83d"
+    sha256 cellar: :any,                 arm64_sequoia: "0a562de79e6c8e22c4434b626af424ba666bc04ed83ae904a5c397a7899da4aa"
+    sha256 cellar: :any,                 arm64_sonoma:  "45cac3d79a3e818acec4701d478e3e6b868f6d5590ba347f24a1fa192a76674d"
+    sha256 cellar: :any,                 sonoma:        "85365a6ce18c3e3d22cf43e84867e82dfd804176c1bf83ebeb714e51e6eb3bfc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "22de66681bdcf9d2e8345a9211add0e8baa16f0fb26afdb8f888040bc3c52887"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e85b017257022ffc33619d39237a1b612453b594c0aa04179cae05c241c36fcf"
   end
 
   depends_on "cmake" => :build

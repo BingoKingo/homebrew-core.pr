@@ -1,15 +1,17 @@
 class Fairymax < Formula
   desc "AI for playing Chess variants"
   homepage "https://www.chessvariants.com/index/msdisplay.php?itemid=MSfairy-max"
-  url "http://hgm.nubati.net/git/fairymax.git",
-      tag:      "5.0b",
-      revision: "f7a7847ea2d4764d9a0a211ba6559fa98e8dbee6"
-  version "5.0b"
+  url "https://deb.debian.org/debian/pool/main/f/fairymax/fairymax_5.0b.orig.tar.gz"
+  sha256 "3e36ba168aa10179225f8dd6953d1c39c4cd4526572765b2e9c77717efe3e52f"
   license :public_domain
-  head "http://hgm.nubati.net/git/fairymax.git", branch: "master"
+
+  livecheck do
+    skip "No longer developed or maintained"
+  end
 
   bottle do
     rebuild 1
+    sha256 arm64_tahoe:    "a10fe6a9cb618abed1eaf1b36c89a0bf95e97d8a6542a7ebfa2be8e4d8bedf50"
     sha256 arm64_sequoia:  "ff66c8d9a55cb7c3567972c8c615ef9a91475322d3ede04f3c0babfcd247910e"
     sha256 arm64_sonoma:   "699b0ba8c10d2452add0b265cc336b835d61e4a2bc0ce00365519d8c3591e52c"
     sha256 arm64_ventura:  "7a431f623e9a7ffc4fe331a5ebe118265a9c0ade9222124516586591e0644286"

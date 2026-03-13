@@ -1,18 +1,18 @@
 class Vhs < Formula
   desc "Your CLI home video recorder"
   homepage "https://github.com/charmbracelet/vhs"
-  url "https://github.com/charmbracelet/vhs/archive/refs/tags/v0.9.0.tar.gz"
-  sha256 "e8538a9019ddfa633ef7e0a6eb417b87fed0555d51b67dc59cb53493e179e20b"
+  url "https://github.com/charmbracelet/vhs/archive/refs/tags/v0.11.0.tar.gz"
+  sha256 "c08b8502989fe7e9626c02938f3fc512c2a4ba21f839f455d20d7eb1da7bc39f"
   license "MIT"
   head "https://github.com/charmbracelet/vhs.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f2a2174756cce0799fda2f31c004d1e8193b85e56ed799ecaaaceb841e3ef02b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f2a2174756cce0799fda2f31c004d1e8193b85e56ed799ecaaaceb841e3ef02b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f2a2174756cce0799fda2f31c004d1e8193b85e56ed799ecaaaceb841e3ef02b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "195b57240e893ad37f6fc86d13c78d5ea4d99ff34213ce3ada8e6d66f63a0cb8"
-    sha256 cellar: :any_skip_relocation, ventura:       "195b57240e893ad37f6fc86d13c78d5ea4d99ff34213ce3ada8e6d66f63a0cb8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d203d016045b4a304efbe5a1b9f21dbfce2bcd0fb2fb3e91cd694ac7c37d863d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "0edf44b9c84f56fb39ae8982b9190380cc129c24a489d3fde161ab733d9219b4"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0edf44b9c84f56fb39ae8982b9190380cc129c24a489d3fde161ab733d9219b4"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0edf44b9c84f56fb39ae8982b9190380cc129c24a489d3fde161ab733d9219b4"
+    sha256 cellar: :any_skip_relocation, sonoma:        "1e57d7d0c7a2e44c65e7db0b344de2ba912362c648060b7ccd9f5de6bcec784d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "cdc1dcb65b659c63f95e43f6347e2cb290744431c6f0ced771c25326d098155e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "15290cb92528067b54e83f001e151ff66e39b1b94bba44174e442bb803dccc70"
   end
 
   depends_on "go" => :build
@@ -24,7 +24,7 @@ class Vhs < Formula
 
     (man1/"vhs.1").write Utils.safe_popen_read(bin/"vhs", "man")
 
-    generate_completions_from_executable(bin/"vhs", "completion")
+    generate_completions_from_executable(bin/"vhs", shell_parameter_format: :cobra)
   end
 
   test do

@@ -1,9 +1,10 @@
 class Libwebsockets < Formula
   desc "C websockets server library"
   homepage "https://github.com/warmcat/libwebsockets"
-  url "https://github.com/warmcat/libwebsockets/archive/refs/tags/v4.3.5.tar.gz"
-  sha256 "87f99ad32803ed325fceac5327aae1f5c1b417d54ee61ad36cffc8df5f5ab276"
+  url "https://github.com/warmcat/libwebsockets/archive/refs/tags/v4.5.4.tar.gz"
+  sha256 "f2aa31a0be16d45470360b868f3b5b114990da038ba5e49569f0732c58b2d9fc"
   license "MIT"
+  compatibility_version 2
   head "https://github.com/warmcat/libwebsockets.git", branch: "main"
 
   livecheck do
@@ -12,21 +13,18 @@ class Libwebsockets < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "9e99f2685bfac3273ac873bedec5c4ce4514666bf717dc9318856810ab92f7d2"
-    sha256 arm64_sonoma:  "8ea3a281fe5caf527100e46eeda10d31ac366839d846785da3c5b365f8882e75"
-    sha256 arm64_ventura: "1fe9ee68992714b466b2cfe7dffe84f4e08fe10de909d44916b5155887f9e825"
-    sha256 sonoma:        "aa41d5252a17883dbb24bf7f88a1246ba5f928fd6373983923fc74aec5f34198"
-    sha256 ventura:       "7690e37818cd8b559f7fd44ef1380da6ade8830294899f2d02c513c446ac3f15"
-    sha256 arm64_linux:   "543d812d4c12757637936ae3180496ce33254d92bfa4577f12fac418736f84c0"
-    sha256 x86_64_linux:  "a5baeb55111964b22daeb1bcc9138d7835999ee92e836eaac24fb616859dc654"
+    sha256 arm64_tahoe:   "d9d43d42a69dac6d47cbe617823541a493204cea01c95c6988672fb7ef54a121"
+    sha256 arm64_sequoia: "0935eeb7dda7941826f3ab857e247b53cf66130f10c6a5910fa6dbcf235f555e"
+    sha256 arm64_sonoma:  "6932a8a409330c9bc4db13b2b50826b9e6619f2bfd2c0f08a8953277ce9ef0a3"
+    sha256 sonoma:        "bd18b625a62b637f6c21b71937a8e1ddb26e7bd2d9150fde24496db5c691f7e7"
+    sha256 arm64_linux:   "8a76cdb1930e82ce621d59813b605cc5ccaba8a13deb98f3731f9fd07eca053b"
+    sha256 x86_64_linux:  "072945865ba3253ef8c17fea3a921e17a2704613f4bc641f445cc6d81db3f64c"
   end
 
   depends_on "cmake" => :build
   depends_on "libevent"
   depends_on "libuv"
   depends_on "openssl@3"
-
-  uses_from_macos "zlib"
 
   def install
     system "cmake", "-S", ".", "-B", "build",

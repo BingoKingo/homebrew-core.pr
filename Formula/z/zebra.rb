@@ -1,10 +1,9 @@
 class Zebra < Formula
   desc "Information management system"
   homepage "https://www.indexdata.com/resources/software/zebra/"
-  url "https://ftp.indexdata.com/pub/zebra/idzebra-2.2.7.tar.gz"
-  sha256 "b465ffeb060f507316e6cfc20ebd46022472076d0d4e96ef7dab63e798066420"
+  url "https://ftp.indexdata.com/pub/zebra/idzebra-2.2.10.tar.gz"
+  sha256 "9ac047f9a4b402722a697062680cdc8fe4a9232da58de0976d7424a79208ad98"
   license "GPL-2.0-or-later"
-  revision 5
 
   livecheck do
     url "https://ftp.indexdata.com/pub/zebra/"
@@ -12,16 +11,18 @@ class Zebra < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "ebc4c8b98b8d0092a14b28a1fc1a3624d25efc739fac4c8c37a24b9cf748dff7"
-    sha256 arm64_sonoma:  "c90a4df5cdf059fbc304eb29694295d15aff3c9e938c9f3043b21c0611e231f2"
-    sha256 arm64_ventura: "ba641b0bb5af1aeed71f7c74bdd2d23260bc56d5417a16b3c0d2a89545d33122"
-    sha256 sonoma:        "89ec7a8767b4ec0897e424efc895c0044a7ec3b974842d5cbc3dc803106db4b5"
-    sha256 ventura:       "a7c5848a84b7e0596504c0b234da47f7dfe9580c3bda227256b35698026207b5"
-    sha256 arm64_linux:   "5334731b4f819cb37340c235ae68d1e1e5deecb367d16c9be82b7f0131fd7839"
-    sha256 x86_64_linux:  "f327f534822726a13ab7d912a3873f915f71c24c701f54675b42077d24212d48"
+    rebuild 1
+    sha256 arm64_tahoe:   "19bbf8d4ccb9a2101ba988660c99f28619faadf473dc5841385cd1946f8327b9"
+    sha256 arm64_sequoia: "8889a6a7ad2c160e224033529b6395f61de7619d8a603992ecb0edc606baa02b"
+    sha256 arm64_sonoma:  "5a8bab3d5c6af8415011b994f40f1618aa685668898bbc3994fd8f3ca7e38001"
+    sha256 sonoma:        "d5fd63bd6a150619f6ffbe4e314f286eabe3e999423e9cb9f35b71d86e681547"
+    sha256 arm64_linux:   "eb2d58aaffda0097ed21f908680cc33e649366997d5dcafaf89fa08c0b67af5b"
+    sha256 x86_64_linux:  "3559c2ea4ab4cea38fc905077c4873dd471586252375aaa2bc744a5037694b29"
   end
 
-  depends_on "icu4c@77"
+  depends_on "pkgconf" => :build
+
+  depends_on "icu4c@78"
   depends_on "yaz"
 
   uses_from_macos "bzip2"
@@ -29,7 +30,10 @@ class Zebra < Formula
   uses_from_macos "libxcrypt"
   uses_from_macos "libxml2"
   uses_from_macos "libxslt"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./configure", "--disable-silent-rules",

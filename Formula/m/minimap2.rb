@@ -1,8 +1,8 @@
 class Minimap2 < Formula
   desc "Versatile pairwise aligner for genomic and spliced nucleotide sequences"
   homepage "https://lh3.github.io/minimap2"
-  url "https://github.com/lh3/minimap2/archive/refs/tags/v2.29.tar.gz"
-  sha256 "008d5e9848b918e4eb09d054aa3d6c272d50e92b8fc8537abf5081a507019718"
+  url "https://github.com/lh3/minimap2/archive/refs/tags/v2.30.tar.gz"
+  sha256 "4e5cd621be2b2685c5c88d9b9b169c7e036ab9fff2f3afe1a1d4091ae3176380"
   license "MIT"
 
   livecheck do
@@ -11,16 +11,18 @@ class Minimap2 < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a17ef19c327d33af21ce663a5c00e731b427ce5539a4fd444c69d08ed13ac031"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "02c4899b062bf0c3bd592ffdc4ebfcab5061468533230c6c1fea0c7cd1fc04bf"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f8dbbb0a2e1de72ee94b40027b7efcc23a49e8ec71fea90737e71e3df0d78c92"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1451d3de7af2dd6f59cb1612f218c78c89be826afb339f36223d15454de33eda"
-    sha256 cellar: :any_skip_relocation, ventura:       "820288efa0f55a08807d60affff35dd8853caba901878b4db15e1597d8d20284"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0796c7908c2694f083f9159dc476820ad29fed7caff4a4a5c471bfb6357f7a77"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3543ef1808df306f48f1677511c6eb81109ca635f5873f521480f61eaef56a7c"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "bab9ae8b3c6ebe68b4cc6ec84c04cefd0a9ed544d474d0b97b3edde63613c029"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cc2e9667c941db62f475850288cc477af72e76f3f2d601dc5504b33a25054bc0"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dea2a7c77af4d26e3121377eaa17fe9f8fda9b195a729f30b0c2b031e71cb79c"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d9697c3492313510140bb1d4290f854db37f419988e0e141d8c98cd8152e24e4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b66bf9449ae3f6d95f0fd33af2b2df9c1f556a59e6b1eb53754d5d39bbc3aa80"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "84a23620b041f878b15b147f1eee02ab87b73c26ff1afd8b40bef05503aa141a"
   end
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     if Hardware::CPU.arm?

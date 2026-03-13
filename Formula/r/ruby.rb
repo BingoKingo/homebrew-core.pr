@@ -5,17 +5,16 @@ class Ruby < Formula
   head "https://github.com/ruby/ruby.git", branch: "master"
 
   stable do
-    # Consider changing the default of `Gem.default_user_install` to true with Ruby 3.5.
-    # This may depend on https://github.com/rubygems/rubygems/issues/5682.
-    url "https://cache.ruby-lang.org/pub/ruby/3.4/ruby-3.4.4.tar.gz"
-    sha256 "a0597bfdf312e010efd1effaa8d7f1d7833146fdc17950caa8158ffa3dcbfa85"
+    # TODO: enable default_user_install when updating to Ruby 4.1
+    url "https://cache.ruby-lang.org/pub/ruby/4.0/ruby-4.0.1.tar.gz"
+    sha256 "3924be2d05db30f4e35f859bf028be85f4b7dd01714142fd823e4af5de2faf9d"
 
     # Should be updated only when Ruby is updated (if an update is available).
     # The exception is Rubygem security fixes, which mandate updating this
     # formula & the versioned equivalents and bumping the revisions.
     resource "rubygems" do
-      url "https://rubygems.org/rubygems/rubygems-3.6.9.tgz"
-      sha256 "ffdd46c6adbecb9dac561cc003666406efd2ed93ca21b5fcc47062025007209d"
+      url "https://rubygems.org/rubygems/rubygems-4.0.3.tgz"
+      sha256 "f5f728a40603773eec1a5c0857693485e7a118619f6ae70dcece6c2e719129a0"
 
       livecheck do
         url "https://rubygems.org/pages/download"
@@ -31,13 +30,12 @@ class Ruby < Formula
 
   bottle do
     rebuild 1
-    sha256 arm64_sequoia: "f91b9870507ed4690914424ea6693cad133a75d062654425fd99b803e37a4d93"
-    sha256 arm64_sonoma:  "c3adf737845d90aa0677eeb0aa0e47d32df406960b75833db68891f73ef849a2"
-    sha256 arm64_ventura: "f65125606d3279b2262a25acb629dc429de665ae7b0a29042be2c20d3b2005e4"
-    sha256 sonoma:        "8086f57d95bbfd253a10310b9da36898cee6955b25d431321acac817cbb2a298"
-    sha256 ventura:       "6dff743916412b2227ee851825737eae59db2696b875120573dfb11b401715d7"
-    sha256 arm64_linux:   "da3abe8bcda1a43b342663d0c668b57ded83b522cd03d01c38a99110ca722d78"
-    sha256 x86_64_linux:  "7d0295b03469cb59ca833318acb453d641406e1a7c07f5761fcd4fe3b6ddbcd3"
+    sha256 arm64_tahoe:   "99ba4d74dc9769146bbc717c340e548f5418b1b5ad634786745655f4b4be31ae"
+    sha256 arm64_sequoia: "a8585e1b706a9e96584d35bda9f4ec2f3ef378e0fede531cfacb276f63fc5868"
+    sha256 arm64_sonoma:  "1e154c859e040a9e7bdcd1e90298872f6551c6618677357c9bd146356fee1162"
+    sha256 sonoma:        "cdb41288da959462858a87352cee45567845d147bd162c67307023197cf5c168"
+    sha256 arm64_linux:   "6797becac7bc9fde35ac405d5cb8e1cbd5a6c16bf50b03a2798461d15d39d4e8"
+    sha256 x86_64_linux:  "6217bdaf74063c80cade025f1aaa9fb3101da08ac8f7622bb5ee0edf6f73a656"
   end
 
   keg_only :provided_by_macos
@@ -51,7 +49,10 @@ class Ruby < Formula
   uses_from_macos "gperf"
   uses_from_macos "libffi"
   uses_from_macos "libxcrypt"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def determine_api_version
     Utils.safe_popen_read(bin/"ruby", "-e", "print Gem.ruby_api_version")
@@ -139,7 +140,7 @@ class Ruby < Formula
       end
     end
 
-    unless build.head? # Use bundled RubyGems for --HEAD (will be newer)
+    if build.stable? # Use bundled RubyGems for --HEAD (will be newer)
       # This is easier than trying to keep both current & versioned Ruby
       # formulae repeatedly updated with Rubygem patches.
       resource("rubygems").stage do
@@ -174,6 +175,7 @@ class Ruby < Formula
     config_file.write rubygems_config
   end
 
+  # TODO: remove when enabling default_user_install
   def post_install
     # Since Gem ships Bundle we want to provide that full/expected installation
     # but to do so we need to handle the case where someone has previously
@@ -195,6 +197,14 @@ class Ruby < Formula
           alias :old_ruby :ruby
           alias :old_default_specifications_dir :default_specifications_dir
         end
+
+        # TODO: enable this with Ruby 4.1
+        #
+        # def self.default_user_install
+        #   return true unless ENV.key?("GEM_HOME")
+        #
+        #   false
+        # end
 
         def self.default_dir
           path = [
@@ -259,6 +269,7 @@ class Ruby < Formula
   end
 
   def caveats
+    # TODO: update path when enabling `Gem.default_user_install`
     <<~EOS
       By default, binaries installed by gem will be placed into:
         #{rubygems_bindir}
@@ -276,10 +287,10 @@ class Ruby < Formula
     ENV["GEM_HOME"] = testpath
     system bin/"gem", "install", "json"
 
-    (testpath/"Gemfile").write <<~EOS
+    (testpath/"Gemfile").write <<~RUBY
       source 'https://rubygems.org'
       gem 'github-markup'
-    EOS
+    RUBY
     system bin/"bundle", "exec", "ls" # https://github.com/Homebrew/homebrew-core/issues/53247
     system bin/"bundle", "install", "--binstubs=#{testpath}/bin"
     assert_path_exists testpath/"bin/github-markup", "github-markup is not installed in #{testpath}/bin"

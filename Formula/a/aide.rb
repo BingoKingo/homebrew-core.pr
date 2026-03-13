@@ -1,28 +1,18 @@
 class Aide < Formula
   desc "File and directory integrity checker"
   homepage "https://aide.github.io/"
+  url "https://github.com/aide/aide/releases/download/v0.19.3/aide-0.19.3.tar.gz"
+  sha256 "6513170bb5b8c22802dd1b72f02d8aa9f432aef2b4470522db03e755212a3f47"
   license "GPL-2.0-or-later"
 
-  stable do
-    url "https://github.com/aide/aide/releases/download/v0.19/aide-0.19.tar.gz"
-    sha256 "e7fba0214be01299d76359bff2975233ed241332e4cfcfff59cd1b6a89aba5e4"
-
-    # Fix to missing MAGIC Constants for linux, remove in next release
-    # Issue ref: https://github.com/aide/aide/issues/192
-    patch do
-      url "https://github.com/aide/aide/commit/3a218b2a3affe034bb51506fd0b770eab723ca95.patch?full_index=1"
-      sha256 "6136c77d4242664a9df9ae9daa62a96809aadb21875655b705b4f2ea1e6cead8"
-    end
-  end
-
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "758e74004bbc5c324e8d762b0bdec6632d817125346c092126784efc5195a503"
-    sha256 cellar: :any,                 arm64_sonoma:  "996cfa72645cfd7cbf3e543e9dd2b562d33f6809f66f795e9d52f1747f49b27e"
-    sha256 cellar: :any,                 arm64_ventura: "2eabc4523a770502710a4cc759fa9b1f21dfef43616c38fa7f8076c2ae679963"
-    sha256 cellar: :any,                 sonoma:        "fd0f7276bedd9c50e33b07770656dc69cc9a408d0acf499b27c85d2ab42ad06a"
-    sha256 cellar: :any,                 ventura:       "b84e1f1c9b88e3fc1a9588ce0d59e11dc9af323b2c54454511ec8022ed2357ed"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d2fb38a54ef59390ca2b5161a839983818eea34f11d50c4909b66eba395ee96f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "020f57203ee46e492a1a3a8e2fbc207757aba784dc14118ffb85f04c98d371ce"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "e84fe8e7cdbd88400214740e38b924ff7bdfe449b2ef2de235d4e9751e3e9225"
+    sha256 cellar: :any,                 arm64_sequoia: "810d048246d7ce9e0ddb19468037f5469af08414ab9fcfa121c0489eb0214958"
+    sha256 cellar: :any,                 arm64_sonoma:  "b65c8a523b64e3895a18a94e79c9edf0ce7190bccd07fed057671c6e3f8ca81e"
+    sha256 cellar: :any,                 sonoma:        "4ea8bb4acbd0926da91bdd8ee2ed6f6adea517aa51a3abce5f62e248425f2a89"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b2f434138bea735edc207d22050845a60d34b494161a7d2f339bad6c11acba8f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cd4e10567325568eadfb6dcde6da800b5a682212bddc7a878554fccbdb251582"
   end
 
   head do
@@ -42,7 +32,10 @@ class Aide < Formula
   uses_from_macos "bison" => :build
   uses_from_macos "flex" => :build
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with cask: "aide-app"
 

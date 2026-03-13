@@ -8,22 +8,27 @@ class HopenpgpTools < Formula
   head "https://salsa.debian.org/clint/hOpenPGP.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "41b5917c6be661736f37f098bff90219a3c4f5cd87b396abf57389d219c1ccb4"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0ea0bdb57778391700816112db32d245f0bb3ec0d8baeecca58764d3bfc9f54b"
-    sha256 cellar: :any,                 arm64_ventura: "b83d81cff76f58a88f73c353b6807a82bb6186419bc525f7e90aaddea2e0c272"
-    sha256 cellar: :any_skip_relocation, sonoma:        "81a7de6f22c94c9e6511f74ac6caab00902a992db025cc63503746ff7ddebe95"
-    sha256 cellar: :any,                 ventura:       "8d3b9bf6403e965b552105bf02b1dd620325f5c37174d3c3959899eae71fe055"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3b60d684c2fee4c0a2bf97fbc083340f7830183f7372edadb6e7a0fd9042843e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2e51c27ef595c911cb7a2f208b6a5c5426e767240f3651e072b5af7bd6213156"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "6e1b1eccc7a834a587e44a3d72443034942527f06b6b871a9c44698c1cb21e58"
+    sha256 cellar: :any,                 arm64_sequoia: "1cd126b1a338333e61bc6d5ff086511af4470c9a05764d5250417469a15669d4"
+    sha256 cellar: :any,                 arm64_sonoma:  "089e8a318331d55e8dae0760ae8df764ca9e252c59dd1640f6f9b10ba56ce219"
+    sha256 cellar: :any,                 sonoma:        "4556fef4e991d2e8dd07835f16b92f18d8c8151c1fb9043fa903a7ce0acc90c9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "10da1dd06cad90211489d231be6b4ddec80304bea1e57aa342c9c4cd2258fc91"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a783536238023b381f195e111f0430f9d7931bea24fd9d31849675e00c29f639"
   end
 
   depends_on "cabal-install" => :build
-  depends_on "ghc@9.10" => :build
+  depends_on "ghc" => :build
   depends_on "pkgconf" => :build
   depends_on "gnupg" => :test
+  depends_on "gmp"
   depends_on "nettle"
 
-  uses_from_macos "zlib"
+  uses_from_macos "libffi"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # TODO: Remove resource once new release ixset-typed release is available
   resource "ixset-typed" do
@@ -35,6 +40,8 @@ class HopenpgpTools < Formula
       url "https://github.com/well-typed/ixset-typed/commit/460901368dcb452d352a17bcd4b8f60200a6fa71.patch?full_index=1"
       sha256 "e284534df9ff14f49dad95a6745137c36c7a6335e896201c577d709794882e4c"
     end
+    # Backport https://github.com/well-typed/ixset-typed/commit/1ee029539a77b0c7d854660707c9daa957d6fb11
+    patch :DATA
   end
 
   def install
@@ -42,10 +49,8 @@ class HopenpgpTools < Formula
     (buildpath/"cabal.project.local").write "packages: . ixset-typed/"
     (buildpath/"ixset-typed").install resource("ixset-typed")
 
-    # Workaround to build with GHC 9.10. `data-functor-logistic` is a
-    # dependency of `rank2classes` which uses the same workaround.
-    # Ref: https://github.com/blamario/grampa/blob/master/cabal.project#L6
-    args = ["--allow-newer=data-functor-logistic:base"]
+    # Workaround to build aeson with GHC 9.14, https://github.com/haskell/aeson/issues/1155
+    args = ["--allow-newer=base,containers,template-haskell", "--constraint=aeson>=2.2", "--constraint=errors>=2"]
 
     system "cabal", "v2-update"
     system "cabal", "v2-install", *args, *std_cabal_v2_args
@@ -74,3 +79,18 @@ class HopenpgpTools < Formula
     end
   end
 end
+
+__END__
+diff --git a/ixset-typed.cabal b/ixset-typed.cabal
+index 888d8a7..e42b86b 100644
+--- a/ixset-typed.cabal
++++ b/ixset-typed.cabal
+@@ -38,7 +38,7 @@ library
+                      deepseq          >= 1.3 && < 2,
+                      safecopy         >= 0.8 && < 0.11,
+                      syb              >= 0.4 && < 1,
+-                     template-haskell >= 2.8 && < 2.23
++                     template-haskell >= 2.8 && < 2.24
+ 
+   hs-source-dirs:    src
+   exposed-modules:

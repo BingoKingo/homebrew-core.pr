@@ -1,8 +1,8 @@
 class Hypre < Formula
   desc "Library featuring parallel multigrid methods for grid problems"
   homepage "https://computing.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods"
-  url "https://github.com/hypre-space/hypre/archive/refs/tags/v2.33.0.tar.gz"
-  sha256 "0f9103c34bce7a5dcbdb79a502720fc8aab4db9fd0146e0791cde7ec878f27da"
+  url "https://github.com/hypre-space/hypre/archive/refs/tags/v3.1.0.tar.gz"
+  sha256 "a6879ae9375d95c26afd97141d61e7a8092807333bf40cd180b385aed7351b2d"
   license any_of: ["MIT", "Apache-2.0"]
   head "https://github.com/hypre-space/hypre.git", branch: "master"
 
@@ -12,25 +12,28 @@ class Hypre < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "86c808a2d91ad2cb4e451e10445911ebdfddc094f683ec5dc4135e3d32373179"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "980dfd622aec636d422f3ee28ca6a0a8069634b85c75f45bd0a61136ed241dd7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "cd5cce6bbe748ee40110a0c6fa3be575a7ad940435c162194cc6504f300cdc15"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d4c4a4b58c7b5217f625d1e0726b899563f99a3d92a45decf651522900fc2ef9"
-    sha256 cellar: :any_skip_relocation, ventura:       "b62f0376fa5930164977c6b3e5766ecc14375a5f7e15a806c28fbf2ce241dcee"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f890413fed72b117977cd0235e885a983af1fc5c998a98fa22a7aae87333a596"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9eea76ecc19f0455d9a8416aa615626f67c77d6792ae173b1d6944ceecb1c2c3"
+    sha256 cellar: :any,                 arm64_tahoe:   "ca82286770d54d33ffbbec6ae9da8087dc0fb72dab3c45980ccab7049983377e"
+    sha256 cellar: :any,                 arm64_sequoia: "4c7a60d7b6a506032ee9e252462a53bce6d4b14275c3e2b9254a2b0adb607394"
+    sha256 cellar: :any,                 arm64_sonoma:  "b5155a9395fa2aac62f082be1432fb69eb219be1c461829797c680e53b796601"
+    sha256 cellar: :any,                 sonoma:        "cc4e2dd22e0d13c072a3df29f13f33fa787a9263f070eeb447afb299b9303051"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "71bb3b3e680b427a8a804f6c0d87213842f0f2f170eeed3e951fc69cd61a5781"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e08f288f4966b90af4fbb59000535df8f27e72b8a44831c0d20a027d7b75f20f"
   end
 
-  depends_on "gcc" # for gfortran
+  depends_on "cmake" => :build
   depends_on "open-mpi"
+  depends_on "openblas"
 
   def install
-    cd "src" do
-      system "./configure", "--prefix=#{prefix}",
-                            "--with-MPI",
-                            "--enable-bigint"
-      system "make", "install"
-    end
+    system "cmake", "-S", "src", "-B", "build",
+                    "-DBUILD_SHARED_LIBS=ON",
+                    "-DHYPRE_ENABLE_BIGINT=ON",
+                    "-DHYPRE_ENABLE_HYPRE_BLAS=OFF",
+                    "-DHYPRE_ENABLE_HYPRE_LAPACK=OFF",
+                    "-DHYPRE_ENABLE_MPI=ON",
+                    *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
   end
 
   test do

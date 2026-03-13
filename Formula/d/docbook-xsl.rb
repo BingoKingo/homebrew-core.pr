@@ -13,6 +13,8 @@ class DocbookXsl < Formula
     regex(%r{^(?:release/)?(\d+(?:\.\d+)+)$}i)
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
     rebuild 1
     sha256 cellar: :any_skip_relocation, all: "201ddedf7dcf5ac0d6eb0a2554ff329ee9856ce5f79d95db9c5d6db7703d9b84"
@@ -33,7 +35,7 @@ class DocbookXsl < Formula
   # see https://www.linuxfromscratch.org/blfs/view/9.1/pst/docbook-xsl.html for this patch
   patch do
     url "https://www.linuxfromscratch.org/patches/blfs/9.1/docbook-xsl-nons-1.79.2-stack_fix-1.patch"
-    mirror "https://raw.githubusercontent.com/Homebrew/formula-patches/5f2d6c1/docbook-xsl/docbook-xsl-nons-1.79.2-stack_fix-1.patch"
+    mirror "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/docbook-xsl/docbook-xsl-nons-1.79.2-stack_fix-1.patch"
     sha256 "a92c39715c54949ba9369add1809527b8f155b7e2a2b2e30cb4b39ee715f2e30"
   end
 

@@ -7,24 +7,32 @@ class DhallToml < Formula
   head "https://github.com/dhall-lang/dhall-haskell.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fa04be536e7446641318c9d7ee241d0280b24061fda69b889a2988f48898e8b9"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0b91f73c50c4c44ac7c5edef748f1c4f880a3ff0690ef64463f5dc04dfff85d5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b221d5914aad68c046ae8f9f0fee29cd0e74ad55f4db5fd027f334daf71282e2"
-    sha256 cellar: :any_skip_relocation, sonoma:        "230e845fc7963e4f421247c6f7733af8a588782ad39232a446f6e1a65fccbb80"
-    sha256 cellar: :any_skip_relocation, ventura:       "a118e324119fb58470cf49f4f898f0c3a603fc3975a11b2b3f60d66eeefdabe0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b0a91ba9614f2b28c79379fb9208a6aa25735985b7d79f84f75aeca830133e3b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e7a0839d98769280508ea3d559828b88c1a78838f21bbceb64e179f6a7078f07"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "3d83e52092e335ddba928d06ae826157f26f8179ab7db6b757b4c298bf1faf60"
+    sha256 cellar: :any,                 arm64_sequoia: "996c152df3dfc9a03b591e6e73125344fb7828a98c9b735d1c8ee3b8f3e1f0d5"
+    sha256 cellar: :any,                 arm64_sonoma:  "6338c0b88b6f2eaa8a42246a7ab9c5fa6e3c265578f0fcce47a652f89895ecda"
+    sha256 cellar: :any,                 sonoma:        "c67986762a7976ae8707fb802f8350871b8d3a182b81b04c4fc92222c7cc9f9a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "40e8c1b7e7f0470c7faf90f1d53ba7372a8b581547c1259d1d8363f852318aec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0bb108a5e80145086584ae1367ee0eebe475ddc8a89419415e2e1d7536c7624d"
   end
 
   depends_on "cabal-install" => :build
-  depends_on "ghc@9.10" => :build
+  depends_on "ghc" => :build
+  depends_on "gmp"
 
+  uses_from_macos "libffi"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
+    # Workaround to build aeson with GHC 9.14, https://github.com/haskell/aeson/issues/1155
+    args = ["--allow-newer=base,containers,template-haskell"]
+
     system "cabal", "v2-update"
-    system "cabal", "v2-install", *std_cabal_v2_args
+    system "cabal", "v2-install", *args, *std_cabal_v2_args
   end
 
   test do

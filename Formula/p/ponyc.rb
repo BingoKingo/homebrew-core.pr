@@ -2,37 +2,33 @@ class Ponyc < Formula
   desc "Object-oriented, actor-model, capabilities-secure programming language"
   homepage "https://www.ponylang.io/"
   url "https://github.com/ponylang/ponyc.git",
-      tag:      "0.59.0",
-      revision: "9a5a2d65b422c2ff104877ad4a0b7048eedba68c"
+      tag:      "0.61.0",
+      revision: "4d9b18e1c087bc46fb8e45d47d30147e4b1760be"
   license "BSD-2-Clause"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "728c3386ec7bd017a34babadc96370b47a0eb4a9756a950cf0c2acc810bab034"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c8bfee9875312e88092509e7f45326312f341f99da29d6568e36e96145f1ad39"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "95f1d38db12a9d94c316bd91cf96d36dfc29b1090dee086dcf56444b1c56326c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "92d259585ce0d1fe70c20526a227d73532a7a9547127d5b2ca86cf041a263b3b"
-    sha256 cellar: :any_skip_relocation, ventura:       "8df48e6967ddd333b5fbd49498cd412cdbc7026e04fde18e5e740e165641f1b7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8606e19315e4e90e562865e6f3c9c2e9420c855a5250d1a47b227780fae0c8cb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0759f7698a899a653162f55a54b7f3d416b3d13f35c28362d9c95d40d50ea512"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "a607579fb0763c69dd3b85a8b366984ade6d8da215a411866fd75894bb694e56"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "87fc81aa43554cbacc862e62c91325573dd71f33ef758bfffd227d4854dc72a7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d1e9111d3389e319324a1d39bfc7326f72678adc1d0ad104b29038e54d400ccf"
+    sha256 cellar: :any_skip_relocation, sonoma:        "dafd057fae809776d547a68758857d6d23f6392f97ab0af9601a13cefc9e2dbe"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e776af8e23906a67e4316de8068a21da5b425c9fb254f025724365ee45a39f6b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2f8204b8876faf1ebfd7c1931dbc6a93b2bb80b2dd5d581ade60a862e5e10f04"
   end
 
   depends_on "cmake" => :build
 
-  uses_from_macos "llvm" => [:build, :test]
   uses_from_macos "python" => :build
-  uses_from_macos "zlib"
 
-  # We use LLVM to work around an error while building bundled `google-benchmark` with GCC
-  fails_with :gcc do
-    cause <<~EOS
-      .../src/gbenchmark/src/thread_manager.h:50:31: error: expected ')' before '(' token
-         50 |   GUARDED_BY(GetBenchmarkMutex()) Result results;
-            |                               ^
-    EOS
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install
-    inreplace "CMakeLists.txt", "PONY_COMPILER=\"${CMAKE_C_COMPILER}\"", "PONY_COMPILER=\"#{ENV.cc}\"" if OS.linux?
+    if OS.linux?
+      inreplace "CMakeLists.txt", "PONY_COMPILER=\"${CMAKE_C_COMPILER}\"", "PONY_COMPILER=\"#{ENV.cc}\""
+      inreplace "lib/CMakeLists.txt", "-DBENCHMARK_ENABLE_WERROR=OFF ", "\\0-DHAVE_CXX_FLAG_WTHREAD_SAFETY=OFF "
+      ENV["pic_flag"] = "-fPIC"
+    end
 
     ENV["CMAKE_FLAGS"] = "-DCMAKE_OSX_SYSROOT=#{MacOS.sdk_path}" if OS.mac?
     ENV["MAKEFLAGS"] = "build_flags=-j#{ENV.make_jobs}"
@@ -44,11 +40,8 @@ class Ponyc < Formula
   end
 
   test do
-    # ENV["CC"] returns llvm_clang, which does not work in a test block.
-    ENV.clang
-
-    system bin/"ponyc", "-rexpr", "#{prefix}/packages/stdlib"
-
+    # test ponyc
+    system bin/"ponyc", "-rexpr", prefix/"packages/stdlib"
     (testpath/"test/main.pony").write <<~PONY
       actor Main
         new create(env: Env) =>
@@ -56,5 +49,23 @@ class Ponyc < Formula
     PONY
     system bin/"ponyc", "test"
     assert_equal "Hello World!", shell_output("./test1").strip
+
+    # test pony-lsp
+    require "open3"
+    json = <<~JSON
+      {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "initialize",
+        "params": {
+          "rootUri": null,
+          "capabilities": {}
+        }
+      }
+    JSON
+    Open3.popen3(bin/"pony-lsp") do |stdin, stdout|
+      stdin.write "Content-Length: #{json.size}\r\n\r\n#{json}"
+      assert_match(/^Content-Length: \d+/i, stdout.readline)
+    end
   end
 end

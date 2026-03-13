@@ -1,50 +1,68 @@
 class Bsc < Formula
   desc "Bluespec Compiler (BSC)"
   homepage "https://github.com/B-Lang-org/bsc"
-  url "https://github.com/B-Lang-org/bsc.git",
-    tag:      "2025.01.1",
-    revision: "65e3a87a17f6b9cf38cbb7b6ad7a4473f025c098"
   license "BSD-3-Clause"
   head "https://github.com/B-Lang-org/bsc.git", branch: "main"
 
+  stable do
+    url "https://github.com/B-Lang-org/bsc/archive/refs/tags/2025.07.tar.gz"
+    sha256 "5019721717ac27bf80a549ccdd0fadf57ac7fe08cfbd75b0de98569fa36780f7"
+
+    resource "yices" do
+      url "https://github.com/B-Lang-org/bsc/releases/download/2025.07/yices-src-for-bsc-2025.07.tar.gz", using: :nounzip
+      sha256 "a7211d089be68303983cc644b70edaae8efab529ff63fd8670a4f20119888781"
+
+      livecheck do
+        formula :parent
+      end
+    end
+  end
+
+  livecheck do
+    url :stable
+    strategy :github_releases
+  end
+
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "023b416fedba9f986345a7b06763995b843fedf2fc45d0428d0f6410fedb8b12"
-    sha256 cellar: :any,                 arm64_sonoma:  "bb8dea8de8ae93ed8c76cbb488ea19645acc76e8aebc3560063024fa381c026a"
-    sha256 cellar: :any,                 arm64_ventura: "5fa279ba7f86d9b0fff2ab75b8d8890b852764e67baeebbcd0125b8c7239825a"
-    sha256 cellar: :any,                 sonoma:        "c8959d3244856dc6562bea2cd1f06ff782195bde78363b1a8dd104176ec6c5f9"
-    sha256 cellar: :any,                 ventura:       "9b975bff3f3232bd26626bc308ccba6d24d433575c88c0b72af4a17059ce4d36"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "de1d37f49533298da63ccbbff21907afbc8952df0ef6ef5d5553a2b720939ae1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "14fba2d067b4da9b16420abf741db79db7eb696f9ff25f629dd205af07409a93"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "5a8e4ab5547aa47dfd38ebce591d09be2608ae9cbad646f812840a806d68bcf4"
+    sha256 cellar: :any,                 arm64_sequoia: "82b90b50a08f90e075c141679c91e704e8c3464cd5fd7c6086bd893db145a235"
+    sha256 cellar: :any,                 arm64_sonoma:  "49f11cd1b6c4f92ee3a5c51b460c6095ce5f82b66af0ef81795d28859ca8ae8a"
+    sha256 cellar: :any,                 sonoma:        "b0ba897244b18a97622c214ac93cfab649489e0e6ab1451e087a91a87ac10e32"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "684b5a230253935597e9048fe6f61cc9a8d0b01e98b1acbc4fff3d06cefa14f9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a798403601b1b39a0296b83b31d4db1ad055bc13d83a8b6c1cbafebaa08ab53b"
   end
 
   depends_on "autoconf" => :build
   depends_on "cabal-install" => :build
   depends_on "ghc" => :build
-  depends_on "gperf" => :build
-  depends_on "make" => :build
   depends_on "pkgconf" => :build
   depends_on "gmp"
   depends_on "icarus-verilog"
-  depends_on "tcl-tk@8"
+  depends_on "tcl-tk"
 
   uses_from_macos "bison" => :build
   uses_from_macos "flex" => :build
+  uses_from_macos "gperf" => :build
+  uses_from_macos "perl" => :build
   uses_from_macos "libffi"
-  uses_from_macos "perl"
 
   conflicts_with "libbsc", because: "both install `bsc` binaries"
 
-  def install
-    system "cabal", "v2-update"
-    system "cabal", "v2-install", "--lib",
-                    "old-time",
-                    "regex-compat",
-                    "split",
-                    "syb"
+  # Workaround to use brew `tcl-tk` until upstream adds support
+  # https://github.com/B-Lang-org/bsc/issues/504#issuecomment-1286287406
+  patch :DATA
 
-    store_dir = Utils.safe_popen_read("cabal", "path", "--store-dir").chomp
-    ghc_version = Utils.safe_popen_read("ghc", "--numeric-version").chomp
-    package_db = "#{store_dir}/ghc-#{ghc_version}-inplace/package.db"
+  def install
+    # Directly running tar to unpack subdirectories into buildpath
+    resource("yices").stage { system "tar", "-xzf", Dir["*.tar.gz"].first, "-C", buildpath } if build.stable?
+
+    store_dir = buildpath/"store"
+    haskell_libs = %w[old-time regex-compat split syb]
+    system "cabal", "v2-update"
+    system "cabal", "--store-dir=#{store_dir}", "v2-install", "--lib", *haskell_libs
+
+    package_db = store_dir.glob("ghc-*/package.db").first
 
     with_env(
       PREFIX:           libexec,
@@ -52,7 +70,7 @@ class Bsc < Formula
       GHCRTSFLAGS:      "+RTS -M4G -A128m -RTS",
       GHC_PACKAGE_PATH: "#{package_db}:",
     ) do
-      system "make", "install-src", "-j#{ENV.make_jobs}"
+      system "make", "install-src", "-j#{ENV.make_jobs}", "LIBGMPA=-lgmp"
     end
 
     bin.write_exec_script libexec/"bin/bsc"
@@ -120,3 +138,34 @@ class Bsc < Formula
     assert_equal expected_output, shell_output("./mkFibOne.bexe")
   end
 end
+
+__END__
+--- a/platform.sh
++++ b/platform.sh
+@@ -78,7 +78,7 @@ fi
+ ## =========================
+ ## Find the TCL shell command
+ 
+-if [ ${OSTYPE} = "Darwin" ] ; then
++if [ ${OSTYPE} = "SKIP" ] ; then
+     # Have Makefile avoid Homebrew's install of tcl on Mac
+     TCLSH=/usr/bin/tclsh
+ else
+@@ -106,7 +106,7 @@ TCL_ALT_SUFFIX=$(echo ${TCL_SUFFIX} | sed 's/\.//')
+ 
+ if [ "$1" = "tclinc" ] ; then
+     # Avoid Homebrew's install of Tcl on Mac
+-    if [ ${OSTYPE} = "Darwin" ] ; then
++    if [ ${OSTYPE} = "SKIP" ] ; then
+ 	# no flags needed
+ 	exit 0
+     fi
+@@ -146,7 +146,7 @@ fi
+ 
+ if [ "$1" = "tcllibs" ] ; then
+     # Avoid Homebrew's install of Tcl on Mac
+-    if [ ${OSTYPE} = "Darwin" ] ; then
++    if [ ${OSTYPE} = "SKIP" ] ; then
+ 	echo -ltcl${TCL_SUFFIX}
+ 	exit 0
+     fi

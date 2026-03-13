@@ -1,31 +1,33 @@
 class MarpCli < Formula
   desc "Easily convert Marp Markdown files into static HTML/CSS, PDF, PPT and images"
   homepage "https://github.com/marp-team/marp-cli"
-  url "https://registry.npmjs.org/@marp-team/marp-cli/-/marp-cli-4.1.2.tgz"
-  sha256 "6f7e20e66b12906be9e4ed7225621ccbd0bf02690b03716647103e64dadb1b84"
+  url "https://registry.npmjs.org/@marp-team/marp-cli/-/marp-cli-4.2.3.tgz"
+  sha256 "e5851716df96b0d5fbe3216e38b1f0ce8f7c6ea0bd1c00e712e77d9da56a2bc8"
   license "MIT"
+  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "da62b75e00504397c018a751576c1b783e7f6ba3929d0e9611fd53888614fcf3"
-    sha256 cellar: :any,                 arm64_sonoma:  "da62b75e00504397c018a751576c1b783e7f6ba3929d0e9611fd53888614fcf3"
-    sha256 cellar: :any,                 arm64_ventura: "da62b75e00504397c018a751576c1b783e7f6ba3929d0e9611fd53888614fcf3"
-    sha256 cellar: :any,                 sonoma:        "c6155d61543ee99565db5b1ad20bb9124e38389d5306303c8ba7425f75de869c"
-    sha256 cellar: :any,                 ventura:       "c6155d61543ee99565db5b1ad20bb9124e38389d5306303c8ba7425f75de869c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "87c5fb7463b29b211d2af1e0a5e4e691e90868403b16475d2531f354a1724259"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c48d21a663d8d84bbb1be5da79a56a45148e22fdc67674fdee91bcc99de9ab3e"
+    sha256 cellar: :any,                 arm64_tahoe:   "7e9ceb263b61d6f55746ab7c5ab6f4e12ce5bb749a618b17912e49ae7315e417"
+    sha256 cellar: :any,                 arm64_sequoia: "17bc3847ffd84cf69b128b48a2220f0610e4715a45f76d9809bf376156a0083b"
+    sha256 cellar: :any,                 arm64_sonoma:  "17bc3847ffd84cf69b128b48a2220f0610e4715a45f76d9809bf376156a0083b"
+    sha256 cellar: :any,                 sonoma:        "b62c5e31eff56dae8f99b73947a2d343a32f321797b559d1eac71e6127776b34"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "17b66788e0faf313b438502fd14fa066c6c589073c7c2f4df78b3556b2cc7869"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6ea40b743d6849ed00af718af64ce987ca7564569eb42f6fda93430ca64566db"
   end
 
-  depends_on "node"
+  # Remove when Node 25 is fixed upstream: https://github.com/nodejs/node/issues/61971
+  # Formula-specific tracking: https://github.com/marp-team/marp-cli/issues/708
+  depends_on "node@24"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
 
     # Remove incompatible pre-built binaries
     os = OS.kernel_name.downcase
     arch = Hardware::CPU.intel? ? "x64" : Hardware::CPU.arch.to_s
     node_modules = libexec/"lib/node_modules/@marp-team/marp-cli/node_modules"
-    node_modules.glob("{bare-fs,bare-os}/prebuilds/*")
+    node_modules.glob("{bare-fs,bare-os,bare-url}/prebuilds/*")
                 .each { |dir| rm_r(dir) if dir.basename.to_s != "#{os}-#{arch}" }
   end
 

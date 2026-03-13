@@ -1,18 +1,17 @@
 class Nmrpflash < Formula
   desc "Netgear Unbrick Utility"
   homepage "https://github.com/jclehner/nmrpflash"
-  url "https://github.com/jclehner/nmrpflash/archive/refs/tags/v0.9.25.tar.gz"
-  sha256 "729b2890620febda4748b502f652f17b9343c9bdd80c1608656c2767e86f6b04"
+  url "https://github.com/jclehner/nmrpflash/archive/refs/tags/v0.9.27.tar.gz"
+  sha256 "a9de4296ec3db91e044f6ce5412342616920c6afda1df312bbeefc9013251f00"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "58b638caa14a68dc8396e69df7a8774d5f32afa8ff94259842b58ea2bb835b3c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4ee2c4b9e0928711561e54d90a74ba22729ea004ee8a680fadfb03ceaf4d44b7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1170fff7a61b522585f0de7fed71eee17acdada99eddcb876de3f1209fa72aa7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5118548149535c43336bc6c42a6907ac529bfa1387b47621cb3a14655def1556"
-    sha256 cellar: :any_skip_relocation, ventura:       "55c02b5c5686dc38ae336ffd865874146fdf315a30381f962d8929ebca04bf87"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "48c4d4e7e9cbb093ce3f552eef69e1ad5adc0e8b84279e347f03489c138937ec"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "02204c8781d87e4c00790807d5367f6826f8420984af35eccaa606f8c1217d90"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ccb3537298818c0381f10a7de1081423b84912b24aa1df5e363abade3a6f41b5"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9112a3e24563e48a37806c61be242cee74492b1eeae4b2c8a4deee3ac0adc689"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dbc3adbdc13f0f05fb4a135c422f15fd5d457b997856695bcb9184bb25596864"
+    sha256 cellar: :any_skip_relocation, sonoma:        "f5c4571e22c359f94d2eba33ac0629bc279a50b4bf0b410d34f125d0b36c64a4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b203614d3b7b379c5aac9ce88f264e2a384adfaca166d02889964a7490d09100"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a3546dc33507645b0d36167b06fde16ca804139fc7fa3d90a62a542e7cc3a893"
   end
 
   depends_on "pkgconf" => :build

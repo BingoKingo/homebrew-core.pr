@@ -4,15 +4,15 @@ class Crystalline < Formula
   url "https://github.com/elbywan/crystalline/archive/refs/tags/v0.17.1.tar.gz"
   sha256 "3e8f4c3f41830092300219ef91c3d03e15536774ef18a5395ff6a9fffc27be5b"
   license "MIT"
+  revision 2
 
   bottle do
-    sha256 arm64_sequoia: "87a66475cc7c310d5a9ca86451588753fa013793a29647adc860a722d44262b3"
-    sha256 arm64_sonoma:  "55781acbd516f945fa2a882e4791c2eb78eebe8a67c618204dad015d960b93af"
-    sha256 arm64_ventura: "497f4eb216f23ed797a8d23b0430ce78156d865604c2e16d95aa3c7068aef792"
-    sha256 sonoma:        "7633dc8f2abafcfe175aa69a8d85b75b9ce7c95a07a46a24cb4037c81625b035"
-    sha256 ventura:       "2de8e6d021d4fef3cc3f3c896f03ddafc8e0003daccc7fdfb8687968e2b643c2"
-    sha256 arm64_linux:   "7378baeedc88e661685c01cb031a0267dcf6969c071b5d8abcfa23b3a4e9d5e2"
-    sha256 x86_64_linux:  "f99684dd3f96d2888b1429df00c6aef334cf35e5da5a6dab025e3192a57574f2"
+    sha256 arm64_tahoe:   "7647fb168c313d4d25f4b21888b3afcb144986451952f8d621b2f1b4381065df"
+    sha256 arm64_sequoia: "c384d158cd61e22df961c05b010996766679faf30cbfcfa06da965d678976b74"
+    sha256 arm64_sonoma:  "d5557e7ef3522dac04fb85b186cbde0348ab7dbbb8f14f1093d3680843767791"
+    sha256 sonoma:        "347bad1d0b85a7387eabfc33429a74d7eb983667940b569f5f4fc3c36f63337a"
+    sha256 arm64_linux:   "263005d3911af92e69ab2f818d0d0d65bfee6fc805cbb7a6be6a3f9466fbcd7c"
+    sha256 x86_64_linux:  "92b9d14b44b3d4af23b559024db819723f34a0d491e839ceae54a237e2357cb4"
   end
 
   depends_on "bdw-gc"

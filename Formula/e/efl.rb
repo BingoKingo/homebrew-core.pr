@@ -4,6 +4,7 @@ class Efl < Formula
   url "https://download.enlightenment.org/rel/libs/efl/efl-1.28.1.tar.xz"
   sha256 "84cf6145f9cc82bfff690005be24392c8f3c52f8e00ff04d8eea371429c09424"
   license all_of: ["GPL-2.0-only", "LGPL-2.1-only", "BSD-2-Clause", "FTL", "zlib-acknowledgement"]
+  revision 2
 
   livecheck do
     url "https://download.enlightenment.org/rel/libs/efl/"
@@ -11,13 +12,13 @@ class Efl < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "08c3174445bc5f78a9c46cfdf4d73b59a1c75978f6a6a203076a418b77241f77"
-    sha256 arm64_sonoma:  "e49c3a736f6e9ecda80831e0939fe3f9249f3f99299ac5533e13e9cd871163a5"
-    sha256 arm64_ventura: "1ba80183f196e5a7270c7aeb0278eded8f11e0a06c3c1379f10bb2b78e7aa05b"
-    sha256 sonoma:        "babf88521d92e177519e9abe1f72252550a91be1d5656e64d290d7edfeb1480b"
-    sha256 ventura:       "fca929565aa586300f59d5e377dd9ff43abe337c7ccf4b99d0a9af55ef1fd1a3"
-    sha256 arm64_linux:   "1d26d6975b267b3bc016364b0747e1ed58df5945795759d40683c3d8f27d3eec"
-    sha256 x86_64_linux:  "f1adfecfef5d86dccaf1ccce34f6cc8fa0748c440422c697986f6ff53e966717"
+    rebuild 1
+    sha256 arm64_tahoe:   "0aedecfbc82dd64256f03aab33fa8ae335417d303f1ae5232312c7db3d83f807"
+    sha256 arm64_sequoia: "20d779a469c064dd9c5f0026d92088fd471072ff8892a198b4a4541e18be5ade"
+    sha256 arm64_sonoma:  "6f12d404e850445aa6f2e4022a661eda4125799f98e00ca8a33a6084c16f97b4"
+    sha256 sonoma:        "68674b9cc25d8d8553903bda991c6a27d96ee0c64cff9495385a7c43e6d4351a"
+    sha256 arm64_linux:   "5c03f04940d543eab7aa8229188ba8854693ad479b969da545c8fcb2f0ee305e"
+    sha256 x86_64_linux:  "9bbb7e3a1d35545a60a72cbe6f5c67ae49ae7e1bde124659822926cebb92284c"
   end
 
   depends_on "meson" => :build
@@ -50,8 +51,6 @@ class Efl < Formula
   depends_on "shared-mime-info"
   depends_on "webp"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "gdk-pixbuf"
     depends_on "little-cms2"
@@ -59,6 +58,17 @@ class Efl < Formula
 
   on_linux do
     depends_on "mesa"
+    depends_on "zlib-ng-compat"
+  end
+
+  # Fix conflicting bool definition.
+  patch do
+    url "https://git.enlightenment.org/enlightenment/efl/commit/0fcaf460c4a33eb54a51b9d8cb38321603019529.patch"
+    sha256 "45492dcea5141814763ed17ac22b068aa74bb165e40afa0fc6cef72af5632335"
+  end
+  patch do
+    url "https://git.enlightenment.org/enlightenment/efl/commit/628c40cce2de0a18818b40615d3351b0c9e9b889.patch"
+    sha256 "13823eb598c2dd81c0a3f143a5b043d0163e8d3b843e397ec4666302943b56d9"
   end
 
   # Remove LuaJIT 2.0 linker args -pagezero_size and -image_base

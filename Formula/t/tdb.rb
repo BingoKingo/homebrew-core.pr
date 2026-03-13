@@ -1,8 +1,8 @@
 class Tdb < Formula
   desc "Trivial DataBase, by the Samba project"
   homepage "https://tdb.samba.org/"
-  url "https://www.samba.org/ftp/tdb/tdb-1.4.13.tar.gz"
-  sha256 "5ee276e7644d713e19e4b6adc00b440afb5851ff21e65821ffaed89e15a5e167"
+  url "https://www.samba.org/ftp/tdb/tdb-1.4.15.tar.gz"
+  sha256 "fba09d8df1f1b9072aeae8e78b2bd43c5afef20b2f6deefa633aa14a377a8dd2"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -11,13 +11,12 @@ class Tdb < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1bd7cd583b2c42a4f0e634859622b0cac4a48f35410650bf0573b74afff49e20"
-    sha256 cellar: :any,                 arm64_sonoma:  "fea78e4678ef0a6f84e3a6cd57713f150f01e73bf81609f54102ef0ada8467ae"
-    sha256 cellar: :any,                 arm64_ventura: "f77f95a5940ca7a4a40ef08d6611239c5885426311e4f0b3c321a6429d6891a7"
-    sha256 cellar: :any,                 sonoma:        "4152b5bb64a94971afa35b8e7c17ea6d3dba0efafe2031617f53765cd158dc0f"
-    sha256 cellar: :any,                 ventura:       "c9e83486f202b33c0dd32f8debba7b8562374766c2488b630d55d7da8df3dc07"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "391ffd0d0824c218c0f175f53511aedd0520d5e5031c971a5a6d096efdf482fd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "62725a4b2245ffdeb4792e1032e09f2ec24824b70363c2ca50c6f024a3f4acf0"
+    sha256 cellar: :any,                 arm64_tahoe:   "263f2b310f2be1f0aeb5b98357dc28c88fbb6a46d116def650e7a30c05f3608e"
+    sha256 cellar: :any,                 arm64_sequoia: "73ab9ee5b4a954338efb2cded87651f64984a2ea27b898f4b4f584a8fa3776ea"
+    sha256 cellar: :any,                 arm64_sonoma:  "6036f32cf47d3abf27e88af33bc95e0b00156eb3f1fb8ab9c3a63ed075d1d96b"
+    sha256 cellar: :any,                 sonoma:        "960e975c3de42888b3b658be681a508da6b995997be2b5f7ea09bd7a07d4fd66"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d346592209e61e26edf76232e05e41f07deecbb3430e68f0d1bf6658a674b649"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b07d10b7909161e804d6d707d300249a23bb86f9aee2cdf313cf92be772a1f47"
   end
 
   uses_from_macos "python" => :build

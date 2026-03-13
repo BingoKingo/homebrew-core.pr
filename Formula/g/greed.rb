@@ -20,6 +20,7 @@ class Greed < Formula
   end
 
   deprecate! date: "2024-06-07", because: :checksum_mismatch
+  disable! date: "2025-06-21", because: :checksum_mismatch
 
   uses_from_macos "ncurses"
 

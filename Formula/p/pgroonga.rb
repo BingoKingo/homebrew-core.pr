@@ -1,8 +1,8 @@
 class Pgroonga < Formula
   desc "PostgreSQL plugin to use Groonga as index"
   homepage "https://pgroonga.github.io/"
-  url "https://packages.groonga.org/source/pgroonga/pgroonga-4.0.1.tar.gz"
-  sha256 "e2dfe40f3a0342e9ce4f1212043c46564fda3678e8cfda8587bbc37b103ebd17"
+  url "https://packages.groonga.org/source/pgroonga/pgroonga-4.0.5.tar.gz"
+  sha256 "8fb7f0e559525594b7f2b20eae4495925c842ab86b3e09e256abfdc5be793133"
   license "PostgreSQL"
 
   livecheck do
@@ -11,18 +11,17 @@ class Pgroonga < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "aa5b5427b783ffc3883f0c7bed63cfa61523ceb262dc8f12828d556744ad1173"
-    sha256 cellar: :any,                 arm64_sonoma:  "4099e0f0a91fc915c153d9065418c6bde0735c33918a553b060b9e72b7d91615"
-    sha256 cellar: :any,                 arm64_ventura: "566650be1da201e6b58e18550dc401de99f37ea306fbc9594e996b6609a1eba2"
-    sha256 cellar: :any,                 sonoma:        "bb3eb6dc07a7dde21c8425cc50a384a345a2d3af35e06e8048763701ce89be03"
-    sha256 cellar: :any,                 ventura:       "ac024d77294e071078565678f948821774d596b97152f8d660c547bfdde11b44"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d95b94358412a53dc2f15df1f277953581a1a4d2a3ae526b1553c6ee0fd0d29d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3d3a3e602ca372150b2c8b9d3ae993fef0434fd9a86bcea549335c37bd2cd38b"
+    sha256 cellar: :any,                 arm64_tahoe:   "a2f47f7e90efb15b9f07a65039b8da6928ba54f2fc9de435bc9a7528970beafd"
+    sha256 cellar: :any,                 arm64_sequoia: "1d591f10d8b95669300cf96addbb80d7a4e0d1b488cf365aa0e547bed010fc0e"
+    sha256 cellar: :any,                 arm64_sonoma:  "23bfaec1f848ebe7917c91051b76c7594fcb08264c574ec3bbbf20dc1ba5ad74"
+    sha256 cellar: :any,                 sonoma:        "a37d21569aec5730eb2b83c5d78a4a26077ca44d15ff028081e515c21081c292"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "56b3138d9ff12939d75e17a1d7425d50a259f5048b6330116bcbf7a3df166c04"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "60269dc50f4ea28b4e35c57e0b560cbc4537d7b39774f201a57b4e8523793c8c"
   end
 
   depends_on "pkgconf" => :build
-  depends_on "postgresql@14" => [:build, :test]
   depends_on "postgresql@17" => [:build, :test]
+  depends_on "postgresql@18" => [:build, :test]
   depends_on "groonga"
 
   def postgresqls
@@ -30,6 +29,8 @@ class Pgroonga < Formula
   end
 
   def install
+    odie "Too many postgresql dependencies!" if postgresqls.count > 2
+
     postgresqls.each do |postgresql|
       with_env(PATH: "#{postgresql.opt_bin}:#{ENV["PATH"]}") do
         system "make"

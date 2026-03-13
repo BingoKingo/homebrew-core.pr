@@ -1,7 +1,7 @@
 class Cpmtools < Formula
   desc "Tools to access CP/M file systems"
-  homepage "http://www.moria.de/~michael/cpmtools/"
-  url "http://www.moria.de/~michael/cpmtools/files/cpmtools-2.23.tar.gz"
+  homepage "https://www.moria.de/~michael/cpmtools/"
+  url "https://www.moria.de/~michael/cpmtools/files/cpmtools-2.23.tar.gz"
   sha256 "7839b19ac15ba554e1a1fc1dbe898f62cf2fd4db3dcdc126515facc6b929746f"
   license "GPL-3.0-or-later"
 
@@ -11,6 +11,7 @@ class Cpmtools < Formula
   end
 
   bottle do
+    sha256 arm64_tahoe:    "efe04ea8503804dc1106da71858d617f5daffe04adb89a312aa32116396af00d"
     sha256 arm64_sequoia:  "e689ad1b8bec7b7fb8b2f39ddccca66072998a172b7ef8788eeb6e54d06c4395"
     sha256 arm64_sonoma:   "229e3ca8bb433a8ca06a17c2d7b433648e9705c56bdfdc8d8084440d8244a3e1"
     sha256 arm64_ventura:  "2fbd054f0433e92761ef5fa76de830ac7bfeeb08525eede726f9d3d969e165df"

@@ -1,19 +1,20 @@
 class Licensed < Formula
   desc "Cache and verify the licenses of dependencies"
-  homepage "https://github.com/github/licensed"
-  url "https://github.com/github/licensed.git",
+  homepage "https://github.com/licensee/licensed"
+  url "https://github.com/licensee/licensed.git",
       tag:      "v5.0.4",
       revision: "6f7a4675fdf69647f524af3facd1d55f6f221d46"
   license "MIT"
+  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "543bec232b40015977c4333399b598789a8f9ac60b7595ba6e7b807d03d81c67"
-    sha256 cellar: :any,                 arm64_sonoma:  "3467c73fc50b835d6b2b3796690358f82dc32f32cb62a1aadcf7efe457593151"
-    sha256 cellar: :any,                 arm64_ventura: "7682dce3e7873abeb6fac39d330cfbc31fa42f2624dd9f5ab61975aa593d15d1"
-    sha256 cellar: :any,                 sonoma:        "3e4f67c15d5a96ca3902b719b31fd71ffe667f73ff988a76dba79f3619ef8f78"
-    sha256 cellar: :any,                 ventura:       "0b4aa564d2e769211cd7cf49606b5742b31c518c2c4a4e70d00c683452e19dff"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "698bdaab6300aac978818d9eb3df3bf2572b6bc37d5406ff0c50a279de70e421"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1c9220f30c3818fae859fc15e013631c34d0fef0ea2bec69116b5bbc9d5eeffc"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "d8cbf6f9ebfad3fff41d1ab9f4f221e2a75f2193c1775233c6a1ddbc78cc38e1"
+    sha256 cellar: :any,                 arm64_sequoia: "3c958df711d2f6ddcf6eefd4c2a7b777358aa4c8b56dba96e312d8a7cf3a8e67"
+    sha256 cellar: :any,                 arm64_sonoma:  "ad142e1414f120332b7c5ca4faf63f6a1a13739c35e09d68f4160d497eafb565"
+    sha256 cellar: :any,                 sonoma:        "153ff0e623b39434ef063fb328ea87cea3b173cf88fb44cc1f63c5f7bf5fb599"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b305bea5e08d008c225732562742339c7e80d06c5d774f7a54a3e14401c2e109"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "386614c73378360866a57ff53df5a67415318e8669b483aee84a48af37ac6a24"
   end
 
   depends_on "cmake" => :build
@@ -21,17 +22,17 @@ class Licensed < Formula
   depends_on "ruby"
   depends_on "xz"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "openssl@3"
+    depends_on "zlib-ng-compat"
   end
 
   def install
+    ENV["BUNDLE_FORCE_RUBY_PLATFORM"] = "1"
     ENV["BUNDLE_VERSION"] = "system" # Avoid installing Bundler into the keg
+    ENV["BUNDLE_WITHOUT"] = "development test"
     ENV["GEM_HOME"] = libexec
 
-    system "bundle", "config", "set", "without", "development", "test"
     system "bundle", "install"
     system "gem", "build", "#{name}.gemspec"
     system "gem", "install", "#{name}-#{version}.gem"

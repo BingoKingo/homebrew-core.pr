@@ -2,10 +2,11 @@ class MoltenVk < Formula
   desc "Implementation of the Vulkan graphics and compute API on top of Metal"
   homepage "https://github.com/KhronosGroup/MoltenVK"
   license "Apache-2.0"
+  compatibility_version 1
 
   stable do
-    url "https://github.com/KhronosGroup/MoltenVK/archive/refs/tags/v1.3.0.tar.gz"
-    sha256 "9476033d49ef02776ebab288fffae3e28fd627a3e29b7ae5975a1e1c785bf912"
+    url "https://github.com/KhronosGroup/MoltenVK/archive/refs/tags/v1.4.1.tar.gz"
+    sha256 "9985f141902a17de818e264d17c1ce334b748e499ee02fcb4703e4dc0038f89c"
 
     # MoltenVK depends on very specific revisions of its dependencies.
     # For each resource the path to the file describing the expected
@@ -13,37 +14,73 @@ class MoltenVk < Formula
     resource "SPIRV-Cross" do
       # ExternalRevisions/SPIRV-Cross_repo_revision
       url "https://github.com/KhronosGroup/SPIRV-Cross.git",
-          revision: "7918775748c5e2f5c40d9918ce68825035b5a1e1"
+          revision: "adec7acbf41a988713cdb85f93f26c8ca5ea863e"
+      version "adec7acbf41a988713cdb85f93f26c8ca5ea863e"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/KhronosGroup/MoltenVK/refs/tags/v#{LATEST_VERSION}/ExternalRevisions/SPIRV-Cross_repo_revision"
+        regex(/^([0-9a-f]+)$/i)
+      end
     end
 
     resource "SPIRV-Headers" do
       # ExternalRevisions/SPIRV-Headers_repo_revision
       url "https://github.com/KhronosGroup/SPIRV-Headers.git",
-          revision: "bab63ff679c41eb75fc67dac76e1dc44426101e1"
+          revision: "b824a462d4256d720bebb40e78b9eb8f78bbb305"
+      version "b824a462d4256d720bebb40e78b9eb8f78bbb305"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/KhronosGroup/MoltenVK/refs/tags/v#{LATEST_VERSION}/ExternalRevisions/SPIRV-Headers_repo_revision"
+        regex(/^([0-9a-f]+)$/i)
+      end
     end
 
     resource "SPIRV-Tools" do
       # ExternalRevisions/SPIRV-Tools_repo_revision
       url "https://github.com/KhronosGroup/SPIRV-Tools.git",
-          revision: "783d7033613cedaa7147d0700b517abc5c32312d"
+          revision: "262bdab48146c937467f826699a40da0fdfc0f1a"
+      version "262bdab48146c937467f826699a40da0fdfc0f1a"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/KhronosGroup/MoltenVK/refs/tags/v#{LATEST_VERSION}/ExternalRevisions/SPIRV-Tools_repo_revision"
+        regex(/^([0-9a-f]+)$/i)
+      end
     end
 
     resource "Vulkan-Headers" do
       # ExternalRevisions/Vulkan-Headers_repo_revision
       url "https://github.com/KhronosGroup/Vulkan-Headers.git",
-          revision: "e2e53a724677f6eba8ff0ce1ccb64ee321785cbd"
+          revision: "6aefb8eb95c8e170d0805fd0f2d02832ec1e099a"
+      version "6aefb8eb95c8e170d0805fd0f2d02832ec1e099a"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/KhronosGroup/MoltenVK/refs/tags/v#{LATEST_VERSION}/ExternalRevisions/Vulkan-Headers_repo_revision"
+        regex(/^([0-9a-f]+)$/i)
+      end
     end
 
     resource "Vulkan-Tools" do
       # ExternalRevisions/Vulkan-Tools_repo_revision
       url "https://github.com/KhronosGroup/Vulkan-Tools.git",
-          revision: "682e42f7ae70a8fadf374199c02de737daa5c70d"
+          revision: "013058f74e2356347f8d9317233bc769816c9dfb"
+      version "013058f74e2356347f8d9317233bc769816c9dfb"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/KhronosGroup/MoltenVK/refs/tags/v#{LATEST_VERSION}/ExternalRevisions/Vulkan-Tools_repo_revision"
+        regex(/^([0-9a-f]+)$/i)
+      end
     end
 
     resource "cereal" do
       # ExternalRevisions/cereal_repo_revision
       url "https://github.com/USCiLab/cereal.git",
-          revision: "51cbda5f30e56c801c07fe3d3aba5d7fb9e6cca4"
+          revision: "a56bad8bbb770ee266e930c95d37fff2a5be7fea"
+      version "a56bad8bbb770ee266e930c95d37fff2a5be7fea"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/KhronosGroup/MoltenVK/refs/tags/v#{LATEST_VERSION}/ExternalRevisions/cereal_repo_revision"
+        regex(/^([0-9a-f]+)$/i)
+      end
     end
   end
 
@@ -53,11 +90,10 @@ class MoltenVk < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "4994cc7e6e7f8af2fb2898fb4d8f806f55ff064d6249beca4ab2f208fd5de319"
-    sha256 cellar: :any, arm64_sonoma:  "c7b7d5d02a925546a6e0cc0c4187fe0b643731abbb32b590a4e60906f688046f"
-    sha256 cellar: :any, arm64_ventura: "cf825bb401b89d746b3fd1274a839e61e15aa4a8fa0c7f327db2b1d4e14fe334"
-    sha256 cellar: :any, sonoma:        "e208e8fe6f90aecc6a16bb3f883cb56f4da55d1b04daae6794f70ace0d835f57"
-    sha256 cellar: :any, ventura:       "b2e3d1f9dc95f2d45b3f25483bf75bc014950b61a830768615a130111bbaa6f5"
+    sha256 cellar: :any, arm64_tahoe:   "c0b1bda916255edc08d5a884eec4826e2649a890283b03e6f62e4aa9984cc9b8"
+    sha256 cellar: :any, arm64_sequoia: "c37a023bd090ca66e5cec2e0b24f7fcd6a57078ca7cc2a1d661301d01975ee27"
+    sha256 cellar: :any, arm64_sonoma:  "0260e56d985f283c9f81af474469285855ce88f48ac5dc31c7a9fb7c2c846aa6"
+    sha256 cellar: :any, sonoma:        "9bb2d88ee0ed7cd035f982a59a2e9c5878237c9f4df88117172ccdbc5127f6d9"
   end
 
   head do
@@ -90,11 +126,9 @@ class MoltenVk < Formula
 
   depends_on "cmake" => :build
   depends_on xcode: ["11.7", :build]
-  # Requires IOSurface/IOSurfaceRef.h.
-  depends_on macos: :sierra
   depends_on :macos # Linux does not have a Metal implementation. Not implied by the line above.
 
-  uses_from_macos "python" => :build, since: :catalina
+  uses_from_macos "python" => :build
 
   def install
     resources.each do |res|
@@ -161,6 +195,9 @@ class MoltenVk < Formula
   end
 
   test do
+    # Disable Metal argument buffers for macOS Sonoma on arm
+    ENV["MVK_CONFIG_USE_METAL_ARGUMENT_BUFFERS"] = "0" if MacOS.version == :sonoma && Hardware::CPU.arm?
+
     (testpath/"test.cpp").write <<~CPP
       #include <vulkan/vulkan.h>
       int main(void) {

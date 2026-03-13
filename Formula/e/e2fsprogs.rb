@@ -1,8 +1,8 @@
 class E2fsprogs < Formula
   desc "Utilities for the ext2, ext3, and ext4 file systems"
   homepage "https://e2fsprogs.sourceforge.net/"
-  url "https://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.47.2/e2fsprogs-1.47.2.tar.gz"
-  sha256 "6dcd67ff9d8b13274ba3f088e4318be4f5b71412cd863524423fc49d39a6371f"
+  url "https://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.47.4/e2fsprogs-1.47.4.tar.gz"
+  sha256 "2cec05f39c20ee621f14926195664e66e6017190ac8e4bbdb16d86082e43c5da"
   license all_of: [
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later", # lib/ex2fs
@@ -18,13 +18,12 @@ class E2fsprogs < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "a6ca9c2d59683ed1f7d97cb2fbf2abae9bcaf4cb3af2cc451c42fb25f2d0931b"
-    sha256 arm64_sonoma:  "75fda5c12d0363d8bd5fb2721bff367361369abdd16a7fd9dae612c5264fce45"
-    sha256 arm64_ventura: "70e8e92b42117b3161e431f6c9de55f754d7e358b4cd74a0a281807828a98004"
-    sha256 sonoma:        "129f5d0b2dc865c6c2d7a2959a71667236b10cbd8a8abbbc5424df73d788ee58"
-    sha256 ventura:       "aaa928d296c1b82a64b89183d5005d3c98bbbc51cb17aa1151b5850519c9b947"
-    sha256 arm64_linux:   "a9a234b1cf8d877076694954b306e91039e40e3c46c2e5394f67c29a6add1762"
-    sha256 x86_64_linux:  "42721911833f1c21f50d2ed01327f86b0470995cdcfc8d48dcc7af5c7b0cc8a6"
+    sha256 arm64_tahoe:   "f8024861ae8b5a645374d7960a5b5e3c41576c792712925d55deb186a74a1d06"
+    sha256 arm64_sequoia: "753c95aef34725e1bc3a4778a6c3073596b8b3a2b32bb18ec4f361fce747813b"
+    sha256 arm64_sonoma:  "c2c812d2da0ef0aa70a6f4962c832fd6636efad99344941ce0654173e7c8a297"
+    sha256 sonoma:        "5985432543778c6ebd6358ecaa2f9fb508c1a9cc6393117597d505b489d8a7a3"
+    sha256 arm64_linux:   "7dc8e4683b77882347b8dcd2cc2b82f2943fca8c30db51795bf33d2f260fd7f5"
+    sha256 x86_64_linux:  "28c57ec49ba06d7c371755737e6ab04a23fa733ef82a83b05a9da2871e8f8215"
   end
 
   keg_only :shadowed_by_macos

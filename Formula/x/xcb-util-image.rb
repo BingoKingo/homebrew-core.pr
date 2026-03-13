@@ -6,6 +6,7 @@ class XcbUtilImage < Formula
   license "X11"
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:    "6f1af8fedcf855ff37794ed6fb607be0a4d560afee79e3fa5ba79ec6bd877d29"
     sha256 cellar: :any,                 arm64_sequoia:  "e7ebd7a81c36003239f80b1fdd67650d6eee527482e2f2f70edc14b631f77224"
     sha256 cellar: :any,                 arm64_sonoma:   "237ce9305294166d1dbd5348b95e75c577511c7b4e69d0203905c86ff5b1ed48"
     sha256 cellar: :any,                 arm64_ventura:  "29c75ea3f0424141fefe9b962c4e8a0ce362c23ef650a905e5118e6833040a85"
@@ -21,7 +22,7 @@ class XcbUtilImage < Formula
   end
 
   head do
-    url "https://gitlab.freedesktop.org/xorg/lib/libxcb-image.git"
+    url "https://gitlab.freedesktop.org/xorg/lib/libxcb-image.git", branch: "master"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build

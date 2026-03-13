@@ -1,9 +1,10 @@
 class Micromamba < Formula
   desc "Fast Cross-Platform Package Manager"
   homepage "https://github.com/mamba-org/mamba"
-  url "https://github.com/mamba-org/mamba/archive/refs/tags/2.1.1.tar.gz"
-  sha256 "789d3d89fe8ca9f06344da21797e3d949ad1ff0ae4c633dc242a333e0ee37485"
+  url "https://github.com/mamba-org/mamba/archive/refs/tags/2.5.0.tar.gz"
+  sha256 "2d8761e423275b2e2b46352c99bdedc062ca22b98871ffa82e044d2be74b350f"
   license "BSD-3-Clause"
+  revision 2
   head "https://github.com/mamba-org/mamba.git", branch: "main"
 
   livecheck do
@@ -14,13 +15,12 @@ class Micromamba < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "74d15240890ade0f18fc3177f478b15637cd472afa8b07394c658cf318719e51"
-    sha256 cellar: :any,                 arm64_sonoma:  "928e0f64d19adf80b818f62bd1fd62bbeecf751b7c8aaf2ed3cad596f22feb4c"
-    sha256 cellar: :any,                 arm64_ventura: "afdc521ae40b2719038bb2f823dd2aeae29f2228f3dd3cc52222dba2f44740b6"
-    sha256 cellar: :any,                 sonoma:        "a04b81ba206040796ad0bea5aa1a86271b4223e5b56d2c2e7fa7b26e9f7e81f7"
-    sha256 cellar: :any,                 ventura:       "58cb2cf31fddd3bd268c6d7a129beddf92c475d3d10e8dd11ddfbdf05c8b5c55"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3bdda7e4d68b3a7956c17afba45ede0f90c80ad5a406258a815fa216fac1150f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f22521844f3e9957a8be3a860443643ee5a38220163c20b496f083404fe020ce"
+    sha256 cellar: :any,                 arm64_tahoe:   "30f343a91fdde9847dfb26f55ce65d0bae331865265f662e99ff67b3d3ab4336"
+    sha256 cellar: :any,                 arm64_sequoia: "5f826dfdf5dfb2ce1747642e9357554f03f1caa73d3711c537fab4e906df93c2"
+    sha256 cellar: :any,                 arm64_sonoma:  "141e9137b738fdfed8d9e84352b3ab8565f07c9ef51d3502f41b2f72adb4a403"
+    sha256 cellar: :any,                 sonoma:        "4163d97f45febba38ecf475e6809d829d244f1244537901f08cd071689ab8acf"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c7fa0224be7bd8b246d441283ab6f4ca56d187df590c7a7041b971c53ee7688f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "98a97c5555f0d139863d82e15cf3d3427ad4e1287a2614ed4ef7f2eacce73dea"
   end
 
   depends_on "cli11" => :build
@@ -45,11 +45,24 @@ class Micromamba < Formula
   uses_from_macos "bzip2"
   uses_from_macos "curl", since: :ventura # uses curl_url_strerror, available since curl 7.80.0
   uses_from_macos "krb5"
-  uses_from_macos "zlib"
+
+  on_macos do
+    depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1600
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  fails_with :clang do
+    build 1600
+    cause "Requires C++23 support for `std::ranges::views::join`"
+  end
 
   def install
     args = %W[
       -DBUILD_LIBMAMBA=ON
+      -DBUILD_LIBMAMBA_SPDLOG=ON
       -DBUILD_SHARED=ON
       -DBUILD_STATIC=OFF
       -DBUILD_MAMBA=ON
@@ -74,11 +87,13 @@ class Micromamba < Formula
 
   test do
     ENV["MAMBA_ROOT_PREFIX"] = testpath.to_s
+
     assert_match version.to_s, shell_output("#{bin}/mamba --version").strip
     assert_match version.to_s, shell_output("#{bin}/micromamba --version").strip
 
-    python_version = "3.9.13"
-    system bin/"mamba", "create", "-n", "test", "python=#{python_version}", "-y", "-c", "conda-forge"
-    assert_match "Python #{python_version}", shell_output("#{bin}/mamba run -n test python --version").strip
+    # Using 'xtensor' (header-only package) to avoid "broken pipe" codesigning issue
+    # encountered on macOS 13-arm and 14-arm during CI.
+    system bin/"mamba", "create", "-n", "test", "xtensor", "-y", "-c", "conda-forge"
+    assert_path_exists testpath/"envs/test/include/xtensor.hpp"
   end
 end

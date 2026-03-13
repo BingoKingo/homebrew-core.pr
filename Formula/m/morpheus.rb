@@ -1,10 +1,9 @@
 class Morpheus < Formula
   desc "Modeling environment for multi-cellular systems biology"
   homepage "https://morpheus.gitlab.io/"
-  url "https://gitlab.com/morpheus.lab/morpheus/-/archive/v2.3.9/morpheus-v2.3.9.tar.gz"
-  sha256 "d27b7c2b5ecf503fd11777b3a75d4658a6926bfd9ae78ef97abf5e9540a6fb29"
+  url "https://gitlab.com/morpheus.lab/morpheus/-/archive/v2.3.10/morpheus-v2.3.10.tar.gz"
+  sha256 "59a7729223f80d60085deeaf61a651782ee2f8507ad93a920ef599b6af6aa279"
   license "BSD-3-Clause"
-  revision 1
 
   livecheck do
     url :stable
@@ -12,32 +11,47 @@ class Morpheus < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "11e3811c5e5932f71678bea042c542a8a9ca5e0e24be85d4ce37f04b2096af1f"
-    sha256                               arm64_sonoma:  "5875ccd833c4e41e3c0d6a92a6e345bebf5b79cb6fddde17e25383dc20a7330c"
-    sha256                               arm64_ventura: "e7e28d8b1bd4020ca3e99ddcceeb9c3af6abc63bb4bdc60bfd6302f04f50d849"
-    sha256 cellar: :any,                 sonoma:        "31b3c036148a0c2ffbd42abc324e85fd5709323ef52977340b128ff92cac7c86"
-    sha256 cellar: :any,                 ventura:       "29d8f5b2730cbda1d887ea580c643d26f80bcd224de09f27245595361f820862"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ac0786ead33d0beb6c8fd5ba6554e2de1df213ba821576fa849a1a8dff1fb4a0"
+    sha256                               arm64_tahoe:   "952cc824b7ea0a9ed9e82fdababc494f9bd6363f4316d8664e3a0318d40b8278"
+    sha256                               arm64_sequoia: "7fe5bbd9ae5a7d1381f162beb513d4e79ba49cee607e50c2ddf2cce19583b921"
+    sha256                               arm64_sonoma:  "c0b50068bbb5445e5d79059ead5db63a2526f21b82a28e7f7f308611ae97e550"
+    sha256 cellar: :any,                 sonoma:        "368f285705c7c0689022b250de7b3a8c0b5dc87fc59d60006261da563c8039d8"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c37d67c8742447e3c169dd2c237d7bd9b1482b6c8877e0b77ffb54e648102cb4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a10f7f2dae6692c6cefeef44e413a5e10cf65c9f439caa3bcc76bccc8271e91a"
   end
 
-  depends_on "boost" => :build
+  # Can undeprecate if new release with Qt 6 support is available.
+  deprecate! date: "2026-05-19", because: "needs end-of-life Qt 5"
+
   depends_on "cmake" => :build
   depends_on "doxygen" => :build
   depends_on "ninja" => :build
+  depends_on "boost"
   depends_on "ffmpeg"
   depends_on "graphviz"
   depends_on "libtiff"
   depends_on "qt@5"
 
+  uses_from_macos "libxslt" => :build
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "libomp"
   end
 
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
   def install
+    # Avoid statically linking to Boost libraries when `-DBUILD_TESTING=OFF`
+    cmakelists = ["CMakeLists.txt", "morpheus/CMakeLists.txt"]
+    inreplace cmakelists, "set(Boost_USE_STATIC_LIBS ON)", "set(Boost_USE_STATIC_LIBS OFF)"
+
+    # Workaround for newer Clang
+    # error: a template argument list is expected after a name prefixed by the template keyword
+    ENV.append_to_cflags "-Wno-missing-template-arg-list-after-template-kw" if OS.mac?
+
     # has to build with Ninja until: https://gitlab.kitware.com/cmake/cmake/-/issues/25142
     args = ["-G", "Ninja"]
 

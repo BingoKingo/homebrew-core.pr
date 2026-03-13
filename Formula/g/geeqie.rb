@@ -1,8 +1,8 @@
 class Geeqie < Formula
   desc "Lightweight Gtk+ based image viewer"
   homepage "https://www.geeqie.org/"
-  url "https://github.com/BestImageViewer/geeqie/releases/download/v2.5/geeqie-2.5.tar.xz"
-  sha256 "cc991c9d4c78c58668105a15f7ece953bfc21b6b78cedc26ccbaaee6a12b8952"
+  url "https://github.com/BestImageViewer/geeqie/releases/download/v2.7/geeqie-2.7.tar.xz"
+  sha256 "9b5f342d3cc47782716711e56c3c7a045b4bbeaa653e192d49ce2d5e87ac8106"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -11,66 +11,68 @@ class Geeqie < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "2ba6af24f586147bdcae30c0cbb338faba1a80c904f78314afa76c2d944ceb04"
-    sha256 cellar: :any, arm64_sonoma:  "9215bb9a5e1e2c6acba36a122821ca28edb43521a901407fb81947f3857de00e"
-    sha256 cellar: :any, arm64_ventura: "96f1a9e5afdceb7cd6528fa0219aef930e31414ba6b887aa04a06b93dd0d5dea"
-    sha256 cellar: :any, sonoma:        "fdbf605a9b19a52011a500a07978cc468648939622de22f0c4416b9b38e21542"
-    sha256 cellar: :any, ventura:       "580834b9d461fba3a84bb36c4fa854139de828c4ff46d544b14661dd8b32fd12"
-    sha256               arm64_linux:   "4b5fa1aa367fc587d8d2eb8ad3341453a9381886888b8c50961cb726788ca6b0"
-    sha256               x86_64_linux:  "a8a49ff2e1f2662ade21392ba02e296cffb0b5cee6b7f8906446701323031824"
+    sha256 cellar: :any, arm64_tahoe:   "d3fd0f03b1df26f2e61b742079f7f664a5918cf7044e09bd98d2f6693af73816"
+    sha256 cellar: :any, arm64_sequoia: "270e21e0c75d58912368404c6bf0046a9dd63ac1563b313ce5e7463be6e9658b"
+    sha256 cellar: :any, arm64_sonoma:  "c5d85e87b206e402c9f0071bfb144b4f9004d91496280b311dd8f8c777f8060a"
+    sha256 cellar: :any, sonoma:        "a26edfc97367bd2628218bfac629b31d72fee788236b9bab6b76f79a38a81472"
+    sha256               arm64_linux:   "c7f84e3cbe65148e8d8e0436a1cea684ac80958aba99b211500d5d80b1a4c427"
+    sha256               x86_64_linux:  "dc92b1f6a42205906725f03bee3a7ef0f1fdd2637bac9d8e45a5d8bca4f12d42"
   end
 
+  depends_on "gettext" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
-  depends_on "pandoc" => :build # for README.html
   depends_on "pkgconf" => :build
-  depends_on "yelp-tools" => :build # for help files
 
-  depends_on "adwaita-icon-theme"
-  depends_on "at-spi2-core"
+  depends_on "adwaita-icon-theme" => :no_linkage
   depends_on "cairo"
   depends_on "djvulibre"
-  depends_on "evince" # for print preview support
   depends_on "exiv2"
   depends_on "ffmpegthumbnailer"
   depends_on "gdk-pixbuf"
-  depends_on "gettext"
   depends_on "glib"
   depends_on "gspell" # for spell checks support
   depends_on "gtk+3"
   depends_on "imagemagick"
+  depends_on "imath"
   depends_on "jpeg-turbo"
   depends_on "jpeg-xl"
   depends_on "libarchive"
   depends_on "libheif"
   depends_on "libraw"
   depends_on "libtiff"
-  depends_on "libx11"
   depends_on "little-cms2"
+  depends_on "openexr"
   depends_on "openjpeg"
   depends_on "pango"
   depends_on "poppler" # for pdf support # for video thumbnails support
-  depends_on "webp"
-  depends_on "webp-pixbuf-loader" # for webp support
+  depends_on "webp" # for webp support
 
+  uses_from_macos "libxslt" => :build # for xsltproc
   uses_from_macos "python" => :build
   uses_from_macos "vim" => :build # for xxd
 
   on_macos do
-    depends_on "enchant"
-    depends_on "harfbuzz"
+    depends_on "gettext"
+  end
+
+  on_linux do
+    depends_on "xorg-server" => :test
   end
 
   def install
-    system "meson", "setup", "build", "-Dlua=disabled", *std_meson_args
+    args = %w[-Dlua=disabled -Dyelp-build=disabled]
+    system "meson", "setup", "build", *args, *std_meson_args
     system "meson", "compile", "-C", "build", "--verbose"
     system "meson", "install", "-C", "build"
   end
 
   test do
-    # Disable test on Linux because geeqie cannot run without a display.
+    # Geeqie 2.7 currently crashes in Linux CI when initializing the GUI stack.
     return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
 
-    system bin/"geeqie", "--version"
+    cmd = "#{bin}/geeqie --version"
+    cmd = "#{Formula["xorg-server"].bin}/xvfb-run #{cmd}" if OS.linux? && ENV.exclude?("DISPLAY")
+    assert_match version.to_s, shell_output(cmd)
   end
 end

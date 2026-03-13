@@ -6,12 +6,13 @@ class Sidekick < Formula
   license "GPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1f5e190b61d1c87bb59f25cf984f5fdad673a7406eff0ccb3454bd68d0ce11ee"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1f5e190b61d1c87bb59f25cf984f5fdad673a7406eff0ccb3454bd68d0ce11ee"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1f5e190b61d1c87bb59f25cf984f5fdad673a7406eff0ccb3454bd68d0ce11ee"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d75fd55ec57420f0f8d4d769c8595427e2f93a6f826bfdbf5d96a144a90a41b6"
-    sha256 cellar: :any_skip_relocation, ventura:       "d75fd55ec57420f0f8d4d769c8595427e2f93a6f826bfdbf5d96a144a90a41b6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c30327aaf4244b393adc45eb87de8b24654c4ae8c7b837304f759b40df7c5045"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b47090a52636675f0dfae5f548f852059b7dc088872a2d8d64eec484e19db617"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b47090a52636675f0dfae5f548f852059b7dc088872a2d8d64eec484e19db617"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b47090a52636675f0dfae5f548f852059b7dc088872a2d8d64eec484e19db617"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0ee43e780bc61973ce3d767a9685e535bda44b5fe2c92c0f387c1dc07b7b0dde"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0f0fc03a04c528d79af849d0ca02d8b168f2ab860699d2d98e1c48a27642ff43"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "39755a46cd0a9f3fa863f933fc9fbf682d4e8841be7a882547fe6eaca455a089"
   end
 
   depends_on "go" => :build
@@ -20,7 +21,7 @@ class Sidekick < Formula
     ldflags = "-s -w -X 'github.com/mightymoud/sidekick/cmd.version=v#{version}'"
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"sidekick", "completion")
+    generate_completions_from_executable(bin/"sidekick", shell_parameter_format: :cobra)
   end
 
   test do

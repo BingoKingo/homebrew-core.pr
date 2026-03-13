@@ -1,18 +1,17 @@
 class Rtorrent < Formula
   desc "Ncurses BitTorrent client based on libtorrent-rakshasa"
   homepage "https://github.com/rakshasa/rtorrent"
-  url "https://github.com/rakshasa/rtorrent/releases/download/v0.15.4/rtorrent-0.15.4.tar.gz"
-  sha256 "39342070caf7506bce5ffe8527b5693d6cbe4fda851d54d505707c9063919fc4"
+  url "https://github.com/rakshasa/rtorrent/releases/download/v0.16.7/rtorrent-0.16.7.tar.gz"
+  sha256 "f00ddb6ac2bb1fcda4116b94119f5ffb79af70afc2f115e64a3147955be757fc"
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "74eff163aa464492cb149c2338b562412c6f95fd6e92ba78d240a594b48a07d7"
-    sha256 cellar: :any,                 arm64_sonoma:  "7c967db0a885331036ca0757e484fb2443303c962c26e9e19413a7bd19d92ff3"
-    sha256 cellar: :any,                 arm64_ventura: "7ee458fa975015e3d9f8b892d371bc4bcd55d21353b58115cd871679f66d9cc6"
-    sha256 cellar: :any,                 sonoma:        "b07ab4ce93bc8e231fdf4844be6211a64f956d396917905635433d5dc19ce3bb"
-    sha256 cellar: :any,                 ventura:       "b5a1648b56241cf37bfdc090d2ae5e1304da4070fe56a28dc66b127c2ca3ea3e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1dfc03adc646b35edb4b68c9b09a001293ccaedd5d73a531a96ebf0d59a8a232"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0c2502f64ea92b501dbe261a3cdbb43ba832ba5b5b0c0be804638acd3a2ee725"
+    sha256 cellar: :any,                 arm64_tahoe:   "a82ceb74a141e9c6b97337d07bb578816ad88377244118056356341e7ffae839"
+    sha256 cellar: :any,                 arm64_sequoia: "33dd6ddeb902d99f21033be843ca09a08b42bda901d50c1f7c57402eefac3f09"
+    sha256 cellar: :any,                 arm64_sonoma:  "0544330a338f2c74d459d1986ef87e6c50e636545e44a40b84926e55b22b9e29"
+    sha256 cellar: :any,                 sonoma:        "6a1ebd897ff9673cfae05842be96e3c871ce60a01b8cc82d80319d82d0424eba"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1b03b4dd85335631fab57474fdc758534d6aa701390266eb1470d1e50767079a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "078d674f051580a11c21b378ba8ea529e6582a5668793b34c0321ea15d8e0d1f"
   end
 
   depends_on "autoconf" => :build

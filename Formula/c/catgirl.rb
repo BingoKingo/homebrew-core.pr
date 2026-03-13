@@ -11,6 +11,7 @@ class Catgirl < Formula
   end
 
   bottle do
+    sha256 arm64_tahoe:   "351867ae899c5212701dff3cbc5aaf3e64ae7f250343de7d10b411365e1ab87e"
     sha256 arm64_sequoia: "10113098841cbf331b3b7ecd70b8fcadc65ee0d863f9fd46671d28325e9e1066"
     sha256 arm64_sonoma:  "7a5ac77635d063e53136ba82f11f793ecabd86340ba3fffbce69463df086c316"
     sha256 arm64_ventura: "e6bb55c082d4b2ceb8328bb4a7723aa3d56168258cad31f0fbc9afad664cb2cb"
@@ -20,8 +21,8 @@ class Catgirl < Formula
     sha256 x86_64_linux:  "b6849416058a2849403173bf34aba0a45d8c27f3a3ff2e43973f0480f6552c00"
   end
 
-  depends_on "ctags" => :build
   depends_on "pkgconf" => :build
+  depends_on "universal-ctags" => :build
 
   depends_on "libretls"
   uses_from_macos "ncurses"
@@ -34,13 +35,13 @@ class Catgirl < Formula
 
     args << "--enable-sandman" if OS.mac?
 
-    system "./configure", *std_configure_args, *args
+    system "./configure", *args, *std_configure_args
     system "make"
     system "make", "install"
   end
 
   test do
-    output = shell_output(bin/"catgirl 2>&1", 64)
+    output = shell_output("#{bin}/catgirl 2>&1", 64)
     assert_match "catgirl: host required", output
   end
 end

@@ -1,9 +1,9 @@
 class I686ElfGcc < Formula
   desc "GNU compiler collection for i686-elf"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  sha256 "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea"
+  url "https://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  sha256 "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
   livecheck do
@@ -11,13 +11,13 @@ class I686ElfGcc < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "8e2c4ad88cbeb24b8de4bd588b2295594282738e750a12257b741d62b9554d15"
-    sha256 arm64_sonoma:  "d76a7ca2b5c17dfd8371073bd9403eebbf767778cd29b3b12add0906f1c292c7"
-    sha256 arm64_ventura: "4c06228afceb027d0ce4b34256c6ec0d5cd7dfe7daeec3ed9294cfc30530bd1a"
-    sha256 sonoma:        "1172380d92d25c59e015a58d537e7034ba29bfaf6fe8144100744074829a0ff4"
-    sha256 ventura:       "8a8386bf395ef25bea60ec676e54579ffa3a7f36e9c5559e3f4be9840ad9ff7e"
-    sha256 arm64_linux:   "7dea4d76dd9a20c6f789b0b942843995bbc12cf73f55345e54c3ebd2b986e043"
-    sha256 x86_64_linux:  "311f32728f01c2ee43cc703ed6a12be6b930a0df5f434f4ffeda5bf9e8f2aedc"
+    rebuild 1
+    sha256 arm64_tahoe:   "dc1192f46f2f58ad2d4d72e774114a707ff15e0bbac8f02f6868fa5b0f58387e"
+    sha256 arm64_sequoia: "336cc59b76765bf151e7559e9cd1d470af2ab4bef9d24270cb656867becde841"
+    sha256 arm64_sonoma:  "7f9ad28884f1c2f7b9c0b53ad1e59018fa2728f5214f964018dcc76b3e513aba"
+    sha256 sonoma:        "abbfb1ae2d570c345fc35aa00e30ae1f63e0f55e04e1e4beb1216d8536499c60"
+    sha256 arm64_linux:   "75c212bc07d5432ac8d8d0cba1159946e5be4a4272e8c34a0693d2052ac1c11c"
+    sha256 x86_64_linux:  "40dc3970e637b82e36c47783c9956ca24d3ccd15e69ce077867bd84ca0c488fa"
   end
 
   depends_on "gmp"
@@ -26,7 +26,9 @@ class I686ElfGcc < Formula
   depends_on "mpfr"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     target = "i686-elf"

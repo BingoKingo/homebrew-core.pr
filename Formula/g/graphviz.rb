@@ -1,19 +1,10 @@
 class Graphviz < Formula
   desc "Graph visualization software from AT&T and Bell Labs"
   homepage "https://graphviz.org/"
+  url "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/14.1.3/graphviz-14.1.3.tar.xz"
+  sha256 "fe76529477c22c0cf833ec5a35b430cf710f4705afc465d86292bf13560be584"
   license "EPL-1.0"
   version_scheme 1
-
-  stable do
-    url "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/12.2.1/graphviz-12.2.1.tar.xz"
-    sha256 "85e34b5c982777c30f01dfab9ea7c713b4335a2f584e62c0abb9868413eb915b"
-
-    # Fix -flat_namespace being used on Big Sur and later.
-    patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
-      sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
-    end
-  end
 
   livecheck do
     url "https://graphviz.org/download/source/"
@@ -21,13 +12,12 @@ class Graphviz < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "1021bca3aee2d641cc8b3741820f4df48c2f53916cfb6cff3ed1fc664ebdf5dd"
-    sha256 arm64_sonoma:  "067aecda0ddbf4b5593f81aaca952ef5d14992f9e0fcff692ba29cc2c868330e"
-    sha256 arm64_ventura: "ce8eaf49349dfd40a47ce364f7b33c94b812e05527ae92be9a58dd9202145734"
-    sha256 sonoma:        "82f8b94e10a0faeffb28cb097ac071707188ea26ab2fc66da607c49c37743d30"
-    sha256 ventura:       "6f35eabfb6acfebcd48ea4d2663307148f7bd8f54fe748dfa33eb173d794aba7"
-    sha256 arm64_linux:   "3121f09ca5ea69be612073ae70261f6303ab78f0337e490f41876ed0b63bfbfc"
-    sha256 x86_64_linux:  "67fab62f20a6882fff2a4863382566cd3e462226f121b6b415a22176e81c518c"
+    sha256 arm64_tahoe:   "688ebaa954a60593c897840c5c881c119a183832f42af6ad3c62ed9b6ee5e204"
+    sha256 arm64_sequoia: "a3fb247607668a4d9042342515e5162055df356c4e784d299418726fb9a7a7cf"
+    sha256 arm64_sonoma:  "4cb2f2c06a8709e5cdc61d0377923e11382b5c5c46994bf43e48f43ddc4ce82e"
+    sha256 sonoma:        "599536d416ee8b2bf63bbeefda10ba9ae08b2e4212bdfb2bfecae24a1d350985"
+    sha256 arm64_linux:   "003e46d32c7bcc37979bf25ddbf9f1fe9f774e3537d7c72c7c4edd683683b4f8"
+    sha256 x86_64_linux:  "492e7dd144e65efcf0020337543c459bac72cae906e697e3f89147183fc8e36f"
   end
 
   head do
@@ -52,7 +42,6 @@ class Graphviz < Formula
   uses_from_macos "flex" => :build
   uses_from_macos "python" => :build
   uses_from_macos "expat"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "fontconfig"
@@ -60,6 +49,10 @@ class Graphviz < Formula
     depends_on "gdk-pixbuf"
     depends_on "gettext"
     depends_on "harfbuzz"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install

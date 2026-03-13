@@ -1,18 +1,19 @@
 class Kind < Formula
   desc "Run local Kubernetes cluster in Docker"
   homepage "https://kind.sigs.k8s.io/"
-  url "https://github.com/kubernetes-sigs/kind/archive/refs/tags/v0.29.0.tar.gz"
-  sha256 "32fcd55671f241b7a782400e1bf1c762f9729526850e7eda08f56451f12268ea"
+  url "https://github.com/kubernetes-sigs/kind/archive/refs/tags/v0.31.0.tar.gz"
+  sha256 "f4aaa1f572f9965eea3f7513d166f545f41b61ab5efeed953048bdcb13c51032"
   license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/kind.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9dd60f52284f2aa41b0583a8fecb1374e5783522e85e5798198d913c2df6be6d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9dd60f52284f2aa41b0583a8fecb1374e5783522e85e5798198d913c2df6be6d"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9dd60f52284f2aa41b0583a8fecb1374e5783522e85e5798198d913c2df6be6d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5aac5b104c34a17b82384b58921975cde430952ea32dbcaac6ddc61387d5fe27"
-    sha256 cellar: :any_skip_relocation, ventura:       "5aac5b104c34a17b82384b58921975cde430952ea32dbcaac6ddc61387d5fe27"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dda1ac55ddad86f969d5849ce0293ee57407acf0d0f7968211d80f63e8f8815b"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "294786a773053174dd0207abd9f19a9149e9104f6f4bd025e4922ef18056e77d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "294786a773053174dd0207abd9f19a9149e9104f6f4bd025e4922ef18056e77d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "294786a773053174dd0207abd9f19a9149e9104f6f4bd025e4922ef18056e77d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "8991293d714f2a97961a74aaa270d45c1368c8dee3570d54f3bf1533c98b6a99"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "fefb317de154724a6bef983c1e50f1709bab098b3ff829fe4aacef141307529a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a0725c9f5c415c504480815ddacad100756f3cc90601ec8f8f96f28fe3730d61"
   end
 
   depends_on "go" => :build
@@ -21,7 +22,7 @@ class Kind < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w")
 
-    generate_completions_from_executable(bin/"kind", "completion")
+    generate_completions_from_executable(bin/"kind", shell_parameter_format: :cobra)
   end
 
   test do
@@ -29,6 +30,6 @@ class Kind < Formula
 
     # Should error out as creating a kind cluster requires root
     status_output = shell_output("#{bin}/kind get kubeconfig --name homebrew 2>&1", 1)
-    assert_match "Cannot connect to the Docker daemon", status_output
+    assert_match "failed to connect to the docker API", status_output
   end
 end

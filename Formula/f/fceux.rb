@@ -2,7 +2,7 @@ class Fceux < Formula
   desc "All-in-one NES/Famicom Emulator"
   homepage "https://fceux.com/"
   license "GPL-2.0-only"
-  revision 5
+  revision 9
   head "https://github.com/TASEmulators/fceux.git", branch: "master"
 
   stable do
@@ -12,17 +12,18 @@ class Fceux < Formula
 
     # patch for `New timeStamp.cpp file renders fceux x86-only` issue
     patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/cd40795/fceux/2.6.6-arm.patch"
+      url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/fceux/2.6.6-arm.patch"
       sha256 "0890494f4b5db5fa11b94e418d505cea87dc9b9f55cdc6c97e9b5699aeada4ac"
     end
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "31754b6f7207bc00a48ea084ec06084b2cab1de6e6bebf1691b6f4d64e54b31e"
-    sha256 cellar: :any,                 arm64_ventura: "896707c1bd55dee56878cde5feca245d73f8a55e8b781d5fb83c59e8989a110d"
-    sha256 cellar: :any,                 sonoma:        "010e7a4a2b114a6799d7f8ec4bd5704c49433a6e720ecddd9bff1c416854077c"
-    sha256 cellar: :any,                 ventura:       "a06a34bfe581b36a7791d93c5605cbdd6cff0af980688c09d64b97fd12e57289"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "229f39e293d88f2c0d53075fa39b5246d3987e8c5264270597f55026952da5f2"
+    sha256 cellar: :any,                 arm64_tahoe:   "9bbe75f88e4ef4f07b66016f279989d0152b3b9b4eda6205116248a8ff493e7f"
+    sha256 cellar: :any,                 arm64_sequoia: "badb3805a8337d784f6708f2105b9c5b7cd388166ee101597011fb73e1ec3e3e"
+    sha256 cellar: :any,                 arm64_sonoma:  "a9913d680aac448b262ee33b2e6e5296493e8c861c25859a08f4091fb5823848"
+    sha256                               sonoma:        "3b270af853ae3f5485310667683262f23d2420940db6e1eaa0291a01e0d9409d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "23e56b704f9059aca2ac48e73eeae0c74ada48f58296ac98e58f5a6f69479044"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6d51564f3c8477453d8b0ea8045237bf8c8c73e770679b3a60518eeda71a3c40"
   end
 
   depends_on "cmake" => :build
@@ -31,7 +32,7 @@ class Fceux < Formula
   depends_on "ffmpeg"
   depends_on "libarchive"
   depends_on "minizip"
-  depends_on "qt"
+  depends_on "qtbase"
   depends_on "sdl2"
   depends_on "x264"
   depends_on "x265"
@@ -39,21 +40,26 @@ class Fceux < Formula
   on_linux do
     depends_on "mesa"
     depends_on "mesa-glu"
-    depends_on "zlib"
+    depends_on "zlib-ng-compat"
   end
 
   def install
-    ENV["CXXFLAGS"] = "-DPUBLIC_RELEASE=1" if build.stable?
-    system "cmake", ".", *std_cmake_args, "-DQT6=ON"
-    system "make"
-    cp "src/auxlib.lua", "output/luaScripts"
-    fceux_path = OS.mac? ? "src/fceux.app/Contents/MacOS" : "src"
-    libexec.install Pathname.new(fceux_path)/"fceux"
-    pkgshare.install ["output/luaScripts", "output/palettes", "output/tools"]
-    (bin/"fceux").write <<~BASH
-      #!/bin/bash
-      LUA_PATH=#{pkgshare}/luaScripts/?.lua #{libexec}/fceux "$@"
-    BASH
+    # Workaround until upstream handles newer minizip 1.3.2 cflags after
+    # https://github.com/madler/zlib/commit/7e6f0784cc0c33e8d5fcb368248168c6656f73c8
+    ENV.append_to_cflags "-I#{Formula["minizip"].opt_include}/minizip"
+
+    args = ["-DQT6=ON"]
+    args << "-DPUBLIC_RELEASE=1" if build.stable?
+    system "cmake", "-S", ".", "-B", ".", *args, *std_cmake_args
+    system "cmake", "--build", "."
+    if OS.mac?
+      cp "src/auxlib.lua", "output/luaScripts"
+      bin.install "src/fceux.app/Contents/MacOS/fceux"
+      pkgshare.install "output/luaScripts", "output/palettes", "output/tools"
+    else
+      system "cmake", "--install", "."
+    end
+    bin.env_script_all_files libexec, LUA_PATH: "#{pkgshare}/luaScripts/?.lua"
   end
 
   test do

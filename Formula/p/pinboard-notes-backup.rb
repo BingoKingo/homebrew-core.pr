@@ -1,19 +1,19 @@
 class PinboardNotesBackup < Formula
   desc "Efficiently back up the notes you've saved to Pinboard"
   homepage "https://github.com/bdesham/pinboard-notes-backup"
-  url "https://github.com/bdesham/pinboard-notes-backup/archive/refs/tags/v1.0.7.tar.gz"
-  sha256 "bd26a1cd7ec4e0a83cd06c1234420ac9262d39c926a42820958502967005f63c"
+  url "https://github.com/bdesham/pinboard-notes-backup/archive/refs/tags/v1.0.7.1.tar.gz"
+  sha256 "8539a62b8a4a718a716ecc4bf17150d7cef8a358b43fbca458de3540db3d5177"
   license "GPL-3.0-or-later"
   head "https://github.com/bdesham/pinboard-notes-backup.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "db4446ba2acc253e4311931498466fcbb817a7d4f0a40586c57a398199e28272"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "269d2c336cc103226d08d1347b641d2ed03a98b41468e14b97c619b1ec0182b4"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "0bbaa3f7e02e6359afb9b42066fc2e975c31f2ed2cfc3cfb4e5cfdf3649da43c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "878786cea9c65cb998b04c9986bd0ef267203e57bac2c0c413b914a79c2b3215"
-    sha256 cellar: :any_skip_relocation, ventura:       "1e1d6084bee6d414a922988d46a79f8f8d34d20fb983d151049889ded6a47154"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2ea494e407702d438d26039b44082e145d14fbc04d38fe5fe66062b08fdcb06d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c73c136aeeb04488e72260d28b820e81791f13cdcf7da540f0e80352a4a3365d"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "61ab93300efacf6806b22a12a68d41abb160245fbd468320985c72541e74c08a"
+    sha256 cellar: :any,                 arm64_sequoia: "bd015512bf68cff2cce03386ecd6a33a60eda0db5aa5dce024c069f245a57f7b"
+    sha256 cellar: :any,                 arm64_sonoma:  "7f2b54f27fc60f45bd2a54fe75c9c098ee16a2112ab7f323ee0cb618f0151636"
+    sha256 cellar: :any,                 sonoma:        "87d95a1410a2d5f7332b9a86b4b822ef00bec53b26b571be9573308304b44238"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "52b12aa0e866edb547e43aa8b3203a811cdab29f55b3860047a07f4f53bf9ba9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d6f27b387f833bca955fe44a98f07222cf8f31539067e5f6b538ad131df13c5a"
   end
 
   depends_on "cabal-install" => :build
@@ -21,14 +21,14 @@ class PinboardNotesBackup < Formula
   depends_on "gmp"
 
   uses_from_macos "libffi"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
-    # Workaround to build with GHC 9.12
-    args = [
-      "--allow-newer=http-api-data:base", # https://github.com/fizruk/http-api-data/pull/146
-      "--allow-newer=req:template-haskell", # https://github.com/mrkkrp/req/pull/182
-    ]
+    # Workaround to build aeson with GHC 9.14, https://github.com/haskell/aeson/issues/1155
+    args = ["--allow-newer=base,containers,template-haskell"]
 
     system "cabal", "v2-update"
     system "cabal", "v2-install", *args, *std_cabal_v2_args

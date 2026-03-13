@@ -4,36 +4,53 @@ class Shaderc < Formula
   license "Apache-2.0"
 
   stable do
-    url "https://github.com/google/shaderc/archive/refs/tags/v2025.2.tar.gz"
-    sha256 "3fddc13bbb87411c6f7b8f447e87c1637933450087e70fc21da650041f4e0132"
+    url "https://github.com/google/shaderc/archive/refs/tags/v2026.1.tar.gz"
+    sha256 "245002feccbe7f8361b223545a5654cea69780745886872d7efff50a38d96c66"
 
     resource "glslang" do
-      # https://github.com/google/shaderc/blob/known-good/known_good.json
+      # https://github.com/google/shaderc/blob/DEPS
       url "https://github.com/KhronosGroup/glslang.git",
-          revision: "8b822ee8ac2c3e52926820f46ad858532a895951"
+          revision: "f0bd0257c308b9a26562c1a30c4748a0219cc951"
+      version "f0bd0257c308b9a26562c1a30c4748a0219cc951"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/google/shaderc/refs/tags/v#{LATEST_VERSION}/DEPS"
+        regex(/["']glslang_revision["']:\s*["']([0-9a-f]+)["']/i)
+      end
     end
 
     resource "spirv-headers" do
-      # https://github.com/google/shaderc/blob/known-good/known_good.json
+      # https://github.com/google/shaderc/blob/DEPS
       url "https://github.com/KhronosGroup/SPIRV-Headers.git",
-          revision: "54a521dd130ae1b2f38fef79b09515702d135bdd"
+          revision: "04f10f650d514df88b76d25e83db360142c7b174"
+      version "04f10f650d514df88b76d25e83db360142c7b174"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/google/shaderc/refs/tags/v#{LATEST_VERSION}/DEPS"
+        regex(/["']spirv_headers_revision["']:\s*["']([0-9a-f]+)["']/i)
+      end
     end
 
     resource "spirv-tools" do
-      # https://github.com/google/shaderc/blob/known-good/known_good.json
+      # https://github.com/google/shaderc/blob/DEPS
       url "https://github.com/KhronosGroup/SPIRV-Tools.git",
-          revision: "f289d047f49fb60488301ec62bafab85573668cc"
+          revision: "fbe4f3ad913c44fe8700545f8ffe35d1382b7093"
+      version "fbe4f3ad913c44fe8700545f8ffe35d1382b7093"
+
+      livecheck do
+        url "https://raw.githubusercontent.com/google/shaderc/refs/tags/v#{LATEST_VERSION}/DEPS"
+        regex(/["']spirv_tools_revision["']:\s*["']([0-9a-f]+)["']/i)
+      end
     end
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "d754215b97ff59175e5b49ac7583837e004d6f0fff59fedd9b42fe5dc779bd9c"
-    sha256 cellar: :any,                 arm64_sonoma:  "8fb423c7f2631260378576f9f90fa830aa78e1a6f1e059da9371ad73c3570da1"
-    sha256 cellar: :any,                 arm64_ventura: "ffc37dd4facbae80c0c6fd4a85621220898facaf2c2e66346d490e65302c86d8"
-    sha256 cellar: :any,                 sonoma:        "cce9f7b41fbfc64373bb63c6e8b6884f635a56b531ce858bc14534c700677e40"
-    sha256 cellar: :any,                 ventura:       "9c5bd57e3a5822fef1f0d42c187d9f77dd740068f8bd40d08cdb03710c29d7c1"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7bb01f0bdd6d5f06d4a0bdaa78707d30763b4f0fb3ca7815ce9790318472e10f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f7be1ea16a85ac988a3e25142dde846feec4477b6b6584730f8d1b3f55b5a8f3"
+    sha256 cellar: :any,                 arm64_tahoe:   "d7ddacc721d7007b1f2c19485b1c938f41cd579f574b340390d66d320dbc20c1"
+    sha256 cellar: :any,                 arm64_sequoia: "a13c345a193efe0785b209c98711d0283a777e153089273d5d0960aa3b53001a"
+    sha256 cellar: :any,                 arm64_sonoma:  "194d5bb48ba609fb62adda23c7943cb18d170cac7f82223770250a859dc47d05"
+    sha256 cellar: :any,                 sonoma:        "2295c30040b559918297da800c7ed9c4ee3df77295a4ac3845852435741b0507"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e8c26769453214cc7c2e4dbc150cb62d0a1797f0e02aa1934aabc0c9e9cb5fa5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "976b47b7844c989741ee3a3f6dbdb03ed0a524cb230f9bda8d1bf5b19d2e7a81"
   end
 
   head do

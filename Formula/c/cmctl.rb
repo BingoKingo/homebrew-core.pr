@@ -1,19 +1,18 @@
 class Cmctl < Formula
   desc "Command-line tool to manage cert-manager"
   homepage "https://cert-manager.io"
-  url "https://github.com/cert-manager/cmctl/archive/refs/tags/v2.2.0.tar.gz"
-  sha256 "b4c6c88c798f9e8b8b06c6fbeb64fc11eb946b08828a994a44b7e630ffbdaa7b"
+  url "https://github.com/cert-manager/cmctl/archive/refs/tags/v2.4.1.tar.gz"
+  sha256 "70c9f5e1fbcf526c87c5a862afca663b816e3ec1eda2d55c7edf70e33fb00fe5"
   license "Apache-2.0"
   head "https://github.com/cert-manager/cmctl.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d55363e9112d7eb0669d0afd9bebaed6aaa4531e332201f8fff5bf007bd21e71"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e399616de9badc5575d22baaf20d5c5452c1a3427ba0e5526b6265907e3e58cb"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ea9f09d98bf6dd0d66609a131b1011266ba2d24c23124d311ef51482502b111b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "2408e81e4faafa8b520ae42a11df5fb348b1bdd539819f269ab7d166e6e36d2a"
-    sha256 cellar: :any_skip_relocation, ventura:       "2a462c18fc1abe0da3d2095387eb10bf42aafddda80d80c4a1a19bdde52eb8bb"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "61a962f1faf16288d67bdb0c09ae8597bc813a020537cdd1f6c6d3cdd1003006"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4ca89dccfcce132bdbe4d4ddf38f76bc1175e9c9897e4bcd43abd5abb1ae3a18"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "291b511a8c5fa486f5cf94358527770d4f0307563b221425a64c0a9a2c06a63d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5fc1d5ac986e39da4fa61785b9ce49db17292a37b61957d94e0fa25ce80bb174"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b27b55bc9fdc8f36c7e7dd57412dd18959bfafb4e1910b793145129cce0a6646"
+    sha256 cellar: :any_skip_relocation, sonoma:        "f61491c8f73e2de22532677e52eb0987cf27a3a2b95ba5298c2a2984d29a8fc6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "dd0970ba25aa60ad39e6546b58f92e7a90e15def9ac788c700f6fa19eb074a87"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2648686a59c1ddaebd2b738b36e4ded146c5ff7e1393ec3f84c20b8acdb4f379"
   end
 
   depends_on "go" => :build
@@ -30,7 +29,7 @@ class Cmctl < Formula
 
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"cmctl", "completion")
+    generate_completions_from_executable(bin/"cmctl", shell_parameter_format: :cobra)
   end
 
   test do
@@ -58,7 +57,6 @@ class Cmctl < Formula
       apiVersion: cert-manager.io/v1
       kind: Certificate
       metadata:
-        creationTimestamp: null
         name: test-certificate
       spec:
         commonName: example.com

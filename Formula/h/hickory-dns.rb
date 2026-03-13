@@ -7,6 +7,7 @@ class HickoryDns < Formula
   head "https://github.com/hickory-dns/hickory-dns.git", branch: "main"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "00338c97c57b343444b4d6383b5f4537a74ce7eefe7267699773bf176697121a"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "f8f589615fd4ae0e19b330aebf7c932480fd246e2e890e263cb091c9deb3229c"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e4641077055a67a0cf03f1a91f7b08e3ce543fd357b546fa23ecac969117eaec"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "898885c68864696ba13319a1d7d5b079d6e2c3dc535cce904d0d1b95d24f3cbd"
@@ -33,9 +34,7 @@ class HickoryDns < Formula
     test_config_path = testpath/"test-data/test_configs"
     example_config = test_config_path/"example.toml"
 
-    pid = fork do
-      exec bin/"hickory-dns", "-c", example_config, "-z", test_config_path, "-p", test_port.to_s
-    end
+    pid = spawn bin/"hickory-dns", "-c", example_config, "-z", test_config_path, "-p", test_port.to_s
     sleep 2
     output = shell_output("dig @127.0.0.1 -p #{test_port} www.example.com")
     expected = "www.example.com.	86400	IN	A	127.0.0.1"

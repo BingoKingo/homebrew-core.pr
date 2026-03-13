@@ -12,12 +12,13 @@ class Hishtory < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e34db19bb53a5227bdda758dd4511b3268bba2a5edf4e97ab312d96a164f8c24"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e34db19bb53a5227bdda758dd4511b3268bba2a5edf4e97ab312d96a164f8c24"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e34db19bb53a5227bdda758dd4511b3268bba2a5edf4e97ab312d96a164f8c24"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d98870cb4d2d3427a139d11dbc40b9e8d94bea42b3be326074fb72363c8bd1fa"
-    sha256 cellar: :any_skip_relocation, ventura:       "c406a562034cc2bdd76625c79616e6bf7362857cd0964c13636d5660a241f1d1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2ff41cdcf4490c139d740a547cc565febf4326cc11d86ca2cd87eb49f615c73c"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "99dec873524b0cd5ac384478afd990b0ed9ed606c9bc6c94e8c3e7c0622747bc"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "99dec873524b0cd5ac384478afd990b0ed9ed606c9bc6c94e8c3e7c0622747bc"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "99dec873524b0cd5ac384478afd990b0ed9ed606c9bc6c94e8c3e7c0622747bc"
+    sha256 cellar: :any_skip_relocation, sonoma:        "efc3d5ab95c59a45cc6ca7c5caf7e367f419c3dfc25755875882a1fe33f91558"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "dffdda94fe7ba567cdb165781632e0e3cfc24553b638cb6b45eee1de5684e493"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "13d274f6feb130825393ffa5e24e6fe5e8bf1aca290214fda7c1f17fbe6c4270"
   end
 
   depends_on "go" => :build
@@ -30,15 +31,14 @@ class Hishtory < Formula
     ]
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"hishtory", "completion")
+    generate_completions_from_executable(bin/"hishtory", shell_parameter_format: :cobra)
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/hishtory --version")
 
-    output = shell_output("#{bin}/hishtory init")
+    output = shell_output("#{bin}/hishtory init --offline")
     assert_match "Setting secret hishtory key", output
-
     assert_match "Enabled: true", shell_output("#{bin}/hishtory status")
   end
 end

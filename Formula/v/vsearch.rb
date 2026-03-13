@@ -1,18 +1,17 @@
 class Vsearch < Formula
   desc "Versatile open-source tool for microbiome analysis"
   homepage "https://github.com/torognes/vsearch"
-  url "https://github.com/torognes/vsearch/archive/refs/tags/v2.30.0.tar.gz"
-  sha256 "6d11ce960206ab64cf6d7907e539348d192a5b3f32f82d37c9bfbc4d789b576c"
+  url "https://github.com/torognes/vsearch/archive/refs/tags/v2.30.5.tar.gz"
+  sha256 "b6ecfa61721bb7805974cdb7d490d56b4ad3ed12b0baaa170fd96ff711d92929"
   license any_of: ["BSD-2-Clause", "GPL-3.0-or-later"]
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c5f7cc238606626fa0e7ef7934d1be830a1f6d3414948d96c64657a7c0e7261d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "95bf8675d1df686a387c61e8abe592dd295f6f20a6d8bde1dd5820cdeb3df895"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a10dde53f6f72b7c42c64149cef00a946903a6ca381666d7a4185de57816ba1e"
-    sha256 cellar: :any_skip_relocation, sonoma:        "76c2bfbdcee1d144d998f55efb5b2f065307fe95c05d1ca9f4d8f66c65b4d035"
-    sha256 cellar: :any_skip_relocation, ventura:       "1d00ca3077cc1516feb5b8b6b9d7aa1895c7d739c937763961c9f6d50921d164"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b8168ba9f58fa34485373f017f8f6b65ec5a8c1643828080cb8a0db8c1173fc5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "01ede91c3962acd2f7600a7d8b2c0bb33506507ecfa1ff07d272a06bab3816e6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "061a632b178e86cf1e74cc3ce4dd1d9932e7e714e5075014420c6fc67f7e2e3a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a3ba9402d07da8d502f4f3bf87405302efb7634476ddfc06a20f83b000802474"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6f0d4f77da3187d3fc95cd1753bf890da782467ab44e3d27519cb94479c16dfe"
+    sha256 cellar: :any_skip_relocation, sonoma:        "3d401c88afc8a922672b6b1605f0d06bd8deaaa068f85777450fca3695787e24"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ef76b11af121aa59337a2c12eb43eae9eb79b89b82f964146b23a7d4b6261290"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "53e3f64285719a49441021c224d1ee559ae12dd43c3df0e66cb2417e067249df"
   end
 
   depends_on "autoconf" => :build

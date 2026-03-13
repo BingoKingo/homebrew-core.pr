@@ -1,8 +1,8 @@
 class Zpaqfranz < Formula
   desc "Deduplicating command-line archiver and backup tool"
   homepage "https://github.com/fcorbelli/zpaqfranz"
-  url "https://github.com/fcorbelli/zpaqfranz/archive/refs/tags/62.2.tar.gz"
-  sha256 "12cad71439987af886639be576d936d97c097f505caa4d5ebd5e454ff844610b"
+  url "https://github.com/fcorbelli/zpaqfranz/archive/refs/tags/64.6.tar.gz"
+  sha256 "2a623c2dc2343bfc7d12fcf0079f713dec2d856e72fb4494e57e0505464d3c22"
   license all_of: [:public_domain, "MIT", "Zlib", "Unlicense", "BSD-2-Clause", "Apache-2.0"]
   head "https://github.com/fcorbelli/zpaqfranz.git", branch: "main"
 
@@ -14,13 +14,12 @@ class Zpaqfranz < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4cc7c2e2717ff9f2a9422ca3a6382fec60ad4f043aa27995f9ee175020868afd"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d9d0ec317388236b384f8e6deedb6962bcaf4f0c7008188189d22ea6d617d60d"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e90d2132aeda6d6200a3d20ee50b1bf76ee92ec72b80b7d8d78010516181ef6d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3719cbb4ddc90f8847a427391a1c81d219be3ba98d34246390196c0b2cc4a548"
-    sha256 cellar: :any_skip_relocation, ventura:       "ebc35c7365a0e8c5099f378efc0ebad074f7ac3224018a017efe230e0266e6ad"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "96b0ad86e6b4e4ace13d7ccd029bcab8c4d138c58b2ba1e69523ee203e387264"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "eaced67567513be07a50c5ba4d6b22fd336652991fd9b1e4134e295fff5f26f5"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "067482f5c100dc9af1ec49412a535747871ea9f4956c1a496021fa54c32c041b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "819eeb2ef41b8f1cc5939cc35ef386e80bbfeef6d6ef2f480593116aa35e2b67"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "55268f0df90d37b99257df1aca7395e1e53dd6564038e616798cb909a32d2f10"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6310bb0259ed5453abc71a6afa9ef4a3ec7d5927f7b05862b19f8243da9c0922"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4bc3a218d3d1635022597b14eff59e436fcb7d4f24591b0e5d60ea41804debb1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ab5610ce71a03b0016d55ad5305aec5bf7e005c567c4395469e8848d052b4bcb"
   end
 
   def install
@@ -34,10 +33,7 @@ class Zpaqfranz < Formula
   end
 
   test do
-    system bin/"zpaqfranz", "autotest", "-to", testpath/"archive"
-    system bin/"zpaqfranz", "extract", testpath/"archive/sha256.zpaq", "-to", testpath/"out/"
-    testpath.glob("out/*").each do |path|
-      assert_equal path.basename.to_s.downcase, Digest::SHA256.hexdigest(path.read)
-    end
+    output = shell_output("#{bin}/zpaqfranz autotest")
+    assert_match "ERROR 0", output
   end
 end

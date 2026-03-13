@@ -1,25 +1,19 @@
 class Stylelint < Formula
   desc "Modern CSS linter"
   homepage "https://stylelint.io/"
-  url "https://registry.npmjs.org/stylelint/-/stylelint-16.20.0.tgz"
-  sha256 "743a70841c93ae3fdcac93d5ef3d30467d1783f4a1d238a301016a96358e0649"
+  url "https://registry.npmjs.org/stylelint/-/stylelint-17.4.0.tgz"
+  sha256 "e070b2b0d97389a7ae7f6105d323cce21ab54704d02fe071e986533f6b58b093"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "658a1258491759d9909a54bada33ab7c480f51f0c8148c93a549553d3b5cf9b8"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "658a1258491759d9909a54bada33ab7c480f51f0c8148c93a549553d3b5cf9b8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "658a1258491759d9909a54bada33ab7c480f51f0c8148c93a549553d3b5cf9b8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b6d62415a7b218b13c8bf79d115c8277e15ef9ac3049e5b9a22cbea9044efbc0"
-    sha256 cellar: :any_skip_relocation, ventura:       "b6d62415a7b218b13c8bf79d115c8277e15ef9ac3049e5b9a22cbea9044efbc0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "658a1258491759d9909a54bada33ab7c480f51f0c8148c93a549553d3b5cf9b8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "658a1258491759d9909a54bada33ab7c480f51f0c8148c93a549553d3b5cf9b8"
+    sha256 cellar: :any_skip_relocation, all: "a7e6a628718e1ac8de18d23d6b558ba98d8521797662924fb6533e1c923f44e2"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

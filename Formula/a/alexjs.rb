@@ -7,6 +7,7 @@ class Alexjs < Formula
 
   bottle do
     rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f8e7666f1bbca1055363b542c7937cfcfdcf2ce1667f8e01a3013353a0b32ab8"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "02502faa257c0027e461b00a8f802c5bb60de704c3f75afbc09aa41b51763d71"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "02502faa257c0027e461b00a8f802c5bb60de704c3f75afbc09aa41b51763d71"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "02502faa257c0027e461b00a8f802c5bb60de704c3f75afbc09aa41b51763d71"
@@ -20,7 +21,7 @@ class Alexjs < Formula
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

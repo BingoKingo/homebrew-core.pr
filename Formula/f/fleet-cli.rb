@@ -1,10 +1,10 @@
 class FleetCli < Formula
   desc "Manage large fleets of Kubernetes clusters"
   homepage "https://github.com/rancher/fleet"
-  url "https://github.com/rancher/fleet/archive/refs/tags/v0.12.3.tar.gz"
-  sha256 "88bcc4c2dd3cb2c23a1214dd1aed4113f17a7d9c8a3370f69d7264afe7de462e"
+  url "https://github.com/rancher/fleet/archive/refs/tags/v0.14.3.tar.gz"
+  sha256 "9ed7701f9925fba3cd8907671d458a248138cfecbc28a02d1da5120d4709b552"
   license "Apache-2.0"
-  head "https://github.com/rancher/fleet.git", branch: "master"
+  head "https://github.com/rancher/fleet.git", branch: "main"
 
   livecheck do
     url :stable
@@ -12,13 +12,12 @@ class FleetCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ceb97e71a29896288761d41d1b4f3488c978751da329882e1182ffc33667ea70"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9e4f749248a449c225e17df68ed854d31da374bf8439741006a4f241c1220f7a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ce26fcf3c34996bfc1c5bc283a5083b2264aa5b6bfb447820406525b208c31d4"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4994db618498a04d4e3bb1ced22f2ffbdd68022abd1042725ee5f17691b64e22"
-    sha256 cellar: :any_skip_relocation, ventura:       "d98c1181447c9f7650122a553ddea74d0124a13ed3038ad588497eddb944e066"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "33816d5713a4a0072c820f7dd311f14f9f8910c797f99872ff81272e2641677d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b4585264fb80ca1ee633a79e2fee303a54f7d0491fcc3c2598c8f524653fb3c2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "8fe5b9b3a9cd99bba491b6589c0cbbc131138f6265d00ee426f9d4cfb46c5976"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a02a5d0b06e139e760dff29980d40dcc2173339a4ba9d2365fd3b45240af5a0d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2add2a9d0cb5e6d0651b78513e22bc662d441ff4c4f48e5b7c691a65eacc02a8"
+    sha256 cellar: :any_skip_relocation, sonoma:        "42af301c6895557ef3e7a96cedb26710e09b754ae64126b014661265f2c43076"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "526f121f230320dcd7574dea90c0e3fc03204d7a5d1bb40bed7990702e15ac9f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e6acbd21a792fa330fd32b397792c6a51c61e8c19617d81b79301b203c1c3461"
   end
 
   depends_on "go" => :build
@@ -31,7 +30,7 @@ class FleetCli < Formula
     ]
     system "go", "build", *std_go_args(output: bin/"fleet", ldflags:), "./cmd/fleetcli"
 
-    generate_completions_from_executable(bin/"fleet", "completion")
+    generate_completions_from_executable(bin/"fleet", shell_parameter_format: :cobra)
   end
 
   test do

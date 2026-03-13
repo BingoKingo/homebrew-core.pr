@@ -1,8 +1,8 @@
 class Manticoresearch < Formula
   desc "Open source text search engine"
   homepage "https://manticoresearch.com"
-  url "https://github.com/manticoresoftware/manticoresearch/archive/refs/tags/9.8.2.tar.gz"
-  sha256 "97054a8bfa671bdbd6ad7ad66d52f95fb7482ec612345f718faec61213fdcc0a"
+  url "https://github.com/manticoresoftware/manticoresearch/archive/refs/tags/17.5.1.tar.gz"
+  sha256 "b533ccbb201e90d619d444f46d4e795f3f1aaf60e22cec87a016637b1dbc49a7"
   license all_of: [
     "GPL-3.0-or-later",
     "GPL-2.0-only", # wsrep
@@ -12,20 +12,21 @@ class Manticoresearch < Formula
   version_scheme 1
   head "https://github.com/manticoresoftware/manticoresearch.git", branch: "master"
 
-  # Only even patch versions are stable releases
+  # There can be a notable gap between when a version is tagged and a
+  # corresponding release is created, so we check the "latest" release instead
+  # of the Git tags.
   livecheck do
     url :stable
-    regex(/^v?(\d+(?:\.\d+)+\.\d*[02468])$/i)
+    strategy :github_latest
   end
 
   bottle do
-    sha256 arm64_sequoia: "48734bd094f3f596a3c15ea2dfa073d6c79bafdd7537a922e3bf75bbaf680451"
-    sha256 arm64_sonoma:  "4937cd47236f18850b378ff19f5e3560edd775581fa5788e9eea72401c06e2a6"
-    sha256 arm64_ventura: "41d9cb164b18901c295f787be5f703d50f4ba96ad574b823e31eeea24c55f240"
-    sha256 sonoma:        "a427a0d82fcbd47dea145d85e4b9889132e7f2afaad9f6bcdd2125877f6873bc"
-    sha256 ventura:       "1e023ce4353422359bdc6f525855d8b2c774962510e6463e67a2f40a795f64cc"
-    sha256 arm64_linux:   "656adde88347d175ea02ddc1141f737f9b27d5a88e63132ed098ea2caaf93682"
-    sha256 x86_64_linux:  "e74cdcab81df34df51c82bc1776b90e5e1a7f4bb7d6e4e8b0ae7330677210097"
+    sha256 arm64_tahoe:   "ef6a6a8bfa36818270100343d06d55a2d9db44ff8883d78a30cf3c7c2b6fc84b"
+    sha256 arm64_sequoia: "820cbcb281c436c60ad359d44e4867672d1fcbeec633ba164748fcc9caf9b392"
+    sha256 arm64_sonoma:  "544ce31f41f2c5de7118f56e02d07f1dc56902a2b11284f931821fb640bc13fa"
+    sha256 sonoma:        "4573e6b6870e7be7b4d933c410b367a07128daa3214d031406911256d93c2913"
+    sha256 arm64_linux:   "7b2362842b8f3e894f6ff5b7ed998297dda9eea5e9ffc1723129713c09bac50f"
+    sha256 x86_64_linux:  "03afd532f2eef63826c39610758adbc58d54fdb84a41e67dde9281c5dded074c"
   end
 
   depends_on "cmake" => :build
@@ -35,7 +36,7 @@ class Manticoresearch < Formula
   # NOTE: `libpq`, `mariadb-connector-c`, `unixodbc` and `zstd` are dynamically loaded rather than linked
   depends_on "boost"
   depends_on "cctz"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "libpq"
   depends_on "mariadb-connector-c"
   depends_on "openssl@3"
@@ -47,8 +48,14 @@ class Manticoresearch < Formula
   uses_from_macos "bison" => :build
   uses_from_macos "flex" => :build
   uses_from_macos "expat"
-  uses_from_macos "libxml2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  # Workaround for Boost 1.89.0 until fixed upstream.
+  # Issue ref: https://github.com/manticoresoftware/manticoresearch/issues/3673
+  patch :DATA
 
   def install
     # Avoid statically linking to boost
@@ -79,15 +86,10 @@ class Manticoresearch < Formula
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
-  end
 
-  def post_install
     (var/"run/manticore").mkpath
     (var/"log/manticore").mkpath
     (var/"manticore/data").mkpath
-
-    # Fix old config path (actually it was always wrong and never worked; however let's check)
-    mv etc/"manticore/manticore.conf", etc/"manticoresearch/manticore.conf" if (etc/"manticore/manticore.conf").exist?
   end
 
   service do
@@ -109,3 +111,22 @@ class Manticoresearch < Formula
     Process.wait(pid)
   end
 end
+
+__END__
+diff --git a/cmake/galera-imported.cmake.in b/cmake/galera-imported.cmake.in
+index 0ffa9caf1..806c929b4 100644
+--- a/cmake/galera-imported.cmake.in
++++ b/cmake/galera-imported.cmake.in
+@@ -15,9 +15,9 @@ include ( ExternalProject )
+ ExternalProject_Add ( galera_populate
+ 		URL @GALERA_PLACE@
+ 		URL_MD5 @GALERA_SRC_MD5@
+-		CMAKE_CACHE_ARGS -DWSREP_PATH:STRING=${wsrep_populate_SOURCE_DIR} -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGALERA_REV:STRING=@GALERA_REV@
++		CMAKE_CACHE_ARGS -DWSREP_PATH:STRING=${wsrep_populate_SOURCE_DIR} -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGALERA_REV:STRING=@GALERA_REV@ -DWITH_BOOST:BOOL=OFF -DCMAKE_CXX_FLAGS:STRING=-DASIO_DISABLE_BOOST_REGEX=1\ -DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG=1
+ 		BUILD_COMMAND "@CMAKE_COMMAND@" --build . --config RelWithDebInfo
+ 		INSTALL_COMMAND "@CMAKE_COMMAND@" --install . --config RelWithDebInfo --prefix "@GALERA_BUILD@"
+ 		)
+ 
+-# file configured from cmake/galera-imported.cmake.in
+\ No newline at end of file
++# file configured from cmake/galera-imported.cmake.in

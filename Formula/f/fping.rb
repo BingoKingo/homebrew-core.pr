@@ -1,8 +1,8 @@
 class Fping < Formula
   desc "Scriptable ping program for checking if multiple hosts are up"
   homepage "https://fping.org/"
-  url "https://fping.org/dist/fping-5.3.tar.gz"
-  sha256 "d57bd0141aea082e3adfc198bfc3db5dfd12a7014c7c2655e97f61cd54901d0e"
+  url "https://fping.org/dist/fping-5.5.tar.gz"
+  sha256 "15c4e32b6c55ff105bafe03e8c91c7ca1b2eda31bf9a7127326bb87887ee18fe"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,13 +11,12 @@ class Fping < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "34826c963fd624266f511d3fb0dd26b610b8843cebbb16f31220e43c20a4052b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ec5e5ab2337affbf9f5fe26ba7a69b55e10f18a0a0065bf0b54eab0847265a19"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "658575a36018fa71348dea5d451069d336b152344bedb9fcc6e3bc33ca9a5283"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1a1ba89c185ab398f0331f79ffbd47a6f810fc8f7e3e25bedcb2022add56eeb5"
-    sha256 cellar: :any_skip_relocation, ventura:       "784590da34854b738fe5ea0470d518a23576496dc7cddf49102940ba78ff1ec3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "92ad8e2a81facd122c8625f7389a2d1d32643c2587c85bf1c0b891d7936fcfea"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "89675f5ea6956c4e188fa9c4ea28b72a951a5ee899d4f06b29e1275dd47a6952"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d8e132e94c41b8dcf3149faf3356beece440bc4f5b804e723e9f7ee9cb14817d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cbe25f1d45b4b018ed308fd986f26211a00cf32c205ebc5c46ebcafdc546e352"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "251479f09a0b2ef3cf58fcd6a7144d0b33baf68f1555f2a6dcdcfea4b1e3eaef"
+    sha256 cellar: :any_skip_relocation, sonoma:        "f126c58d92896bc945c83969b8ee25e7ec5aee3b2480eb836f6c036a550f7c54"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7df0fdc7745faf467a98549da150873dc5c944cf5a3deb49c64972d5a0eda5b7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2cc39f11322e6922333f12d26b85a755520ff205f4214b9602bb7062d79b7673"
   end
 
   head do

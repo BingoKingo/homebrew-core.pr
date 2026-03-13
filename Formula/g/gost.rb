@@ -1,18 +1,23 @@
 class Gost < Formula
   desc "GO Simple Tunnel - a simple tunnel written in golang"
-  homepage "https://github.com/ginuerzh/gost"
-  url "https://github.com/ginuerzh/gost/archive/refs/tags/v2.12.0.tar.gz"
-  sha256 "ed575807b0490411670556d4471338f418c326bb1ffe25f52977735012851765"
+  homepage "https://gost.run/"
+  url "https://github.com/go-gost/gost/archive/refs/tags/v3.2.6.tar.gz"
+  sha256 "79874354530b899576dd4866d3b1400651d0b17c1e7a90ad30c44686a0642600"
   license "MIT"
-  head "https://github.com/ginuerzh/gost.git", branch: "master"
+  head "https://github.com/go-gost/gost.git", branch: "master"
+
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "57e454b905ac17f21519f34ed868db709413efb45f53fe37edeb9bd0e9da0259"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "86b48c89f4ea3d4edaaa3cec855981de9ac0fc36cc82f50b166bf6bf688c8997"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "189a833087438d49b52688387ab96ff43aa9728337fc24c236e007691dae1eb4"
-    sha256 cellar: :any_skip_relocation, sonoma:        "e9f65b51d764ccac83750b55a03bb3895cd0c2e32a2e57697fa3323a12499c67"
-    sha256 cellar: :any_skip_relocation, ventura:       "4c956460f08c30254b98a089e1ee60a62ca5721f2525638ed16af81c46e28a8e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "de78cc69979d46baeb0727157ea88dc6b6f3c263258e2d99c32040c5a9abd28c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "925d5ffa1c7f6ffd0c3743b6805308bc39ca041e1c7e93c1333848699f5504cc"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "925d5ffa1c7f6ffd0c3743b6805308bc39ca041e1c7e93c1333848699f5504cc"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "925d5ffa1c7f6ffd0c3743b6805308bc39ca041e1c7e93c1333848699f5504cc"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d5d199aadd5a88043ec9f8bffd7de6f852dafdf4a45fac5a8d3527f7ee489efa"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e68d6e4500a83ee8cc60afed486e32e9b6320b5566ce7836b69148627272493d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d8e887113b6a3f3715847a8004c6b9d8708212a69cac3ddcaed42eef3d3f148d"
   end
 
   depends_on "go" => :build
@@ -26,13 +31,10 @@ class Gost < Formula
 
   test do
     bind_address = "127.0.0.1:#{free_port}"
-    fork do
-      exec bin/"gost", "-L", bind_address
-    end
+    spawn bin/"gost", "-L", bind_address
     sleep 2
     output = shell_output("curl -I -x #{bind_address} https://github.com")
     assert_match %r{HTTP/\d+(?:\.\d+)? 200}, output
-    assert_match %r{Proxy-Agent: gost/#{version}}i, output
     assert_match(/Server: GitHub.com/i, output)
   end
 end

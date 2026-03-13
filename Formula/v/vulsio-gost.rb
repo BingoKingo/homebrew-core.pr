@@ -1,17 +1,17 @@
 class VulsioGost < Formula
   desc "Local CVE tracker & notification system"
   homepage "https://github.com/vulsio/gost"
-  url "https://github.com/vulsio/gost/archive/refs/tags/v0.5.1.tar.gz"
-  sha256 "03e1155c8c989f1980c7392ed6c899bf74dee1bf577f0838521dda977466f9ca"
+  url "https://github.com/vulsio/gost/archive/refs/tags/v0.7.2.tar.gz"
+  sha256 "e96c8c8f29b19c3cb9b2288e91903d60074a17d0525333a7712ad03e248dd96a"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "df9dc1b779c37edd3d593f55245b103b98584ba75b87b4743bfc04c0f59067b2"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "df9dc1b779c37edd3d593f55245b103b98584ba75b87b4743bfc04c0f59067b2"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "df9dc1b779c37edd3d593f55245b103b98584ba75b87b4743bfc04c0f59067b2"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8050dfd7bd5560060a221fbfa7b6be492087f345c23ee9274bdfec1271d3af9d"
-    sha256 cellar: :any_skip_relocation, ventura:       "8050dfd7bd5560060a221fbfa7b6be492087f345c23ee9274bdfec1271d3af9d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a4a2ae9ca9d6b2d48bbe08312fe2e647319cf8881bc0393b017498f42acb8a20"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "813d140b549cab244bf2fa4de218034cd5066968ab0f869d64a74f934f017eaa"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "813d140b549cab244bf2fa4de218034cd5066968ab0f869d64a74f934f017eaa"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "813d140b549cab244bf2fa4de218034cd5066968ab0f869d64a74f934f017eaa"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e368bafbdbf01f8ca5e69331d3cf131626b5e69daa94fe43ec9944690dc067ca"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7be514f0ece49d3c709983bb2e04c5754f555f534e32307e56be378637c1fef6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a975a3784dd47bb8e2a5c71b9ad596c412231fb427ebf7496686ee1f8e309e4b"
   end
 
   depends_on "go" => :build
@@ -24,9 +24,9 @@ class VulsioGost < Formula
       -X github.com/vulsio/gost/config.Version=#{version}
       -X github.com/vulsio/gost/config.Revision=#{tap.user}
     ]
-    system "go", "build", *std_go_args(output: bin/"gost", ldflags:)
+    system "go", "build", *std_go_args(ldflags:, output: bin/"gost")
 
-    generate_completions_from_executable(bin/"gost", "completion")
+    generate_completions_from_executable(bin/"gost", shell_parameter_format: :cobra)
   end
 
   test do

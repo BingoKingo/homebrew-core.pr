@@ -1,25 +1,24 @@
 class Pygobject3 < Formula
   desc "GNOME Python bindings (based on GObject Introspection)"
   homepage "https://pygobject.gnome.org"
-  url "https://download.gnome.org/sources/pygobject/3.52/pygobject-3.52.3.tar.gz"
-  sha256 "00e427d291e957462a8fad659a9f9c8be776ff82a8b76bdf402f1eaeec086d82"
+  url "https://download.gnome.org/sources/pygobject/3.56/pygobject-3.56.1.tar.gz"
+  sha256 "2ec1cc8c55c7ffeebb97e58a9bba7aa1e74611f1173628084685446804a8881a"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "b8d91047912ee452e7b000c29413dc0646134deee82d94181c8063ab5f33fd70"
-    sha256 cellar: :any, arm64_sonoma:  "def6801a1a2cda4fa6873130411bbd3c5a57cfc8027ede2aed8b557d2932b1a0"
-    sha256 cellar: :any, arm64_ventura: "45ccc44e5d04c45b4019c3669bb2faf7348b417fd1e3da58f24c4cf19ef86538"
-    sha256 cellar: :any, sonoma:        "87b3fe1cbb732c37d112c4a24acebd29a778836cf3360f3dfb356d6d0c561885"
-    sha256 cellar: :any, ventura:       "bfd291c8f04e022750b169ca41f2976ed9980b99e65e22cd0dcedcf484702bc9"
-    sha256               arm64_linux:   "e2bccaf4b84f7b54193c369b6ea4a738e6343ddf3498e5a26f69dda3db59e0a5"
-    sha256               x86_64_linux:  "0367b4bfcc0e178c788629172392956f88494ab1e04577b092b53eaf5b008a60"
+    sha256 cellar: :any, arm64_tahoe:   "71463d786a2c092be821002478ede1418b63816367aa85b63801ff884ef7388e"
+    sha256 cellar: :any, arm64_sequoia: "2738ab144fdd30aa615a2ef184683495dda3adceec96cb955d1440cefe004e6a"
+    sha256 cellar: :any, arm64_sonoma:  "0842af882d7c66ec1f03f5888afccf018139c95d104cbbe0a733a9ba25e790d2"
+    sha256 cellar: :any, sonoma:        "beb1e2b8a01f338cfcd5d46728e7581a1c311550fcdf968d42336e7eefedfac6"
+    sha256               arm64_linux:   "7684146c5d4b0522950f88f011293d12495b2643e59b71211cb3cc2fd72231eb"
+    sha256               x86_64_linux:  "241f466211a72a45aa16c6a1e616b2c68bf689805defdeb87320c94ed3ad723e"
   end
 
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => :build
-  depends_on "python@3.12" => [:build, :test]
   depends_on "python@3.13" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
 
   depends_on "cairo"
   depends_on "glib"

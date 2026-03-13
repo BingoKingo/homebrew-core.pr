@@ -1,27 +1,22 @@
 class Tmuxinator < Formula
   desc "Manage complex tmux sessions easily"
   homepage "https://github.com/tmuxinator/tmuxinator"
-  url "https://github.com/tmuxinator/tmuxinator/archive/refs/tags/v3.3.4.tar.gz"
-  sha256 "a923c48127e0d63d0b5397f6297842ed51cf5a5762c348e1db0efd59506c58bd"
+  url "https://github.com/tmuxinator/tmuxinator/archive/refs/tags/v3.3.7.tar.gz"
+  sha256 "556756c17b8740af0d0bb3af58f3205ff25d00d515dbe6fc378653a28d14c4d8"
   license "MIT"
   head "https://github.com/tmuxinator/tmuxinator.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "6d3d903bd93f7555c16d092f8bd85d972f4c726d2670340f53f8df3682b93934"
+    sha256 cellar: :any_skip_relocation, all: "a9ff335a312a7cc07ec67c66da6d1295300d9ce304d66773664a1a24790c687b"
   end
 
   depends_on "ruby"
   depends_on "tmux"
   depends_on "tmuxinator-completion"
 
-  resource "xdg" do
-    url "https://rubygems.org/downloads/xdg-2.2.5.gem"
-    sha256 "f3a5f799363852695e457bb7379ac6c4e3e8cb3a51ce6b449ab47fbb1523b913"
-  end
-
   resource "thor" do
-    url "https://rubygems.org/downloads/thor-1.3.2.gem"
-    sha256 "eef0293b9e24158ccad7ab383ae83534b7ad4ed99c09f96f1a6b036550abbeda"
+    url "https://rubygems.org/downloads/thor-1.4.0.gem"
+    sha256 "8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d"
   end
 
   resource "erubi" do
@@ -41,10 +36,6 @@ class Tmuxinator < Formula
     system "gem", "install", "--ignore-dependencies", "tmuxinator-#{version}.gem"
     bin.install libexec/"bin/tmuxinator"
     bin.env_script_all_files(libexec/"bin", GEM_HOME: ENV["GEM_HOME"])
-
-    # Make sure tmuxinator checks HOMEBREW_PREFIX for data files. Also ensures uniform bottles.
-    inreplace_files = libexec.glob("gems/xdg-*/lib/xdg/base_dir{,/extended}.rb")
-    inreplace inreplace_files, "/usr/local", HOMEBREW_PREFIX
   end
 
   test do
@@ -53,9 +44,9 @@ class Tmuxinator < Formula
 
     commands = shell_output("#{bin}/tmuxinator commands")
     commands_list = %w[
-      commands completions new edit open start
-      stop local debug copy delete implode
-      version doctor list
+      commands completions copy debug delete doctor
+      edit help implode local list new open start stop
+      stop_all version
     ]
 
     expected_commands = commands_list.join("\n")

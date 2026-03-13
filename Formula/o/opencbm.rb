@@ -4,7 +4,7 @@ class Opencbm < Formula
   url "https://github.com/OpenCBM/OpenCBM/archive/refs/tags/v0.4.99.104.tar.gz"
   sha256 "5499cd1143b4a246d6d7e93b94efbdf31fda0269d939d227ee5bcc0406b5056a"
   license "GPL-2.0-only"
-  head "https://git.code.sf.net/p/opencbm/code.git", branch: "master"
+  head "https://github.com/OpenCBM/OpenCBM.git", branch: "master"
 
   livecheck do
     url :homepage
@@ -13,6 +13,7 @@ class Opencbm < Formula
 
   bottle do
     rebuild 1
+    sha256 arm64_tahoe:   "d5e8f6b89063a3de0040990afe6bd3a5e135bf0ed37bf05f51af658af12a58f5"
     sha256 arm64_sequoia: "529ae3225eaf83d45e82682ed1e4a209f92e6998c1c646e24532f9e711a8eea1"
     sha256 arm64_sonoma:  "fe90bccc22f2363fad79f49fa1cc5e844d2bc3c83627a9b7460bc5a07b64877d"
     sha256 arm64_ventura: "d278718401caa82cefb764cad68a547d8e09a2a28622ff012472a0dbaeebbb21"

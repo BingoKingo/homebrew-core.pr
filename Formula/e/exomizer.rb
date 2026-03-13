@@ -7,13 +7,10 @@ class Exomizer < Formula
     "Zlib",
     "GPL-3.0-or-later" => { with: "Bison-exception-2.2" },
   ]
-
-  livecheck do
-    url "https://bitbucket.org/magli143/exomizer/wiki/browse/downloads/"
-    regex(/href=.*?exomizer[._-]v?(\d+(?:\.\d+)+)\.zip/i)
-  end
+  head "https://bitbucket.org/magli143/exomizer.git", branch: "master"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "56448e95a835779566679e80a082ca12284cf6412a299194e363f7f06bb0440d"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "93a5cf305a6a643351a6335ce2555628f9448b9010009475e77ffa6d8a54b441"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a7292bb3eeaffac34f6540a029f6e21b79089b66e498d9e3bfa611cd44189b48"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "1e4a5b210dbdfaca2b71eb4c5d78401e5029667d6be88fe44d7aad0c2f4abc1b"

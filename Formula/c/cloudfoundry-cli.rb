@@ -1,8 +1,8 @@
 class CloudfoundryCli < Formula
   desc "Official command-line client for Cloud Foundry"
   homepage "https://docs.cloudfoundry.org/cf-cli"
-  url "https://github.com/cloudfoundry/cli/archive/refs/tags/v8.14.0.tar.gz"
-  sha256 "44abf756a7ced0fd6dc12d6cb87c26aac5b79a5c6a6871b7f57aa1864521d437"
+  url "https://github.com/cloudfoundry/cli/archive/refs/tags/v8.18.0.tar.gz"
+  sha256 "33cbaa5b45f3cba52ed7842a84fd1c462de4fa334f6e09929eb0c7b4420f7d2e"
   license "Apache-2.0"
   head "https://github.com/cloudfoundry/cli.git", branch: "main"
 
@@ -12,12 +12,12 @@ class CloudfoundryCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "979ed2b67372ecf27e871ca4ba989d276337b4eb42e0469f6f165031d376b79d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "979ed2b67372ecf27e871ca4ba989d276337b4eb42e0469f6f165031d376b79d"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "979ed2b67372ecf27e871ca4ba989d276337b4eb42e0469f6f165031d376b79d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "096615d910f2d95af59cea9df2bda5a8c330e96685fce9361e3fcd992675f973"
-    sha256 cellar: :any_skip_relocation, ventura:       "096615d910f2d95af59cea9df2bda5a8c330e96685fce9361e3fcd992675f973"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "13f87f8c6ed6cb74bc5c049ddd6364113ef9fbcc5b0bc8759d44d40a33b36c53"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b61decccbf35024e3257bc139377ff3a310cc0eac449200bca9ce662697591d9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b61decccbf35024e3257bc139377ff3a310cc0eac449200bca9ce662697591d9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b61decccbf35024e3257bc139377ff3a310cc0eac449200bca9ce662697591d9"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b487d3d8ed11eaca1defe7c3151ad7352812b6f1fef8cef09c34387f99f12344"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "87092cf4cf85b8264f6d0767a0dc0cebfb69a33f4eb06ddcffbf4d639e1a0616"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b139461c0739a4b9c0ec054df2bbce366f88887c40e7182e0c01a8ae3910d208"
   end
 
   depends_on "go" => :build
@@ -27,9 +27,9 @@ class CloudfoundryCli < Formula
   def install
     ldflags = %W[
       -s -w
-      -X code.cloudfoundry.org/cli/version.binaryVersion=#{version}
-      -X code.cloudfoundry.org/cli/version.binarySHA=#{tap.user}
-      -X code.cloudfoundry.org/cli/version.binaryBuildDate=#{time.iso8601}
+      -X code.cloudfoundry.org/cli/v8/version.binaryVersion=#{version}
+      -X code.cloudfoundry.org/cli/v8/version.binarySHA=#{tap.user}
+      -X code.cloudfoundry.org/cli/v8/version.binaryBuildDate=#{time.iso8601}
     ]
     system "go", "build", *std_go_args(ldflags:, output: bin/"cf")
   end

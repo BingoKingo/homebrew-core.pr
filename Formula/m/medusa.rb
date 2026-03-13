@@ -1,23 +1,22 @@
 class Medusa < Formula
   desc "Solidity smart contract fuzzer powered by go-ethereum"
   homepage "https://github.com/crytic/medusa"
-  url "https://github.com/crytic/medusa/archive/refs/tags/v1.2.1.tar.gz"
-  sha256 "dc1d759a0037350b51adce293cc678bf441386606ccf622745e8ff2d04a86cb0"
+  url "https://github.com/crytic/medusa/archive/refs/tags/v1.5.1.tar.gz"
+  sha256 "075c080a52cd27f3efae4146ac2e1bb38c8acf7a58891dacef610d29e91d93be"
   license "AGPL-3.0-only"
   head "https://github.com/crytic/medusa.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d0a87e647f278b365177ba8493606325a91557de070e7f8e1346cec0854dc7df"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "87ccb12465609526c2dcee37bbabffcb38affa4f5c9b5560d77b1dc270a996b5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f1f7b37a0f797128ba0a10bcc296fb75d2ecf3097b51d37b5aae1029da4bb4d9"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a7549c4a058ea66ba043d5e66dc312f2f401b4ef3fad6ec5e06123036a93642a"
-    sha256 cellar: :any_skip_relocation, ventura:       "88830664a5ad9f7075537f5423e414cf287e93183209f1518fd153504cde2533"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c688934508215e0501c484964785c04174f89092cd564951d2a9406351b0804d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d8dfb057a32ef14cef7b32b4b62970d18de576fd31a3bfbfe9ca42f3784ca93d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "171577dd8a1423ffcb8e8322e3f6ff7372f06aadb500e5fa947e01856c046df6"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e74b21070cf3a32810e5729a12625eb5aaeb308b56fe40157a5d4b2ec3de1053"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "90b9bf4570c49a9860f61627fca1ec1fd9500469df3cb049a7e8fd45f6337ae0"
+    sha256 cellar: :any_skip_relocation, sonoma:        "4475b58792b0a2cb28549b69cc11fa8b6cebb19e14fadb06f240053a310f771a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "65f2808967ea59f2651dbfd5315ca052d004b18989a46c5a96dd4483e58e7503"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "602048de2af9385120c31cc1846b48c56c88f3236b12dca86ff389ebb04961d3"
   end
 
   depends_on "go" => :build
-  depends_on "truffle" => :test
+  depends_on "solidity" => :test
   depends_on "crytic-compile"
 
   conflicts_with "bash-completion", because: "both install `medusa` bash completion"
@@ -28,9 +27,7 @@ class Medusa < Formula
   end
 
   test do
-    system "truffle", "init"
-
-    (testpath/"contracts/test.sol").write <<~SOLIDITY
+    (testpath/"test.sol").write <<~SOLIDITY
       pragma solidity ^0.8.0;
       contract Test {
         function assert_true() public {

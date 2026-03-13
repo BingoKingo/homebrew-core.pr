@@ -1,18 +1,18 @@
 class Imlib2 < Formula
   desc "Image loading and rendering library"
   homepage "https://sourceforge.net/projects/enlightenment/"
-  url "https://downloads.sourceforge.net/project/enlightenment/imlib2-src/1.12.5/imlib2-1.12.5.tar.gz"
-  sha256 "097d40aee4cf4a349187615b796b37db1652fcc84bb0e8d5c0b380ab651d9095"
+  url "https://downloads.sourceforge.net/project/enlightenment/imlib2-src/1.12.6/imlib2-1.12.6.tar.gz"
+  sha256 "59743ce82aefa9c1ec9476af608d541b74164714d2928fbd84ff5db6c4399079"
   license "Imlib2"
 
   bottle do
-    sha256 arm64_sequoia: "45e7832774c28fd6a40124c51835018534047536a506a8d7eed221ea2ab0204c"
-    sha256 arm64_sonoma:  "baf76382fc4937739ed8d2b61486b21a6677014362e0f3d891e6300d2a3f0012"
-    sha256 arm64_ventura: "deea7061495882c1a753838d12b5c84aeafad29a6422320bdae76c73bc5a29c2"
-    sha256 sonoma:        "9eba1823dbefdeebc3529ab8b40fd9a94ae36418e127f6743ccde0cd8ba6f78c"
-    sha256 ventura:       "9370ff5272a65cf7cf2f6748085c5728f6ac53cf1c42a382c4ef868e6856e8b8"
-    sha256 arm64_linux:   "2779490f04716e717c042160e6a70288b7de6097b42d2f5c573d8b3415abf482"
-    sha256 x86_64_linux:  "4a735d4a3638e58916205c67984e5ee5fa1b2aff554c9da6310d57995c84234f"
+    rebuild 1
+    sha256 arm64_tahoe:   "2b91eb5c5e4b335cb4ce21ac5f9379e37c1d798a99605db3edb384a9b92f2e6a"
+    sha256 arm64_sequoia: "622ef7a95f9b20ea7521c35c7e6608ca8c69cda18f838c2bbbc35c5899c03c84"
+    sha256 arm64_sonoma:  "c12ac5662371d80fc850fa03086044ea09dec1812afee6a4febc6f52fe20a082"
+    sha256 sonoma:        "a5894661719aa0e61993021bcf5683adb5c101098872bc6e4ddcae528752425a"
+    sha256 arm64_linux:   "3f6ba4191ffc83dafc78761ac21ff667f455caf1a8a88c718510f0ba51332e53"
+    sha256 x86_64_linux:  "d86ce123067142a835df423eea2c8a2d4cb1d095ab44688c315a00297d7d6c2d"
   end
 
   depends_on "pkgconf" => :build
@@ -27,7 +27,10 @@ class Imlib2 < Formula
   depends_on "xz"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./configure", "--disable-silent-rules",

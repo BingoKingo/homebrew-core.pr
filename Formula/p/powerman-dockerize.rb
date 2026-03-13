@@ -1,24 +1,25 @@
 class PowermanDockerize < Formula
   desc "Utility to simplify running applications in docker containers"
   homepage "https://github.com/powerman/dockerize"
-  url "https://github.com/powerman/dockerize/archive/refs/tags/v0.20.2.tar.gz"
-  sha256 "b9c10d73a222379c95c8cb02da882857ce0ff001e084468218ccb33375f1043e"
+  url "https://github.com/powerman/dockerize.git",
+      tag:      "v0.24.2",
+      revision: "1b7811b7ea17f8a175de13d55d5ebb537811900c"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "77eb12272817fa2070e5ffff79c53db97e822776cee3b599cf1731c47b5bf96c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "77eb12272817fa2070e5ffff79c53db97e822776cee3b599cf1731c47b5bf96c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "77eb12272817fa2070e5ffff79c53db97e822776cee3b599cf1731c47b5bf96c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0613ab1a6aef4c559a4b566c13323fe02400dbab2698cad61fc6ea099908b0dc"
-    sha256 cellar: :any_skip_relocation, ventura:       "0613ab1a6aef4c559a4b566c13323fe02400dbab2698cad61fc6ea099908b0dc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0f2fc4582b62b2b7bb8c7a947862a82f1e4e46e0a22c620a7d6d920ae5f8ef2a"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c03de360eaaa2046b25d67d51f12f0f40100c37af8125fd4105eb2de56b75497"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c03de360eaaa2046b25d67d51f12f0f40100c37af8125fd4105eb2de56b75497"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c03de360eaaa2046b25d67d51f12f0f40100c37af8125fd4105eb2de56b75497"
+    sha256 cellar: :any_skip_relocation, sonoma:        "5b2a0b96f2fdb90e2eb00fd8d5ac24b7f7fd33e70b5cf5d1eff11a8f14b62b3a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "789da6f945f97e449374e63c000a47f28caa4819777adccb76e29abff2dc70f4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c84b304af3f032e411b87f5750d4ba4a2cfadce7e442877f0bcfe2e056adee98"
   end
 
   depends_on "go" => :build
   conflicts_with "dockerize", because: "powerman-dockerize and dockerize install conflicting executables"
 
   def install
-    system "go", "build", *std_go_args(output: bin/"dockerize", ldflags: "-s -w -X main.ver=#{version}")
+    system "go", "build", *std_go_args(output: bin/"dockerize", ldflags: "-s -w")
   end
 
   test do

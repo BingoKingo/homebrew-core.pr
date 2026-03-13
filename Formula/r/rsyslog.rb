@@ -1,8 +1,8 @@
 class Rsyslog < Formula
   desc "Enhanced, multi-threaded syslogd"
   homepage "https://www.rsyslog.com/"
-  url "https://www.rsyslog.com/files/download/rsyslog/rsyslog-8.2412.0.tar.gz"
-  sha256 "8cdfa5a077cba576bdd6b1841cc2848b774e663b2e44a39512bb820174174802"
+  url "https://www.rsyslog.com/files/download/rsyslog/rsyslog-8.2602.0.tar.gz"
+  sha256 "4fe5256cea046d77546d36042d090e384184bc24041ecda5d03c03d35d1eabbb"
   license all_of: ["Apache-2.0", "GPL-3.0-or-later", "LGPL-3.0-or-later"]
 
   livecheck do
@@ -11,22 +11,26 @@ class Rsyslog < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "a6bdd3c313df1e78f07ad1c17d10ad789fcf81fe36a086e20205f5a7e776e9f0"
-    sha256 arm64_sonoma:  "354d633feb5a36805573f10f8e1c3fcc5f608ffc5026212635047b346b3e197a"
-    sha256 arm64_ventura: "7ea98249ad0dc1e7a4597e7057f5c6876242a249309b9cc49324be1e7e3e4e59"
-    sha256 sonoma:        "634fdc7ce73d23b03242f48159487efb0b5c4fc260969ecc714efde9420ba2b1"
-    sha256 ventura:       "d062e44b88e5d1b02ffab7237dac1a70fef11e1a204137ffb4a4284123ceddd1"
-    sha256 arm64_linux:   "8bf6e7b74eb77f2caabf141e907132cd9dd3ea91a77c0a91ef10adda9e2baab7"
-    sha256 x86_64_linux:  "b0f6a768aa0755c58ca09703551430588f40df0273679bc4131bdda4bc508c73"
+    sha256 arm64_tahoe:   "e86c820fbc63e371fe8543bf2ff5365bbec589c2e7cbe4a2872d7d35632d11ff"
+    sha256 arm64_sequoia: "95707460e1a5b349d6d675e56b9c0bf57d29ec2cc3dca46b5a32a80953445844"
+    sha256 arm64_sonoma:  "98c567808f97893fdda9a0f55f75aad073b52bc262a0f4aec6732ca4485ae0d3"
+    sha256 sonoma:        "2476dfb611e2179214663f2f8152c91a3dffe2d64d7bf83578786789a93cb8dc"
+    sha256 arm64_linux:   "37bea4b49af501f895823195f150974e661927d5117efceaf8151bf04caefb37"
+    sha256 x86_64_linux:  "f62a69acef13cf839170010356966d48351d7deca8a6329e6ebcbf0555067112"
   end
 
   depends_on "pkgconf" => :build
   depends_on "gnutls"
   depends_on "libestr"
   depends_on "libfastjson"
+  depends_on "protobuf-c"
+  depends_on "snappy"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./configure", "--enable-imfile",
@@ -43,13 +47,11 @@ class Rsyslog < Formula
       # minimal config file for receiving logs over UDP port 10514
       $ModLoad imudp
       $UDPServerRun 10514
-      *.* /usr/local/var/log/rsyslog-remote.log
+      *.* #{var}/log/rsyslog-remote.log
     EOS
     etc.install buildpath/"rsyslog.conf"
-  end
 
-  def post_install
-    mkdir_p var/"run"
+    (var/"run").mkpath
   end
 
   service do

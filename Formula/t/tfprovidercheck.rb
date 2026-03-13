@@ -1,18 +1,18 @@
 class Tfprovidercheck < Formula
   desc "CLI to prevent malicious Terraform Providers from being executed"
   homepage "https://github.com/suzuki-shunsuke/tfprovidercheck"
-  url "https://github.com/suzuki-shunsuke/tfprovidercheck/archive/refs/tags/v1.0.4.tar.gz"
-  sha256 "999816d11c9b30a01af4725a118e2e974f6927875fe0d1045ae6e0ab49e95284"
+  url "https://github.com/suzuki-shunsuke/tfprovidercheck/archive/refs/tags/v1.0.7.tar.gz"
+  sha256 "99dddd4317b99c3f304ed206b68de5c13840995dd04218968fe693ec77d20cd2"
   license "MIT"
   head "https://github.com/suzuki-shunsuke/tfprovidercheck.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "677d19930251eac409e75565e6325a56fc7e31014329b3719434de20212c085f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "677d19930251eac409e75565e6325a56fc7e31014329b3719434de20212c085f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "677d19930251eac409e75565e6325a56fc7e31014329b3719434de20212c085f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0f6036c235d4088cbaac59cb2165bad5d2496a0d63ae31586c4396a59f073513"
-    sha256 cellar: :any_skip_relocation, ventura:       "0f6036c235d4088cbaac59cb2165bad5d2496a0d63ae31586c4396a59f073513"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f889a0a70843517244b54a61a5de472e7d47313f7aee0fbc9b460d8994a34b5c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "427a2a1015f2145bd56bfab2f7e55da6e9dd51d269f52865b74332595bc17d1e"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "427a2a1015f2145bd56bfab2f7e55da6e9dd51d269f52865b74332595bc17d1e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "427a2a1015f2145bd56bfab2f7e55da6e9dd51d269f52865b74332595bc17d1e"
+    sha256 cellar: :any_skip_relocation, sonoma:        "4cbaf50f5a3e8dc17c9a1afe95c18337234b75e478723f2511ff6152617723f6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8b8f7a9fb706c0b91832695220d4afb0db43549beaae7707ceeebfc53050886e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31a2633383d7a927d45d1591203d5781cc6e0e5681e6a3d5155a48a1837368fa"
   end
 
   depends_on "go" => :build

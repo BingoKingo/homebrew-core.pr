@@ -1,8 +1,8 @@
 class Dumpling < Formula
   desc "Creating SQL dump from a MySQL-compatible database"
   homepage "https://github.com/pingcap/tidb"
-  url "https://github.com/pingcap/tidb/archive/refs/tags/v8.5.1.tar.gz"
-  sha256 "5266d6d4657c4b8fe805e63f885afd2ed189c34ed25174f9ff17b8a3392208f0"
+  url "https://github.com/pingcap/tidb/archive/refs/tags/v8.5.5.tar.gz"
+  sha256 "2dee41c6e6f1251ef5aa820cbb8c47950069e3e2baeb26072604d6be25498ecd"
   license "Apache-2.0"
   head "https://github.com/pingcap/tidb.git", branch: "master"
 
@@ -12,15 +12,16 @@ class Dumpling < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6715a2eff19789a8226fd793c666467fb293a850eb7ce16bfa521d3d5e71ad84"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e8801737a27e7d2ac8480b200e3cd93c93c85890e6c9262ed2da27feab78991d"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f1dc9cb3092baa6e4724deddc2ca90a367d568733fc9bbec3551380f891c2334"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3b81af5b162a3d46429358564ff50cc35d9b4764d699c475dba3554059923c38"
-    sha256 cellar: :any_skip_relocation, ventura:       "245acffe14d7a85d822ccd801c1da66d2dcfddf2f9bf28353d0ee5b8423816cb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c49cf78d2f80ea4fae79fc6f4478feb9ba9957c818dbd92455f95ee7aee39db7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "5844a11f18582d626238f91d0a2aa0e5df9067b14b4ff6481d76751c49ca6bae"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e61551c2cc9561b920bfb1fae76a34453fd9e4b2342111b2cf38b8552a595119"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "89b16c443161aa8af29d9d67c2bfba4a2c3c1bd83934deae7db40f660a7834ce"
+    sha256 cellar: :any_skip_relocation, sonoma:        "4e379fc76aad5816a8b9bf3711a12c47c0b64e67de8271670b1467f9ba6ff623"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "be17bd146f8d0e5214ad39a850dc55d2f741bbcf495a968e3857024df44fd664"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cfc64eb60af9ecd9ba221226e92abf183890db5e55ebfca027681ec52c0a2700"
   end
 
-  depends_on "go" => :build
+  # Unpin go when release supports Go 1.26. Ref https://github.com/pingcap/tidb/issues/65761
+  depends_on "go@1.25" => :build
 
   def install
     project = "github.com/pingcap/tidb/dumpling"
@@ -28,18 +29,18 @@ class Dumpling < Formula
       -s -w
       -X #{project}/cli.ReleaseVersion=#{version}
       -X #{project}/cli.BuildTimestamp=#{time.iso8601}
-      -X #{project}/cli.GitHash=brew
+      -X #{project}/cli.GitHash=#{tap.user}
       -X #{project}/cli.GitBranch=#{version}
-      -X #{project}/cli.GoVersion=go#{Formula["go"].version}
+      -X #{project}/cli.GoVersion=go#{Formula["go@1.25"].version}
     ]
 
     system "go", "build", *std_go_args(ldflags:), "./dumpling/cmd/dumpling"
   end
 
   test do
-    output = shell_output("#{bin}/dumpling --database db 2>&1", 1)
-    assert_match "create dumper failed", output
+    assert_match version.to_s, shell_output("#{bin}/dumpling --version 2>&1")
 
-    assert_match "Release version: #{version}", shell_output("#{bin}/dumpling --version 2>&1")
+    output = shell_output("#{bin}/dumpling --host does-not-exist.invalid --port 1 --database db 2>&1", 1)
+    assert_match "create dumper failed", output
   end
 end

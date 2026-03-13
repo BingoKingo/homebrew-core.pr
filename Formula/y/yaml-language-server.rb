@@ -1,19 +1,19 @@
 class YamlLanguageServer < Formula
   desc "Language Server for Yaml Files"
   homepage "https://github.com/redhat-developer/yaml-language-server"
-  url "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-1.18.0.tgz"
-  sha256 "079322c49fa5429f6c7c9edf893236dba70f6a11aaad841623f31c50fd0deaa4"
+  url "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-1.21.0.tgz"
+  sha256 "624eea621cfd66c43b5ef949c935ff8663b50bd2a977e77db1ab2df6c6876cd8"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "bafbbb95e8456cfb2c17f213f7a4589c70b869feb3b26c5b3a0840f45e6b189e"
+    sha256 cellar: :any_skip_relocation, all: "bb2b785956d677a0b86ae7188c0f88cb8396889e6f7b2ed57086b59373a0582b"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

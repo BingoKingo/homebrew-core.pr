@@ -1,26 +1,39 @@
 class Restish < Formula
   desc "CLI tool for interacting with REST-ish HTTP APIs"
   homepage "https://rest.sh/"
-  url "https://github.com/danielgtaylor/restish/archive/refs/tags/v0.20.0.tar.gz"
-  sha256 "0aebd5eaf4b34870e40c8b94a0cc84ef65c32fde32eddae48e9529c73a31176d"
+  url "https://github.com/rest-sh/restish/archive/refs/tags/v0.21.2.tar.gz"
+  sha256 "3686e652193c976a04c96f83ee1a78571509e22169b83f7212a7380b374d24b1"
   license "MIT"
-  head "https://github.com/danielgtaylor/restish.git", branch: "main"
+  head "https://github.com/rest-sh/restish.git", branch: "main"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "af849ab00700354c245e51554623c3ebff73e73c96d4111b27d91fd63c3a46de"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "af849ab00700354c245e51554623c3ebff73e73c96d4111b27d91fd63c3a46de"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "af849ab00700354c245e51554623c3ebff73e73c96d4111b27d91fd63c3a46de"
-    sha256 cellar: :any_skip_relocation, sonoma:        "e095d39764cc37c5a7d04ff8f7844fe85ef49872a48d4edb10e8456aa514b47a"
-    sha256 cellar: :any_skip_relocation, ventura:       "e095d39764cc37c5a7d04ff8f7844fe85ef49872a48d4edb10e8456aa514b47a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2a5dc617d1e1861651fba58b970338a23cf9fabbba515d11b4e8a51e8898e9ec"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d9fdc528fbe2fccaca3bfab636db7872d1ede385b5709ed9c61e50085def7f66"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7ef7937e4508123101de80ff1b78a6eaaee299c73207acfd8a7979a4b9e49a4f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3d20de61133d8ea4332df51e6e452ac3ac113a7d555f95efab4840f03cbd1860"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ae17b3c10c11df3bb120154a6801e30e61a98242f9e42cf29f20e3d4fe80279b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "04054f2b8bbe4ae53bcb9a9b469d8e597f153ef2016bdf64f3982193d2b80cf1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "33df4c0eccc2dc3c8cdca8c428ac26a756eac84750f3846ca0ff871aa0ff22d6"
   end
 
   depends_on "go" => :build
 
   def install
+    # Workaround to avoid patchelf corruption when cgo is required (for crypto11)
+    if OS.linux? && Hardware::CPU.arch == :arm64
+      ENV["CGO_ENABLED"] = "1"
+      ENV["GO_EXTLINK_ENABLED"] = "1"
+      ENV.append "GOFLAGS", "-buildmode=pie"
+    end
+
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}")
 
-    generate_completions_from_executable(bin/"restish", "completion")
+    generate_completions_from_executable(bin/"restish", shell_parameter_format: :cobra)
   end
 
   test do

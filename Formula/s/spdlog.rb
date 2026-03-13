@@ -1,19 +1,18 @@
 class Spdlog < Formula
   desc "Super fast C++ logging library"
   homepage "https://github.com/gabime/spdlog"
-  url "https://github.com/gabime/spdlog/archive/refs/tags/v1.15.3.tar.gz"
-  sha256 "15a04e69c222eb6c01094b5c7ff8a249b36bb22788d72519646fb85feb267e67"
+  url "https://github.com/gabime/spdlog/archive/refs/tags/v1.17.0.tar.gz"
+  sha256 "d8862955c6d74e5846b3f580b1605d2428b11d97a410d86e2fb13e857cd3a744"
   license "MIT"
   head "https://github.com/gabime/spdlog.git", branch: "v1.x"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "b885d77ddec4626dd6f31bc9a94fae28b4bd3ac4e5e91c36624891d262d6d3de"
-    sha256 cellar: :any,                 arm64_sonoma:  "222a1f363fe1b82e9e830c7a42f98d73c7b9673e7256502cdc66093193e2fee3"
-    sha256 cellar: :any,                 arm64_ventura: "78d3b81c70195115a7d762b9b39efaef6d45652488654a1104c237138a5f3898"
-    sha256 cellar: :any,                 sonoma:        "6407f99157debc92ed12594a56cc98b9513e6d3617c5bf0ccad7127c8e0340a1"
-    sha256 cellar: :any,                 ventura:       "f62555b2fb8dcc64a581c3f2efca87e50b49aecbc62d3492b4fb910c97442cb3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "774a3ccba115e20c6b0c594bb4c6b554de3c65f1454666d86a4aa0028d8591ff"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "334f9f05e98a52ecea6bbdbaebbfb597936d4169c935018eff7cd2f1789dcebd"
+    sha256 cellar: :any,                 arm64_tahoe:   "69443892af6734072aadc934bec0118cab7084e0dc71458e9a2e5942bdf24910"
+    sha256 cellar: :any,                 arm64_sequoia: "b2367992ea0242f207b0ba28339d586dbb190ac83faec6950c7706d7bbc6db8a"
+    sha256 cellar: :any,                 arm64_sonoma:  "07c90f09c9f912bc2d5b5597d8f9fb9b96dd9d5d5fa905d245d32274b03045dc"
+    sha256 cellar: :any,                 sonoma:        "26eb42de91edf67fd36f48ad416eda0da84c101b99dac85057087727fb974c0c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ea613072e73e447b4faba3f7ed8e03cda77dc0427ada1299ea429e7a4fea2604"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ff71007269f44e4b90e0e3cabc7d4969ebddac67b2f0469d39a9b403d85c05b8"
   end
 
   depends_on "cmake" => :build
@@ -51,7 +50,7 @@ class Spdlog < Formula
       int main()
       {
         try {
-          auto console = spdlog::basic_logger_mt("basic_logger", "#{testpath}/basic-log.txt");
+          auto console = spdlog::basic_logger_mt("basic_logger", testpath/"basic-log.txt");
           console->info("Test");
         }
         catch (const spdlog::spdlog_ex &ex)

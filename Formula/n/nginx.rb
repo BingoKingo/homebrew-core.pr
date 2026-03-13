@@ -3,9 +3,10 @@ class Nginx < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.27.5.tar.gz"
-  sha256 "e96acebb9c2a6db8a000c3dd1b32ecba1b810f0cd586232d4d921e376674dd0e"
+  url "https://nginx.org/download/nginx-1.29.6.tar.gz"
+  sha256 "316f298cd9f061d6d0679696152710285b72f75d88eb1f7e323f40c5c52fe0d7"
   license "BSD-2-Clause"
+  compatibility_version 2
   head "https://github.com/nginx/nginx.git", branch: "master"
 
   livecheck do
@@ -14,13 +15,12 @@ class Nginx < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "972063bdf74564fca762d847ce7cde789e3b2b195d6cbf6a05927c8fda1f1b1c"
-    sha256 arm64_sonoma:  "6ec8b8438449b35e333d29ff2bf53b525efe7a48d588ace187d75e61596501ab"
-    sha256 arm64_ventura: "adad8ede39f78697c70cba86e96822827a5661692a01f765dad9f47f98c53c3f"
-    sha256 sonoma:        "e901bf7d34765ebf766f3385058da8159c7b7e897392745e4cc787e87a52f167"
-    sha256 ventura:       "c4cc442a7b38cd644ccf0e85f63033109fe677bf66634ec322d958e3adb645d6"
-    sha256 arm64_linux:   "570847468bb0e31f37e7859850ed848a0717d17a2f2d7d16963c3528b002f207"
-    sha256 x86_64_linux:  "a65d15b224f4388f5c11272ffb6c1c83df981cd69838a63e5476e9ce58ffbf8f"
+    sha256 arm64_tahoe:   "c1968131218256afd2c463348ad0a67d2912358c41a997f83d15abac665b513c"
+    sha256 arm64_sequoia: "0384098ea93baab78bc68d9abb9711cb0da8a1c1da5262b626b51786226bbc9f"
+    sha256 arm64_sonoma:  "779c49500d00718fa71fb15f26317b96d4e6f59a333a7aa79f606701f4af3e2d"
+    sha256 sonoma:        "a867be0d1883346cc6142b579abcbf949f0770eb82fca5cc1f8d493e185afddc"
+    sha256 arm64_linux:   "8a6ae2a98662e1c154737855d9d77d833d986bbf9ab372de434844d385c9bb3f"
+    sha256 x86_64_linux:  "9bb12f36d9af98940cc174bbe18bc4d6593dc310d24a9d867c28809362d1c771"
   end
 
   depends_on "openssl@3"
@@ -28,7 +28,10 @@ class Nginx < Formula
 
   uses_from_macos "xz" => :build
   uses_from_macos "libxcrypt"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # keep clean copy of source for compiling dynamic modules e.g. passenger

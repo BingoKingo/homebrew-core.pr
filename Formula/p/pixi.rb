@@ -1,8 +1,8 @@
 class Pixi < Formula
   desc "Package management made easy"
   homepage "https://pixi.sh"
-  url "https://github.com/prefix-dev/pixi/archive/refs/tags/v0.48.0.tar.gz"
-  sha256 "008d49f5adfece6a0cb8b4cdf2a44b0577c9d3760fdd64b466ae54923077562e"
+  url "https://github.com/prefix-dev/pixi/archive/refs/tags/v0.65.0.tar.gz"
+  sha256 "03527008a7ba0e76698b8f8870fdb3519e599c424fa718e55f1222382a5f2c6d"
   license "BSD-3-Clause"
   head "https://github.com/prefix-dev/pixi.git", branch: "main"
 
@@ -15,13 +15,12 @@ class Pixi < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6caa997959cbedcbf79eb923f670871234c6e4ed21715529e059eb46a1d45689"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "765cfa417446813ad3626dbbdfe195b69cb89c40a1b3791bd2c291acca2131ea"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b07110caa030ac0d48173270b80fd4b69d91aa1cbc8387e360293aae768008f7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4495dcb5270b7634c6dc146a9797893fc9aa85d799849ecd08afc4b4f931c7d4"
-    sha256 cellar: :any_skip_relocation, ventura:       "514d4737aeab72617534c78b1d6620ccf15df23ff12c1246726112dd55562fd2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "68884111625b02633ef9db4b2d0a5b3d634dc9914c98a6488619ba3f8aa3fe2d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dfc41559049e647fae2a57d06a5fd43f55aae3e09faa4d17f012c5b372698516"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d13fab0d72698fdd1ff0e003ebe69e7664c50263180a15fb8fe1a3bbf6a88fb2"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "69c989f69fd30ad4682530d95dddf7430d81c4a8db6f979f22eb6abf47418e56"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "797517f07d2ce719f037126b804c7c78bb820582baee4112efd39af2f9563a59"
+    sha256 cellar: :any_skip_relocation, sonoma:        "cb6b6e7893d83f57b08a1970600e7d0bc5c703875eadc46e362c06dc02f1acdf"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "54ea64aee6e81ad0054f0e723ad5ce036cc6a67713bf91842c7e6a04f01a5810"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c2dd82119ce5658918827289862d4270e2a220bb790228eb5434ca1c478461c1"
   end
 
   depends_on "cmake" => :build
@@ -42,12 +41,14 @@ class Pixi < Formula
       `self-update` has been disabled for this build.
       Run `brew upgrade pixi` instead.
     EOS
-    system "cargo", "install", *std_cargo_args
+    system "cargo", "install", *std_cargo_args(path: "crates/pixi")
 
     generate_completions_from_executable(bin/"pixi", "completion", "-s")
   end
 
   test do
+    ENV["PIXI_HOME"] = testpath
+
     assert_equal "pixi #{version}", shell_output("#{bin}/pixi --version").strip
 
     system bin/"pixi", "init"

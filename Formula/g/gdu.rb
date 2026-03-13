@@ -1,18 +1,18 @@
 class Gdu < Formula
   desc "Disk usage analyzer with console interface written in Go"
   homepage "https://github.com/dundee/gdu"
-  url "https://github.com/dundee/gdu/archive/refs/tags/v5.30.1.tar.gz"
-  sha256 "ad363967b6a34e02812e4cba36bb340f377cf64a435e23f6e8e9e6b3f775220e"
+  url "https://github.com/dundee/gdu/archive/refs/tags/v5.34.0.tar.gz"
+  sha256 "e7ff370d682563b71c2da0ad3162ecdb17db988cb2d2b5c1708405d31e63e816"
   license "MIT"
   head "https://github.com/dundee/gdu.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "30f8670a47423d2d9ab75cc3dcfc0c7b5996120cd2a2df56f5a54c79904c5d17"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "30f8670a47423d2d9ab75cc3dcfc0c7b5996120cd2a2df56f5a54c79904c5d17"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "30f8670a47423d2d9ab75cc3dcfc0c7b5996120cd2a2df56f5a54c79904c5d17"
-    sha256 cellar: :any_skip_relocation, sonoma:        "818de028c8fc955fb8df9d1e03f20ac8f792f1f9265b3b845d74cb19a6fd1a12"
-    sha256 cellar: :any_skip_relocation, ventura:       "818de028c8fc955fb8df9d1e03f20ac8f792f1f9265b3b845d74cb19a6fd1a12"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bdc10b86df052f39e3fbbf431d05492e410808cf6c831ed653a862e484ae8b56"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "be7ad505558a21d361f6d2d5269a15e646e0332ea3979c7e831425a3036e2b05"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "be7ad505558a21d361f6d2d5269a15e646e0332ea3979c7e831425a3036e2b05"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "be7ad505558a21d361f6d2d5269a15e646e0332ea3979c7e831425a3036e2b05"
+    sha256 cellar: :any_skip_relocation, sonoma:        "75cca354c5ccf6c34821bd45ee3cabe9bcc028a0654e1fe206a2157eb1e42ca2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0a606867bdb25deddc04d8cb37d0c4d2b1c8f918fd9eedcea2235e715f0f0b90"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "880a65e40b06bbf21689630eb8f01a3bde69129d9a396f6c81b3730c4c260793"
   end
 
   depends_on "go" => :build
@@ -39,8 +39,8 @@ class Gdu < Formula
 
   test do
     mkdir_p testpath/"test_dir"
-    (testpath/"test_dir"/"file1").write "hello"
-    (testpath/"test_dir"/"file2").write "brew"
+    (testpath/"test_dir/file1").write "hello"
+    (testpath/"test_dir/file2").write "brew"
 
     assert_match version.to_s, shell_output("#{bin}/gdu-go -v")
     assert_match "colorized", shell_output("#{bin}/gdu-go --help 2>&1")

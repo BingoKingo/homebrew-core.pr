@@ -1,8 +1,8 @@
 class GnuGetopt < Formula
   desc "Command-line option parsing utility"
   homepage "https://github.com/util-linux/util-linux"
-  url "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-2.41.tar.xz"
-  sha256 "81ee93b3cfdfeb7d7c4090cedeba1d7bbce9141fd0b501b686b3fe475ddca4c6"
+  url "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-2.41.3.tar.xz"
+  sha256 "3330d873f0fceb5560b89a7dc14e4f3288bbd880e96903ed9b50ec2b5799e58b"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -38,13 +38,12 @@ class GnuGetopt < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "56589a88d65309ca6eb5f8110dba58a592bb39dfca2b01ec3e710d1515301a9e"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f66eab32c181a9f58ac40434ad4fdb7908e2f9e8ef0247f2076105a1811d2395"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c4d0fbdb714ad12cf070d38a590066c9b0b25be32025f3d96672dd7912ab293b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "410a045158138d1b15ec926fd02c04132562f26b848a6950c90ee7204918de83"
-    sha256 cellar: :any_skip_relocation, ventura:       "31bf079de0d0829cba00e616fc79ddb787a3fcfc559024905c47512a78871871"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0b0019e2baad11e4f81fd6f94381a2bc78f404111188ef7d9c8ec4ee7dee6688"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "87f5c0068cb0fa80cf8b814cfb3ff8501e4ff1fa65eae15a20328bd782e76434"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "1cd2aff2f76e90b315337b38824b6a346dd8531d55f5b9bbb8a69e26e7a61e30"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "292d9b482660f78f286ac137ad4c79f9247561da587d9cb577a08c2abc7c53d3"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1f4b12ea4c02121d6574b4c011f0aa636cefa3816ea75d0686081b5e566d7506"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e405ec71a589cdacdd6f009e1e46c814f60d026aec8863c17401bbce3aca70cc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8caad3359d900c8b40fa47bdc00b6def1b09fa0bff2c4b177991abd59a01b244"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d2992e719592a0d909c88893f8628e0f00ae76b94ea4a9d9f79a490fe27cf034"
   end
 
   keg_only :shadowed_by_macos, "macOS provides BSD getopt"

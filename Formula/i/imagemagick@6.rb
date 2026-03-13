@@ -1,8 +1,8 @@
 class ImagemagickAT6 < Formula
   desc "Tools and libraries to manipulate images in many formats"
   homepage "https://legacy.imagemagick.org/"
-  url "https://imagemagick.org/archive/releases/ImageMagick-6.9.13-25.tar.xz"
-  sha256 "17ba5ee0e0ce4a2248db5115d3683dd7c24e82eec96515da028997c9f926a121"
+  url "https://imagemagick.org/archive/releases/ImageMagick-6.9.13-41.tar.xz"
+  sha256 "fb77a60f500ed82c92ea692b13704c5691a3237e8e07e0987761c42432c65a8b"
   license "ImageMagick"
   head "https://github.com/imagemagick/imagemagick6.git", branch: "main"
 
@@ -12,14 +12,12 @@ class ImagemagickAT6 < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 arm64_sequoia: "09cae28da4c71a6004c02518ffea95ef4df07fcc7f211eab10d6eac87eb48fb5"
-    sha256 arm64_sonoma:  "3f7492a6a7040334c307e36e780a4e34a9148c2d644713c939ab8ccd4c82bf6e"
-    sha256 arm64_ventura: "0736732b7c46c6fcbbf5106695758e428ef862d2a03414bd97c9986f0e1f96c7"
-    sha256 sonoma:        "57a9fb490b1378cc28e1df03706e8d3c937c1d0aad8210c18880fc186069a6ec"
-    sha256 ventura:       "68eeb42ec14914a27303bb7748bce2ced67135dd6824fba1a138f1967b67e8dd"
-    sha256 arm64_linux:   "4d83ead3cbb27e2c7aff3f58e5796c07691a16c2574aede0ce4aa35f99bbc057"
-    sha256 x86_64_linux:  "5487c6a697e5ec21472cadd645e053b289700c75c169a1ae9e0eaf52b482f090"
+    sha256 arm64_tahoe:   "f27cd8242d6822feb7ef7cb9eb974709cefa935950a486b2bea8f18480ba1c84"
+    sha256 arm64_sequoia: "c6400617a37a4f2c663e98a17f10f7e7f4dc673db39d802af5eb7235fe69e4bc"
+    sha256 arm64_sonoma:  "e24f31eb7ea9b9dc61740d81d9343622973091f6939987acb7f53bcd4988461d"
+    sha256 sonoma:        "632418e01c867d2c729e5a117a5c4bd1ace483af0e6792bd4474c12cc12bf301"
+    sha256 arm64_linux:   "a1f5bd37b8ce7bfc091dfbc475f4ab082fe39cda51c9a444510f673f09e23e1d"
+    sha256 x86_64_linux:  "815df7c99b842c80d8306591f97239f3ad989225e082457acef3c6f0f43f3b4b"
   end
 
   keg_only :versioned_formula
@@ -39,7 +37,10 @@ class ImagemagickAT6 < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   skip_clean :la
 

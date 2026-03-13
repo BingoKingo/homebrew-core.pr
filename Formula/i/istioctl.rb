@@ -1,8 +1,8 @@
 class Istioctl < Formula
   desc "Istio configuration command-line utility"
   homepage "https://istio.io/"
-  url "https://github.com/istio/istio/archive/refs/tags/1.26.1.tar.gz"
-  sha256 "98a5ddee12d5ca9bd57a5c5fb99b5b179a9cb1ebc2005e1fac680ce8255b90e4"
+  url "https://github.com/istio/istio/archive/refs/tags/1.29.1.tar.gz"
+  sha256 "b99745fb1b32438807a66b3114ef914529ed21d7ac36f479c1a25ba703db728c"
   license "Apache-2.0"
   head "https://github.com/istio/istio.git", branch: "master"
 
@@ -12,13 +12,12 @@ class Istioctl < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "029a531d1289d425a88f9aaa84c9492c943f93786da4814e88c2c99cf3d57821"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1ef66e7b5ed5cf0b127bbb0d94c0cc8988d74f044fee620914642b4f8a48666d"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "64a950bf512d41713972e66e2703f19d435a918378b68ab0408d7b9ae89e3021"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4d4cb0174d9ab8be189343674f89e05382d8d3d2ef19d14b7b0b828dd52d0410"
-    sha256 cellar: :any_skip_relocation, ventura:       "99960f2e23e4d2c5708a4fdb972c0417a04e117e1c777c24b75c5cdc9aedb050"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1486bb6f306d63a1e77a076067251a4d026d900e63b933de27ce630a10225e19"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "febcfe909039be1cbd29f67e6b4e9d93a9d79dc942fb8f97bac2fac26da8f285"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "fed25d036aa0c12385da48f2eef9f2b2e455f1f5a9d1932c3680f5af231f99ae"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1e7dd25658143461b39d0a2fbf5854e2434fb1a01f80ad46892d0c3babbba295"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fd15631cc61ce6c12e4bd6162341ffdd8f19bca15c3a587c4c4c952f5f5f3c80"
+    sha256 cellar: :any_skip_relocation, sonoma:        "73360cec01a472bd3ee27f436b727cf2255d9c8c4a3a9986a2b672b7c48719e1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "98016f2f261e1a5b06904ff0e86db36d1404f043e386a08c0b1c2f269bfd0621"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e7d4140e59a831cc315828a74bba413886a7b3fd09575b279199ded3d87206fb"
   end
 
   depends_on "go" => :build
@@ -34,7 +33,7 @@ class Istioctl < Formula
     ]
     system "go", "build", *std_go_args(ldflags:), "./istioctl/cmd/istioctl"
 
-    generate_completions_from_executable(bin/"istioctl", "completion")
+    generate_completions_from_executable(bin/"istioctl", shell_parameter_format: :cobra)
     system bin/"istioctl", "collateral", "--man"
     man1.install Dir["*.1"]
   end

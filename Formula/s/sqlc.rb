@@ -1,19 +1,19 @@
 class Sqlc < Formula
   desc "Generate type safe Go from SQL"
   homepage "https://sqlc.dev/"
-  url "https://github.com/sqlc-dev/sqlc/archive/refs/tags/v1.29.0.tar.gz"
-  sha256 "7f26a9539d25df18d3cd2f02785b5a08e30adf568a08b50c5504556f16c1fb5d"
+  url "https://github.com/sqlc-dev/sqlc/archive/refs/tags/v1.30.0.tar.gz"
+  sha256 "32a8ff2acd852c4a004383b441e6614b6c57ce1a294c0e455ab7431f017aa895"
   license "MIT"
   head "https://github.com/sqlc-dev/sqlc.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5b2cb8abc13302602bacb210046b3363ea5ffa62cec7f6450eb36db5d30329e1"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5e5bbd8ba0116438e96980d549854ba347dc8e2964ec993dfa071ba0f0c10867"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1da3bcf4cc4bea4e1161f379d638b8e39d5daabe1d39bf006627286731aceeb6"
-    sha256 cellar: :any_skip_relocation, sonoma:        "20699ef3244bbeb467fb5f04aefd76d5da9962d2f60d8ef949d68591d0e34698"
-    sha256 cellar: :any_skip_relocation, ventura:       "9dd512414f694c9c0ce86230c24877d6d9a0d80f3967a8241e5cfdcec4556359"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1673b21b686ec9fba8afe6c78343255389b33ddaa218f3e93f16c9422bf8174f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3f7b484597cfb48ac5eafbb2b5e04b8c02027719162aeb0b15eb6833c8781da4"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "65a2c9a85988703e6034ce9568f7dda5be00815420d70b5ab72ccd800402f50a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b88f2250038d6f2b180887259f9c0f77acf70f3f6070624f42b7e1c313d4180e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "30b22cc47b06649cbe945bf610f466cfe46f3bcad5319b6ed38b0f2ca18f3ee2"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ea73b26ee1d06ee62c4e67aa5fa3c4c5becd4cfadabd5c5eb025b4ce4c9a5d69"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "456430594367578fb997bc22625954b1c72095d81a99faa09029c914fa3661ea"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "04f0741a948e12432ca3c56088b59b49a391152e3802fc24a453642d1ca2bce5"
   end
 
   depends_on "go" => :build
@@ -21,7 +21,7 @@ class Sqlc < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w"), "./cmd/sqlc"
 
-    generate_completions_from_executable(bin/"sqlc", "completion")
+    generate_completions_from_executable(bin/"sqlc", shell_parameter_format: :cobra)
   end
 
   test do

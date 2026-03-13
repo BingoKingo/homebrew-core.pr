@@ -1,8 +1,8 @@
 class BareosClient < Formula
   desc "Client for Bareos (Backup Archiving REcovery Open Sourced)"
   homepage "https://www.bareos.com/"
-  url "https://github.com/bareos/bareos/archive/refs/tags/Release/24.0.3.tar.gz"
-  sha256 "df3e193593f9ab2797d293ea4186a62bfbe1195fc0144d172a02ed6065a32034"
+  url "https://github.com/bareos/bareos/archive/refs/tags/Release/25.0.2.tar.gz"
+  sha256 "39c300ea4886c5c949d61034eff5990e046a130ac4d0e295a92745acd30516a9"
   license "AGPL-3.0-only"
 
   livecheck do
@@ -11,13 +11,12 @@ class BareosClient < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "10b0c0b67042ffd83629387b86d6112cb34e6e950eedf755e954093f641f5728"
-    sha256 arm64_sonoma:  "6705b2e4d0d8e1a1e1830168823469bcc4a8617492fe13daa22bb1ae72734609"
-    sha256 arm64_ventura: "71e22166e539e09d6b87cd86ec01bd79a478ae377a9c15004c7b00483820c87b"
-    sha256 sonoma:        "9c04da04c8b41c09a2fffea007a264978a95d13c24964db6f9dcac4f09b04d4e"
-    sha256 ventura:       "45ecb37f7607c7f9f17d143dff01d1ae3e6a44a62dca7d71e6f603a81d5ce59b"
-    sha256 arm64_linux:   "09de0afc996411c511d8c244ec8d6b9101e39d787a69c6db9c7b99d85f497bfb"
-    sha256 x86_64_linux:  "c6dc45c3b4ddf3c3008e3381cab0c3946e62646d618437d48de7c6d4edc48a1b"
+    sha256 arm64_tahoe:   "4c38cca3791014540429ccd676920e0f74f7685e7849b9b3c7804c90c6211a3f"
+    sha256 arm64_sequoia: "d9cb42257448dc9ddcd9b819d2da38447ea9a51e0bb42c285092a4fd6e36cefd"
+    sha256 arm64_sonoma:  "ac9e37cc820cc391044476a26e4806866b6a13e3e7af16cf67409dc4c1948a0f"
+    sha256 sonoma:        "b2b2f19e68cac163658b2c8eabd6eda2c2e5696420f4d101462033673f0b5121"
+    sha256 arm64_linux:   "cd80b9ff94ccb46a892d4c294859beaba56a51acaac0af764c2aa895f4d96d22"
+    sha256 x86_64_linux:  "8d99defa6d8fc3a03635e3ea4fb2fc16bc70f59653a4f8b9474b19b7435dc923"
   end
 
   depends_on "cli11" => :build
@@ -31,14 +30,13 @@ class BareosClient < Formula
   depends_on "readline"
   depends_on "xxhash"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "gettext"
   end
 
   on_linux do
     depends_on "acl"
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with "bacula-fd", because: "both install a `bconsole` executable"
@@ -54,14 +52,7 @@ class BareosClient < Formula
     end
 
     # Work around hardcoded paths forced static linkage on macOS
-    inreplace "core/cmake/BareosFindAllLibraries.cmake" do |s|
-      s.gsub! "set(OPENSSL_USE_STATIC_LIBS 1)", ""
-      s.gsub! "${HOMEBREW_PREFIX}/opt/lzo/lib/liblzo2.a", Formula["lzo"].opt_lib/shared_library("liblzo2")
-    end
-
-    inreplace "core/cmake/FindReadline.cmake",
-              "${HOMEBREW_PREFIX}/opt/readline/lib/libreadline.a",
-              Formula["readline"].opt_lib/shared_library("libreadline")
+    inreplace "core/cmake/BareosFindAllLibraries.cmake", "set(OPENSSL_USE_STATIC_LIBS 1)", ""
 
     inreplace "core/src/filed/CMakeLists.txt",
               "bareos-fd PROPERTIES INSTALL_RPATH \"@loader_path/../${libdir}\"",
@@ -90,10 +81,8 @@ class BareosClient < Formula
     # If no configuration files are present,
     # deploy them (copy them and replace variables).
     unless (etc/"bareos/bareos-fd.d").exist?
-      system lib/"bareos/scripts/bareos-config", "deploy_config",
-             lib/"bareos/defaultconfigs", etc/"bareos", "bareos-fd"
-      system lib/"bareos/scripts/bareos-config", "deploy_config",
-             lib/"bareos/defaultconfigs", etc/"bareos", "bconsole"
+      system lib/"bareos/scripts/bareos-config", "deploy_config", "bareos-fd"
+      system lib/"bareos/scripts/bareos-config", "deploy_config", "bconsole"
     end
   end
 

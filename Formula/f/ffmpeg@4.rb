@@ -6,7 +6,7 @@ class FfmpegAT4 < Formula
   # None of these parts are used by default, you have to explicitly pass `--enable-gpl`
   # to configure to activate them. In this case, FFmpeg's license changes to GPL v2+.
   license "GPL-2.0-or-later"
-  revision 1
+  revision 6
 
   livecheck do
     url "https://ffmpeg.org/download.html"
@@ -14,13 +14,12 @@ class FfmpegAT4 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "a4296862a66e08202decb85c2e426163c838407283521c768e8ad5306aa0bdbb"
-    sha256 arm64_sonoma:  "71172ba10cfe7a20915cb5c473bf5e550c3e49a232c87a0adf0dda0b51bbe961"
-    sha256 arm64_ventura: "59e67106e7879163577611992de4c77754a32930852b506af5df0da8b600add3"
-    sha256 sonoma:        "b2b65123d994bd3fc8ef8278d299e3994788c2193ad2763ba8c05709a890527b"
-    sha256 ventura:       "2df77db20fe2e315d4f45e2bde713cacbb461966c31795aa760cf67083b567f8"
-    sha256 arm64_linux:   "95b2761828fe103ec08b9d775082894d94ae2af89fa0639718f66c1cdd48ffc3"
-    sha256 x86_64_linux:  "bb3e70583a64d3b34beb3174cb03844be08080eba19c4185715ca95294e0eda8"
+    sha256 arm64_tahoe:   "19f443b24c6279c943197da8d7618d500403f4262efe8d9a1c70d38a674cb903"
+    sha256 arm64_sequoia: "201ff161dd7e271b97b3315c44e9b13dcb31545b7c0f59256df1b40a6da2e0d8"
+    sha256 arm64_sonoma:  "43c04a8c2c1e5e9b8de6dbfda8091efb1e9184f5ceb59a15170f26ddbafcbf02"
+    sha256 sonoma:        "0075ffeccdfee3f465cff5b7f792825fa54df390d9cc02f3e0ffdfa0b265e86e"
+    sha256 arm64_linux:   "9ddb1b586bcff70eae241a304a5d15d02a342840f96c41e064f471e469ca9c1f"
+    sha256 x86_64_linux:  "9b860a4b780f6394b7635e52825be8f786b53020e3cbed1ea0c4203c461217c5"
   end
 
   keg_only :versioned_formula
@@ -64,7 +63,6 @@ class FfmpegAT4 < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "libarchive"
@@ -78,6 +76,7 @@ class FfmpegAT4 < Formula
     depends_on "libx11"
     depends_on "libxext"
     depends_on "libxv"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -134,7 +133,7 @@ class FfmpegAT4 < Formula
 
     # The new linker leads to duplicate symbol issue
     # https://github.com/homebrew-ffmpeg/homebrew-ffmpeg/issues/140
-    ENV.append "LDFLAGS", "-Wl,-ld_classic" if DevelopmentTools.clang_build_version >= 1500
+    ENV.append "LDFLAGS", "-Wl,-ld_classic" if DevelopmentTools.ld64_version.between?("1015.7", "1022.1")
 
     system "./configure", *args
     system "make", "install"
@@ -147,9 +146,14 @@ class FfmpegAT4 < Formula
   end
 
   test do
-    # Create an example mp4 file
+    # Create a 5 second test MP4
     mp4out = testpath/"video.mp4"
-    system bin/"ffmpeg", "-filter_complex", "testsrc=rate=1:duration=1", mp4out
-    assert_path_exists mp4out
+    system bin/"ffmpeg", "-filter_complex", "testsrc=rate=1:duration=5", mp4out
+    assert_match(/Duration: 00:00:05\.00,.*Video: h264/m, shell_output("#{bin}/ffprobe -hide_banner #{mp4out} 2>&1"))
+
+    # Re-encode it in HEVC/Matroska
+    mkvout = testpath/"video.mkv"
+    system bin/"ffmpeg", "-i", mp4out, "-c:v", "hevc", mkvout
+    assert_match(/Duration: 00:00:05\.00,.*Video: hevc/m, shell_output("#{bin}/ffprobe -hide_banner #{mkvout} 2>&1"))
   end
 end

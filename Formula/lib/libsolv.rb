@@ -1,8 +1,8 @@
 class Libsolv < Formula
   desc "Library for solving packages and reading repositories"
   homepage "https://github.com/openSUSE/libsolv"
-  url "https://github.com/openSUSE/libsolv/archive/refs/tags/0.7.33.tar.gz"
-  sha256 "776f3c9cc253cd860e72c8c489c7a067c46a96d6993ff302f68d9efd03b37cba"
+  url "https://github.com/openSUSE/libsolv/archive/refs/tags/0.7.36.tar.gz"
+  sha256 "32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,22 +11,25 @@ class Libsolv < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "8c20e921848ef410a5c77803ead0374d70ccc593aaaf543626a29263a2348a0f"
-    sha256 cellar: :any,                 arm64_sonoma:  "da834535bcc64c3e6d586ec4d1371b781170b983ffa9f6874145cfc6a010d531"
-    sha256 cellar: :any,                 arm64_ventura: "404a8fe6d417920bfc54e89467e81023bfff1fc719f8574db4d405b96ee1f501"
-    sha256 cellar: :any,                 sonoma:        "73ef8f8def05699f78254adc9ba95a10e6f920e4d79dfee60a565e910d5da505"
-    sha256 cellar: :any,                 ventura:       "060ebf653cdd06678c533fe7f23c621e4ad5031ae93ae964446de8b685cce3e6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4978a9432bab01ba6bdb3d312204bb69ca97b1bc85d87834328a8cd4947ccf09"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "eb1d5d0e1b803b524614e71271e5634ccb4fde5f52e6fd62361bce44a9687e15"
+    sha256 cellar: :any,                 arm64_tahoe:   "87086273dce26bc433877f410f39ca4d3cf250fa8b257c4b36fc47243b3ecf78"
+    sha256 cellar: :any,                 arm64_sequoia: "e82122f9978d6b918f9188d0b4acd3e8aa31cd403863614ba63561e58db2de9a"
+    sha256 cellar: :any,                 arm64_sonoma:  "f44a274210d5f2e0f6d125d51d4e102e1a2b044e2aaba4df2f1b06195bc83a9f"
+    sha256 cellar: :any,                 sonoma:        "f35a7b2bfb6ee65e76ce62c6a2d2b6f06f0bcd97835275b15dd3140e0a893b6e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6881cb23d0096ba56eaf6a7f9d1e8721a8196dff7a79ba61c6ab33700ea683d8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "65acf2b26ea4359dfbf41daae79a079119be8926cdeffa304754db3bfa68c5f4"
   end
 
   depends_on "cmake" => :build
+  depends_on "rpm"
   depends_on "xz"
   depends_on "zstd"
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = %W[
@@ -45,6 +48,9 @@ class Libsolv < Formula
       -DENABLE_BZIP2_COMPRESSION=ON
       -DENABLE_ZSTD_COMPRESSION=ON
       -DENABLE_ZCHUNK_COMPRESSION=ON
+      -DENABLE_RPMDB=ON
+      -DENABLE_RPMMD=ON
+      -DENABLE_RPMPKG=ON
       -DCMAKE_INSTALL_RPATH=#{rpath}
     ]
 

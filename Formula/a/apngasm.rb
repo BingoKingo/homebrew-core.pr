@@ -4,31 +4,38 @@ class Apngasm < Formula
   url "https://github.com/apngasm/apngasm/archive/refs/tags/3.1.10.tar.gz"
   sha256 "8171e2c1d37ab231a2061320cb1e5d15cee37642e3ce78e8ab0b8dfc45b80f6c"
   license "Zlib"
-  revision 17
+  revision 20
   head "https://github.com/apngasm/apngasm.git", branch: "master"
 
   bottle do
-    sha256                               arm64_sequoia: "9f9562c52caf37166d3771a0e370250319750ce9fa016ca099ee231ba4ae88d3"
-    sha256                               arm64_sonoma:  "f0791efcfc25b7001706e2e2bdcb1f9120d8cf5fd1c34a1fefdfb09056b492dc"
-    sha256                               arm64_ventura: "3d82122ccb48a72935372aac4a7952a4a078b8e1918704e3f68ed4feb50bc225"
-    sha256                               sonoma:        "fc995725850b2752e9f442bf63eee3cffd43a4454a48429edd57cbeab2b4356c"
-    sha256                               ventura:       "c37625e57630e64210b78c4621173c635fc6fe567c2a334fcce25b5c0723017e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5b9da2361fb8475de751ce0eadc113311b992916637e11fd1e70c00d579b4ec9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7176fba311bf1861d06e2f5cab3172ec487c50aa1aaaa8ca84d7adf14d52f5cb"
+    rebuild 1
+    sha256                               arm64_tahoe:   "f648a9450c38c86f0a2790b194a3f44534dbf8eb4cdca060ed4ba011aaf106dd"
+    sha256                               arm64_sequoia: "48cff36bc137fc8a4369555a5fe2741830c12cf7d7ab4cb6719e5235806d352d"
+    sha256                               arm64_sonoma:  "0e34041c1528674faf22b6dbf0270cae0ec788391b2ca39d5e68eeaac80a8130"
+    sha256                               sonoma:        "d0cab8f5fe072f029bde277f83e27f77ff135e261eb37f7af74d9cd3dc531b9c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7020b0940d9cf23dbd77afd912001b9d759d4b26722fecc4e1d482d54a8df890"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7fd1796b7defa25851257aa4245f02d0b3e31f23c9bf88440c1a3ee910e1ef66"
   end
 
   depends_on "cmake" => :build
   depends_on "boost"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "libpng"
   depends_on "lzlib"
-  depends_on macos: :catalina
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   fails_with :gcc do
     version "7"
     cause "Requires C++17 filesystem"
+  end
+
+  # Fix build with Boost 1.89.0, pr ref: https://github.com/apngasm/apngasm/pull/111
+  patch do
+    url "https://github.com/apngasm/apngasm/commit/7bf77bdefd348c629f650e2a5102a26ab6bee7b8.patch?full_index=1"
+    sha256 "cbb9d679c5d46424bb00962481903f12b8b0e943dfdc98910ad05af7c7dacf5b"
   end
 
   def install

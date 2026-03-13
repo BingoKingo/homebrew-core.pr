@@ -1,8 +1,8 @@
 class Tesseract < Formula
   desc "OCR (Optical Character Recognition) engine"
   homepage "https://tesseract-ocr.github.io/"
-  url "https://github.com/tesseract-ocr/tesseract/archive/refs/tags/5.5.1.tar.gz"
-  sha256 "a7a3f2a7420cb6a6a94d80c24163e183cf1d2f1bed2df3bbc397c81808a57237"
+  url "https://github.com/tesseract-ocr/tesseract/archive/refs/tags/5.5.2.tar.gz"
+  sha256 "6235ea0dae45ea137f59c09320406f5888383741924d98855bd2ce0d16b54f21"
   license "Apache-2.0"
   head "https://github.com/tesseract-ocr/tesseract.git", branch: "main"
 
@@ -12,13 +12,12 @@ class Tesseract < Formula
   end
 
   bottle do
-    sha256               arm64_sequoia: "868efa52231ba29227c3f394bbb6ed684743222cf15622661f253a9f0d6164ed"
-    sha256               arm64_sonoma:  "7b80671e010cd121964ed5962159fc8b42950796c33304de155c850378eaa49d"
-    sha256               arm64_ventura: "894270307a4fe98f7b0caa386c24efc7d995b60e468f5e4536b48b4b5275126d"
-    sha256 cellar: :any, sonoma:        "1a804044fac31660e5d4bdffec1de80c60b6d99b21312cdaa7f69fc6c4c42304"
-    sha256 cellar: :any, ventura:       "3f17c42eb79554bf6544344380fd67e22ecc54aed07e719b4f7f03c4fb6f83c7"
-    sha256               arm64_linux:   "a1f93cc60eca99a4c5bac11c40b02620df5628ea55b95bf6dd7813f533947724"
-    sha256               x86_64_linux:  "1874dfec6cedc7cd1bd7fd117623933eab4bbf7193128f81b6dffc7d8791eed3"
+    sha256               arm64_tahoe:   "5c573461bfef6b219120a51bff457cc7eca377c43b971cc5639c109517b1daf4"
+    sha256               arm64_sequoia: "2581ad24c87515f9dfb218ebbec5681bd36af0f4d6ec561dd91bf91cd412a61d"
+    sha256               arm64_sonoma:  "d30bb6d0c4f2675db059a902ea9a8d3a7a6469b5b256ee11f7128b0836df6a8e"
+    sha256 cellar: :any, sonoma:        "002f53df778424f6973071d5422061f2a07bd6da9294e05fbe5847a6763e4820"
+    sha256               arm64_linux:   "56c554781e18f586dc232a1a08ff4b866948cd32e8c99a58c1bfc41dc434b165"
+    sha256               x86_64_linux:  "89e359d2cb5283131f6d74c2bc4e26cbeb65ad36a3dad40eca500464eb5c5933"
   end
 
   depends_on "autoconf" => :build
@@ -29,7 +28,7 @@ class Tesseract < Formula
   depends_on "fontconfig"
   depends_on "glib"
   depends_on "harfbuzz"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "leptonica"
   depends_on "libarchive"
   depends_on "pango"

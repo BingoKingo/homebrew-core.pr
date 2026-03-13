@@ -1,18 +1,17 @@
 class Secp256k1 < Formula
   desc "Optimized C library for EC operations on curve secp256k1"
   homepage "https://github.com/bitcoin-core/secp256k1"
-  url "https://github.com/bitcoin-core/secp256k1/archive/refs/tags/v0.6.0.tar.gz"
-  sha256 "785bb98e7d6705c51c8dfa8ac3af6aa2ccfa3774714d51c0b9e28fac1146e9f1"
+  url "https://github.com/bitcoin-core/secp256k1/archive/refs/tags/v0.7.1.tar.gz"
+  sha256 "958f204dbafc117e73a2604285dc2eb2a5128344d3499c114dcba5de54cb7a9e"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "df425b521f46c58e13a1bb877d7a59fdeaf405ec020c530c6052bcab8108b007"
-    sha256 cellar: :any,                 arm64_sonoma:  "f1e59f7f9158c265009d9e68474320514d4275e3fc4ddd9c90b97e690fbb51c1"
-    sha256 cellar: :any,                 arm64_ventura: "7d62c4478e434647dd715759c7c1e5d6d891823b835e102c01458ae41cf278c6"
-    sha256 cellar: :any,                 sonoma:        "11d1cfee8f09a6a398cb05161e3b132634385f9ea17f3f1be9816777fa5fc693"
-    sha256 cellar: :any,                 ventura:       "29a61d5ddeb1e6b5a9d6ced52e059530e8cc1cd0d734a8258d6b48847506dcc6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2e524ded9708762e9b13a77b719d2ef7dbf44e4192444c113e7e8dd75b544122"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "021cdad1de96cc81c67a779074717150bd1aa5eff164ecc10d91226871a805dd"
+    sha256 cellar: :any,                 arm64_tahoe:   "da2fa73c7222a2b0ecd611814895c92fe175fd59b4a2e60fb9886993c549b842"
+    sha256 cellar: :any,                 arm64_sequoia: "07ae325f7e07a797ff61e73a6b785ef5066855459990f568604ae387d5154175"
+    sha256 cellar: :any,                 arm64_sonoma:  "329d9345dc3d88b81a2206b921cfd3b0f55241d878e639ce4f2e49b5f1ba5506"
+    sha256 cellar: :any,                 sonoma:        "c6a1dfbc6bfaec13225ebc3a979b131dcce74b475afebc60bb8993dd59087112"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "684efba291dd63c1bae72882e46db5aa6a94b052ea45db027bc776d964544fe1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f11de3494970a0d0e9b4206ea0a8d5eea0fc119efcd3927e309fed714944c19c"
   end
 
   depends_on "autoconf" => [:build]

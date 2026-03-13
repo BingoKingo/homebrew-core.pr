@@ -1,18 +1,19 @@
 class Clive < Formula
   desc "Automates terminal operations"
   homepage "https://github.com/koki-develop/clive"
-  url "https://github.com/koki-develop/clive/archive/refs/tags/v0.12.11.tar.gz"
-  sha256 "c406ff8c8a959f5de0730ecfd393c432587f824b86cc91979ee54e4e96b44ac0"
+  url "https://github.com/koki-develop/clive/archive/refs/tags/v0.12.16.tar.gz"
+  sha256 "a08e5143d657a236edd1d90332b4d8c8e8a1899480b595fd8688678a86d7db84"
   license "MIT"
   head "https://github.com/koki-develop/clive.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5daeabe93c5968be4e4be53e2d1b87b7cacc87c7ac25b9a8be3643a665b85272"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5daeabe93c5968be4e4be53e2d1b87b7cacc87c7ac25b9a8be3643a665b85272"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5daeabe93c5968be4e4be53e2d1b87b7cacc87c7ac25b9a8be3643a665b85272"
-    sha256 cellar: :any_skip_relocation, sonoma:        "cd4f7a5f56aee0212ed974c4ad9441b8f800f57ef73864729dcd2641744f9de7"
-    sha256 cellar: :any_skip_relocation, ventura:       "cd4f7a5f56aee0212ed974c4ad9441b8f800f57ef73864729dcd2641744f9de7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "88dfd175a7bb323ef3e1df32ab69035480bc0ffc1a34790b662141b17d9a0a34"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "0a9327759ff50f04774163452e0a60dff60b69f527e6469d41160ff1b035febe"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0a9327759ff50f04774163452e0a60dff60b69f527e6469d41160ff1b035febe"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0a9327759ff50f04774163452e0a60dff60b69f527e6469d41160ff1b035febe"
+    sha256 cellar: :any_skip_relocation, sonoma:        "13dfb211db8851a2a42ac0f4821157125b4883fab14b108b74cc0bf791dfef73"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f659f4937a4a0c6ac175d18849e424e6507f23ae7ea5eb5edebf2ea372adee44"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4a747c9d5ef60f51f3cc127f41f0bd83efb2785835d0e35c59ecb437c3bf36ba"
   end
 
   depends_on "go" => :build
@@ -20,6 +21,7 @@ class Clive < Formula
 
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/koki-develop/clive/cmd.version=v#{version}")
+    generate_completions_from_executable(bin/"clive", shell_parameter_format: :cobra)
   end
 
   test do

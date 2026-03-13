@@ -1,28 +1,24 @@
 class Selene < Formula
   desc "Blazing-fast modern Lua linter"
   homepage "https://kampfkarren.github.io/selene"
-  url "https://github.com/Kampfkarren/selene/archive/refs/tags/0.28.0.tar.gz"
-  sha256 "c51acf52e7c3136cd0b67b9a39a4a447c8f0257371b2b2acc7e77587260a377b"
+  url "https://github.com/Kampfkarren/selene/archive/refs/tags/0.30.1.tar.gz"
+  sha256 "61c66d7e40d8d00fe8364a2696c7f87bcb976d838bd681fd802d427c7675a872"
   license "MPL-2.0"
   head "https://github.com/Kampfkarren/selene.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e8160e3e3b1589956eb8c952c94dbdb6e9417972007bd3740026dc5caf0eb195"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0e2f4d3b17a7b036592845a4586d4d82e491574c374cb1c4f23fed3ff78589a3"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c6c76305c6d5730c2e20096085a8af6d6b436415600c2d12e4b25363ee0b6474"
-    sha256 cellar: :any_skip_relocation, sonoma:        "512897fa1880a3afab978ee53662c2bc06f1118e9fa8c684d28db5bfbd6e9162"
-    sha256 cellar: :any_skip_relocation, ventura:       "98d5b6b93545d9d50608f6cc832ad8af6a9a35dfca94804b8c15b67fc6ce87c3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "95bd12bda47d2fcb53978952250d17e8413fee634ed0142bf51a27833ee03ba4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bc9d1abd031c82dcc47fdd530daaf4ca6555da8b7faf4e8bedfe3f45473ec05c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "cbcf7c178fa11c1afbdd4e8b6774a63f59548f83271c410459e8ab880ad657d8"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8125a29586e52cd90876de09eab14a84971c9373d2b6c6e56c5d04cf3870cdf2"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e714599b1be78018752f5a906ad1a4f274bb7305a16ee18b4010f4f076bea247"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b80ff59bc0699f7a96ccef7827855fefb8a4753989c0486ae095bec7b82b8edc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "89bcf20592930998bea9b22b5356d469999997747ddbbf9247421be333389113"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2fd0ce6b395be9edd863fcfa1323417a4f22d8d853ea82edcb7974defe81cd40"
   end
 
-  depends_on "pkgconf" => :build
   depends_on "rust" => :build
 
   def install
-    cd "selene" do
-      system "cargo", "install", "--bin", "selene", *std_cargo_args
-    end
+    system "cargo", "install", *std_cargo_args(path: "selene")
   end
 
   test do

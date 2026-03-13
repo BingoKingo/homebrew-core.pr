@@ -2,23 +2,21 @@ class Openfast < Formula
   desc "NREL-supported OpenFAST whole-turbine simulation code"
   homepage "https://openfast.readthedocs.io"
   url "https://github.com/openfast/openfast.git",
-      tag:      "v4.0.4",
-      revision: "d28a823169e75029d73362b07a2942d0a454f03b"
+      tag:      "v5.0.0",
+      revision: "2895884d2be01862173c88d70f86b358d2f1a50a"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "2e89b7a85921381093c8ebb7c03d3453287725e32bf548a78c4d96687e13984d"
-    sha256 cellar: :any,                 arm64_sonoma:  "aae62eb732843dccd695d0228166fb77bd7f39350464ebec9b1dadf83116434c"
-    sha256 cellar: :any,                 arm64_ventura: "a651f9197f973c8b9846d3e5d4d8415d4f846dd074b44d4c9cc6aee38027c2d5"
-    sha256 cellar: :any,                 sonoma:        "baaeffca5e7d33ecea19f76071bd3679845c3626dda3d3fef36506609b13569c"
-    sha256 cellar: :any,                 ventura:       "56d53252d63b0ef61aa6465401500bc692c2ea3bc90324f10d72f5370bb8dd63"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4660629844154eb7e200d48e84b842108d3649096881db26348b0472a7d66cdb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6d8a1b246f53b43a2e7db5d6fd5c3ec12209be17374cdc5b310e1129e43843c6"
+    sha256 cellar: :any,                 arm64_tahoe:   "6ecde78845e6ac56c38f2fa722a7c87704836d010bf68bc97126cf18ca2684fd"
+    sha256 cellar: :any,                 arm64_sequoia: "56d2e317f70a8aa4127817299328a11e0372badb8fbde48d61c5cbcdb9a9231c"
+    sha256 cellar: :any,                 arm64_sonoma:  "35f2cc68a1471ae5441ce13202359fdd9425e3427a1eb906fcaf3b6cc33bd339"
+    sha256 cellar: :any,                 sonoma:        "5a606d97ad7687766f227121be94676b5d0b9f3e46f8ee4bee95ccf28d69d815"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6b3ab5b1825081dab92545f3b2d80592e4adc400e6df581fdd9e76e8ea354aa2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "24eb63f4b4eb5324399d775bd67938af304d1f92c1e26cbad2ff418c00c6c7eb"
   end
 
   depends_on "cmake" => :build
-  depends_on "gcc"
-  depends_on "netcdf"
+  depends_on "gcc" # for gfortran
   depends_on "openblas"
 
   def install

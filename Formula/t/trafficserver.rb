@@ -1,20 +1,41 @@
 class Trafficserver < Formula
   desc "HTTP/1.1 and HTTP/2 compliant caching proxy server"
   homepage "https://trafficserver.apache.org/"
-  url "https://downloads.apache.org/trafficserver/trafficserver-10.0.5.tar.bz2"
-  mirror "https://archive.apache.org/dist/trafficserver/trafficserver-10.0.5.tar.bz2"
-  sha256 "79d4efc02a94b38cf75ad3bfc0652d84155b4cdd5cf2cdcdb53399aa6ab8e397"
   license "Apache-2.0"
 
-  bottle do
-    sha256 arm64_sequoia: "8036860308c3d5a166f8e67334892d79dd185b759a88f0bda448dc55e4d152d9"
-    sha256 arm64_sonoma:  "e4b4b50ca4ccd123f27e6b140bc9db7faab0c793f71de15660336a1fc495ada2"
-    sha256 arm64_ventura: "947ce75f85a4f4e40da713ca19d9700ea6dff56340433f52dae608a81bb14c1a"
-    sha256 sonoma:        "5f8f1e5de63f3a656df0c660d47b5394942ea922e1a47397ab62aff7bcf34bb5"
-    sha256 ventura:       "f5d7187b184a23f594b870f252f494fcdad54ec0376244a174d608ac4eb68386"
-    sha256 arm64_linux:   "d5686131b0ae392e9b63efd83df2fb98e8214ccb4db7d8d2b2ec899c0708b7f7"
-    sha256 x86_64_linux:  "bba4bdd8d52ab6650c7957d16818fc22ad7db80032a6490635b9f2e4892efdc2"
+  stable do
+    url "https://downloads.apache.org/trafficserver/trafficserver-10.1.1.tar.bz2"
+    mirror "https://archive.apache.org/dist/trafficserver/trafficserver-10.1.1.tar.bz2"
+    mirror "https://archive.apache.org/dist/trafficserver/trafficserver-10.1.0.tar.bz2"
+    sha256 "793af06a5e45f1c53245c227a7af17a19a6cf18f04d366866e7ac62c5a28d292"
+
+    depends_on "pcre" # PCRE2 issue: https://github.com/apache/trafficserver/issues/8780
   end
+
+  # Allow livechecking for new releases while deprecated.
+  livecheck do
+    url :stable
+  end
+
+  bottle do
+    rebuild 1
+    sha256 arm64_tahoe:   "d8e4fa5e13e8822946de2772c88a334b3e7e430fba31e4e3329e6ea3f829c48d"
+    sha256 arm64_sequoia: "72b9a62fa880ace2d24edf9be492d43e15000e1c9162fde40ab1c845b2f7067f"
+    sha256 arm64_sonoma:  "ede50d93ac297899f385192c8a9df6e557e4e1eca12d4a1c71362981a0a7285f"
+    sha256 sonoma:        "226fb5553211df0c672cd07b1e4cfa912343f43b9e02766b3f68814f9f8a9033"
+    sha256 arm64_linux:   "8d77b971e1f2845185d98edcc26a28e15cabc9813e121e02b8f4c9c25b80fe15"
+    sha256 x86_64_linux:  "d796189230e2f4f0fabe59f16cebad73c323edc25dc9db03c0f5f5ac829b787b"
+  end
+
+  head do
+    url "https://github.com/apache/trafficserver.git", branch: "master"
+
+    depends_on "zstd"
+  end
+
+  # Can be undeprecated with 10.2.0 release.
+  # Backporting PCRE2 support requires 30+ commits and resolving conflicts, so not worth it.
+  deprecate! date: "2026-01-14", because: "needs EOL `pcre`"
 
   depends_on "cmake" => :build
   depends_on "ninja" => :build
@@ -27,7 +48,6 @@ class Trafficserver < Formula
   depends_on "luajit"
   depends_on "nuraft"
   depends_on "openssl@3"
-  depends_on "pcre" # PCRE2 issue: https://github.com/apache/trafficserver/issues/8780
   depends_on "pcre2"
   depends_on "xz"
   depends_on "yaml-cpp"
@@ -35,14 +55,16 @@ class Trafficserver < Formula
   uses_from_macos "flex" => :build
   uses_from_macos "curl"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "libcap"
     depends_on "libunwind"
+    depends_on "zlib-ng-compat"
   end
 
   def install
+    odie "Remove `pcre` dependency!" if build.stable? && version >= "10.2.0"
+
     system "cmake", "-S", ".", "-B", "build",
                     "-DBUILD_EXPERIMENTAL_PLUGINS=ON",
                     "-DEXTERNAL_YAML_CPP=ON",

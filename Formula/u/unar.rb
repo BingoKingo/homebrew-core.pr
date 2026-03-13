@@ -4,34 +4,35 @@ class Unar < Formula
   url "https://github.com/MacPaw/XADMaster/archive/refs/tags/v1.10.8.tar.gz"
   sha256 "652953d7988b3c33f4f52b61c357afd1a7c2fc170e5e6e2219f4432b0c4cd39f"
   license "LGPL-2.1-or-later"
-  revision 6
+  revision 7
   head "https://github.com/MacPaw/XADMaster.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "3c3885c3e70e7e37ad4d2d2a4a3d8840cf53e9f675a6642f57ad93d4da4fa8a8"
-    sha256 cellar: :any,                 arm64_sonoma:  "456de86a2a8cf4b63c7b598f9b4740a4598af1b8dcfe066724601075da938739"
-    sha256 cellar: :any,                 arm64_ventura: "b9d20ecd5c6627f96ff7554775a5944848ff89ffc666e4b841bb67ab51782950"
-    sha256 cellar: :any,                 sonoma:        "e398cb80ec4fe5195312ecef6986e96858c7a172bf0aa5fb310d7a5738ba4bd8"
-    sha256 cellar: :any,                 ventura:       "ff08a4c92f3b66fc3bbd8f8e6ddfab7c4f82a7cad165c116a773402054131a74"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c9447a1e19c7166109c05fbd7760c44e33442a3523857f0f7e71d1e46d8f59a5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "19ffbed9a0f8c86c8b688e347e6b4bcb4f63aeaee730d511aa90b9e553a3060e"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "0ef068932336d86ad68784341497223c5d17d6e56ed564a698d6686031ff97fa"
+    sha256 cellar: :any,                 arm64_sequoia: "e38bf30cf01db29aa27d0bf1b208009eb6d64547904f6923ef6994bb74e264c7"
+    sha256 cellar: :any,                 arm64_sonoma:  "5114acd866a2552989947614859b3cfd347c52cebc1d7ae4677824e9db94f56b"
+    sha256 cellar: :any,                 sonoma:        "0d686d8ad4563aab687d8a48578ccafde6bec7681939c280357ef02f14829f5d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "85565efda882c47c9abf8d29ad7da951ab88459bf5cabb179a21fecaeb46158c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "128ef931a133a2dba46f9bfacfe00d28830ec81adcea315d026159321fd1a79d"
   end
 
   depends_on xcode: :build
 
   uses_from_macos "llvm" => :build
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "gnustep-base"
-    depends_on "icu4c@77"
+    depends_on "icu4c@78"
     depends_on "libobjc2"
     depends_on "wavpack"
+    depends_on "zlib-ng-compat"
   end
 
-  # Clang must be used on Linux because GCC Objective C support is insufficient.
-  fails_with :gcc
+  fails_with :gcc do
+    cause "GCC Objective-C support is insufficient"
+  end
 
   resource "universal-detector" do
     url "https://github.com/MacPaw/universal-detector/archive/refs/tags/1.1.tar.gz"

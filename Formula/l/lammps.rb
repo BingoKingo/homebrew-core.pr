@@ -1,12 +1,12 @@
 class Lammps < Formula
   desc "Molecular Dynamics Simulator"
   homepage "https://docs.lammps.org/"
-  url "https://github.com/lammps/lammps/archive/refs/tags/stable_29Aug2024_update2.tar.gz"
+  url "https://github.com/lammps/lammps/archive/refs/tags/stable_22Jul2025_update3.tar.gz"
   # lammps releases are named after their release date. We transform it to
   # YYYY-MM-DD (year-month-day) so that we get a sane version numbering.
   # We only track stable releases as announced on the LAMMPS homepage.
-  version "20240829-update2"
-  sha256 "f8ca3f021a819ced8658055f7750e235c51b4937ddb621cf1bd7bee08e0b6266"
+  version "20250722-update3"
+  sha256 "07f487cc33fc8f2ec4a449b7bce570e52b5a46608075e0276d26e0e232511bef"
   license "GPL-2.0-only"
 
   # The `strategy` block below is used to massage upstream tags into the
@@ -26,30 +26,29 @@ class Lammps < Formula
     end
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "68dadea5323f428530fce56d1ee3f59f1c198d781e7460a22ec4cc9f3f3f96a8"
-    sha256 cellar: :any,                 arm64_sonoma:  "724c532f8d3f41e5ecf955d9afd5a06dabe5b244bf953cc3877b668e7f7573fd"
-    sha256 cellar: :any,                 arm64_ventura: "af826f4ddd364978c779bc4d85d74ab47e19de0aad783c1f98cbf2c0085f5bbc"
-    sha256 cellar: :any,                 sonoma:        "e12baae2c10968d8eba18ea3e5db1b3de2fbac84cf6174add5628b8231a3b99e"
-    sha256 cellar: :any,                 ventura:       "6ee483146f85ba818c42f9fde3d019d90e2bbefea837878eade1251d97132286"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "706eeb925bed4dc64a9d6c0b1b2de2292c54eabbd0fa7174f6323fda5add0c22"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "96fae09fc6dbb95cfa7c4506565cdcc9873ea710e3ddf38fc0361fc5cd18806b"
+    sha256 cellar: :any,                 arm64_tahoe:   "3fed8c9b50b90a0929a6432d68c92d92ed73441ce57797db4f1c165519c6bf24"
+    sha256 cellar: :any,                 arm64_sequoia: "887962ba291dd482ccbd70693052953544348b5dd820e35c3c92965dfc242be4"
+    sha256 cellar: :any,                 arm64_sonoma:  "b7d316f96bef621214ded2c41f4aa31d3566e64a307777c5b85912c9745ef3c1"
+    sha256 cellar: :any,                 sonoma:        "488d6bc075954db35f7592afdc075b3a5a91c7ec09178b162b0df9d3d67ca42d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "be4260b6460a187d7631e5f10b4b7b2cac49f7db13220393a2c9f67b167ded28"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8285694265836fc1dec98ff60c722b2d2d046d3086d9e813ae7c2ce0df863a2a"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
+  depends_on "voro++" => :build
 
   depends_on "fftw"
-  depends_on "gcc" # for gfortran
-  depends_on "gsl"
   depends_on "jpeg-turbo"
   depends_on "kim-api"
   depends_on "libpng"
   depends_on "open-mpi"
-  depends_on "voro++"
 
   uses_from_macos "curl"
+  uses_from_macos "python"
 
   on_macos do
     depends_on "libomp"

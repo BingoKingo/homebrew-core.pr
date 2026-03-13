@@ -1,9 +1,10 @@
 class Inko < Formula
   desc "Safe and concurrent object-oriented programming language"
   homepage "https://inko-lang.org/"
-  url "https://releases.inko-lang.org/0.18.1.tar.gz"
-  sha256 "498d7062ab2689850f56f5a85f5331115a8d1bee147e87c0fdfe97894bc94d80"
+  url "https://releases.inko-lang.org/0.19.1.tar.gz"
+  sha256 "2261118c98d520f61624257c6fc2b0c65782d7de2b5cd6f17245f071b1d25015"
   license "MPL-2.0"
+  revision 1
   head "https://github.com/inko-lang/inko.git", branch: "main"
 
   # The upstream website doesn't provide easily accessible version information
@@ -15,24 +16,22 @@ class Inko < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "ee26a0c11c1c527151fde51739a7f4fe5ac5f721805deb98e1a5f2bd3024d038"
-    sha256 cellar: :any,                 arm64_sonoma:  "44fc95eba234a04e7cfe132a17874892a86fdcf0b198a07de3ca5807fdead3be"
-    sha256 cellar: :any,                 arm64_ventura: "e61d4dd6bacfdb7d01a885493de960998271cf10f6bf4931a2deecef27a59eec"
-    sha256 cellar: :any,                 sonoma:        "487151f34bc632c5d5618cb65d06efd23afd8f8dac3becf13f2b2597e18aa4e5"
-    sha256 cellar: :any,                 ventura:       "f4b935a853326a2422c5f2bb826c765d9cfa27dd32ebf8005e1d1f7bdbdd58f9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "578ff3eacb96844be7e983fd7c8bf8c7481138ea12425cbdd9cf2c95e317060a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7af46ba20d2d34d8d5ec23574d97caa98a50278eca21fd9e1573856cf58ee24f"
+    sha256 cellar: :any,                 arm64_tahoe:   "c9d6cce4fd8ddc942c18921f753e2a044c199f127b368ba8430e9b2386d4e9b2"
+    sha256 cellar: :any,                 arm64_sequoia: "3bafd599e8e57b9433bb2f8254297880d7cfd4496594ac6fe21d6fe237b11694"
+    sha256 cellar: :any,                 arm64_sonoma:  "338bcdb09b2d4940eb1dfd4f2742b6585db63615b85064047743d50ce0414e87"
+    sha256 cellar: :any,                 sonoma:        "b0f312f237328f7e847f52a5e153d1c9e323786e3794e1413127d1efd73fe519"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3ec14147195e7d84ea9a995cf7329b24ae6275a9cd4169fb680fa58ed4d9f39f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c8eba3d51bac7359f601fdbd010525f559ce0386fcfd85cee0ae5a1d90849544"
   end
 
   depends_on "rust" => :build
-  depends_on "llvm@17" # see https://github.com/inko-lang/inko/blob/4738b81dbec1f50dadeec3608dde855583f80dda/ci/mac.sh#L5
+  depends_on "llvm"
 
-  uses_from_macos "libffi", since: :catalina
+  uses_from_macos "libffi"
 
   def install
     # Avoid statically linking to LLVM
-    inreplace "compiler/Cargo.toml", 'features = ["prefer-static"]', 'features = ["force-dynamic"]'
+    inreplace "compiler/Cargo.toml", 'prefer-static"]', 'force-dynamic"]'
 
     system "make", "build", "PREFIX=#{prefix}"
     system "make", "install", "PREFIX=#{prefix}"
@@ -42,7 +41,7 @@ class Inko < Formula
     (testpath/"hello.inko").write <<~INKO
       import std.stdio (Stdout)
 
-      class async Main {
+      type async Main {
         fn async main {
           Stdout.new.print('Hello, world!')
         }

@@ -1,55 +1,107 @@
 class Pyqt < Formula
   desc "Python bindings for v6 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
-  url "https://files.pythonhosted.org/packages/32/de/102e8e66149085acf38bbf01df572a2cd53259bcd99b7d8ecef0d6b36172/pyqt6-6.9.0.tar.gz"
-  sha256 "6a8ff8e3cd18311bb7d937f7d741e787040ae7ff47ce751c28a94c5cddc1b4e6"
+  url "https://files.pythonhosted.org/packages/96/03/e756f52e8b0d7bb5527baf8c46d59af0746391943bdb8655acba22ee4168/pyqt6-6.10.2.tar.gz"
+  sha256 "6c0db5d8cbb9a3e7e2b5b51d0ff3f283121fa27b864db6d2f35b663c9be5cc83"
   license "GPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "9d2e7040345f46c69227e5dd30def0a1c0476514d243e5b5dead7d41d56afa4c"
-    sha256 cellar: :any,                 arm64_ventura: "d9ad0408c1b54060d3de9e2dd1f3e677a294e04731117826c53e3fa439acae4e"
-    sha256 cellar: :any,                 sonoma:        "a32ce76f5d3bfe77347e5cbda5f8e03d078776ab79d2f727745ae6fc6816f562"
-    sha256 cellar: :any,                 ventura:       "221fd42552d92677b357637d303cbe7f62f78ce3263dfb48051fbcbd0ae1189f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "11224506e0d20f285ad01c36b366dda4e6b5b1723056f100c32935bf27a26fa9"
+    sha256 cellar: :any,                 arm64_tahoe:   "1da5eaaf94662961f84964b14d4bad63a997d1ee9a33bf1ca52cda6a97c83e2a"
+    sha256 cellar: :any,                 arm64_sequoia: "decc8ae8a3b3e148bbf11b5a5ac4c1b711bc43768f699bb66fef94ba02f22348"
+    sha256 cellar: :any,                 arm64_sonoma:  "f570a9802e539f69fc516a8e435bfad4c642d7826b3dc30c1b031ea87d192297"
+    sha256 cellar: :any,                 sonoma:        "6fa5127fa04872e243f90c50a3a8524c5bb8b4bc28b190558139f337dc1df1a1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b2b2dbe475515323dfd19fdcc55ba4b05b5d8c7b5492960df04dd47d73ed902b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "92efa396ff59ce6c73a2759b7693fef39941c012b0cf0b9146348c0a6d4f182b"
   end
 
   depends_on "pyqt-builder" => :build
-  depends_on "python@3.13"
-  depends_on "qt"
+  depends_on "python@3.14"
+  depends_on "qt3d"
+  depends_on "qtbase"
+  depends_on "qtcharts"
+  depends_on "qtconnectivity"
+  depends_on "qtdatavis3d"
+  depends_on "qtdeclarative"
+  depends_on "qtmultimedia"
+  depends_on "qtnetworkauth"
+  depends_on "qtpositioning"
+  depends_on "qtquick3d"
+  depends_on "qtremoteobjects"
+  depends_on "qtscxml"
+  depends_on "qtsensors"
+  depends_on "qtserialport"
+  depends_on "qtspeech"
+  depends_on "qtsvg"
+  depends_on "qttools"
+  depends_on "qtwebchannel"
+  depends_on "qtwebsockets"
+
+  on_macos do
+    depends_on "qtshadertools"
+  end
+
+  on_sonoma :or_newer do
+    depends_on "qtwebengine"
+  end
+
+  on_linux do
+    # TODO: Add dependencies on all Linux when `qtwebengine` is bottled on arm64 Linux
+    on_intel do
+      depends_on "qtwebengine"
+    end
+  end
+
+  pypi_packages exclude_packages: %w[pyqt6-3d-qt6 pyqt6-charts-qt6
+                                     pyqt6-datavisualization-qt6 pyqt6-networkauth-qt6
+                                     pyqt6-webengine-qt6 pyqt6-qt6],
+                extra_packages:   %w[pyqt6-3d pyqt6-charts pyqt6-datavisualization
+                                     pyqt6-networkauth pyqt6-webengine]
 
   # extra components
   resource "pyqt6-3d" do
-    url "https://files.pythonhosted.org/packages/b3/1a/89e4bbc1c604d3a450111a7600d256b371200bf616157efd48c13f5646d3/pyqt6_3d-6.9.0.tar.gz"
-    sha256 "af4b497e34f30e8dba53da2f2683e82994bc6d6f512fb7a91c3150aa31b6d49a"
+    url "https://files.pythonhosted.org/packages/df/ca/2399911c654e0ff2c8f35043c6e240ab91b78557a53d7e4360e6ade5ec98/pyqt6_3d-6.10.0.tar.gz"
+    sha256 "93d89fe30d98804b0983e9b52079d15ae82b1f0a279a5f90f2ff48ed3e6489ed"
   end
 
   resource "pyqt6-charts" do
-    url "https://files.pythonhosted.org/packages/05/2e/d818e649751bd74df5aac3f8cfc7bc96c739ce19ae22fbaee75625a387e0/pyqt6_charts-6.9.0.tar.gz"
-    sha256 "7efbe9bb7e6ad4f9845211a0efe0f91ca5e14f9362ed1ba84d55f2b8515091f7"
+    url "https://files.pythonhosted.org/packages/98/1d/ca03b2ebdf08a06780fea0ec2ca3bc1eeac0e68e59eb9f6ad95666b1e6aa/pyqt6_charts-6.10.0.tar.gz"
+    sha256 "91e15e28d011caa4c83881a90687b35e3d05ef57290cdd9760824c95bdac6a3e"
   end
 
   resource "pyqt6-datavisualization" do
-    url "https://files.pythonhosted.org/packages/0e/64/2fb8f276b6231d9c7a4333279b39834fd05d9e503651db8e94c2c1980d3f/pyqt6_datavisualization-6.9.0.tar.gz"
-    sha256 "1515475f1b2c37275ecf6ac74017a64fae8335d97b87fbbaf14bac3f82cdaa0a"
+    url "https://files.pythonhosted.org/packages/a4/c6/ae606113706dbf4ca1f99e93e4a338595cb13f19996d17af810248155499/pyqt6_datavisualization-6.10.0.tar.gz"
+    sha256 "4581c6f6f5e84f6431b01f563ef7b5036204a5f8823b0ea1ce5a083a880c4ee5"
   end
 
   resource "pyqt6-networkauth" do
-    url "https://files.pythonhosted.org/packages/88/6d/cc1fb6ae4fa7b455dbda92f8e41fefe6393a1081dfa2ebd9ddc7daf28ade/pyqt6_networkauth-6.9.0.tar.gz"
-    sha256 "9acb6e97bd54584bbaeac2aabc40ec17a79d868f7da37a163c7bd4b7a8f04b09"
+    url "https://files.pythonhosted.org/packages/9b/a2/d9982657322efbfb4d3cfcbadfdb5c782ad19bcf54005bc6a730b156de01/pyqt6_networkauth-6.10.0.tar.gz"
+    sha256 "94c9504613c8ff68f08eb1ff6ba7804c277b56e335baa6e44c1eba5279961f7b"
   end
 
   resource "pyqt6-sip" do
-    url "https://files.pythonhosted.org/packages/90/18/0405c54acba0c8e276dd6f0601890e6e735198218d031a6646104870fe22/pyqt6_sip-13.10.0.tar.gz"
-    sha256 "d6daa95a0bd315d9ec523b549e0ce97455f61ded65d5eafecd83ed2aa4ae5350"
+    url "https://files.pythonhosted.org/packages/0d/e9/d1b97154cec1d6c8a3d93fb6565d1463bc528fa5103491d626d07a451c7c/pyqt6_sip-13.10.3.tar.gz"
+    sha256 "630895b3827e2c3b4e072089157985691fe4210d64340e71141f93775ea4ae51"
   end
 
   resource "pyqt6-webengine" do
-    url "https://files.pythonhosted.org/packages/8f/1a/9971af004a7e859347702f816fb71ecd67c3e32b2f0ae8daf1c1ded99f62/pyqt6_webengine-6.9.0.tar.gz"
-    sha256 "6ae537e3bbda06b8e06535e4852297e0bc3b00543c47929541fcc9b11981aa25"
+    url "https://files.pythonhosted.org/packages/5f/5d/355dfe41246c611e861a1e88b43173b57c1b56a550bea12cfeaafbc7e6b6/pyqt6_webengine-6.10.0.tar.gz"
+    sha256 "267d27275d0c79ae270bca4b03520a41fa7e85c2a4d9632da8cb9cc233a55ad1"
   end
 
   def python3
-    "python3.13"
+    "python3.14"
+  end
+
+  def webengine_supported?
+    on_sonoma :or_newer do
+      return true
+    end
+    on_linux do
+      on_intel do
+        return true
+      end
+    end
+    false
   end
 
   def install
@@ -72,7 +124,7 @@ class Pyqt < Formula
     resources.each do |r|
       next if r.name == "pyqt6-sip"
       # Don't build WebEngineCore bindings on macOS if the SDK is too old to have built qtwebengine in qt.
-      next if r.name == "pyqt6-webengine" && OS.mac? && MacOS.version <= :ventura
+      next if r.name == "pyqt6-webengine" && !webengine_supported?
 
       r.stage do
         inreplace "pyproject.toml", "[tool.sip.project]", <<~TOML
@@ -107,7 +159,7 @@ class Pyqt < Formula
       Xml
     ]
     # Don't test WebEngineCore bindings on macOS if the SDK is too old to have built qtwebengine in qt.
-    pyqt_modules << "WebEngineCore" if OS.linux? || MacOS.version > :ventura
+    pyqt_modules << "WebEngineCore" if webengine_supported?
     pyqt_modules.each { |mod| system python3, "-c", "import PyQt#{version.major}.Qt#{mod}" }
 
     # Make sure plugin is installed as it currently gets skipped on wheel build,  e.g. `pip install`

@@ -6,6 +6,7 @@ class Diffr < Formula
   license "MIT"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:    "071c7a6bb8aa37bd0282e02096635a6aff9afb1e263dff03ae426a2d45351511"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:  "25cdb1a853eceeba0ce00dee4f2b5657abe9865ee7568a0cf18ee0b5fe95d3bd"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:   "2bc9706cc3bf1e99eda0b2138a3dbea9b4da2c097f4e4c421aa6249269146678"
     sha256 cellar: :any_skip_relocation, arm64_ventura:  "234e4932d849bec1ee31bc0caa455070caf78aa3839836ee15cce08546c72995"
@@ -20,17 +21,22 @@ class Diffr < Formula
   end
 
   depends_on "rust" => :build
-  depends_on "diffutils" => :test
 
   def install
     system "cargo", "install", *std_cargo_args
   end
 
   test do
-    (testpath/"a").write "foo"
-    (testpath/"b").write "foo"
-    _output, status =
-      Open3.capture2("#{Formula["diffutils"].bin}/diff -u a b | #{bin}/diffr")
-    status.exitstatus.zero?
+    output = pipe_output("#{bin}/diffr --colors refine-added:none --colors added:foreground:blue", <<~DIFF, 0)
+      @@ -1 +1,2 @@
+       foo
+      +bar
+    DIFF
+
+    assert_equal <<~DIFF, output
+      \e[0m@@ -1 +1,2 @@\e[0m
+      \e[0m foo\e[0m
+      \e[0m\e[34m+\e[0m\e[0mbar\e[0m
+    DIFF
   end
 end

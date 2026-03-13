@@ -6,7 +6,14 @@ class HttpServerRs < Formula
   license "Apache-2.0"
   head "https://github.com/http-server-rs/http-server.git", branch: "main"
 
+  # Avoid pre-releases like `v1.0.0-pre.20251223080344`
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:    "0a809086a7ca4186c1f20e8ae46b1f5aae4af25494c69a4c3bdaf5463d94fdda"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:  "fe010697a6d9851c061d2939929b4e6f9750ad2612ba486b35610175da62c604"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:   "d6f29de99576b74d2398a7fc093bc700a3de1d7d5c1db98224c3750c1ae79226"
     sha256 cellar: :any_skip_relocation, arm64_ventura:  "07f0f7eaf185964fa80e46e9b0b797c8f454345fb3eb72d21ca618379c59602d"
@@ -29,7 +36,7 @@ class HttpServerRs < Formula
   test do
     touch testpath/"foobar"
     port = free_port
-    pid = fork { exec bin/"http-server", "-q", "-p", port.to_s }
+    pid = spawn bin/"http-server", "-q", "-p", port.to_s
     sleep 3
     output = shell_output("curl -s http://localhost:#{port}")
     assert_match "foobar", output

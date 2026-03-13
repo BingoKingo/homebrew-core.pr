@@ -1,17 +1,17 @@
 class Libunicode < Formula
   desc "Modern C++20 Unicode library"
   homepage "https://github.com/contour-terminal/libunicode"
-  url "https://github.com/contour-terminal/libunicode/archive/refs/tags/v0.6.0.tar.gz"
-  sha256 "0c217f8264000f1b8c36e78969cb9cf91ac97de937cc141ab78e6b1ad7f404ef"
+  url "https://github.com/contour-terminal/libunicode/archive/refs/tags/v0.8.0.tar.gz"
+  sha256 "1cea0180dd75a46132505330218efc102152fc4eb52462e470ea2bebf836cc58"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "2e51dbe77f5b2853092a3648b1d22422b011641e893a56aafaf842d93e2ac75a"
-    sha256 cellar: :any,                 arm64_sonoma:  "4543c2694bb3bc240a45792de40e9ecef4229eeed3ff73f25dea245c0aaa7fa8"
-    sha256 cellar: :any,                 arm64_ventura: "dcbad1aeabc61e9e4ef5b0776cc40fcaab878e67931bf0b057847e3e9e69e86c"
-    sha256 cellar: :any,                 sonoma:        "eb839f56e6eb0d2d877a623eeab2ba46fa4a2f8e7c5b6133232caef634f14fb8"
-    sha256 cellar: :any,                 ventura:       "88b268f809736144bc316d83d38ece5c25c96c4b97b563173a8ca925fccddbc8"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0dd8a8d2af9689cf2b7e45dfc7ac13ffd68cf9926041c787943c6d6d5f26ffd5"
+    sha256 cellar: :any,                 arm64_tahoe:   "4846522bed2a20e0e55fc78d44bddfda8d20cc548e1ae52e11e2c515ab25497e"
+    sha256 cellar: :any,                 arm64_sequoia: "18c77a62061164b2bb648f3c0d2f81c6dc59c6d55d203c630d4b4b76502cb50c"
+    sha256 cellar: :any,                 arm64_sonoma:  "2c6d41deab236a258845bfe7cad0d1a23150b1c96ee5de45de133c342a993ef9"
+    sha256 cellar: :any,                 sonoma:        "f425c312c6fc2946ae0cc20ee4bc69279c891c3f0c81036891ddc8ffe640bb8d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a5e2f93a5968bc3f0386cc34b9ab84188d71dcd9e6418bcee9c82f3ee5439ab1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "875b32c339c1e465c6f2a1a1830b6d6e68b7a2a932638276c527088a395fb3dc"
   end
 
   depends_on "cmake" => :build
@@ -20,6 +20,10 @@ class Libunicode < Formula
 
   on_macos do
     depends_on "llvm" if DevelopmentTools.clang_build_version <= 1500
+  end
+
+  on_linux do
+    depends_on "gcc" # TODO: remove and rebuild bottle on Ubuntu 24.04
   end
 
   fails_with :clang do
@@ -33,8 +37,6 @@ class Libunicode < Formula
   end
 
   def install
-    ENV.llvm_clang if OS.mac? && DevelopmentTools.clang_build_version <= 1500
-
     args = %W[
       -DLIBUNICODE_EXAMPLES=OFF
       -DLIBUNICODE_TESTING=OFF
@@ -48,9 +50,6 @@ class Libunicode < Formula
   end
 
   test do
-    # ENV.llvm_clang doesn't work in the test block
-    ENV["CXX"] = Formula["llvm"].opt_bin/"clang++" if OS.mac? && DevelopmentTools.clang_build_version <= 1500
-
     (testpath/"test.cpp").write <<~CPP
       #include <iostream>
       #include <libunicode/capi.h>
@@ -64,7 +63,7 @@ class Libunicode < Formula
       }
     CPP
 
-    system ENV.cxx, "-std=c++17", "-o", "test", "test.cpp", "-I#{include}", "-L#{lib}", "-lunicode"
+    system ENV.cxx, "-std=c++20", "-o", "test", "test.cpp", "-I#{include}", "-L#{lib}", "-lunicode"
     assert_match "Grapheme cluster count: 7", shell_output("./test")
 
     assert_match "HYPHEN", shell_output("#{bin}/unicode-query U+2D")

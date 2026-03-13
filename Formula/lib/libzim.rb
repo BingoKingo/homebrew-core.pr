@@ -1,38 +1,29 @@
 class Libzim < Formula
   desc "Reference implementation of the ZIM specification"
   homepage "https://github.com/openzim/libzim"
-  url "https://github.com/openzim/libzim/archive/refs/tags/9.3.0.tar.gz"
-  sha256 "791220e51e6a160d349491b9744ec1a9c1a104f11a79e8e73673daf242be69ed"
+  url "https://github.com/openzim/libzim/archive/refs/tags/9.5.0.tar.gz"
+  sha256 "0e5290a21a4efe8281dfa2325c59d465ba8ace7ccc1082554763c1a58fdd3b42"
   license "GPL-2.0-or-later"
-  revision 2
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "b4ceecbeedcfc12b93d6f09afd9108509970317095e61792c171908037dfebd7"
-    sha256 cellar: :any, arm64_sonoma:  "faebeb4b051a2de69ce34863390dbb6c623ea2f01d0ddc7265e9b73cab5aa917"
-    sha256 cellar: :any, arm64_ventura: "0a36f78d2ec284ba491c030e071a9a5875106dac327bd6e060f479410b6c9331"
-    sha256 cellar: :any, sonoma:        "c68a4e4aeb4d87ac9faec8349222751f49a4e570c15d5b1c05e93d2ca5cc57a7"
-    sha256 cellar: :any, ventura:       "d342df82217c3d5d6e160bd5b5c6eb1301854bfeb7d2691bb250c04e3a634389"
-    sha256               arm64_linux:   "5c4f15314c93fa0ab0f858bae329925eb9fabc5eeb75b390b34100f91208d6ee"
-    sha256               x86_64_linux:  "8e90267f0cbdcda4336951766f6bce92b4b694031c98b19597ee146546bf9781"
+    sha256 cellar: :any, arm64_tahoe:   "48cd61ca906e796a5f052b7b785a246990586710911f35a8e8aa972b5ffd3577"
+    sha256 cellar: :any, arm64_sequoia: "d1e87bf314c5ab7de2d12ce2ff2073e9d1f024cd49bcb034f1210b53a115b83c"
+    sha256 cellar: :any, arm64_sonoma:  "575d6fa8bdd1101954af9bac8deaeb67d0d2dd8d8ca3048eeef6b954438189e1"
+    sha256 cellar: :any, sonoma:        "15469b111c56d8875e9c52032b604b7c388ab6d020af76c8c9b42ce4bc4da64b"
+    sha256               arm64_linux:   "5656b7a4989035f58dad78310331da9e5daa4118f2350dce1af647d236659689"
+    sha256               x86_64_linux:  "823f50ac913f732fb96348bcd043fb5047b95b823cf02c5e3f7109c08be438c2"
   end
 
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => :build
 
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "xapian"
   depends_on "xz"
   depends_on "zstd"
 
   uses_from_macos "python" => :build
-
-  # Apply commit from open PR to fix build with ICU 76+
-  # PR ref: https://github.com/openzim/libzim/pull/936
-  patch do
-    url "https://github.com/openzim/libzim/commit/48c8c3fa7ad7a54f6df9a5be2676d189bbaf0022.patch?full_index=1"
-    sha256 "f88890feab66aec7861b4eaab58202d6417c7c4d3692fe56f0e4b5fba06c64a3"
-  end
 
   def install
     system "meson", "setup", "build", *std_meson_args
@@ -49,9 +40,8 @@ class Libzim < Formula
         return 0;
       }
     CPP
-    system ENV.cxx, "test.cpp", "-L#{lib}", "-lzim", "-o", "test", "-std=c++11"
 
-    # Assert the first line of output contains "libzim <version>"
+    system ENV.cxx, "test.cpp", "-L#{lib}", "-lzim", "-o", "test", "-std=c++11"
     assert_match "libzim #{version}", shell_output("./test")
   end
 end

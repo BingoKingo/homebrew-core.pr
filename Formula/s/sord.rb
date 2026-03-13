@@ -1,8 +1,8 @@
 class Sord < Formula
   desc "C library for storing RDF data in memory"
   homepage "https://drobilla.net/software/sord.html"
-  url "https://download.drobilla.net/sord-0.16.18.tar.xz"
-  sha256 "4f398b635894491a4774b1498959805a08e11734c324f13d572dea695b13d3b3"
+  url "https://download.drobilla.net/sord-0.16.22.tar.xz"
+  sha256 "bb23b34b216579136795d518cffa73d91cf205594ce9accebfd408afb839173f"
   license "ISC"
 
   livecheck do
@@ -11,13 +11,12 @@ class Sord < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "9482cf28bd5e2d77ed057903e53157a57e09355e8a6c69eb935fdefc67c79505"
-    sha256 cellar: :any, arm64_sonoma:  "bd8611d53bf08d025037edaa7ef83e635dbe853c3783ed94909a1edfc93d7457"
-    sha256 cellar: :any, arm64_ventura: "41fcd2ff39ea5a50392a5a3b31c523ca5c7e087e1d0124c1b8101da518e40bf8"
-    sha256 cellar: :any, sonoma:        "d1230019e29331722881ff6ecaa0533dd452b350792394a7c8f701f8ffde46dc"
-    sha256 cellar: :any, ventura:       "70e0cf3dced39cd9b5b0a069a0261fed4e758412f625e4803449d27e6fa07f72"
-    sha256               arm64_linux:   "cb55e96bc9ead5b118ced1ace42f11a2641e7475c6db29e24facfe9bbb743146"
-    sha256               x86_64_linux:  "eee6fa6352554b778e2a51f04791a165d4bf3ca78379ff205481ae157bb2dc35"
+    sha256 cellar: :any, arm64_tahoe:   "7d601b06900746e2c9cd81dc91701ceb1bae9400e04b24bc1ba0d7006970eaad"
+    sha256 cellar: :any, arm64_sequoia: "b5d34d39cee51b1ea2da94aa693aebc8b5413f109f20dd31469bc8f3d9da96ae"
+    sha256 cellar: :any, arm64_sonoma:  "5a6e268d98524a5a65f754ed4382931114224c6e36d2454381cb15025a7f77c3"
+    sha256 cellar: :any, sonoma:        "ff7a7bc3b353a1dfe56144056aba13239bfda5a1158797cd90648db36a8a4e52"
+    sha256               arm64_linux:   "f806b8548ac19ca37c21be5c746ba5619cb02b5369eefa5cbe5b4c5f0a034581"
+    sha256               x86_64_linux:  "97a9b803c95513489075f33ec9575553ad37960e74db859606fcef1f48a0662a"
   end
 
   depends_on "meson" => :build
@@ -41,6 +40,6 @@ class Sord < Formula
     EOS
 
     output = "<http://example.org/base#a> <http://example.org/base#b> <http://example.org/base#c> .\n"
-    assert_equal output, shell_output(bin/"sordi input.ttl")
+    assert_equal output, shell_output("#{bin}/sordi input.ttl")
   end
 end

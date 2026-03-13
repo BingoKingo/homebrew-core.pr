@@ -1,19 +1,18 @@
 class LimaAdditionalGuestagents < Formula
   desc "Additional guest agents for Lima"
   homepage "https://lima-vm.io/"
-  url "https://github.com/lima-vm/lima/archive/refs/tags/v1.1.1.tar.gz"
-  sha256 "82577e2223dc0ba06ea5aac539ab836e1724cdd0440d800e47c8b7d0f23d7de5"
+  url "https://github.com/lima-vm/lima/archive/refs/tags/v2.0.3.tar.gz"
+  sha256 "55625e642de492827e6cf7740c095822ef8193458211e286f17a3c11ebf50a93"
   license "Apache-2.0"
   head "https://github.com/lima-vm/lima.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8e21b3e7d70b997b1dd6e7d996d903edffb6055339a1b6c15911f5282efd1cea"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fd6d9cda49a969422b199c4f40f8e30a1fc5d725a03ae4004c694dfcd3826076"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "90316c2e8fd2027a848b40fe642b3d81acb20b87c8b169920c4b223ecb515d1a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "de1807b8111dd71f1eb779fbad785beecef840216c9506ccdf9923f62980b61c"
-    sha256 cellar: :any_skip_relocation, ventura:       "f8ff74c221f986226128c968eb2b1fe73c3ed16a86215d09ebaf44520a5ad0ba"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c029ca0dc5d56d6606c1c53b81493ae3cec81d09205f9469538a6bef8843023e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bb471e21416e4c445e30e96209e965677ebc99fbc9809baad2e6be3dbb5f939c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "067f8a048142239ccc91b511a7dfd848298160116d8ed469375acf8a01a1261e"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cb644f88a4d927d40bed54c2ba8ed65a4921bcc8bb035a93902023bd2ce944ed"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c3820af5f1f93604f0b52d810ac302bad9fddfb63da64063ca4b7bfd8c2d35a5"
+    sha256 cellar: :any_skip_relocation, sonoma:        "7541e22bfc280d9520f5326dd6775b53390f8087037d0b09e5841cfaee696c4e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "73715002140b399d10dbb0dd982465913575d76ebea2db14cbccfb49ad326a32"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dce0179511a3227d6ee9db567e4b3d64e7bfe4c2651920553286fe8eab81b20b"
   end
 
   depends_on "go" => :build

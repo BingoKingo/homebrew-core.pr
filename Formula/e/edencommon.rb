@@ -1,50 +1,50 @@
 class Edencommon < Formula
   desc "Shared library for Watchman and Eden projects"
   homepage "https://github.com/facebookexperimental/edencommon"
-  url "https://github.com/facebookexperimental/edencommon/archive/refs/tags/v2025.05.26.00.tar.gz"
-  sha256 "3f769e27646f4ace5a918411b00a24e56505e9508fee7683465615fc5ea55569"
+  url "https://github.com/facebookexperimental/edencommon/archive/refs/tags/v2026.03.09.00.tar.gz"
+  sha256 "e90d7d94d06e4f7a87cfddd0ebf747c5b4a20112e7798c72873c583b282d15d7"
   license "MIT"
   head "https://github.com/facebookexperimental/edencommon.git", branch: "main"
 
   bottle do
-    sha256                               arm64_sequoia: "48aac8679494b64bf3f8e5f00772b00d871771b780ab50fa064ca2620fd6aecd"
-    sha256                               arm64_sonoma:  "10e2d6f26c9f7f793f6d2d06dcab62d360fb6256093e4e2d7a476a21e888c039"
-    sha256                               arm64_ventura: "38affa4976a53be0cd777703da1e8cb64a1ac69ba27cfd0696b1d988cbade776"
-    sha256 cellar: :any,                 sonoma:        "1590b8f06e2212cb4e5db5950df56137e483f7dadf20b019d4f54aea3a387404"
-    sha256 cellar: :any,                 ventura:       "eb1187256cb796b0018eefa95df71943aeb26b6edbcc7b6e968b104713089eb3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e137a34bb9d5d1da45bd88ca7847abfcf68b4681d587bd345461a584b736c2a1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e2a16108710550917e34fc92fe04ee1b0e0b681f018207aa8a78b96674b37916"
+    sha256                               arm64_tahoe:   "3457fda00d252e4dbdeafdec1f782375a0adacb947182447894ccedc500efaf5"
+    sha256                               arm64_sequoia: "a4024dd67590b9e510533c1e9749e8ef03726e82e045240e07981a9bf9f9fcdc"
+    sha256                               arm64_sonoma:  "95544bfea1f6dbaca0b99e6d7d152d49b7edb08e8d064020464ec721b9370911"
+    sha256 cellar: :any,                 sonoma:        "4be7fa60f0a9e6edcb68df7fb2268ebb448548f1a79f5e7a9e08bf980e14b099"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5cf9c744dc53a8df3489c72f218afc5f45ef95f4489f462feed6a2cc25ef3ea3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c8982437f130e543d72b2c86aed9cbaa691e62d7061a0b17c48eb8ced05753de"
   end
 
   depends_on "cmake" => :build
+  depends_on "fbthrift" => :build
+  depends_on "gflags" => :build
+  depends_on "glog" => :build
   depends_on "googletest" => :build
   depends_on "mvfst" => :build
   depends_on "wangle" => :build
   depends_on "boost"
   depends_on "fb303"
-  depends_on "fbthrift"
   depends_on "fmt"
   depends_on "folly"
-  depends_on "gflags"
-  depends_on "glog"
-  depends_on "openssl@3"
 
   def install
     # Fix "Process terminated due to timeout" by allowing a longer timeout.
-    inreplace buildpath.glob("eden/common/{os,utils}/test/CMakeLists.txt"),
-              /gtest_discover_tests\((.*)\)/,
-              "gtest_discover_tests(\\1 DISCOVERY_TIMEOUT 60)"
-    inreplace "eden/common/utils/test/CMakeLists.txt",
-              /gtest_discover_tests\((.*)\)/,
-              "gtest_discover_tests(\\1 DISCOVERY_TIMEOUT 60)"
+    # Related: https://gitlab.kitware.com/cmake/cmake/-/issues/26773
+    test_cmakelists = %w[
+      eden/common/os/test/CMakeLists.txt
+      eden/common/utils/test/CMakeLists.txt
+    ]
+    inreplace test_cmakelists, /(gtest_discover_tests\(.*)\)/, "\\1 DISCOVERY_TIMEOUT 60)"
 
     # Avoid having to build FBThrift py library
     inreplace "CMakeLists.txt", "COMPONENTS cpp2 py)", "COMPONENTS cpp2)"
 
-    shared_args = ["-DBUILD_SHARED_LIBS=ON", "-DCMAKE_INSTALL_RPATH=#{rpath}"]
-    linker_flags = %w[-undefined dynamic_lookup -dead_strip_dylibs]
-    linker_flags << "-ld_classic" if OS.mac? && MacOS.version == :ventura
-    shared_args << "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,#{linker_flags.join(",")}" if OS.mac?
+    shared_args = %W[
+      -DCMAKE_CXX_STANDARD=20
+      -DBUILD_SHARED_LIBS=ON
+      -DCMAKE_INSTALL_RPATH=#{rpath}
+    ]
+    shared_args << "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-undefined,dynamic_lookup -Wl,-dead_strip_dylibs" if OS.mac?
 
     system "cmake", "-S", ".", "-B", "_build", *shared_args, *std_cmake_args
     system "cmake", "--build", "_build"

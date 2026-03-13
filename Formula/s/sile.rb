@@ -4,15 +4,16 @@ class Sile < Formula
   url "https://github.com/sile-typesetter/sile/releases/download/v0.15.13/sile-0.15.13.tar.zst"
   sha256 "5e97c19651aff710687b93292d5361cb411652094bcc8c62c811c19f7a81464b"
   license "MIT"
+  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "791057d65933cb50c4d8ad27484f2b6d6d838e153de29fc8f95312e7e2785a53"
-    sha256 cellar: :any,                 arm64_sonoma:  "47955878faf528c2cb3c9bb91853a58c02e56e6dd00587d2e9d1dd5a3a31dbd7"
-    sha256 cellar: :any,                 arm64_ventura: "2947a239426f6aa1aa7db9e14340a18225473a00c1135f5ddead063d9448e202"
-    sha256 cellar: :any,                 sonoma:        "9d5cbae91ce3fb80c09381d1236fbbfdc302b62e9a21f179f0b6f3f12f96c680"
-    sha256 cellar: :any,                 ventura:       "e2322341d5537d844173bf3e002fc5a91c175e18e5f0519db2f91c28e3806850"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a169fa67dd41e38518571a68c655de8597e5c02fa7f2eea25d8b57876c6cfe29"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "58dcf197e11ada5600481377945cbd70f41cd3ed5e6ff737a355aa48b19f9215"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "84311a8e0777cad0808ef2e936df25589c908410fdf80f8e59a336c07530eb0d"
+    sha256 cellar: :any,                 arm64_sequoia: "758458193f72b63e0404eb5475aeb44bdd6819942918e758e97dcb32bdc05090"
+    sha256 cellar: :any,                 arm64_sonoma:  "ad308a0c985244934ca559aab8ba718e217e72e4ad805504e6c8dc8c1037e458"
+    sha256 cellar: :any,                 sonoma:        "1fbd167ab091deeb57811129b2c31446acef25597accf72de9a1bf9efe8c55e6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4f05214a3fe6b2a84909859ab5484935dcba0045e3aff5bc5104e2a39f56eb4a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6074cb5bbd1485cbcda34b290269ed29990895d800d9458e7d8c814904b8ad11"
   end
 
   head do
@@ -23,25 +24,28 @@ class Sile < Formula
     depends_on "libtool" => :build
   end
 
-  depends_on "jq" => :build
   depends_on "pkgconf" => :build
   depends_on "poppler" => :build
   depends_on "rust" => :build
 
   depends_on "fontconfig"
   depends_on "harfbuzz"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "libpng"
   depends_on "luajit"
   depends_on "luarocks"
   depends_on "openssl@3"
 
+  uses_from_macos "jq" => :build, since: :sequoia
   uses_from_macos "unzip" => :build
   uses_from_macos "expat"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "freetype"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   resource "compat53" do
@@ -162,7 +166,7 @@ class Sile < Formula
     if OS.mac?
       zlib_dir = expat_dir = "#{MacOS.sdk_path_if_needed}/usr"
     else
-      zlib_dir = Formula["zlib"].opt_prefix
+      zlib_dir = Formula["zlib-ng-compat"].opt_prefix
       expat_dir = Formula["expat"].opt_prefix
     end
 
@@ -203,8 +207,7 @@ class Sile < Formula
     <<~EOS
       By default SILE uses the font Gentium Plus to render all documents that do not specifically call for something else. If this font is not available on your system you may encounter errors. Of lower priority depending on your use case, the math typesetting package defaults to using Libertinus Math and the default monospace font is Hack.
 
-      Homebrew does not supply any of these font dependencies in default casks, but they can be added by tapping cask-fonts:
-        brew tap homebrew/cask-fonts
+      These fonts can be installed via Homebrew:
         brew install --cask font-gentium-plus
         brew install --cask font-libertinus
         brew install --cask font-hack

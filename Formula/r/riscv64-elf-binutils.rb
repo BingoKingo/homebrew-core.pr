@@ -1,9 +1,9 @@
 class Riscv64ElfBinutils < Formula
   desc "GNU Binutils for riscv64-elf cross development"
   homepage "https://www.gnu.org/software/binutils/"
-  url "https://ftp.gnu.org/gnu/binutils/binutils-2.44.tar.bz2"
-  mirror "https://ftpmirror.gnu.org/binutils/binutils-2.44.tar.bz2"
-  sha256 "f66390a661faa117d00fab2e79cf2dc9d097b42cc296bf3f8677d1e7b452dc3a"
+  url "https://ftpmirror.gnu.org/gnu/binutils/binutils-2.46.0.tar.bz2"
+  mirror "https://ftp.gnu.org/gnu/binutils/binutils-2.46.0.tar.bz2"
+  sha256 "0f3152632a2a9ce066f20963e9bb40af7cf85b9b6c409ed892fd0676e84ecd12"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -11,22 +11,23 @@ class Riscv64ElfBinutils < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "f472f7fe69981f7d860f6f0e6e1bc78e6639226f8bc2f4e7744a9f177b079ce9"
-    sha256 arm64_sonoma:  "c46cd7e69e1749187f014b0fbf1668c191a0424b7fd6a95c24bb2c392a0e66f7"
-    sha256 arm64_ventura: "cd10f00638540334c0a1c6f2f8af13360c1052075fe86489dbcbbf8407eb2eae"
-    sha256 sonoma:        "13e059cd58a16e9b125a221b4cbe20821a52adbce5de9bb7b446de84030fb4bc"
-    sha256 ventura:       "22a588a8a73828bdcd18a02acb9cb957264ffd69c23e1385d49ced61f5ef20ab"
-    sha256 arm64_linux:   "4b776625620fb882bcfe1abd418e8e7af15a8bf61f3126c735fd8f0aa37b40b4"
-    sha256 x86_64_linux:  "fbe2bc02087b1a79587039dccd73b023b597232412d3b6855c845f3f69d872ae"
+    sha256 arm64_tahoe:   "d37df2f1817b189621420013525be45c9b1a9186b0bc17beb35595ceeda44a07"
+    sha256 arm64_sequoia: "f899cf838014e5644b80e7878792305b7cc707c806ee9fd973d4dcdeddba9d67"
+    sha256 arm64_sonoma:  "320d51e1e896e66f428893c90badbc072e624b02498fbf700d47cb0404403a7b"
+    sha256 sonoma:        "26d02e863630ff329c19f8d39564304bad95d7ca51c341d7af04dae0f86e080e"
+    sha256 arm64_linux:   "47489b6cccf3482cc9b883688e71b72962864725bbda63970b9abb2ea441db3e"
+    sha256 x86_64_linux:  "bfbdc564238f10a6d02c7c7d40a9a2369291b248134d479914bf57b630ad9029"
   end
 
   depends_on "pkgconf" => :build
   depends_on "zstd"
 
-  uses_from_macos "zlib"
-
   on_system :linux, macos: :ventura_or_newer do
     depends_on "texinfo" => :build
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install

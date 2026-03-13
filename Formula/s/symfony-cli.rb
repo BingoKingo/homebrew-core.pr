@@ -1,32 +1,44 @@
 class SymfonyCli < Formula
   desc "Build, run, and manage Symfony applications"
   homepage "https://github.com/symfony-cli/symfony-cli"
-  url "https://github.com/symfony-cli/symfony-cli/archive/refs/tags/v5.11.0.tar.gz"
-  sha256 "29996a4f7f2032fe1e3b1d8df734843f84ee7e2ac9db10e1e690ffc37df88713"
+  url "https://github.com/symfony-cli/symfony-cli/archive/refs/tags/v5.16.1.tar.gz"
+  sha256 "9222ea6c4996c1231577f7475c65902f2eb332ee5249d06c6017218dc35c6a19"
   license "AGPL-3.0-or-later"
 
   bottle do
     rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d47dc98f5d38c5284110ae1efa4ed7c1288d07f01606e858b500cf347f82601b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8d912e1b871a1c1dda5ad88ff4d99d7dfaf4e8f49a14e90b570b4673edd1253b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "72ef3cbff4d00dddbef4cf615224d325cdd1e4e7e704ff348233bcfbfd1b0c9b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "7d26574687c410530d91d9d9fae06e8a0330bb2ed4b37ba3e1f3473d8c547374"
-    sha256 cellar: :any_skip_relocation, ventura:       "a87a33ae5beaaf2113b0b4f94ec66328d0d562fe88c6f9ca40c7ad249e0dd87c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8c3b7f8262d00c957e3d5d1493bcdb244843f17fcffc55bcaa1e6e528a8cc222"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3686f63b764302e774456bf898f2674bedcc295fff45a9f88e9dc229329207f0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d618f2a9539c12b70149cb84fa99e3e9be6926cb13610a59dc9339571d1b31de"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "13ec5b53e97f7f219ea9c1e62dce82936062253a6aa14bd66a50c213bf04f2e4"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2e0389f858e43fb275cf0de8728acaf09b2487f9e09641aa936f9fe9d153d1ab"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2f2af81225d2ab9e606f1fc01ad814469797a3fce2b4cf42125b02834b80942c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b96691de854b7d81284dabc89f3f1ade63e227139a250278578dba99067f67bb"
   end
 
   depends_on "go" => :build
   depends_on "composer" => :test
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version} -X main.channel=stable", output: bin/"symfony")
+    ldflags = %W[
+      -s -w
+      -X main.version=#{version}
+      -X main.buildDate=#{time.iso8601}
+      -X main.channel=stable
+    ]
+    system "go", "build", *std_go_args(ldflags:, output: bin/"symfony")
+
+    generate_completions_from_executable(bin/"symfony", "self:completion")
+  end
+
+  service do
+    run ["#{opt_bin}/symfony", "local:proxy:start", "--foreground"]
+    keep_alive true
   end
 
   test do
+    assert_match version.to_s, shell_output("#{bin}/symfony self:version")
+
     system bin/"symfony", "new", "--no-git", testpath/"my_project"
     assert_path_exists testpath/"my_project/symfony.lock"
-    output = shell_output("#{bin}/symfony -V")
-    assert_match version.to_s, output
-    assert_match "stable", output
   end
 end

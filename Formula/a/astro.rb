@@ -1,8 +1,8 @@
 class Astro < Formula
   desc "To build and run Airflow DAGs locally and interact with the Astronomer API"
   homepage "https://www.astronomer.io/"
-  url "https://github.com/astronomer/astro-cli/archive/refs/tags/v1.34.1.tar.gz"
-  sha256 "33682819fe78164d34a52ee586a0ae9a0c0f41a387380c37e6fe8436dbf14d95"
+  url "https://github.com/astronomer/astro-cli/archive/refs/tags/v1.39.0.tar.gz"
+  sha256 "a4f31da92a9d6faffdec6f83a61011c8058822cb2081321a0a1ae1af54a88304"
   license "Apache-2.0"
   head "https://github.com/astronomer/astro-cli.git", branch: "main"
 
@@ -12,12 +12,12 @@ class Astro < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b4419ac3003d435b92bef3cb6b7da6abdaba68d87539fc3c1bf5bf02b8134964"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1548e1f78f42cd57e4ae79c5392150e929c62857800ce0b2d97e85883e0a4efb"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "75900e43078430bb111f021b864e54746e93429145dbe49668ae34b8161c8075"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b67a2de203e92d0883e307bdf5c39682bbb9d48c93b1f5ff764ebc8294b54051"
-    sha256 cellar: :any_skip_relocation, ventura:       "4c18599120798174f642fd1c5995d1584c6e3b5de60b750acc28120e19c6e440"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "88887d54c8684bd4c5b79021e1e8013e8058eb4f4f70f9b31e7fbb9c1e5eef4e"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7028c49d04ef8ff6e7858aaf613c336d62b681ccf91f4f8e04a0b9985292770b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fb4fb52b48ec94ec7e864da15a497b5ebedf27e76bbb4ff188b92414a5df9ecf"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b64e631736a99023a3fde84c2d21d6d14d69af05f994f53662cb59b5d0c9de23"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ce247832ee904507be764f003bf2107b6a620c187ea20335b407d765f331f953"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "92d1daf49c0ec3ac962da87ac9ed288655cc2d978efa9f61906e00ffd7d44a11"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "66d8be158ffb018a93e956ee08fbe1a1fe0e66f52d308bf381e7a93f20570504"
   end
 
   depends_on "go" => :build
@@ -29,7 +29,7 @@ class Astro < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/astronomer/astro-cli/version.CurrVersion=#{version}")
 
-    generate_completions_from_executable(bin/"astro", "completion")
+    generate_completions_from_executable(bin/"astro", shell_parameter_format: :cobra)
   end
 
   test do
@@ -45,7 +45,7 @@ class Astro < Formula
       assert_path_exists testpath/".astro/config.yaml"
     end
 
-    run_output = shell_output("echo 'test@invalid.io' | #{bin}/astro login astronomer.io --token-login=test", 1)
+    run_output = pipe_output("#{bin}/astro login astronomer.io --token-login=test", "test@invalid.io", 1)
     assert_match(/^Welcome to the Astro CLI*/, run_output)
   end
 end

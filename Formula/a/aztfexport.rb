@@ -2,19 +2,18 @@ class Aztfexport < Formula
   desc "Bring your existing Azure resources under the management of Terraform"
   homepage "https://azure.github.io/aztfexport/"
   url "https://github.com/Azure/aztfexport.git",
-      tag:      "v0.17.1",
-      revision: "aa75416cc3159a277f2e54cc2044ddea7122bc98"
+      tag:      "v0.19.0",
+      revision: "9949c60f26721c45b4e8a470fc9c921146ee9160"
   license "MPL-2.0"
   head "https://github.com/Azure/aztfexport.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "494fd1d33cf38dae763505225a477cfe42730434250c67aeb314d1c5283948c8"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "494fd1d33cf38dae763505225a477cfe42730434250c67aeb314d1c5283948c8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "494fd1d33cf38dae763505225a477cfe42730434250c67aeb314d1c5283948c8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ff3e1fb1e23a62f75599e01e3a5330d3a5aedd11993183b27f3c5e47def155d0"
-    sha256 cellar: :any_skip_relocation, ventura:       "ff3e1fb1e23a62f75599e01e3a5330d3a5aedd11993183b27f3c5e47def155d0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "acdd35577a41cf46edf936c43c431e984ded8c05860f1af490afcc4d2bdd191c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3b3c53c15e3bb6b3ad58789f9d95c18f3b7f04201e963a23272655fabec4bdfb"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "17d6ac76357f0d14269f333ba6d24a2824d5b1be8e44656cdf2baec885a57f03"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "17d6ac76357f0d14269f333ba6d24a2824d5b1be8e44656cdf2baec885a57f03"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "17d6ac76357f0d14269f333ba6d24a2824d5b1be8e44656cdf2baec885a57f03"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6db2ce1c76f929d24e20ade80bc54b240c2ab6b5e526086660a88ceb0b57cff0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "aa28f882c85a2a0e1cbcfe9a37bb8c8dc21681bdc09e3dc2c93b684382bafd4a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "67ae721579552390be22c9fa69f428988c4b2e070638ecea479564f8d533d718"
   end
 
   depends_on "go" => :build

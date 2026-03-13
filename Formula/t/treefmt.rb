@@ -1,18 +1,18 @@
 class Treefmt < Formula
   desc "One CLI to format the code tree"
   homepage "https://treefmt.com/latest/"
-  url "https://github.com/numtide/treefmt/archive/refs/tags/v2.3.1.tar.gz"
-  sha256 "02d29561b92110e83596ec93e19c8787b31f4b3211bd0a9d2c384d1b09f74c94"
+  url "https://github.com/numtide/treefmt/archive/refs/tags/v2.4.1.tar.gz"
+  sha256 "b798ea210346474ce7f90dc062e849615abdbfeac1219d88d16bb1da7ce5566b"
   license "MIT"
   head "https://github.com/numtide/treefmt.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a136ef60c859adba5e9126d4e30e20270fea4489c9411d190e42008b4f464905"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a136ef60c859adba5e9126d4e30e20270fea4489c9411d190e42008b4f464905"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a136ef60c859adba5e9126d4e30e20270fea4489c9411d190e42008b4f464905"
-    sha256 cellar: :any_skip_relocation, sonoma:        "103f4fe09efa1fe6d2dd13a23014ee6c8540313778ecef73accb195aae853c53"
-    sha256 cellar: :any_skip_relocation, ventura:       "103f4fe09efa1fe6d2dd13a23014ee6c8540313778ecef73accb195aae853c53"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "08a842627c99794b757fe6046285605c8182c2763202cc34d65bffd3980cf217"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ed5a10b18aa08bd20327b09cf7ebb6f52f0dabe0120a289848e8e9991c6a6945"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ed5a10b18aa08bd20327b09cf7ebb6f52f0dabe0120a289848e8e9991c6a6945"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ed5a10b18aa08bd20327b09cf7ebb6f52f0dabe0120a289848e8e9991c6a6945"
+    sha256 cellar: :any_skip_relocation, sonoma:        "613c7e3a993c485cbe041fe608ff7dc766507689f7408060101806629a5df465"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f690ebba1fc834e088305ff8f6047e6e199bff76fb3ac10739ab7e67087d7f11"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1ea13aad1351bb0da64fefbc96d3dceb989fe621abd4a19fa5a23d9a1eb8b9ff"
   end
 
   depends_on "go" => :build

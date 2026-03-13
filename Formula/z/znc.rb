@@ -1,10 +1,10 @@
 class Znc < Formula
   desc "Advanced IRC bouncer"
   homepage "https://wiki.znc.in/ZNC"
-  url "https://znc.in/releases/znc-1.9.1.tar.gz"
-  sha256 "e8a7cf80e19aad510b4e282eaf61b56bc30df88ea2e0f64fadcdd303c4894f3c"
+  url "https://znc.in/releases/znc-1.10.1.tar.gz"
+  sha256 "4e6e76851dbf2606185972b53ec5decad68fe53b63a56e4df8b8b3c0a6c46800"
   license "Apache-2.0"
-  revision 5
+  revision 3
 
   livecheck do
     url "https://znc.in/releases/"
@@ -12,13 +12,13 @@ class Znc < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "0861238c72cd5397e1568a741f8ac0339b00e573e3b799ffb223d665fb3b5e12"
-    sha256 arm64_sonoma:  "2465789ae2561cf508f38ca0867f67188fce03bc5548ec5a01e4858de66d9884"
-    sha256 arm64_ventura: "65b535ea5a67a4861e94c69b0caad4c082a8798ba68684fe62b9565d762fef23"
-    sha256 sonoma:        "a6d475310180f77f8ffcc744a0c37f3165c4b1fa995a1f40d1d24ad3a44acf73"
-    sha256 ventura:       "33da8af5b2f1dfed9dcc1948da42671ed4ccd73c2fd5dfc717ce09d9e408f978"
-    sha256 arm64_linux:   "f9b89d45801edeb21325f98eb1ec5c49363cd5649aaa8dbf0e27b55c061faea9"
-    sha256 x86_64_linux:  "bdd3624bb4903a647648c3f9efa1f2c1d5e383d9f29024771fe3a6eb1395d4d5"
+    rebuild 1
+    sha256 arm64_tahoe:   "afb9c0ccfe01f8d0c335ad33d7cb27d3bcff074ca0e22158d83caabf73bc7277"
+    sha256 arm64_sequoia: "b74d2600ee42c8c0cbf9ba88c13be60fde6a8de877803a94a10f80a23018eb69"
+    sha256 arm64_sonoma:  "ef62cd1a62388891aca94018dadc7484def7d0479d4714b3843898516892b85b"
+    sha256 sonoma:        "25b53ba0a8aa7400cd84902fc9f9b871b81af26021ec417420384341b27d7c80"
+    sha256 arm64_linux:   "f9a460da2c37ce2776fd85d3201a8ca6911cb423e94bf7682e67bb97f5c95577"
+    sha256 x86_64_linux:  "d7cabd8dc640eb9161c5489da76eff509f3459bac957c427da009241c3dfeea7"
   end
 
   depends_on "cmake" => :build
@@ -26,16 +26,18 @@ class Znc < Formula
   depends_on "pkgconf" => :build
   depends_on "boost"
   depends_on "cctz"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "openssl@3"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     rm_r(["third_party/cctz", "third_party/googletest"])
 
-    python3 = "python3.13"
+    python3 = "python3.14"
     xy = Language::Python.major_minor_version python3
 
     # Fixes: CMake Error: Problem with archive_write_header(): Can't create 'swigpyrun.h'

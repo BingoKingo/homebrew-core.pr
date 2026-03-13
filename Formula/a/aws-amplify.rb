@@ -1,18 +1,17 @@
 class AwsAmplify < Formula
   desc "Build full-stack web and mobile apps in hours. Easy to start, easy to scale"
   homepage "https://aws.amazon.com/amplify/"
-  url "https://registry.npmjs.org/@aws-amplify/cli-internal/-/cli-internal-13.0.1.tgz"
-  sha256 "fe7b1b6a7aa426612031a8712a0ae70ab94b24f6072a8866e92c12fe2598cc68"
+  url "https://registry.npmjs.org/@aws-amplify/cli-internal/-/cli-internal-14.2.5.tgz"
+  sha256 "43785466b4869a5df23fece70587c8362b281a27b24f33d049154cc642e15907"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "489dbddaaaa5293c2fc43c1e8f367aec51630d4979f8e9f1557a868a336398dd"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "489dbddaaaa5293c2fc43c1e8f367aec51630d4979f8e9f1557a868a336398dd"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "489dbddaaaa5293c2fc43c1e8f367aec51630d4979f8e9f1557a868a336398dd"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1120ac36e1da8e1521001928f952de2da94dfbf66ea059df558f6be80df9556f"
-    sha256 cellar: :any_skip_relocation, ventura:       "1120ac36e1da8e1521001928f952de2da94dfbf66ea059df558f6be80df9556f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "489dbddaaaa5293c2fc43c1e8f367aec51630d4979f8e9f1557a868a336398dd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "14ac446d69172e164ece46c26cdf0ea866e0d1c2e57991e4aee0e3157776e4de"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "0c5219dfc85244742c742b03efc5478f0a38d6c9ad72782ce09d01fa34d9016e"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c5232b6dc732fbc8388e711a102da26f15965328681d2fc7b70eb90e9d24d404"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c5232b6dc732fbc8388e711a102da26f15965328681d2fc7b70eb90e9d24d404"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0c4d784581e5f642bcb0eeae52c7136f4d5dbcb2ccef689ade93ba0785f93c33"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "16e90e393dc527fae7998c590aa8aaf264b5c1066608d26db3f1748f88bcb6fa"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4f2d481a8f32e6f3eb32c73ccc82007363de28ea39fa35c059c8b122b810aa96"
   end
 
   depends_on "node"
@@ -41,6 +40,7 @@ class AwsAmplify < Formula
     (node_modules/"amplify-dynamodb-simulator/emulator/DynamoDBLocal_lib").glob("libsqlite4java-*").each do |f|
       rm f if f.basename.to_s != "libsqlite4java-#{os}-#{arch}"
     end
+    deuniversalize_machos node_modules/"fsevents/fsevents.node" if OS.mac?
   end
 
   test do

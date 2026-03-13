@@ -1,8 +1,8 @@
 class Tippecanoe < Formula
   desc "Build vector tilesets from collections of GeoJSON features"
   homepage "https://github.com/felt/tippecanoe"
-  url "https://github.com/felt/tippecanoe/archive/refs/tags/2.78.0.tar.gz"
-  sha256 "da628c5fa1aec3aba318f6096d2f60d8b4cc78043e1c25e18a4d0975c8262f00"
+  url "https://github.com/felt/tippecanoe/archive/refs/tags/2.79.0.tar.gz"
+  sha256 "b0fd9df49b6efc988288ea48774822c6de19eb48428017f27ee0b3b01d44f05d"
   license "BSD-2-Clause"
 
   livecheck do
@@ -11,17 +11,20 @@ class Tippecanoe < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "bad7cb29c955e82161443cbb4ceaea5c2f363b916ac39caee6dc1858838c769b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f4c6159f9be5c5f8f51086368285c092477e56a9e806c0df5f277c57c4ecc0b6"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "11b91e170f02af2ac3a06abe136ed801a63f992deb9a8a07a643af93175d20e6"
-    sha256 cellar: :any_skip_relocation, sonoma:        "cbc643cdac3193b9aa7772a0673ab05d6cad35c06381d8e83d02c5e3dba17a36"
-    sha256 cellar: :any_skip_relocation, ventura:       "fa88fbbf875ed9ea6320eef04a79c900fbf2a75a545582058d475acb2632e9dd"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ea7de77825580f3434355a2a15638bfdecbcfba0ea3deb7289d8ba44d291e517"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "92a3f5a0750911ebc42d9289149fb924db26add21d1e9080f0423f36e7c741f6"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "789f0c1726dbfe2e753ee90977c212738d1435b6217c4d20df7e2e1a6fb09732"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "08faa5cd2a23753e7cea762bc9d69c2c3403086a923423158bee845cdf1c4eb5"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5115543a48645f67a4e3cbf8c545a5c152286df2112def83b2baad49c6fde501"
+    sha256 cellar: :any_skip_relocation, sonoma:        "198449b1baacb651f09b763511340e2279ffb817896a52701245d81345eb1abd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7bad962c9d0003b05ed245187d525cec015d6e2dcae507f20af3be646394bbfd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "facc57688a1d929bef5456e1b2c5298c7ae089ed4e12fe37d46051b818c2d228"
   end
 
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "make", "install", "PREFIX=#{prefix}"

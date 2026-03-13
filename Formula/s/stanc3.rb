@@ -2,18 +2,17 @@ class Stanc3 < Formula
   desc "Stan transpiler"
   homepage "https://github.com/stan-dev/stanc3"
   url "https://github.com/stan-dev/stanc3.git",
-      tag:      "v2.36.0",
-      revision: "0366507dd98f96bf6acd5d2753bd0910f2eb0ecb"
+      tag:      "v2.38.0",
+      revision: "e05ba2b1c68af5abf6bb4ce4279e82b6d1059f8b"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1a4e28729eb9e4790ba984d02f9752a9e3092c556892673e97d4324c67783cd1"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6ba590eb17a914c2ce3c93c775a2d8dc1c9dc58ddc4cfecc20a92686d96508d2"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "16ccaddc885752a02296d260bbff43e1a618183c5feb29f54dc966d282f58a7b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d95e9716a7f9bfbed4a9161030ec37001051de2ddb7b18f4386b599b11692ca6"
-    sha256 cellar: :any_skip_relocation, ventura:       "d000fd196bc37829af7985f3cfd15a95cae50676acef2250d54cbe088cd207ba"
-    sha256                               arm64_linux:   "0c35526796f504d5ea421e2bd2ea9bbb1e5d5889d150563fab318f5fa6a1ff82"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "92fe8afc06fb2059c4ffd178c2a67eba0b305a60a566ebb80f4fbbce090504ca"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "052f27eccaa5dd5a4b9c441846e3741cee2b3e5e733d52094db2c3e39e7dca54"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3d835afe8912f71f5772dcf3384bc177b4dacea3906acb13e116e1dd9adb7322"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "eb02b223a6c2b33b7284e59ce8f068816246aa13057430eb6a5269de7cca0964"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0bc2c520dc35d62340f74eea4243e70921af2d4c4e8b991edee6016e77781405"
+    sha256                               arm64_linux:   "e0581e5129dd2feeb742d8bf10db92be453f5fc081c55bbf490f37eb9b6769c6"
+    sha256                               x86_64_linux:  "3b13da81774f275c774e28c92965d9469e136f9afbf2389d1f76cceace80ddb3"
   end
 
   depends_on "ocaml" => :build
@@ -22,18 +21,23 @@ class Stanc3 < Formula
   uses_from_macos "unzip" => :build
 
   def install
-    Dir.mktmpdir("opamroot") do |opamroot|
-      ENV["OPAMROOT"] = opamroot
-      ENV["OPAMYES"] = "1"
-      ENV["OPAMVERBOSE"] = "1"
-
-      system "opam", "init", "--no-setup", "--disable-sandboxing"
-      system "bash", "-x", "scripts/install_build_deps.sh"
-      system "opam", "exec", "dune", "subst"
-      system "opam", "exec", "dune", "build", "@install"
-
-      bin.install "_build/default/src/stanc/stanc.exe" => "stanc"
+    # Workaround to build with OCaml 5.4.0
+    inreplace "stanc.opam" do |s|
+      s.gsub! '"ocaml" {= "4.14.1"}', '"ocaml" {>= "4.14.1"}'
+      s.gsub! '"core" {= "v0.16.1"}', '"core" {= "v0.17.1"}'
+      s.gsub! '"ppx_deriving" {= "5.2.1"}', '"ppx_deriving" {= "6.1.1"}'
     end
+
+    ENV["OPAMROOT"] = buildpath/".opam"
+    ENV["OPAMYES"] = "1"
+    ENV["OPAMVERBOSE"] = "1"
+
+    system "opam", "init", "--compiler=ocaml-system", "--disable-sandboxing", "--no-setup"
+    system "opam", "install", ".", "--deps-only", "--yes", "--no-depexts"
+    system "opam", "exec", "dune", "subst"
+    system "opam", "exec", "dune", "build", "@install"
+
+    bin.install "_build/default/src/stanc/stanc.exe" => "stanc"
   end
 
   test do

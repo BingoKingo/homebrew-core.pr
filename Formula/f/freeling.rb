@@ -4,24 +4,31 @@ class Freeling < Formula
   url "https://github.com/TALP-UPC/FreeLing/releases/download/4.2/FreeLing-src-4.2.1.tar.gz"
   sha256 "c672a6379142ac2e872741e7662f17eccd8230bffc680564d2843d87480f1600"
   license "AGPL-3.0-only"
-  revision 10
+  revision 13
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "4e30428a201c092dd95925dbf2cbcf0462c161fc9605de3208a6947435ca8f96"
-    sha256 cellar: :any,                 arm64_sonoma:  "1daaaad0626d64ab84527ee4c3010e7d0182c0bb9105927b2a5ff67d450c508f"
-    sha256 cellar: :any,                 arm64_ventura: "e7eb98da6f2e974de97e0b42212a36b873698aa46e615d52de003f736b0de0cc"
-    sha256 cellar: :any,                 sonoma:        "18159dc9e41798f544bedf23ea60bf6f28dbd51504f2b518bc9862778765d0e3"
-    sha256 cellar: :any,                 ventura:       "70f59ec40dbf77652da963e4c91102ca8df50fb53c25155d48f1420b7eae9233"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c7d7377eedefefda284293356c01655d29e03e193b3e7f51a74f244d7a9ab01c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "09ee37dbdbd8a8d47ad0c439b2b1067f96a5e7f683d78a0d29642f54ded934a8"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "da96408a42b876a1aefc4337783ebb0203b5ccdbe487d363fe3594bbd5aed321"
+    sha256 cellar: :any,                 arm64_sequoia: "cb2fffda68c5af4a65a43eecc84a8650097454d9c78c94dd37e96288e505eb9a"
+    sha256 cellar: :any,                 arm64_sonoma:  "60c5ffef39d292344fb0dad6d11ed9fb0b9f39bb4508e919fe42175666588347"
+    sha256 cellar: :any,                 sonoma:        "4171dbc6b31de0360a4278f503660de5376847db28cc4bf97af4b286a871c8fc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3daf501eb541caf93c400beea8633264c5468f7a41b59294cb31cf36b489b853"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bde9ff0e82cddc046515d15f8808c867dee2435e22f072a99d2e9bfdddd3d218"
   end
+
+  # Last release on 2022-07-15, bundles a copy of `dynet` which doesn't work
+  # with latest Eigen and requires patching to build with latest ICU
+  deprecate! date: "2026-02-02", because: :unmaintained
+  disable! date: "2027-02-02", because: :unmaintained
 
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "dynet"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "foma", because: "freeling ships its own copy of foma"
   conflicts_with "hunspell", because: "both install 'analyze' binary"

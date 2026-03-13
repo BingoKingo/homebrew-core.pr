@@ -1,8 +1,8 @@
 class Libxslt < Formula
   desc "C XSLT library for GNOME"
   homepage "http://xmlsoft.org/XSLT/"
-  url "https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.tar.xz"
-  sha256 "5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a"
+  url "https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.tar.xz"
+  sha256 "9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e"
   license "X11"
 
   # We use a common regex because libxslt doesn't use GNOME's "even-numbered
@@ -13,13 +13,13 @@ class Libxslt < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "882f9071165800a694e3dc146e614c984b70d80cf8fa284cc78dd0f35f096a2f"
-    sha256 cellar: :any,                 arm64_sonoma:  "ba204e6736fe30b763bc9372a464f050daa8c5d66aebbff6c8659abbc796d4ae"
-    sha256 cellar: :any,                 arm64_ventura: "68fbcc1a39a1af56dda4c550816f0a4796ed8b70608518b184331f1e13a1ff1b"
-    sha256 cellar: :any,                 sonoma:        "c2432ea083f92c5d6ffd4968f7a0e3d675f7c2098f27e2742b607a9ba68d1f6d"
-    sha256 cellar: :any,                 ventura:       "96311a902a7c1ce991bfb90a01b11442d5ede675238afd8ed22980f7d91b415f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "847d260b760e00468ab47ce7b72514ef3381622fdb396512926ef4c82d54d1cc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "595b354dd8c9dc086224701709d5a471f7a916693ebf52e5d68eea1f454bd98d"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "5247978b2374fcb0d2a4f9b0ce74c08fde85305c2d2816b458e8a64fc7013c7d"
+    sha256 cellar: :any,                 arm64_sequoia: "f1ba7468eded4f5db764b1a35802820af8be74455130443dce0748370b9d4e54"
+    sha256 cellar: :any,                 arm64_sonoma:  "97e95a9b6f10e601120a14bb003b6bb4ca6248123368425ea6295cc36f40f4e3"
+    sha256 cellar: :any,                 sonoma:        "75584f355ae00d06a7e5b1844e08acad55ea3a8d48db8425ef7f5066db590a5c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4a08d60e1ea50a89702e83b5ac483104831961bb42d47684ba7f6f8bd3bbed98"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4b03c065c1b506ebe8caac9d6ad14b9d46950faad527e6ca89aafcd9eec234e5"
   end
 
   head do
@@ -50,6 +50,8 @@ class Libxslt < Formula
                           *std_configure_args
     system "make"
     system "make", "install"
+
+    inreplace [bin/"xslt-config", lib/"pkgconfig/libxslt.pc", lib/"pkgconfig/libexslt.pc"], prefix, opt_prefix
   end
 
   def caveats

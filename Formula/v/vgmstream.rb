@@ -2,9 +2,9 @@ class Vgmstream < Formula
   desc "Library for playing streamed audio formats from video games"
   homepage "https://vgmstream.org"
   url "https://github.com/vgmstream/vgmstream.git",
-      tag:      "r2023",
-      revision: "f96812ead1560b43ef56d1d388a5f01ed92a8cc0"
-  version "r2023"
+      tag:      "r2083",
+      revision: "57df2e179d929532094f4e4dd42ce5395514622b"
+  version "r2083"
   license "ISC"
   version_scheme 1
   head "https://github.com/vgmstream/vgmstream.git", branch: "master"
@@ -16,23 +16,18 @@ class Vgmstream < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "9d603c60f7149d4391e2f9603f077b8a5dea45eb22517e1fcae98966b0bcc8ed"
-    sha256 cellar: :any,                 arm64_sonoma:  "a9f8d5660a11587ceb4f74c36028595bd0f382dec602d5dae67e60394512f1c5"
-    sha256 cellar: :any,                 arm64_ventura: "1efac14baca5b829081b4798b3fdad731d667b0076615e0ac92dde5caa08c5e8"
-    sha256 cellar: :any,                 sonoma:        "2644519b01f118d98935bb7ef5c6b2205711938d904f548829960cc65229ea5c"
-    sha256 cellar: :any,                 ventura:       "77b35a83341fc2faedc0bfa5fe0f925da8e410e76a38e426c720fca917228f02"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "56043db74438ba802de747ab9c277b5f2521ec4077cd5cd3d70242aa7da18a97"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d542cf27b207fe2a8fdd850d5520c00bc70498ea835221a74198e08701c61dd2"
+    sha256 cellar: :any,                 arm64_tahoe:   "47cf5a573445ed7c118cb0845334179d1654073ead9c6de4e9b7a7f9c69b535d"
+    sha256 cellar: :any,                 arm64_sequoia: "c29c821fff5afa7c5078a61a12b841ccf83b69f9e10648755b3c3d37fbeeed1e"
+    sha256 cellar: :any,                 arm64_sonoma:  "1c11d25a63a6f6d3d8be589c622fbb6115f08268d71f3f2bc6e350730978d4bd"
+    sha256 cellar: :any,                 sonoma:        "75160c8ac0aa21de83575798cb142b8de59ef744b3f7b94bcff921cb05e29830"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5f26317e486d5c7857d83a0bfca2b75d443f603003e7be18faec10abe45c2700"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e62e644e31513b5e22ce38bf207cf2b6a7afc49bc0b489b047ed18f91aae75e2"
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
   depends_on "cmake" => :build
-  depends_on "libtool" => :build
   depends_on "pkgconf" => :build
 
   depends_on "ffmpeg"
-  depends_on "jansson"
   depends_on "libao"
   depends_on "libvorbis"
   depends_on "mpg123"
@@ -43,15 +38,15 @@ class Vgmstream < Formula
   end
 
   def install
-    ENV["LIBRARY_PATH"] = HOMEBREW_PREFIX/"lib"
+    # TODO: Try adding `-DBUILD_SHARED_LIBS=ON` in a future release.
+    # Currently failing with requires target "g719_decode" that is not in any export set
     system "cmake", "-S", ".", "-B", "build",
                     "-DBUILD_AUDACIOUS:BOOL=OFF",
                     "-DUSE_CELT=OFF",
-                    *std_cmake_args,
-                    "-DFETCHCONTENT_FULLY_DISCONNECTED=OFF" # FIXME: Find a way to build without this.
+                    *std_cmake_args
     system "cmake", "--build", "build"
-    bin.install "build/cli/vgmstream-cli", "build/cli/vgmstream123"
-    lib.install "build/src/libvgmstream.a"
+    system "cmake", "--install", "build"
+    lib.install "build/src/libvgmstream.a" # remove when switching to shared libs
   end
 
   test do

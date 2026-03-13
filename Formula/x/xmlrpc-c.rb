@@ -1,18 +1,17 @@
 class XmlrpcC < Formula
   desc "Lightweight RPC library (based on XML and HTTP)"
   homepage "https://xmlrpc-c.sourceforge.io/"
-  url "https://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.60.05/xmlrpc-c-1.60.05.tgz"
-  sha256 "67d860062459ea2784c07b4d7913319d9539fa729f534378e8e41c8918f2adf6"
+  url "https://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.64.03/xmlrpc-1.64.03.tgz"
+  sha256 "74729d364edbedbe42e782822da1e076f3f45c65c4278a3cfba5f2342d7cedbe"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "c618884cc42669b7cdd4147ffa1897b487ba9c1022c54c048cf0c40cc14ca1a4"
-    sha256 cellar: :any,                 arm64_sonoma:  "c5322ce6f4b0d23b9c3b30dec56598faf7b9f6a880f679d9e1fb691e39caf5b8"
-    sha256 cellar: :any,                 arm64_ventura: "1777fac56090d27fcd30b36e3d650da992bf6ba89e5898c87fa8ca38d34352e5"
-    sha256 cellar: :any,                 sonoma:        "73add0f6405a8d62a7b76c0538c548a6ae8abc73669c50655f150fa7b35b7aaf"
-    sha256 cellar: :any,                 ventura:       "e93fdf25ead371a86ef0f61d0af71ed63118f15387dd5e6c5902cfb9dec57df2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7fc68a4419b803d9e9f6badf6966d955e15bbf81bad146d68f0b6be25fbce2d8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8abc661587c2c0aa4f4fe5cb086c812b448e4cc59ec388f492d7e871a1ce77dc"
+    sha256 cellar: :any,                 arm64_tahoe:   "9897b4b3c6605051e8e52bf360dd34ad7326c51d4463a9e57cbd5f619b8b0820"
+    sha256 cellar: :any,                 arm64_sequoia: "9f09ab393af5042319150908090644ce6fbe8adaeecd9533c7fa4f4c6b411fb4"
+    sha256 cellar: :any,                 arm64_sonoma:  "ffb5c8957883e25d1504134ca072965bc4b29634fa2d2a6e4436f6da2432f252"
+    sha256 cellar: :any,                 sonoma:        "7d5a0807b77515d4adf986e490375efdff341bab63730ba19f5bb36f9df5db65"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2251b02f8dca16a8ce8b03e5a648288f91819d6f90b3a7bc33e30f247a535065"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3333ba125091b7c7852e8aad02a1f541aae8f6544eb5b41846101dca07764295"
   end
 
   depends_on "pkgconf" => :build

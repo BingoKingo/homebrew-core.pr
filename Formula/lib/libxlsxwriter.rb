@@ -1,22 +1,24 @@
 class Libxlsxwriter < Formula
   desc "C library for creating Excel XLSX files"
   homepage "https://libxlsxwriter.github.io/"
-  url "https://github.com/jmcnamara/libxlsxwriter/archive/refs/tags/v1.2.2.tar.gz"
-  sha256 "8ab0aced8a6e82f12f567b48d2cb3ca7b925893126607a619666da467e9ac14f"
+  url "https://github.com/jmcnamara/libxlsxwriter/archive/refs/tags/v1.2.4.tar.gz"
+  sha256 "e0db59fc248a5ffa465a05ea83a9d466d4bca0e53ab42771515d4ebb467a41c1"
   license "BSD-2-Clause"
   head "https://github.com/jmcnamara/libxlsxwriter.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5b03fecbf3ece1bcc03a87c89a84f60fa73b7e0b119d257c477fdc11d4acf188"
-    sha256 cellar: :any,                 arm64_sonoma:  "b02767c87f8db4bc8eecf747a9c8ea80db9dfadf4ad330b835f09317e038d2b9"
-    sha256 cellar: :any,                 arm64_ventura: "6382eb17ff04a5e5871c07bd400bbeb796b39a0825f617481428ecb96a0547e5"
-    sha256 cellar: :any,                 sonoma:        "50f6b2f9e3133fd947fc072a10bc180878a830a9dd950091bef325ecfb7001fd"
-    sha256 cellar: :any,                 ventura:       "f27ed6a59bc16de11c207ac54d51a403aaee52890ac0d00b0a8b98e65330e42f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "db67a2e2c9e7234d96e833866631dbeb778f6d235f852e92b452a6fc22d487bd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e6acbfaa5bc5479bd3b91fb788b50117e638d4c86699876cac937d415fc2ca06"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "c5270d39abf4b98ae78add1ceb9251066b8fcb804cdc3f379ade7689e37521a8"
+    sha256 cellar: :any,                 arm64_sequoia: "6761b53a60a8b03860510381371b0c6841e4ca4b77ba5705c81172b2a0b6cefb"
+    sha256 cellar: :any,                 arm64_sonoma:  "3e9ecb49f206268f647c4c48f01008d5ba7ab9dbfd5695dba05f35993b90e318"
+    sha256 cellar: :any,                 sonoma:        "d925e1ecb73f059f5ad8d53ed6f2e9f90b4ad32d9c34042b6500fea6368c4e49"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "af3be196f27cb7c63a3755ff38f1f20a51cdf88b02d83503381c38eecbde32e7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0178462a88fe85971f75fee9a92b90939594ee9c839e0dfab6e2b4e7c02edf7a"
   end
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "make", "install", "PREFIX=#{prefix}", "V=1"

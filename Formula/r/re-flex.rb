@@ -1,18 +1,17 @@
 class ReFlex < Formula
   desc "Regex-centric, fast and flexible scanner generator for C++"
   homepage "https://www.genivia.com/doc/reflex/html"
-  url "https://github.com/Genivia/RE-flex/archive/refs/tags/v5.5.0.tar.gz"
-  sha256 "9057d0d149259d3706e878c54a9c393ab22c7580f35bbd7ddea56e72db906da2"
+  url "https://github.com/Genivia/RE-flex/archive/refs/tags/v6.1.0.tar.gz"
+  sha256 "6a6ca333e45760900734ed40ae9fe4162843d2eca2d3a47923875b1ca89e00a8"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5392f526e1af262b2dba7bb256d9c28b91eba0be64312f5c3e7e2d142adeeeab"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "30a294a8558a94aab49f015c0fc938706e9ff22ca0b152ce5159558be0aeeeba"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "096ddf1973454385f5a32f0f40b5c3bfa8cb271424f9e5d5728e950528a0d651"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5ae7249954011836464044831c3ba61a3d33c4c2314693cf6b23cd0fc2b4b5d9"
-    sha256 cellar: :any_skip_relocation, ventura:       "f5e8b15e768952f1772348ed57eb5cfeeadc27ff091f3e8edbdbfa0e7e6c2a92"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3f1911702d41fda102d0277be10ee048e2fc910228398906f14bd434f0b640f6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d8be16a41e24b9e23524278f86ed366452ddf45e09de53933b2cb6a262ae4525"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "5ac12f3cf19d3d09031811eea4c3b25c32ffa7405418e96523347f482b5873b2"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d87444f0f6b45476774bcc95df3e5ca0815e32f0a902f4941d36d9f6e56749da"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0e2b8cd885ac94545cde2f36aa699d7839ce5fc35b2232cbc8f34802daf5d12b"
+    sha256 cellar: :any_skip_relocation, sonoma:        "635ffa3ef8bc19e9e713cd363bbaacc26847e69104636c0e8b91ab1120ad341e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4cdadb5513a409c3e86b0b0413f582e628f00a4f23837b08147c6dbf84357e24"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f3818545d3b3a081a4ec934fdc21bedb6a591e5e07e4d26a219ff17852b37983"
   end
 
   depends_on "pcre2"

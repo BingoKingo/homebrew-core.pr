@@ -7,6 +7,7 @@ class Grsync < Formula
   revision 1
 
   bottle do
+    sha256 arm64_tahoe:    "7986e7f825b1b6c2f31beadad835a38e018b215d50ec918a4c943c1449127127"
     sha256 arm64_sequoia:  "7acba4db4f6cd2ad09e1cffff1f7c0d24c46cbc611c8ed9c7e78a604b746b2cf"
     sha256 arm64_sonoma:   "abf6159ff6f8b96053d162b2022ed8609af8c059c79348ae5557c28afeecc562"
     sha256 arm64_ventura:  "3330a2f548559889d4d2cc138d79e5bd39f00aea3c14525912fd5f6c1c20136d"
@@ -18,9 +19,9 @@ class Grsync < Formula
     sha256 x86_64_linux:   "e69fa72c81515369642531c0e5fc7febe6953d082721eb5b1e839c0f7a72a597"
   end
 
+  depends_on "gettext" => :build
   depends_on "intltool" => :build
   depends_on "pkgconf" => :build
-  depends_on "gettext"
   depends_on "glib"
   depends_on "gtk+3"
   depends_on "pango"
@@ -31,6 +32,7 @@ class Grsync < Formula
     depends_on "at-spi2-core"
     depends_on "cairo"
     depends_on "gdk-pixbuf"
+    depends_on "gettext"
     depends_on "harfbuzz"
   end
 

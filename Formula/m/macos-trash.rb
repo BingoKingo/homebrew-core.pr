@@ -1,22 +1,27 @@
 class MacosTrash < Formula
   desc "Move files and folders to the trash"
   homepage "https://github.com/sindresorhus/macos-trash"
-  url "https://github.com/sindresorhus/macos-trash/archive/refs/tags/v2.0.0.tar.gz"
-  sha256 "95eeea2a96e5d989145da4697206062798b9f708101dc426ae5a489969619114"
+  url "https://github.com/sindresorhus/macos-trash/archive/refs/tags/v3.0.0.tar.gz"
+  sha256 "10bc181d282ab99143178e9b6d23da46b216aef200f3ec282c783ba0d4e666b9"
   license "MIT"
   head "https://github.com/sindresorhus/macos-trash.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d2428e281cfd65f72086b510be7e425635e855f4fda1d272964c30b5253a9df4"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8aff9fa300a5df44f6659bfc66c7976e79b8e3aee583c22148ee50062517b281"
-    sha256 cellar: :any_skip_relocation, sonoma:        "240b1bf992d89a5b41c1f5346188c5059bd5b2ed0ba8c475f7a02310cc299e31"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "91b9dff20bd5ab363fbd573dadf35f0b78410dfb275e77e3d77c1e424fa6cd3e"
+    sha256 cellar: :any,                 arm64_sequoia: "0dccef8a0abe4b6f56b63b16fab54058316deaf28c6b5af3360214fee7750c0e"
+    sha256 cellar: :any,                 arm64_sonoma:  "f057ac1b33b63704e23e9d62431e4925d9995df18fb064adc3aa0e48d2662bac"
+    sha256 cellar: :any,                 sonoma:        "7fe04e7f88a301551cf89a98f82e3178536c1b12b609bf9a846b06f10e3437df"
   end
 
   keg_only :shadowed_by_macos
 
   depends_on xcode: ["16.0", :build]
   depends_on :macos
-  uses_from_macos "swift", since: :sonoma # Swift 6.0
+  uses_from_macos "swift", since: :tahoe # Swift 6.2
+
+  conflicts_with "osx-trash", because: "both install a `trash` binary"
+  conflicts_with "trash-cli", because: "both install a `trash` binary"
+  conflicts_with "trash", because: "both install a `trash` binary"
 
   def install
     system "swift", "build", "--disable-sandbox", "-c", "release"

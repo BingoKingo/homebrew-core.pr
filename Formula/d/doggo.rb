@@ -1,18 +1,18 @@
 class Doggo < Formula
   desc "Command-line DNS Client for Humans"
   homepage "https://doggo.mrkaran.dev/"
-  url "https://github.com/mr-karan/doggo/archive/refs/tags/v1.0.5.tar.gz"
-  sha256 "92a34f5510a48ab657a980c39edf907c17e96e88a476187d5b57a8cef3becd5b"
+  url "https://github.com/mr-karan/doggo/archive/refs/tags/v1.1.5.tar.gz"
+  sha256 "0266fe51cd7c6001011c3424380ff0f48809dcaf631fa65f51bfcbe66e59face"
   license "GPL-3.0-or-later"
   head "https://github.com/mr-karan/doggo.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "659e186849f180769977ef2af67b9880c454b72d32853222ab69f396e51094f7"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "659e186849f180769977ef2af67b9880c454b72d32853222ab69f396e51094f7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "659e186849f180769977ef2af67b9880c454b72d32853222ab69f396e51094f7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "e2bf2f469a3d501455d0c5db6005dd1f78a5a3916e31253361db0effd0d4cedf"
-    sha256 cellar: :any_skip_relocation, ventura:       "e2bf2f469a3d501455d0c5db6005dd1f78a5a3916e31253361db0effd0d4cedf"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e6ef549e7c62a7cd3f1cf41dd03e7f99bf26e256f950ddc1b6c08d2a488debd5"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "48d0033ab3cbcb4c31351174c58afdac844219fec933f6cd2faae2075d1cd2a6"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "48d0033ab3cbcb4c31351174c58afdac844219fec933f6cd2faae2075d1cd2a6"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "48d0033ab3cbcb4c31351174c58afdac844219fec933f6cd2faae2075d1cd2a6"
+    sha256 cellar: :any_skip_relocation, sonoma:        "de71149e98f29d79539c1e1400a25678a3d3f6fe769e4dac818acb0c82544a3b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1e5b07a4d10836691161cc8db741759954d816276392de74b872802dd41074fb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6082e855c991757fa18b411a4bf269682a8ce74be7c730108916d827bcf4fc49"
   end
 
   depends_on "go" => :build
@@ -26,7 +26,7 @@ class Doggo < Formula
 
   test do
     answer = shell_output("#{bin}/doggo --short example.com NS @1.1.1.1")
-    assert_equal "a.iana-servers.net.\nb.iana-servers.net.\n", answer
+    assert_equal "hera.ns.cloudflare.com.\nelliott.ns.cloudflare.com.\n", answer
 
     assert_match version.to_s, shell_output("#{bin}/doggo --version")
   end

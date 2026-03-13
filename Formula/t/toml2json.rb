@@ -1,19 +1,18 @@
 class Toml2json < Formula
   desc "Convert TOML to JSON"
   homepage "https://github.com/woodruffw/toml2json"
-  url "https://github.com/woodruffw/toml2json/archive/refs/tags/v1.3.1.tar.gz"
-  sha256 "d32aceb8387553a25bec45747cdb45ce6a079935a03eb13d3477f68cc1fecaaa"
+  url "https://github.com/woodruffw/toml2json/archive/refs/tags/v1.4.0.tar.gz"
+  sha256 "70c9bf872f22d22691d41eeb06442a0fddf4b341ddebfadf8734d1e68e0174ce"
   license "MIT"
   head "https://github.com/woodruffw/toml2json.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c236bae5e89882b86de4a4432cd45c265e52b120cfb92f5df4668a7d5d5ae28e"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e916b159e93d256b232b7e05b9c70fd8efed7fcf90ba0e54f8fa1d47660fdc96"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c41859623992135a393b49977c66b3defdcaf597c025ebcbb2e5ce2a1a59b220"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0b63f1c3d4f53869cd7178d1150d47e24af6c4f2075e0a128a2ee180e2696d38"
-    sha256 cellar: :any_skip_relocation, ventura:       "263ada74ecbaadf923978f9018950a6d361fe16d16f08033dcdea6b86bd6718c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1bad30571325d81e794e04241c1536a4cfc9f645e5b32a65752e379df35c5cf3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3ef85b1667b92098289aa2bc8a6c2747188350d052a699b780909aeeae6455db"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "e7b2b0427521ab532a532e7c79660a039ab61e4d25d40b110accec10b997e4d3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d3d3a1fdf26a222e53b14398cabf8f8d726359ab6bd73969ac6a814f3d66564f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9ba3deb56cc6c7fc853bb0f3917017886f687b73df694911bd31d07d1d281517"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b9ccb30451c3fee454908111290d7b20c7213ec146e1c7152e5e975a40f78b96"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6b4499857996bd712c846e7850c8ad38ffc013b633ab9e160c191bcd0f1383e6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "786b289aec4e5444f47921cdece21b0688c8915c99fd985b70b72e2cbe123323"
   end
 
   depends_on "rust" => :build

@@ -1,8 +1,8 @@
 class Knot < Formula
   desc "High-performance authoritative-only DNS server"
   homepage "https://www.knot-dns.cz/"
-  url "https://knot-dns.nic.cz/release/knot-3.4.6.tar.xz"
-  sha256 "d19c5a1ff94b4f26027d635de108dbfc88f5652be86ccb3ba9a44ee9be0e5839"
+  url "https://knot-dns.nic.cz/release/knot-3.5.3.tar.xz"
+  sha256 "e003ad1eef229c4e65a6cac876ee773e25a06177ecdc83795a26617a6eebe471"
   license all_of: ["GPL-3.0-or-later", "0BSD", "BSD-3-Clause", "LGPL-2.0-or-later", "MIT"]
 
   livecheck do
@@ -11,13 +11,12 @@ class Knot < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "62241ba2192c8ffce58930ecd47a88899eaccc4251bfb9f7ba23fe18f2e60c03"
-    sha256 arm64_sonoma:  "94f5f562fe7533cb29fc2e53fb6f9308fe16b36b4f1cf41bb7caa273c16f0bfb"
-    sha256 arm64_ventura: "d7b76b9ed9be9a503cc6a21c5c896f0125411dbf119e4f225894f8d2a1d03867"
-    sha256 sonoma:        "9d65336182f586b314fd29bfee25c8652839c3032f9f9afa405e02ae502c8d63"
-    sha256 ventura:       "f2353253ac4781bbb3436823a9e56389edf0091d03874caa3157e042fb7cba2d"
-    sha256 arm64_linux:   "719cc905109bf0ca8a68b009af89ba49a9e2b6f0caa1d90c82a845abd1d1ef55"
-    sha256 x86_64_linux:  "8e0bf75312b54c8edd092dd36139829eaefb5b0f0160f5053d5b47d3a65dedf2"
+    sha256 arm64_tahoe:   "bc0c1ce69bfb8207b9ba59b4ca897c95de7a1917ebc4fbf4ea544a66c5ab47ea"
+    sha256 arm64_sequoia: "cebdffaa3639390405ec21b513e5ddef268b865a55918346bf5ad5ce10fbd3ba"
+    sha256 arm64_sonoma:  "51c0ac6de8584b943110e3a4ae8f13be99cfb1ecad1b0baad5437908f8dd9d08"
+    sha256 sonoma:        "ee6b51cfba74a46f04c4d5292418b0a0e564707ed446ac7e5efdc7c54d31c3ad"
+    sha256 arm64_linux:   "bbfb5510a47663ff854a9b7e95a7456c325389ecec8995dd2b477ab7ab14e01d"
+    sha256 x86_64_linux:  "c0aca513df98073d9dda1578d71f393778b0f325b737ad4d2736fb5364412a07"
   end
 
   head do
@@ -40,14 +39,6 @@ class Knot < Formula
 
   uses_from_macos "libedit"
 
-  # Fix 'knot/modules/rrl/./kru.inc.c:250:7: error: always_inline function' on macOS 13 and 14,
-  # see https://github.com/Homebrew/homebrew-core/pull/219163.
-  # Remove in next release.
-  patch do
-    url "https://gitlab.nic.cz/knot/knot-dns/-/commit/509d9d82b51c58ea572dccb09f4fdbe1a3c2571e.diff"
-    sha256 "c9b0d2dd5dddbe3d2fc0b817bbc3171f34fb73d0b099bf2b52cf101f4d0239ff"
-  end
-
   def install
     system "autoreconf", "--force", "--install", "--verbose" if build.head?
     system "./configure", "--disable-silent-rules",
@@ -67,17 +58,14 @@ class Knot < Formula
 
     (buildpath/"knot.conf").write(knot_conf)
     etc.install "knot.conf"
-  end
-
-  def post_install
     (var/"knot").mkpath
   end
 
   def knot_conf
-    <<~EOS
+    <<~YAML
       server:
         rundir: "#{var}/knot"
-        listen: [ "0.0.0.0@53", "::@53" ]
+        listen: [ "127.0.0.1@53", "::@53" ]
 
       log:
         - target: "stderr"
@@ -89,7 +77,7 @@ class Knot < Formula
       template:
         - id: "default"
           storage: "#{var}/knot"
-    EOS
+    YAML
   end
 
   service do

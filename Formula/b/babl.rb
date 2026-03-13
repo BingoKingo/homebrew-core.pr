@@ -1,8 +1,8 @@
 class Babl < Formula
   desc "Dynamic, any-to-any, pixel format translation library"
   homepage "https://www.gegl.org/babl/"
-  url "https://download.gimp.org/pub/babl/0.1/babl-0.1.114.tar.xz"
-  sha256 "bcbb7786c1e447703db3bc7fa34d62d0d2d117b22f04d8834c7b2d5ded456487"
+  url "https://download.gimp.org/pub/babl/0.1/babl-0.1.124.tar.xz"
+  sha256 "1b0d544ab6f409f2b1b5f677226272d1e8c6d373f2f453ee870bfc7e5dd4f1b1"
   license "LGPL-3.0-or-later"
   # Use GitHub instead of GNOME's git. The latter is unreliable.
   head "https://github.com/GNOME/babl.git", branch: "master"
@@ -13,13 +13,12 @@ class Babl < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "5ce954090d32baf2105b51b9181fc0033dd948598929f5391b17d3f64d89d6fb"
-    sha256 arm64_sonoma:  "ebea9657244533795a3b5244acff93bdb0c68394e3f337b513fe10fa31e82ac2"
-    sha256 arm64_ventura: "d69c75d99f6b01bb19b7e575bc05f2a105b5d16e6122c106c013163eb0afa63f"
-    sha256 sonoma:        "711bcc1ca2003825471449a9d759f71c34e971909e6b5d46285c0bbc04d37198"
-    sha256 ventura:       "80fac3c8153b352e4cae06c647461c1eccb8caa0295c5472354fd25719240178"
-    sha256 arm64_linux:   "a6b592bfd886d0c851e52d4d58698b4b0f141a7e6c469fde635ba320444c6d48"
-    sha256 x86_64_linux:  "3da3985cdc276fdfed64fce9fffdbbe174f5bd66ba2a9592619b80cc92b95a78"
+    sha256 cellar: :any, arm64_tahoe:   "27aea7a6f63a2e1ba8d6a595b59857562c68294c2eedd5c433b9a514c8ee6a1d"
+    sha256 cellar: :any, arm64_sequoia: "a580f00306ff64feef4979435e06b2e2f0b11e962f3a57dbfefbb511788a2b6b"
+    sha256 cellar: :any, arm64_sonoma:  "a60ac02f7b06ccfeeb08fbc3c7f67f82590d20bd6ad4540db3ab480aba314c91"
+    sha256 cellar: :any, sonoma:        "6f307d9c04db4f2dbeb71c17c35945f9c6c03523543637216a115437ebdad149"
+    sha256               arm64_linux:   "e47f059154814c4e8a72ebffa9ce751792e8f0851a2cb9ebd116f47e88d376c9"
+    sha256               x86_64_linux:  "9700ef030c0593a7768b0e3fd7040ed815ea02c369b2d2586bbbfb2ccee3c705"
   end
 
   depends_on "glib" => :build # to add to PKG_CONFIG_PATH for gobject-introspection

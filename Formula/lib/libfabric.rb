@@ -1,8 +1,8 @@
 class Libfabric < Formula
   desc "OpenFabrics libfabric"
   homepage "https://ofiwg.github.io/libfabric/"
-  url "https://github.com/ofiwg/libfabric/releases/download/v2.1.0/libfabric-2.1.0.tar.bz2"
-  sha256 "97df312779e2d937246d2f46385b700e0958ed796d6fed7aae77e2d18923e19f"
+  url "https://github.com/ofiwg/libfabric/releases/download/v2.4.0/libfabric-2.4.0.tar.bz2"
+  sha256 "13f508e1d770c44f872c4117d9bcbfc102dc9d7532d3292455e0e0e5ef7b3bba"
   license any_of: ["BSD-2-Clause", "GPL-2.0-only"]
   head "https://github.com/ofiwg/libfabric.git", branch: "main"
 
@@ -12,13 +12,12 @@ class Libfabric < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "e708bd1fd4cb2bdd0d37d12b73744fdc5878808d4df727aa12a6bc6db5c7d284"
-    sha256 cellar: :any,                 arm64_sonoma:  "c47ad07aa226ff618b1efa4f3aec8785af8805f81da91cbf79710a465799949f"
-    sha256 cellar: :any,                 arm64_ventura: "744ab1d09613ed90b5daf9ca56f157b0a5be99107e572394622dbd58e10285e3"
-    sha256 cellar: :any,                 sonoma:        "cde9e6629221b066db676576f7b6f76250db1a3cb0bf18447eab63d2fb5ae39d"
-    sha256 cellar: :any,                 ventura:       "7ff1b4a7c98bc71d9e86b20ecbd042482addef9db83f835e6d77b84fb26a4ad7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b2850f3048c57104572aff425bdc2dc4877612dc6272e0b2ffabb591f298a51f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8572d2600655e04cc2e5ed5d09d9e811f6dc79e0e948ec9fc08e470cd3241184"
+    sha256 cellar: :any,                 arm64_tahoe:   "4dd3b1dce713f5db21167eac9632e6a42c70ccce828f7249b11fdef8474e3eb1"
+    sha256 cellar: :any,                 arm64_sequoia: "20636cb6c553f8344681b7da625fc6f1f5af447d73adc9223e60edc22a8e900e"
+    sha256 cellar: :any,                 arm64_sonoma:  "bcbd780a01b02da314362c6f0884df0a5225700a42107167f5cda1f9cba8c90c"
+    sha256 cellar: :any,                 sonoma:        "927414d499184088c24ef2833691ea0d26b1386f51f2c4fda28d9c8b52835bac"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3832559b56f2b8d6e194790a11e3e80fc464cb2980f94ce39f1f099736fab38a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "751b31b5c57276c8ea427511b08540fec3171463e319c68b2523758ab0057064"
   end
 
   depends_on "autoconf" => :build

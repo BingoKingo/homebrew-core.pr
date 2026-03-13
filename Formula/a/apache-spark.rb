@@ -1,10 +1,10 @@
 class ApacheSpark < Formula
   desc "Engine for large-scale data processing"
   homepage "https://spark.apache.org/"
-  url "https://dlcdn.apache.org/spark/spark-4.0.0/spark-4.0.0-bin-hadoop3.tgz"
-  mirror "https://archive.apache.org/dist/spark/spark-4.0.0/spark-4.0.0-bin-hadoop3.tgz"
-  version "4.0.0"
-  sha256 "2ebac46b59be8b85b0aecc5a479d6de26672265fb7f6570bde2e72859fd87cc4"
+  url "https://dlcdn.apache.org/spark/spark-4.1.1/spark-4.1.1-bin-hadoop3.tgz"
+  mirror "https://archive.apache.org/dist/spark/spark-4.1.1/spark-4.1.1-bin-hadoop3.tgz"
+  version "4.1.1"
+  sha256 "f5874d9d6a4935f26bc9f761467971d26812a17d94c6493b8eb4b810e7db31ae"
   license "Apache-2.0"
   head "https://github.com/apache/spark.git", branch: "master"
 
@@ -16,10 +16,10 @@ class ApacheSpark < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "57dc64a028ae181115603613203c66f9bc249c87b547f83cd17cff03399b8509"
+    sha256 cellar: :any_skip_relocation, all: "7cde4c6decf8ac3a4272f63d6ed60ee578413a7fec9dae076284b8d31d36640b"
   end
 
-  depends_on "openjdk@17"
+  depends_on "openjdk@21"
 
   def install
     # Rename beeline to distinguish it from hive's beeline
@@ -28,16 +28,22 @@ class ApacheSpark < Formula
     rm(Dir["bin/*.cmd"])
     libexec.install Dir["*"]
     bin.install Dir[libexec/"bin/*"]
-    bin.env_script_all_files(libexec/"bin", JAVA_HOME: Language::Java.overridable_java_home_env("17")[:JAVA_HOME])
+    bin.env_script_all_files(libexec/"bin", JAVA_HOME: Language::Java.overridable_java_home_env("21")[:JAVA_HOME])
   end
 
   test do
     require "pty"
 
+    (testpath/"data.txt").write <<~EOS
+      Homebrew test
+      Homebrew Spark test
+      Spark test Homebrew
+    EOS
+
     output = ""
     PTY.spawn(bin/"spark-shell") do |r, w, pid|
       w.puts "sc.parallelize(1 to 1000).count()"
-      w.puts "jdk.incubator.foreign.FunctionDescriptor.TRIVIAL_ATTRIBUTE_NAME"
+      w.puts 'sc.textFile("data.txt").filter(line => line.contains("Spark")).first()'
       w.puts ":quit"
       begin
         r.each_line { |line| output += line }
@@ -55,6 +61,6 @@ class ApacheSpark < Formula
     end
 
     assert_match "Long = 1000", output
-    assert_match "String = abi/trivial", output
+    assert_match "String = Homebrew Spark test", output
   end
 end

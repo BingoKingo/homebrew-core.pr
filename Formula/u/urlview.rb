@@ -17,7 +17,10 @@ class Urlview < Formula
     regex(/href=.*?urlview[._-]v?(\d+(?:\.\d+)*[a-z]?(?:-\d+(?:\.\d+)*)?)/i)
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b6e3087bd014b40df019a8836f5f478181677742d8b45636acba03c5a7c956fa"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "b2a05f008302affc74e6cab2a4fc76d212678746d4d167252e21d0a7f50d49e0"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ceb55a63116f409bce3870150eda3310cc48f57813c79e6cb6d8a082e9be2eb0"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "cef111adfd85ccdf8ae30eda094940acc688c8454679b3432c2c8b39e54c32ea"
@@ -34,7 +37,7 @@ class Urlview < Formula
   end
 
   patch do
-    url "http://ftp.debian.org/debian/pool/main/u/urlview/urlview_0.9-23.1.debian.tar.xz"
+    url "https://deb.debian.org/debian/pool/main/u/urlview/urlview_0.9-23.1.debian.tar.xz"
     sha256 "bdb3b403b165ff1fe7d1a7c05275b6c865e4740d9ed46fd9c81495be1fbe2b9f"
     apply "patches/debian.patch",
           "patches/Fix-warning-about-implicit-declaration-of-function.patch",

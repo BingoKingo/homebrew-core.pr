@@ -1,19 +1,19 @@
 class Dissent < Formula
   desc "GTK4 Discord client in Go"
   homepage "https://github.com/diamondburned/dissent"
-  url "https://github.com/diamondburned/dissent/archive/refs/tags/v0.0.34.tar.gz"
-  sha256 "54b437cd2ae63c32cf3fa71d4da327c32de949c68911685031c96752d89b2d1a"
+  url "https://github.com/diamondburned/dissent/archive/refs/tags/v0.0.37.tar.gz"
+  sha256 "b08ae331e5c69759eb7b9511908007fc3e9c7a28208bfa66ffbd84b6f335364a"
   license "GPL-3.0-or-later"
   head "https://github.com/diamondburned/dissent.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "a582ef1d6ea47394a7b6df4d265e629b6e2d26386c871b0e6724f5950be562f6"
-    sha256 cellar: :any,                 arm64_sonoma:  "f79f724350eca02175363cb382661f0cb5381aee973190cdc269c11b5cff1e7c"
-    sha256 cellar: :any,                 arm64_ventura: "4e97c313bbf20d57a379d1642a9023f9a94531893fa61b2954c3f4542ea77e51"
-    sha256 cellar: :any,                 sonoma:        "f26bc3ae384baa5f76c3caeb13048b93cdd3702ed253c56c3bbad593b7b4e7fc"
-    sha256 cellar: :any,                 ventura:       "5159ff05405959dd2c6e70a1cbe5ad062c3258e9cb26143457e02680a112bf7b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a17aa8c1d8575302b2da4ba7b6457f325be94d4d6362536b6e7374f12d98f221"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "00f1c7ed586d1e26fc81daf2beac7d88287a9f7abdbe496ad602acd601d31afb"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "dd1e49a1cba57126c5863d4a2b677b02fd03fdbaf8a1ce6f81474007b9394661"
+    sha256 cellar: :any,                 arm64_sequoia: "b45fd55dfd1e9cd6191fb59cc7cac06c310e90414a44033c916c84fb572da839"
+    sha256 cellar: :any,                 arm64_sonoma:  "9604a42062cae3551df4c41f8c47a79f7d743fd8fe42c870655240652d79c074"
+    sha256 cellar: :any,                 sonoma:        "ea9319c548bdd84c5a00e110f352299d4c3f586fc9a176005e71dd5fdd18ad07"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "09d43aa6bfef20752ac31e2b33ad1737a2e40ee0d57bf3ee214833302e2ad81a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b7cb6a3cebf7c5fcebeed8c7ee8180e59dc465c4e9c4c1595b40de885392caaa"
   end
 
   depends_on "go" => :build
@@ -36,15 +36,25 @@ class Dissent < Formula
     depends_on "harfbuzz"
   end
 
+  on_linux do
+    depends_on "xorg-server" => :test
+  end
+
   def install
+    # Workaround to avoid patchelf corruption when cgo is required
+    if OS.linux? && Hardware::CPU.arm64?
+      ENV["CGO_ENABLED"] = "1"
+      ENV["GO_EXTLINK_ENABLED"] = "1"
+      ENV.append "GOFLAGS", "-buildmode=pie"
+    end
+
     system "go", "build", *std_go_args(ldflags: "-s -w")
   end
 
   test do
-    # Fails in Linux CI with "Failed to open display"
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     # dissent is a GUI application
-    system bin/"dissent", "--help"
+    cmd = "#{bin}/dissent --help"
+    cmd = "#{Formula["xorg-server"].bin}/xvfb-run #{cmd}" if OS.linux? && ENV.exclude?("DISPLAY")
+    assert_match "Show all help options", shell_output(cmd)
   end
 end

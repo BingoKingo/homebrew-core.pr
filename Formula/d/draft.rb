@@ -1,19 +1,18 @@
 class Draft < Formula
   desc "Day 0 tool for getting your app on Kubernetes fast"
   homepage "https://github.com/Azure/draft"
-  url "https://github.com/Azure/draft/archive/refs/tags/v0.17.12.tar.gz"
-  sha256 "3e117e99c479274f8b893b1e1edc359de0b13fc57eb99314c27d9f2d4c67fbb2"
+  url "https://github.com/Azure/draft/archive/refs/tags/v0.17.14.tar.gz"
+  sha256 "515e739765ae855e9a19a6de94d6f2529b11eddb707e1f8ee61867be7cd2b06b"
   license "MIT"
   head "https://github.com/Azure/draft.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cee57fe1d7b7a4a28de43b494526bd95dbcb234c1debe88492a1d7fb930255f4"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "083819bac8681f4bfc564c6a0c460e25133714ed3608d3482dd89cdf6cf10dd0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a3412aec724beb0811b5932087bceeb66cecd3c14e2d432be4d90ceb6a84f8cb"
-    sha256 cellar: :any_skip_relocation, sonoma:        "65a8a47ad936055f0f22c49706662647807f838d67c8c6b27aa34733b60bb185"
-    sha256 cellar: :any_skip_relocation, ventura:       "9c5c9d590fa2610470ef0d024b9ab92d5b69fbbf171b1d9944409c44597cc218"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "13cd95466e9ca07117b5555fa4568f1382a95228dfc2b380c9fb256ce4c2fca7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a62682136071f98d719ce43e7df16d35842284729bb09a1cfeced67dd4f212ba"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d421ee84bd5e9645501210f787dbab90fb8397488f4886b100cfde2ea76056f7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "aa70d3160f12bcfcb745032d00f548e965e2c110ab8ea7b920d55d6724412f53"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "08a267d3651f0c9a3cd68b09f4899adbcbe5dc866091da7d5ac1d1ca16014a91"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ad7fa2b985e02b879f9fa933fcf45d247293bab01ddfbd48cbf48ed7b398014b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a69f7663d99a27e99c89e5bf08c40cd0bd48102a4cf9817d298b95eddde7688b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9389136adfb076edbd6f0b449905aaefc9f0ad5905e10fe2e571e37f18c7a925"
   end
 
   depends_on "go" => :build
@@ -22,7 +21,7 @@ class Draft < Formula
     ldflags = "-s -w -X github.com/Azure/draft/cmd.VERSION=#{version}"
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"draft", "completion")
+    generate_completions_from_executable(bin/"draft", shell_parameter_format: :cobra)
   end
 
   test do

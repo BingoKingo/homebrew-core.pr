@@ -12,13 +12,13 @@ class Mono < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "41128a9161b2880c1ff0da606a970a610255f46426ea970ac505c7f7cc77c817"
-    sha256 arm64_sonoma:  "2207ce97c51add48bdb178771a7e6496da62c099a8a740c976772a4f69ff2cd4"
-    sha256 arm64_ventura: "a98870bf0b93c31318f1edbf9b441c24ecb805ef32e0c2e92654b457dd27346a"
-    sha256 sonoma:        "3a024c3814922097b3b8b08d9a80b7ce81100e1da46b137857507eb0565bd63e"
-    sha256 ventura:       "90b8a3c1bb6caea2325c4fc796890c8d0256a8ffc9058699fdc6917538f187c3"
-    sha256 arm64_linux:   "acbf40ca28dfb5b841e215db980aea60894545ce8104864b78b3e447467dc70e"
-    sha256 x86_64_linux:  "e444b5cd477167205ef6e5fcb7ecddf09781ea3edc2ce53ea0879511fcc2055b"
+    rebuild 2
+    sha256 arm64_tahoe:   "2859f9fc32324373e145969a201a90621c1443001d454d8b0c48ce349356f725"
+    sha256 arm64_sequoia: "ada6e9683f3e1c9c4f0dc372680250252cfca61ac77c1f8f6299ad3b8452cfd8"
+    sha256 arm64_sonoma:  "66ab0b66299f71ab5f37ad15ac0282b7628af0e9daf210df43120118cb4bc8e4"
+    sha256 sonoma:        "42ea1aab95e1cdb360e600e2ef1d0b868a91fa8aba7d0d1e6d437d7388b39d3d"
+    sha256 arm64_linux:   "bf35bf67b10fa9755014d6efb0bbe5b882309675846ffce33bf2c9fc824e7453"
+    sha256 x86_64_linux:  "a2671d691010f3649f86ef822be69121d1bcb7071f1c04b1959d4b05a4ad7a96"
   end
 
   depends_on "autoconf" => :build
@@ -27,11 +27,10 @@ class Mono < Formula
   depends_on "libtool" => :build
   depends_on "pkgconf" => :build
 
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   uses_from_macos "unzip" => :build
   uses_from_macos "krb5"
-  uses_from_macos "zlib"
 
   on_macos do
     if DevelopmentTools.clang_build_version >= 1600
@@ -49,11 +48,12 @@ class Mono < Formula
 
   on_linux do
     depends_on "ca-certificates"
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with "xsd", because: "both install `xsd` binaries"
   conflicts_with cask: "mono-mdk"
-  conflicts_with cask: "homebrew/cask-versions/mono-mdk-for-visual-studio"
+  conflicts_with cask: "mono-mdk-for-visual-studio"
   conflicts_with "chicken", because: "both install `csc`, `csi` binaries"
   conflicts_with "pedump", because: "both install `pedump` binaries"
 
@@ -65,8 +65,6 @@ class Mono < Formula
   link_overwrite "lib/cli"
 
   def install
-    ENV.llvm_clang if DevelopmentTools.clang_build_version >= 1600
-
     # Replace hardcoded /usr/share directory. Paths like /usr/share/.mono,
     # /usr/share/.isolatedstorage, and /usr/share/template are referenced in code.
     inreplace_files = %w[

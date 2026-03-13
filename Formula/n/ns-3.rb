@@ -3,18 +3,17 @@ class Ns3 < Formula
 
   desc "Discrete-event network simulator"
   homepage "https://www.nsnam.org/"
-  url "https://gitlab.com/nsnam/ns-3-dev/-/archive/ns-3.45/ns-3-dev-ns-3.45.tar.gz"
-  sha256 "ea736ba7de4baf0b4fc91cfe2ff74ac3bcd94d4e3ad7055141ddbb30f8d0fc48"
+  url "https://gitlab.com/nsnam/ns-3-dev/-/archive/ns-3.47/ns-3-dev-ns-3.47.tar.gz"
+  sha256 "d74850986ee83ac50269711686d504487dfa5b57a65b90b87f91ae256846fd64"
   license "GPL-2.0-only"
 
   bottle do
-    sha256                               arm64_sequoia: "16a5e5c3ad224f1bfcb9e2820eba18c0b8c173efc439134d6bb0518875623ab6"
-    sha256                               arm64_sonoma:  "62126a9fdd2c9c8add1f3afe4a07711aa54c48200f48f7b675618f0ec1555505"
-    sha256                               arm64_ventura: "57b9753395cea0ab0519dc036783373e5d533fa09957c9f2768a79afabec86e0"
-    sha256                               sonoma:        "2e76d35afec9a8ff072481604cb44fd37a9a1f5d8d97b34927e39c6879482b10"
-    sha256                               ventura:       "adf133d189b26d97496f0c8d44c33438174b4fd521b79eda5a197e3914d87683"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "16990f583b68561b0e280ae2a94601b3eaac8f55f43821f98752c9ac8b003e64"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9789a8feeb782f96928c7b0dab8222333f79f8390859dbf57cae226b35fcc35a"
+    sha256                               arm64_tahoe:   "78d73bf412c0a8d13a3b40ef963537c435cefd92963a187afc303f25a6462956"
+    sha256                               arm64_sequoia: "47a887511315636df875b399517bdd2e2e5a6554cd2b1a7722cfb64411804e26"
+    sha256                               arm64_sonoma:  "5d668b877b36d7d256ca8b21c42ef9398abe91f834f4b80e1d52c24c3cd5de5b"
+    sha256                               sonoma:        "d53671ffe89ae8a854ca123aac06f9c74835f85ec30d29ec1d912025c96cdfef"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c79288402f2b79215f9fcb1110615735925fb5f5f3cf5a4adecd42de7d123581"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3305e0770bc93d496281f9df99984a867ad67f8acfdc58838e07296ee9f007da"
   end
 
   depends_on "boost" => :build
@@ -27,15 +26,20 @@ class Ns3 < Formula
   uses_from_macos "sqlite"
 
   def install
+    # Fix to error: no matching function for call to ‘find...’
+    # Issue ref: https://gitlab.com/nsnam/ns-3-dev/-/issues/1264
+    inreplace "src/core/model/test.cc", "#include <vector>", "#include <vector>\n#include <algorithm>"
+
     # Fix binding's rpath
     linker_flags = ["-Wl,-rpath,#{loader_path}"]
 
-    system "cmake", "-S", ".", "-B", "build",
-                    "-DNS3_GTK3=OFF",
-                    "-DNS3_PYTHON_BINDINGS=OFF",
-                    "-DNS3_MPI=ON",
-                    "-DCMAKE_SHARED_LINKER_FLAGS=#{linker_flags.join(" ")}",
-                    *std_cmake_args
+    args = %W[
+      -DNS3_GTK3=OFF
+      -DNS3_PYTHON_BINDINGS=OFF
+      -DNS3_MPI=ON
+      -DCMAKE_SHARED_LINKER_FLAGS=#{linker_flags.join(" ")}
+    ]
+    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
 

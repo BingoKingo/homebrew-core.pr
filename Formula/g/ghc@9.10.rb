@@ -1,8 +1,8 @@
 class GhcAT910 < Formula
   desc "Glorious Glasgow Haskell Compilation System"
   homepage "https://haskell.org/ghc/"
-  url "https://downloads.haskell.org/~ghc/9.10.1/ghc-9.10.1-src.tar.xz"
-  sha256 "bf386a302d4ee054791ffd51748900f15d71760fd199157922d120cc1f89e2f7"
+  url "https://downloads.haskell.org/~ghc/9.10.3/ghc-9.10.3-src.tar.xz"
+  sha256 "d266864b9e0b7b741abe8c9d6a790d7c01c21cf43a1419839119255878ebc59a"
   # We build bundled copies of libffi and GMP so GHC inherits the licenses
   license all_of: [
     "BSD-3-Clause",
@@ -11,25 +11,28 @@ class GhcAT910 < Formula
   ]
 
   livecheck do
-    url "https://www.haskell.org/ghc/download.html"
-    regex(/href=.*?download[._-]ghc[._-][^"' >]+?\.html[^>]*?>\s*?v?(9\.10(?:\.\d+)+)\s*?</i)
+    url "https://www.haskell.org/ghc/"
+    regex(/href=.*?download[_-]ghc[_-]v?(9[._]10[._]\d+)\.html/i)
+    strategy :page_match do |page, regex|
+      page.scan(regex).map { |match| match[0].tr("_", ".") }
+    end
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "ec9bf60301efe6176480908497e6bbcf760c8933cb6e7e5f37ebb974511503ad"
-    sha256 cellar: :any,                 arm64_sonoma:  "6adabdb9471ae60464844e605ea1b125072093c3545bbb6be58c97e068e4b179"
-    sha256 cellar: :any,                 arm64_ventura: "7873d62ffe85f56f79253dd01207e5d2ff9d517327908d24df0cddf0507a894d"
-    sha256 cellar: :any,                 sonoma:        "468cb6b1d315ee7666776732ff81810ef758fafab73cb9e4625f2eae4eec6b53"
-    sha256 cellar: :any,                 ventura:       "bdb6eb7758ff9cbe21ddd04b686adde591cccf4cc783f61f6dbd748d1d717d51"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "594c60e3a2ad54c4b992c26e122f13b6ebe454583bb9cda468fc3896263feb51"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7094724850adb80577444deb76d26cd865c71f45d6afaae2f92cb9809cf7fd76"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "030bfb684494c0b7f5d13dcf23ad531a529e8ec3ee27ed638a876f41f33fa485"
+    sha256 cellar: :any,                 arm64_sequoia: "772bc175945ab38b79bf88cb7d9d2ba028ae7c6cde1391671540f926f9008ff8"
+    sha256 cellar: :any,                 arm64_sonoma:  "1f2e1c66ef293b3deb66e3a244d9a4b9690dea30b905fa7609528877830fd072"
+    sha256 cellar: :any,                 sonoma:        "84afe9e1dab2daab8a716e161aa580a09b26d62ac7ebbdd4bde7e13ae480c1ca"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "fe1cd3d4f0d246f2c6d8e311a6cde3d6d5a4d99926baecc60565db68520188bd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "af406c8bff2ccb59d78ea00dcdf56250359f2e0a20c2a02f2634c6fc36de3075"
   end
 
   keg_only :versioned_formula
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
-  depends_on "python@3.13" => :build
+  depends_on "python@3.14" => :build
   depends_on "sphinx-doc" => :build
   depends_on "xz" => :build
 
@@ -92,12 +95,6 @@ class GhcAT910 < Formula
     end
   end
 
-  # Backport fix to avoid unnecessary `alex` dependency
-  patch do
-    url "https://gitlab.haskell.org/ghc/ghc/-/commit/aba2c9d4728262cd9a2d711eded9050ac131c6c1.diff"
-    sha256 "152cd2711a7e103bbf0526dc62e51b437e6c60e26149f2cd50ccafaa057316ce"
-  end
-
   def install
     # ENV.cc and ENV.cxx return specific compiler versions on Ubuntu, e.g.
     # gcc-11 and g++-11 on Ubuntu 22.04. Using such values effectively causes
@@ -109,7 +106,12 @@ class GhcAT910 < Formula
     ENV["CC"] = ENV["ac_cv_path_CC"] = OS.linux? ? "cc" : ENV.cc
     ENV["CXX"] = ENV["ac_cv_path_CXX"] = OS.linux? ? "c++" : ENV.cxx
     ENV["LD"] = ENV["MergeObjsCmd"] = "ld"
-    ENV["PYTHON"] = which("python3.13")
+    ENV["PYTHON"] = which("python3.14")
+
+    # Workaround for https://gitlab.haskell.org/ghc/ghc/-/issues/26166
+    if DevelopmentTools.ld64_version >= "1221.4"
+      inreplace "rts/rts.cabal", /("-Wl,-undefined,dynamic_lookup)"/, "\\1,-ld_classic\""
+    end
 
     binary = buildpath/"binary"
     resource("binary").stage do
@@ -143,6 +145,8 @@ class GhcAT910 < Formula
       -j#{ENV.make_jobs}
       --prefix=#{prefix}
       --flavour=release
+      --docs=no-haddocks
+      --docs=no-sphinx-html
       --docs=no-sphinx-pdfs
     ]
     # Let hadrian handle its own parallelization

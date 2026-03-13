@@ -2,10 +2,11 @@ class MariadbConnectorC < Formula
   desc "MariaDB database connector for C applications"
   homepage "https://mariadb.org/download/?tab=connector&prod=connector-c"
   # TODO: Remove backward compatibility library symlinks on breaking version bump
-  url "https://archive.mariadb.org/connector-c-3.4.5/mariadb-connector-c-3.4.5-src.tar.gz"
-  mirror "https://fossies.org/linux/misc/mariadb-connector-c-3.4.5-src.tar.gz/"
-  sha256 "b17e193816cb25c3364c2cc92a0ad3f1d0ad9f0f484dc76b8e7bdb5b50eac1a3"
+  url "https://archive.mariadb.org/connector-c-3.4.8/mariadb-connector-c-3.4.8-src.tar.gz"
+  mirror "https://fossies.org/linux/misc/mariadb-connector-c-3.4.8-src.tar.gz/"
+  sha256 "156aed3b49f857d0ac74fb76f1982968bcbfd8382da3f5b6ae71f616729920d7"
   license "LGPL-2.1-or-later"
+  revision 1
   head "https://github.com/mariadb-corporation/mariadb-connector-c.git", branch: "3.4"
 
   # The REST API may omit the newest major/minor versions unless the
@@ -24,13 +25,12 @@ class MariadbConnectorC < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "0f6e48401540ad5fca8583d02329792604df22c02a9137fec1ab02a4c1955756"
-    sha256 arm64_sonoma:  "b96d0241b6244af7eca596aeb9d158c98d44d2e5f914023ca2ce8557ccbb5f77"
-    sha256 arm64_ventura: "57809abf5e712cf20a0a5e1b9ea2f0f4c989b17b1e325aeff60d490e2c49cc3b"
-    sha256 sonoma:        "7550489b9f9ad42c71427f97b2a9fc2fa1eecb4742b6ac6412b1cf4a9ed03fb6"
-    sha256 ventura:       "17f76960fce3ba3b002d770da9a85eec2a5c97f01d00033db3a141d696047da2"
-    sha256 arm64_linux:   "5166bacc7622caca103cbca8393791b1e61c840e7c0871337532ccbc2971bbce"
-    sha256 x86_64_linux:  "12d8c56920e856f27a2adc9840590b6381e72c286c8bbb99579f45e2cc49671d"
+    sha256 arm64_tahoe:   "01d614467287c61b78cb78e9234d1c445dbd79beb4b9c12bf99ed0beb1a01535"
+    sha256 arm64_sequoia: "0970698d342c0c98b3a4efeb408e764d4ca12d6c015d2cd41e0f1700bab34bdc"
+    sha256 arm64_sonoma:  "78e4cc822105fd0699d3913dedb784b5d30596a0ee140932071933afd1b1a338"
+    sha256 sonoma:        "79501ef30e2ab77c3894897428269d33b80a9cb1c7a9ee4df3a119ecc508473a"
+    sha256 arm64_linux:   "b3242cc136211ae92f6559f959e94ff963fa6822900784c0f98c7893e30cf01d"
+    sha256 x86_64_linux:  "9a2b2d89b014881733d2ee25d06a4ce7f0c17bcdb159059036ed068784a6d415"
   end
 
   keg_only "it conflicts with mariadb"
@@ -41,7 +41,10 @@ class MariadbConnectorC < Formula
 
   uses_from_macos "curl"
   uses_from_macos "krb5"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     rm_r "external"

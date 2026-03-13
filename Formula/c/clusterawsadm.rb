@@ -2,8 +2,8 @@ class Clusterawsadm < Formula
   desc "Home for bootstrapping, AMI, EKS, and other helpers in Cluster API Provider AWS"
   homepage "https://cluster-api-aws.sigs.k8s.io/clusterawsadm/clusterawsadm.html"
   url "https://github.com/kubernetes-sigs/cluster-api-provider-aws.git",
-      tag:      "v2.8.3",
-      revision: "3cced5006823e4c4aa21d427cb3be3e8d99a1566"
+      tag:      "v2.10.2",
+      revision: "999ac9ad1cf483469083fd599ab3ce89e1f6fbe4"
   license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/cluster-api-provider-aws.git", branch: "main"
 
@@ -13,12 +13,12 @@ class Clusterawsadm < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "41bb8e909c8aba446a6ae586e9afe0e6337118ff51f2f8a289a7007b7b851257"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b62396ddfb38bb7f3b004e94f7c7131431fbf4095c28196a38016808e49fdab5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1f1ce88ad3ceecc5e93f64c4176e80422046b4fb5befedb368d70e90ee39c04d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "104c8d48635f4d3b0a15b4976006ec9c0dd8b1259343e873b3deba597c868d42"
-    sha256 cellar: :any_skip_relocation, ventura:       "fb5f8dc2d32f63595d39bb220d2af0314925d5984786cb188ebf8d517e0175a3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f221c6d02a6003f93f080a9b6711654a37d7200a1369e9a5760eaac73ffa5053"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f92c24e53d1661fd010e6199291e737c8e1fa72183e8ab95b3722eb5eb291236"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0120ebc49a46c46f130ec0a07ad0be052bc01c2ea8a5722b53cad2226602472a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1eefc085a05472bfbcfd20003a884a2ef5b94cd2a9002f11743ff72db0d9a5ac"
+    sha256 cellar: :any_skip_relocation, sonoma:        "8251e5026c5f72d32f0f75014b82d28e91535990ec7c57d00842ac7de6643624"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5a941298e0db7c32bdca8d4a713465acc2b07ecbe40ae3ea276bb9f9555f2321"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3bcab380e8e32a64350f9e7c1a55e95da25a42a4a59e6da9708807a080550655"
   end
 
   depends_on "go" => :build
@@ -27,7 +27,7 @@ class Clusterawsadm < Formula
     system "make", "clusterawsadm"
     bin.install Dir["bin/*"]
 
-    generate_completions_from_executable(bin/"clusterawsadm", "completion")
+    generate_completions_from_executable(bin/"clusterawsadm", shell_parameter_format: :cobra)
   end
 
   test do

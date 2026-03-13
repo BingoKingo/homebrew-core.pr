@@ -1,18 +1,18 @@
 class Undercutf1 < Formula
   desc "F1 Live Timing TUI for all F1 sessions with variable delay to sync to your TV"
   homepage "https://github.com/JustAman62/undercut-f1"
-  url "https://github.com/JustAman62/undercut-f1/archive/refs/tags/v3.1.90.tar.gz"
-  sha256 "cec4089f0f3185de5d851777f7b4805fa0df6c61edd1dccb4ef4aad0a2b5cfd1"
+  url "https://github.com/JustAman62/undercut-f1/archive/refs/tags/v4.0.51.tar.gz"
+  sha256 "6a184d20b7b702460fb98235117458100975a98a779c65a7f1e1c1268001fabd"
   license "GPL-3.0-only"
   head "https://github.com/JustAman62/undercut-f1.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "173621d296459284e8711ada683c8243f0ba1a5bf9ae4f11b1e3c1f2029239b0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "87303fe03f08e9ef9c29b86a8a58548a5d56c2d75c1358de67d6c43a3c8d4acc"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e11408bcc3ddfaef0f75f42f570eb995537569a53364c863721a8a61273d8d15"
-    sha256 cellar: :any_skip_relocation, ventura:       "a8d3c4b16c2111d04d1ea791baa2ec90c21bee67714bdb0a5da9e542c6ec8247"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c034ce27e4ee20981ee12aa8738ed40b7da0391938cc44f690e2155191bf0635"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "105feeb71fecf1dd3ccc7371f0b35e75dc337e41f0a64b444787716721fa9fcb"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "4b7a5f5b53e0c5553c84fe4490cef6ccdafc55145665f0e87645087fe6850c21"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3b516d1b359779eac22910c1f2326c2fd5eb224abe3bbadd1a5e188e7089e6de"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "26674eee940ac4ab72d0a6f30d8e732cf1cc110905eb3ce5fd9cb13515a0c938"
+    sha256 cellar: :any_skip_relocation, sonoma:        "3b49db28c4dcde729a4bbb4e09bfff9caebf594b3dc3fb834c0fef708c3c3a9c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0cf95b851d59f25d78028d86c58e41d9142c6b42aebae3e0c4a7854e091968bb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f4376ea7d47c46563d49a5110bc4e653019a1c305c500093c9c20e39d2363d4f"
   end
 
   depends_on "dotnet"
@@ -36,6 +36,8 @@ class Undercutf1 < Formula
       -p:EnableCompressionInSingleFile=false
       -p:DebugType=None
       -p:PublicRelease=true
+      -p:PublishTrimmed=false
+      -p:PublishAot=false
     ]
 
     # Version override is not needed if cloning from HEAD
@@ -49,7 +51,7 @@ class Undercutf1 < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/undercutf1 --version")
 
-    output = shell_output("#{bin}/undercutf1 import 2025")
+    output = shell_output("#{bin}/undercutf1 import 2026")
     assert_match "Available Meetings", output
   end
 end

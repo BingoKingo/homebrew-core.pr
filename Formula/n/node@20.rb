@@ -1,8 +1,8 @@
 class NodeAT20 < Formula
-  desc "Platform built on V8 to build network applications"
+  desc "Open-source, cross-platform JavaScript runtime environment"
   homepage "https://nodejs.org/"
-  url "https://nodejs.org/dist/v20.19.2/node-v20.19.2.tar.xz"
-  sha256 "4a7ff611d5180f4e420204fa6f22f9f9deb2ac5e98619dd9a4de87edf5b03b6e"
+  url "https://nodejs.org/dist/v20.20.1/node-v20.20.1.tar.xz"
+  sha256 "e540efdd6750f838e867daf9ab9d90ea195423f915613d05d87105f4d2ecd186"
   license "MIT"
 
   livecheck do
@@ -11,13 +11,12 @@ class NodeAT20 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "be55f8d8c39ef95fc8679c5134e220170a1018b8260d4e0ef094bc1a2b4a9f75"
-    sha256 arm64_sonoma:  "6da90926c6e9c66a8a7cf036fac648b725885e9df5c4555138db694035fecb8f"
-    sha256 arm64_ventura: "a8868e101395048bb17d35f6c70d61876e79de376b09bd6c3008c89caebe9619"
-    sha256 sonoma:        "4f0d2148422fa01d70d1128f956625b75f2b6fb6e7e5e3fb51e32c982f5410cf"
-    sha256 ventura:       "d850934c12a4c34c7219346a875d8038f55484ad0630a81d59fd1142b4032235"
-    sha256 arm64_linux:   "7c0fddc0126df790140b7851ca49982e843c4fb94b35642b10cd08b1b16bdc17"
-    sha256 x86_64_linux:  "d70ddaccae20469adb9fbbd4f02f96f8d6e1fa8230f0199672c2e3204146c490"
+    sha256 arm64_tahoe:   "2a91f49bf9f6befbf090ccc2c684a78ff1fcfc9ca4ab5e2121817d55f831ea99"
+    sha256 arm64_sequoia: "e17ea128372d2b6ad829189f24e3c01b426438f2e014a2788ff47e4e0711f248"
+    sha256 arm64_sonoma:  "075a26247dc555127d4dd88947e5a2b0507016aa21649559408fb2f2a9cc180e"
+    sha256 sonoma:        "d995f19302d32c903a25b3148bc015456e7ba5136e5e174c0a1f7059dde9a0c2"
+    sha256 arm64_linux:   "d053ea2a3284cd0dfa5f44d8e46eede89293f27f291574674468ef45fde5c6d4"
+    sha256 x86_64_linux:  "bfea9c8923c714f103e854c639c7f85a00a7e7f83ed5f9137d22d7fc35d549ab"
   end
 
   keg_only :versioned_formula
@@ -30,16 +29,19 @@ class NodeAT20 < Formula
   depends_on "python@3.13" => :build
   depends_on "brotli"
   depends_on "c-ares"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "libnghttp2"
   depends_on "libuv"
   depends_on "openssl@3"
 
-  uses_from_macos "python", since: :catalina
-  uses_from_macos "zlib"
+  uses_from_macos "python"
 
   on_macos do
-    depends_on "llvm" => [:build, :test] if DevelopmentTools.clang_build_version <= 1100
+    depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1100
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   fails_with :clang do
@@ -49,23 +51,7 @@ class NodeAT20 < Formula
     EOS
   end
 
-  # Fix build with Xcode 16.3.
-  patch do
-    url "https://github.com/Bo98/node/commit/3b5eb14cad3a493e99f84ca45871bd37570cae3d.patch?full_index=1"
-    sha256 "3a110c30ec63c4e5afbb48f27922a69c40d3939db5a5b6b20d40660f996ae27d"
-  end
-  patch do
-    url "https://github.com/Bo98/node/commit/e2ab76c1aeceaf866b8c5053cf71f199706d621d.patch?full_index=1"
-    sha256 "b306c7cfa910e025b1a23fda1da8f8613310a2d7b5c575d3718529db8d9e7fdd"
-  end
-  patch do
-    url "https://github.com/Bo98/node/commit/a56d782971c30164545e76a97b07ade373a3a565.patch?full_index=1"
-    sha256 "86af038fca81170d41e7c324864cc74fb098dbea6b8d28273b6b50ca53415979"
-  end
-
   def install
-    ENV.llvm_clang if OS.mac? && (DevelopmentTools.clang_build_version <= 1100)
-
     # The new linker crashed during LTO due to high memory usage.
     ENV.append "LDFLAGS", "-Wl,-ld_classic" if DevelopmentTools.clang_build_version >= 1500
 
@@ -96,9 +82,8 @@ class NodeAT20 < Formula
 
     # Enabling LTO errors on Linux with:
     # terminate called after throwing an instance of 'std::out_of_range'
-    # Pre-Catalina macOS also can't build with LTO
     # LTO is unpleasant if you have to build from source.
-    args << "--enable-lto" if OS.mac? && MacOS.version >= :catalina && build.bottle?
+    args << "--enable-lto" if OS.mac? && build.bottle?
 
     system "./configure", *args
     system "make", "install"
@@ -109,9 +94,6 @@ class NodeAT20 < Formula
   end
 
   test do
-    # Make sure Mojave does not have `CC=llvm_clang`.
-    ENV.clang if OS.mac?
-
     path = testpath/"test.js"
     path.write "console.log('hello');"
 

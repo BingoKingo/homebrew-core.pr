@@ -1,19 +1,18 @@
 class KubeLinter < Formula
   desc "Static analysis tool for Kubernetes YAML files and Helm charts"
   homepage "https://github.com/stackrox/kube-linter"
-  url "https://github.com/stackrox/kube-linter/archive/refs/tags/v0.7.2.tar.gz"
-  sha256 "e6718eef1f964cd9ef82144deb79db4c4bf0907115613f77091951cbabd4e8bb"
+  url "https://github.com/stackrox/kube-linter/archive/refs/tags/v0.8.3.tar.gz"
+  sha256 "e548670732ec47e34308abc96755c2cffeeaa1d942222167669709d612caa7d1"
   license "Apache-2.0"
-  head "https://github.com/stackrox/kube-linter.git", branch: "master"
+  head "https://github.com/stackrox/kube-linter.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "87b59ecf25a7798396243cea61f112484c033d51b3a0f6f114504caa0de38f8b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "87b59ecf25a7798396243cea61f112484c033d51b3a0f6f114504caa0de38f8b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "87b59ecf25a7798396243cea61f112484c033d51b3a0f6f114504caa0de38f8b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4188d431207630a63971c36d03d615f5e223bf22278aaa607c8b706c4454c818"
-    sha256 cellar: :any_skip_relocation, ventura:       "4188d431207630a63971c36d03d615f5e223bf22278aaa607c8b706c4454c818"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9af5b3f787bfc216c4a89f846d4c3cea9dba854e1032895e090113d7a1f9c7ff"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9664b67c1bbdf51da6e5fc9c5d3350211f3893a86586e8cfee6a5260933e6565"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "4b16ae96700ced1179dc45c0c136a4cfeba5a5651f6e2ea38ac8886f8410b986"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4b16ae96700ced1179dc45c0c136a4cfeba5a5651f6e2ea38ac8886f8410b986"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4b16ae96700ced1179dc45c0c136a4cfeba5a5651f6e2ea38ac8886f8410b986"
+    sha256 cellar: :any_skip_relocation, sonoma:        "4ed1130dc09dfcebb9b263d146b4b6629b533900e4f206206c659e97ea9d79b5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "470534c3ce9782cb5a59df64177e236a7b89e61951230408e80f6ab27000391e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "743b7bd5e1afb0c95f0626f45bcaecdd4c5f1f48908ece1fdff2cfd094e30421"
   end
 
   depends_on "go" => :build
@@ -23,7 +22,7 @@ class KubeLinter < Formula
     ldflags = "-s -w -X golang.stackrox.io/kube-linter/internal/version.version=#{version}"
     system "go", "build", *std_go_args(ldflags:), "./cmd/kube-linter"
 
-    generate_completions_from_executable(bin/"kube-linter", "completion")
+    generate_completions_from_executable(bin/"kube-linter", shell_parameter_format: :cobra)
   end
 
   test do

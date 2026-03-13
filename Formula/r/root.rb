@@ -1,8 +1,8 @@
 class Root < Formula
   desc "Analyzing petabytes of data, scientifically"
   homepage "https://root.cern"
-  url "https://root.cern/download/root_v6.36.00.source.tar.gz"
-  sha256 "94afc8def92842679a130a27521be66e2abdaa37620888e61d828a43fc4b01a2"
+  url "https://root.cern/download/root_v6.38.04.source.tar.gz"
+  sha256 "1ca561d03b3addae00cb76af57f8c75d3c229e8bd6939bdd408ec33fda9d3487"
   license "LGPL-2.1-or-later"
   head "https://github.com/root-project/root.git", branch: "master"
 
@@ -15,13 +15,12 @@ class Root < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "6acf19d37623fdaf605ac510467c5e6154c48497511f8868a638ef468d30d425"
-    sha256 arm64_sonoma:  "fe907ced2705016bc6e7184d14e2ae14a86ced6cd968fd64451d9eb92bc81563"
-    sha256 arm64_ventura: "2f0d6136bca3a216dad49bce925896518629a92acc001bb76d9f7a98ccb4ee91"
-    sha256 sonoma:        "bd6de4cdd4e0e191d92707faad723dd9a29dea7ad831c13f185f5d8ae1af9c15"
-    sha256 ventura:       "f4f89934bbd31c04ed0c7b6c7db37f66b60d93b9452cd1383d77fcff331d11f6"
-    sha256 arm64_linux:   "c8fcb64265097c17ca1fec59366c1bb05742f7348683d516d021fe2f5ce365fc"
-    sha256 x86_64_linux:  "77d0bd95feebf10783b6f1b356c001539f4bd95c01a79911c558ad02ea08e52d"
+    sha256 arm64_tahoe:   "f1bb8f99d729f11310bc5cc9efdfb0d6e2d97b26e42e4514070731216eee7a94"
+    sha256 arm64_sequoia: "7e43d1c569a0751edf1c7669e5127a7285996f06dce9cecdb8db3d148c85e57a"
+    sha256 arm64_sonoma:  "be388704e412ef6f67b2bc5921de0b9a0220a0884dc8689e703e723eb569880c"
+    sha256 sonoma:        "5b7dab555029908cffc40197f1dc54cef63d13970fd15ad5173251fe9ef16e29"
+    sha256 arm64_linux:   "fedfb115cea6af22b6a061d292f1768d1e6bea0b3d20d62ee12ba58c44332dd6"
+    sha256 x86_64_linux:  "5a435a0a2a8603ff2eac5241bb849d22cf5983c5efd724f861d278749cf94889"
   end
 
   depends_on "cmake" => :build
@@ -42,14 +41,12 @@ class Root < Formula
   depends_on "libpng"
   depends_on "libtiff"
   depends_on "lz4"
-  depends_on "mariadb-connector-c"
-  depends_on "nlohmann-json"
+  depends_on "nlohmann-json" => :no_linkage
   depends_on "numpy" # for tmva
   depends_on "openblas"
   depends_on "openssl@3"
-  depends_on "pcre"
   depends_on "pcre2"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
   depends_on "sqlite"
   depends_on "tbb"
   depends_on "xrootd"
@@ -60,7 +57,6 @@ class Root < Formula
   uses_from_macos "libxcrypt"
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_ventura :or_older do
     depends_on :xcode
@@ -73,18 +69,16 @@ class Root < Formula
     depends_on "libxpm"
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "zlib-ng-compat"
   end
 
   skip_clean "bin"
 
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install
-    # Workaround for CMake 4 due to VDT, https://github.com/dpiparo/vdt/blob/master/CMakeLists.txt
-    ENV["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5"
-
     # Skip modification of CLING_OSX_SYSROOT to the unversioned SDK path
     # Related: https://github.com/Homebrew/homebrew-core/issues/135714
     # Related: https://github.com/root-project/cling/issues/457
@@ -147,7 +141,6 @@ class Root < Formula
       -Dgnuinstall=ON
       -Dimt=ON
       -Dmathmore=ON
-      -Dmysql=ON
       -Docaml=OFF
       -Doracle=OFF
       -Dpgsql=OFF

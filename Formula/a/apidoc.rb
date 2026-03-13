@@ -20,12 +20,13 @@ class Apidoc < Formula
   end
 
   deprecate! date: "2024-07-16", because: :repo_archived
+  disable! date: "2025-07-17", because: :repo_archived
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

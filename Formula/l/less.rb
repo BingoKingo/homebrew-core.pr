@@ -1,8 +1,8 @@
 class Less < Formula
   desc "Pager program similar to more"
   homepage "https://www.greenwoodsoftware.com/less/index.html"
-  url "https://www.greenwoodsoftware.com/less/less-678.tar.gz"
-  sha256 "4c085364f3028290d34647df27f56018c365dc4c0092ab7de74ed8fe89014fe7"
+  url "https://www.greenwoodsoftware.com/less/less-692.tar.gz"
+  sha256 "61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -11,13 +11,12 @@ class Less < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "502b8720691e823180290da162df33d6a3ee3276d32feb267c7e7dfa3b577668"
-    sha256 cellar: :any,                 arm64_sonoma:  "3bbfb91b9a141230356b458272fe22205d6df4b6bf93029ecc295d3ec3df2adf"
-    sha256 cellar: :any,                 arm64_ventura: "451515a2c9a3004ed57982a65210e534fbf17ee35af14df5832b781386ec171f"
-    sha256 cellar: :any,                 sonoma:        "f912635990a5ae7ea078abc98ca51ade4ea8aa9091713f9e3bcf3739274ea174"
-    sha256 cellar: :any,                 ventura:       "3ebf4828bee4254a689cd89251ac7fcf73cbc6c34eb1ced8ffdd9e4cec96eb2c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8edfc61f568168f8e20c92ef83966f6d64f04d8723e36ec574072f1106fc6614"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "32e65477589dd717159c9fa72dd9911fb5bdc492729639dec1e2c63dd5170be9"
+    sha256 cellar: :any,                 arm64_tahoe:   "b722c9aa81a00fae94f5db080f405fe169691d739adfe87773538f911b4f7f6b"
+    sha256 cellar: :any,                 arm64_sequoia: "49025d79f5e34f8d10a247b84c108113473d7bc4286f3cedcfdf527f6d7b006a"
+    sha256 cellar: :any,                 arm64_sonoma:  "d3ad99fc4a0d87f3b9d8fbb6ae632f9b346edcade504df137b237c8e2feaccbb"
+    sha256 cellar: :any,                 sonoma:        "11411cbab4a546b0017adcc73aad460a36698512f8c7db96e7a483667cf8ccf8"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7aa23eb672f228b03513584c06a12a182bfb31bc48ba23bda1d46b3e8c7eaba0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f4ebb640487e5fde5b887326fe22373eafc0af64bbc9da3ad9d03a5d65c8e92b"
   end
 
   head do

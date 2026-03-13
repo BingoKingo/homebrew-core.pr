@@ -1,9 +1,9 @@
 class ArmNoneEabiGcc < Formula
   desc "GNU compiler collection for arm-none-eabi"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  sha256 "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea"
+  url "https://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  sha256 "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
   livecheck do
@@ -11,13 +11,13 @@ class ArmNoneEabiGcc < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "950ae88a2bb16979dfa0139e7476eb2fc80bc692ad880bbf092d0d6bcf0cc3a9"
-    sha256 arm64_sonoma:  "47b7f8ed2c0cd6acc7ee8d1366a52a607a632e80a477cd6da44b10e7cf5a8fcd"
-    sha256 arm64_ventura: "05bc9cc7feae5565e586d4325c7bc6ca13dee9b19c1bcf4f5ba4f8a818156154"
-    sha256 sonoma:        "8102ba85c7ceb1e6f605148f68669bd81236a82b08606a6da7dd2d69ec931295"
-    sha256 ventura:       "b8e540b02d053d17c6e1352e51fb8aa5e54b11d0058ae8a6ef7a8806a1e09614"
-    sha256 arm64_linux:   "cb6c669ab813b488687953d87444b9058865ab06104bf8414a6ad5658058618d"
-    sha256 x86_64_linux:  "d3de23e3829393072a929e402287b15ad48bf56962ebbdf57a933d288781e6da"
+    rebuild 1
+    sha256 arm64_tahoe:   "4e862be029fd2e27e1d2614a54581846fdf3cf1f55e4d3e75eb1d097ffaafc39"
+    sha256 arm64_sequoia: "8b0034c3bc3e3ec1d1e7b3d4da1fc9208f9ddcaf182bf95a85dc921ad394b2ab"
+    sha256 arm64_sonoma:  "7586b52ffdc271857080b690184c269975c0d885c8688653c01c063e321fa02d"
+    sha256 sonoma:        "4a64941cdc4bc7110a72969d07e89e17944392073a1dce1a90ab31fe052303ad"
+    sha256 arm64_linux:   "a52b2e1db4a395276e704677d2dd7f164ab9fd277ad2353b8f117d45ca917a6e"
+    sha256 x86_64_linux:  "ef7aec12914835857f8ade168373e744061017468638dab8275ab7a28a3764b8"
   end
 
   depends_on "arm-none-eabi-binutils"
@@ -27,7 +27,9 @@ class ArmNoneEabiGcc < Formula
   depends_on "mpfr"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     target = "arm-none-eabi"

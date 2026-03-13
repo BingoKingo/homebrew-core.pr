@@ -1,8 +1,8 @@
 class Grafana < Formula
   desc "Gorgeous metric visualizations and dashboards for timeseries databases"
   homepage "https://grafana.com"
-  url "https://github.com/grafana/grafana/archive/refs/tags/v12.0.1.tar.gz"
-  sha256 "50d6d65c2538c7533cb09722cf721a79769ac1c9bda03e951db614aaba5395d8"
+  url "https://github.com/grafana/grafana/archive/refs/tags/v12.4.1.tar.gz"
+  sha256 "4d3fa7dc9160aa427602b798273016d745a82a536d67d941de720d2a906801f6"
   license "AGPL-3.0-only"
   head "https://github.com/grafana/grafana.git", branch: "main"
 
@@ -12,48 +12,49 @@ class Grafana < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4b268313fdaca3dbdc653dbef48ffe6c2d8c414cbe8da59b99125207bd7cc812"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "887b896a45fa7693b83dd07e500aab1c18285b03740aee40fc3fd6a2fb2a110e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "42bb4042c3974fb988767950e51ecaebc871e050d80ab323f7e82f006248bbbc"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a6a395b95a51046977e446741b84615fc717e79935892b6a4fa5495a05a0a109"
-    sha256 cellar: :any_skip_relocation, ventura:       "4665791510bffcf802d99768729208a4fbc25f68adee4c52484bac7f9ba014e7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "49193a3d537ac311ae17a860ffce05e8dcf98092a90e40fc5331358e60f1a53e"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "800ef7c7a3dce22996a6dc0ce686228427313e492694480fcc3b6988b3219b40"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7d040cf1d8944022331c0cb80299f6f11b2011d16a360e6781411360f20bb9c8"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "edb500a29c0e55747069e420a9b5aabe7d4de83791cca28c53a2fb7a822e28c8"
+    sha256 cellar: :any_skip_relocation, sonoma:        "18ee074275e92a1907ac9fc80c3f4a60e5feec37ad2835296145ff5bff5f7318"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "bac38afa478fe7444fba727e9610b8b50299e7ec082d52b2a03cb4f57117c000"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "95050e1723b3851a0648ff9142f024a573b53a575fab46ee993b947b651c8ee0"
   end
 
   depends_on "go" => :build
-  depends_on "node@22" => :build
+  depends_on "node" => :build
   depends_on "yarn" => :build
 
-  uses_from_macos "python" => :build, since: :catalina
-  uses_from_macos "zlib"
+  uses_from_macos "python" => :build
 
   on_linux do
+    # Workaround for old `node-gyp` that needs distutils.
+    # TODO: Remove when `node-gyp` is v10+
+    depends_on "python-setuptools" => :build
     depends_on "fontconfig"
     depends_on "freetype"
+    depends_on "zlib-ng-compat"
   end
 
   def install
+    ENV["COMMIT_SHA"] = tap.user
     ENV["NODE_OPTIONS"] = "--max-old-space-size=8000"
+    ENV["npm_config_build_from_source"] = "true"
 
     system "make", "gen-go"
     system "go", "run", "build.go", "build"
 
-    system "yarn", "install"
+    system "yarn", "install", "--immutable"
     system "yarn", "build"
 
     os = OS.kernel_name.downcase
     arch = Hardware::CPU.intel? ? "amd64" : Hardware::CPU.arch.to_s
-    bin.install "bin/#{os}-#{arch}/grafana"
-    bin.install "bin/#{os}-#{arch}/grafana-cli"
-    bin.install "bin/#{os}-#{arch}/grafana-server"
+    bin.install buildpath.glob("bin/#{os}-#{arch}/grafana{,-cli,-server}")
 
     cp "conf/sample.ini", "conf/grafana.ini.example"
     pkgetc.install "conf/sample.ini" => "grafana.ini"
     pkgetc.install "conf/grafana.ini.example"
     pkgshare.install "conf", "public", "tools"
-  end
 
-  def post_install
     (var/"log/grafana").mkpath
     (var/"lib/grafana/plugins").mkpath
   end
@@ -73,46 +74,15 @@ class Grafana < Formula
   end
 
   test do
-    require "pty"
-    require "timeout"
+    assert_match version.to_s, shell_output("#{bin}/grafana --version")
+    assert_match version.to_s, shell_output("#{bin}/grafana server --version")
 
-    # first test
-    system bin/"grafana", "server", "-v"
-
-    # avoid stepping on anything that may be present in this directory
-    tdir = File.join(Dir.pwd, "grafana-test")
-    Dir.mkdir(tdir)
-    logdir = File.join(tdir, "log")
-    datadir = File.join(tdir, "data")
-    plugdir = File.join(tdir, "plugins")
-    [logdir, datadir, plugdir].each do |d|
-      Dir.mkdir(d)
-    end
-    Dir.chdir(pkgshare)
-
-    res = PTY.spawn(bin/"grafana", "server",
-      "cfg:default.paths.logs=#{logdir}",
-      "cfg:default.paths.data=#{datadir}",
-      "cfg:default.paths.plugins=#{plugdir}",
-      "cfg:default.server.http_port=50100")
-    r = res[0]
-    w = res[1]
-    pid = res[2]
-
-    listening = Timeout.timeout(10) do
-      li = false
-      r.each do |l|
-        if l.include?("HTTP Server Listen")
-          li = true
-          break
-        end
-      end
-      li
-    end
-
+    cp_r pkgshare.children, testpath
+    port = free_port
+    pid = spawn bin/"grafana", "server", "cfg:server.http_port=#{port}", "cfg:log.mode=file"
+    sleep 15
+    assert_equal "Ok", shell_output("curl --silent localhost:#{port}/healthz")
+  ensure
     Process.kill("TERM", pid)
-    w.close
-    r.close
-    listening
   end
 end

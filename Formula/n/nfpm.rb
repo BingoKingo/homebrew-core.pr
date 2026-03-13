@@ -1,18 +1,18 @@
 class Nfpm < Formula
   desc "Simple deb and rpm packager"
   homepage "https://nfpm.goreleaser.com/"
-  url "https://github.com/goreleaser/nfpm/archive/refs/tags/v2.42.1.tar.gz"
-  sha256 "02188194076de423a5e496dfb8a09d4da000e9c812ed30310a1c8bf7dc6c7ee3"
+  url "https://github.com/goreleaser/nfpm/archive/refs/tags/v2.45.1.tar.gz"
+  sha256 "ff829107b1c96014fb910ea6d2260623ac98f16603d894e037fbd10e2fef6aea"
   license "MIT"
-  head "https://github.com/goreleaser/nfpm.git", branch: "master"
+  head "https://github.com/goreleaser/nfpm.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d52862fabd2d42630ba0b1acdf518db4e425fc61c601cfb2dd68701524cba266"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d52862fabd2d42630ba0b1acdf518db4e425fc61c601cfb2dd68701524cba266"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d52862fabd2d42630ba0b1acdf518db4e425fc61c601cfb2dd68701524cba266"
-    sha256 cellar: :any_skip_relocation, sonoma:        "e4311f4ba1a9f7cce4b1cac8ac69feca786b408a3db7d58a896ab06bea6432c0"
-    sha256 cellar: :any_skip_relocation, ventura:       "e4311f4ba1a9f7cce4b1cac8ac69feca786b408a3db7d58a896ab06bea6432c0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7f8cba097ac5d4aaeebad337943a72f50578c8192496e2a9a535cacc6c0bd03b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7d817431c2b75b908320f45b02e044f2f386b04053d243ea55ea9cf304558d8a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7d817431c2b75b908320f45b02e044f2f386b04053d243ea55ea9cf304558d8a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7d817431c2b75b908320f45b02e044f2f386b04053d243ea55ea9cf304558d8a"
+    sha256 cellar: :any_skip_relocation, sonoma:        "aaa3ac765e84596de7c8f34372a39fc2718e3e76b29fbc3cf9283e55fdb5318e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f98f17e1fba29e41ccf1c2c947e8c9945871aebca12dbe7b4c6398c39c521560"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8320974e4c68099c9529a57a07d30eec33ecb7043c6f8cd68db1c0c7b942eee2"
   end
 
   depends_on "go" => :build
@@ -20,7 +20,7 @@ class Nfpm < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=v#{version}"), "./cmd/nfpm"
 
-    generate_completions_from_executable(bin/"nfpm", "completion")
+    generate_completions_from_executable(bin/"nfpm", shell_parameter_format: :cobra)
   end
 
   test do

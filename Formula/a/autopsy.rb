@@ -16,12 +16,12 @@ class Autopsy < Formula
     sha256 cellar: :any_skip_relocation, monterey:       "cec5acab1fcc5e79f07962e85ed00af7696fb5db6d7e1bce164d8f21bf3b614d"
     sha256 cellar: :any_skip_relocation, big_sur:        "cec5acab1fcc5e79f07962e85ed00af7696fb5db6d7e1bce164d8f21bf3b614d"
     sha256 cellar: :any_skip_relocation, catalina:       "cec5acab1fcc5e79f07962e85ed00af7696fb5db6d7e1bce164d8f21bf3b614d"
-    sha256 cellar: :any_skip_relocation, mojave:         "cec5acab1fcc5e79f07962e85ed00af7696fb5db6d7e1bce164d8f21bf3b614d"
     sha256 cellar: :any_skip_relocation, x86_64_linux:   "5e1ce8b5147639d7737a4013030ee2a059d1b8dd4657554e08e9423a9a6b2f66"
   end
 
   # Installs prebuilt binaries, broken on arm: https://github.com/Homebrew/homebrew-core/issues/175053
   deprecate! date: "2024-06-22", because: :does_not_build
+  disable! date: "2025-06-23", because: :does_not_build
 
   depends_on "sleuthkit"
 
@@ -92,7 +92,7 @@ class Autopsy < Formula
     mv "lib", "libexec"
     prefix.install %w[global.css help libexec pict]
     prefix.install Dir["*.txt"]
-    (prefix+"conf.pl").write autcfg
+    (prefix/"conf.pl").write autcfg
     inreplace "base/autopsy.base", "/tmp/autopsy", prefix
     inreplace "base/autopsy.base", "lib/define.pl", "#{libexec}/define.pl"
     bin.install "base/autopsy.base" => "autopsy"

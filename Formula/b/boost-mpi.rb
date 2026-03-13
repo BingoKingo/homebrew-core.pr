@@ -1,8 +1,8 @@
 class BoostMpi < Formula
   desc "C++ library for C++/MPI interoperability"
   homepage "https://www.boost.org/"
-  url "https://github.com/boostorg/boost/releases/download/boost-1.88.0/boost-1.88.0-b2-nodocs.tar.xz"
-  sha256 "ad9ce2c91bc0977a7adc92d51558f3b9c53596bb88246a280175ebb475da1762"
+  url "https://github.com/boostorg/boost/releases/download/boost-1.90.0/boost-1.90.0-b2-nodocs.tar.xz"
+  sha256 "9e6bee9ab529fb2b0733049692d57d10a72202af085e553539a05b4204211a6f"
   license "BSL-1.0"
   head "https://github.com/boostorg/boost.git", branch: "master"
 
@@ -11,13 +11,12 @@ class BoostMpi < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "c214ac20967386a38a1de487e0c20bbdc466e459065b970887eaf35371e54402"
-    sha256                               arm64_sonoma:  "ed980f9505b4403dc52d9a091f07cc0e118f4185dc1d9ef17cd2b8ae542a5429"
-    sha256                               arm64_ventura: "98cc35fc6851d822f0c026e86131d97e83575722063c5552b814406331f8bf14"
-    sha256                               sonoma:        "2fdef3897c4ac951086aeef0f1701b4896dc1781bca6c596096d52bb6121e5c3"
-    sha256                               ventura:       "50b09f6f2800a5044c57074f945dd7b9af1424e165e3911e2f9036e2741d9348"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a5186de020b7743b4a0cdc320fe447e28b37b80a945c4c693868c4653c51ce42"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5f97a0a0b5d9388d97948a3a2c02005b935770f968de76d7a2ce626ab5f57888"
+    sha256                               arm64_tahoe:   "670dd9f317690572c55e29b35f850fdb2a9bf6173b24659b7386195129c6fee2"
+    sha256                               arm64_sequoia: "59b9a8df7461cff1219fe857551d02ec37dbd783e2d3b173987665846fed8719"
+    sha256                               arm64_sonoma:  "1ba24fd1729bf2d4fa74087d4d98db902d17bcd0d618dd6f4fff6ef49bec6abc"
+    sha256                               sonoma:        "1f4b7c4cc2fd1ee4a5553385d5885162e11779d969ad949e8ddb59f1f2e8930d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "68372159bf8d129e7212b757272a6b114637444382d9c246a170a2d7d5178c37"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d6b807df695489d80a4e89f0299941e10e733a4c1adc260bf31f425a3994db4f"
   end
 
   # Test with cmake to avoid issues like:

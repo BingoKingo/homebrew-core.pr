@@ -1,29 +1,18 @@
 class Bat < Formula
   desc "Clone of cat(1) with syntax highlighting and Git integration"
   homepage "https://github.com/sharkdp/bat"
+  url "https://github.com/sharkdp/bat/archive/refs/tags/v0.26.1.tar.gz"
+  sha256 "4474de87e084953eefc1120cf905a79f72bbbf85091e30cf37c9214eafcaa9c9"
   license any_of: ["Apache-2.0", "MIT"]
-  revision 1
   head "https://github.com/sharkdp/bat.git", branch: "master"
 
-  stable do
-    url "https://github.com/sharkdp/bat/archive/refs/tags/v0.25.0.tar.gz"
-    sha256 "4433403785ebb61d1e5d4940a8196d020019ce11a6f7d4553ea1d324331d8924"
-
-    # git2 bump to use libgit2 1.9, upstream pr ref, https://github.com/sharkdp/bat/pull/3169
-    patch do
-      url "https://github.com/sharkdp/bat/commit/01680e444ba4273b17d2d6d85a19f7a5e7046820.patch?full_index=1"
-      sha256 "ad450b12f6a4a8332bf1e249a239518c7edfe94ccc6abbbeb705cf22620c5619"
-    end
-  end
-
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "63e99dea5bc85d0e9c3c76c41c7324933d05b791c86cbdb47bf173bbb4f25afd"
-    sha256 cellar: :any,                 arm64_sonoma:  "53705be5ee2484a8e2254437e0197b763a27b4e3a88e2c9aa7f43c739ecc48c6"
-    sha256 cellar: :any,                 arm64_ventura: "a058d53d4156ae1ea72b9d153533f253b57fcbd273d704e7f9f867c0e6b05562"
-    sha256 cellar: :any,                 sonoma:        "c9dc4cc4d679e32223eec006c4b52c46fcee17e67fdb762dd494f839ba8a199e"
-    sha256 cellar: :any,                 ventura:       "0ed6d0e85d9af4020f4eb0f41efc2e8f1e7ca5d8deb2bfe82cb8d4a24591cdca"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b0a32aac15c2338597b6faf190ea1ffa7e3f77a85470e9612c3da9cb9b85b7d0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "68f6c503b8895e4390935142c771030aca2d70b7fb3fc72449df664e05af1680"
+    sha256 cellar: :any,                 arm64_tahoe:   "d209bb9f1f7eab77b65f9b5573007ce52f39fb90b379ffefeffc2181119991aa"
+    sha256 cellar: :any,                 arm64_sequoia: "072537d409b056879cb735bcbc0454562b8bae732fbbfac9242afea736410f88"
+    sha256 cellar: :any,                 arm64_sonoma:  "9492e6fd0b1ee200e279476da087bf1cb6b2202c5e4c2507336c583b836c5049"
+    sha256 cellar: :any,                 sonoma:        "033b483e2d1b96c314365048f59a80a83c1827a82bcad99d7b7bc5ef90aa0f77"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d0211b0cbe32b5b14b76a02a1a15f47c96f677c35102739a3789fb376183b5e4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3d5a088fbd751c14317ee725a3b9751b835bf0a5ecbd4cfa7671ef90ce8ca922"
   end
 
   depends_on "pkgconf" => :build

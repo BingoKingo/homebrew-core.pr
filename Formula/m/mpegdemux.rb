@@ -1,7 +1,8 @@
 class Mpegdemux < Formula
   desc "MPEG1/2 system stream demultiplexer"
   homepage "http://www.hampa.ch/mpegdemux/"
-  url "http://www.hampa.ch/mpegdemux/mpegdemux-0.1.5.tar.gz"
+  url "https://deb.debian.org/debian/pool/main/m/mpegdemux/mpegdemux_0.1.5.orig.tar.gz"
+  mirror "http://www.hampa.ch/mpegdemux/mpegdemux-0.1.5.tar.gz"
   sha256 "05015755d45e50cbd3018baeaa8abcedc003b1162fa28237a72ab25c1bc00023"
   license "GPL-2.0-only"
 
@@ -11,6 +12,7 @@ class Mpegdemux < Formula
   end
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:    "c8009d2002ba680af6e0ef4d3addb176638b15450967b07caa5817f95606e80b"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:  "596de6513b152e156fcffbfb37e42b097606fc3efed168190998049ddef8b9ff"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:   "0a5ac9ee81a39717100b75106922b741f5adf919ff9351dd72abdd659f0575a6"
     sha256 cellar: :any_skip_relocation, arm64_ventura:  "7b4354702d4ee60e1833b2f000b5af4cc5c84a27af849019ea75098d99db68b3"

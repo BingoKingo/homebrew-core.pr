@@ -1,23 +1,22 @@
 class PythonTkAT39 < Formula
   desc "Python interface to Tcl/Tk"
   homepage "https://www.python.org/"
-  url "https://www.python.org/ftp/python/3.9.22/Python-3.9.22.tar.xz"
-  sha256 "8c136d199d3637a1fce98a16adc809c1d83c922d02d41f3614b34f8b6e7d38ec"
+  url "https://www.python.org/ftp/python/3.9.25/Python-3.9.25.tar.xz"
+  sha256 "00e07d7c0f2f0cc002432d1ee84d2a40dae404a99303e3f97701c10966c91834"
   license "Python-2.0"
 
-  livecheck do
-    formula "python@3.9"
+  bottle do
+    sha256 cellar: :any,                 arm64_tahoe:   "605652d4b416da946391152dfff95e132051024b39f5bf92874d1c4e7df1bb16"
+    sha256 cellar: :any,                 arm64_sequoia: "15e8153bd95f1440bb888f1e7e944558edde77901a1b0057bdf4ab5645080b1d"
+    sha256 cellar: :any,                 arm64_sonoma:  "4675b5a8cf5c110f06ee19c2afa43df40930a1ce25f8785c7b003ba538ce7cce"
+    sha256 cellar: :any,                 sonoma:        "6a713e912309d33e7155769d2c9a5bf900182b6b9403696b11646fc49cbefb15"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "768e2164044eccdbbb7b436a3f94b9adee9f100311c0994827b6a7cc5afaffcc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4035a740833fc798719765d1124ceca0c5d5652091befb81f6de94d91d9b34d0"
   end
 
-  bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "97ff0ebb45169ef1ff0c84f9a371a26366c1f7d5dcbdd44731d7aafef909dbdf"
-    sha256 cellar: :any,                 arm64_sonoma:  "bee7e5c80ede81876ed8f19d5162558d1800860d9f4c921b05e70f715f086848"
-    sha256 cellar: :any,                 arm64_ventura: "8f0e72d74b73201b8e4308472f0e62cc472a2c857fc4530281d6f4cd1073b8be"
-    sha256 cellar: :any,                 sonoma:        "2bd134ab988daff8d742f16f1d7812797d3768923329e09bad20a1ec869fe046"
-    sha256 cellar: :any,                 ventura:       "6dde244305b1c4422d73cb4cfa89d074b17ad6fa66c2b47c1ea0a8b80c10c690"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b8a69bf13e7d5218ce7454239a7a4841dc2f49ed9ecafa528e1a22b29145da55"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c022b1b83102ca8f5d347c378d210034f881fcdd8de06d9dee2204c3fbec851b"
-  end
+  # Follow up to python@3.9 deprecation
+  deprecate! date: "2025-10-15", because: :deprecated_upstream
+  disable! date: "2026-10-15", because: :deprecated_upstream
 
   depends_on "python@3.9"
   depends_on "tcl-tk@8"

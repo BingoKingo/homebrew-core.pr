@@ -1,8 +1,8 @@
 class Gperftools < Formula
   desc "Multi-threaded malloc() and performance analysis tools"
   homepage "https://github.com/gperftools/gperftools"
-  url "https://github.com/gperftools/gperftools/releases/download/gperftools-2.16/gperftools-2.16.tar.gz"
-  sha256 "f12624af5c5987f2cc830ee534f754c3c5961eec08004c26a8b80de015cf056f"
+  url "https://github.com/gperftools/gperftools/releases/download/gperftools-2.18.1/gperftools-2.18.1.tar.gz"
+  sha256 "d18d919175f9e4d740ace6b52f0f4f91284160c454e91b36ffd6456282a02206"
   license "BSD-3-Clause"
 
   livecheck do
@@ -12,13 +12,12 @@ class Gperftools < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "b4d276871df67ffac99cd78e33136c6c10cd03b7953fd2338157484eb98aa51c"
-    sha256 cellar: :any,                 arm64_sonoma:  "98aaefc52161d42aaa50012e0d1f25f6b893f00369947bd72b5976be6651016e"
-    sha256 cellar: :any,                 arm64_ventura: "d428485901b9144e3b3d95ce3f0c4b344e1760dedb9672251ede5c6fac05b3a7"
-    sha256 cellar: :any,                 sonoma:        "b0f53d444765abb98c3c6756b4453898c59ff9664801f3f8f753b391e9481a1d"
-    sha256 cellar: :any,                 ventura:       "11454d149fe95769f52b1a679b7543a377896b136ed8756934b2309b5e79ed4f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "391faba3dacc74cd391006073abdc790c94121413482b602588a75218b67f51c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "04f8ba407cd4997e7c0f62e25568c3216a36b1dbc50335b5a8c53351b4a73614"
+    sha256 cellar: :any,                 arm64_tahoe:   "441be19e92f18df04aacfbe09dffe235c9bf8b070c5d5e3f8db6611c9890c23d"
+    sha256 cellar: :any,                 arm64_sequoia: "8cc759dba8cf08fe71fd36cf585b6a626bd22bd41718c26616eefa665443b383"
+    sha256 cellar: :any,                 arm64_sonoma:  "5dc611bd687d0b5b3ddadf2f200edcedad5d95b6f07d45324bb782e62d57d750"
+    sha256 cellar: :any,                 sonoma:        "96980b401d0332ec875685001597fee2a37006f40bd1e92d55bf53fa315c62bb"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f6cf2911544eb57a83f4baeaf71e7b5e9b905af8c31d73461306cdf3bf5a728f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2dafaf048a2e362d06592fa527fba49a22eefa29f66c60edb14a10e9edbf0876"
   end
 
   head do

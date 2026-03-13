@@ -1,21 +1,24 @@
 class Vtk < Formula
   desc "Toolkit for 3D computer graphics, image processing, and visualization"
   homepage "https://www.vtk.org/"
-  url "https://www.vtk.org/files/release/9.4/VTK-9.4.2.tar.gz"
-  sha256 "36c98e0da96bb12a30fe53708097aa9492e7b66d5c3b366e1c8dc251e2856a02"
+  url "https://www.vtk.org/files/release/9.5/VTK-9.5.2.tar.gz"
+  sha256 "cee64b98d270ff7302daf1ef13458dff5d5ac1ecb45d47723835f7f7d562c989"
   license "BSD-3-Clause"
-  revision 1
+  revision 3
   head "https://gitlab.kitware.com/vtk/vtk.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_sonoma:  "f547aa7af3480adfce7f08562b689caf68869a462f6530b5af85221e0e8de0f2"
-    sha256 cellar: :any, arm64_ventura: "0543c0a79e791feef7599eba5fd0a727082bcaa0db9977ca3723e24235b4600c"
-    sha256 cellar: :any, sonoma:        "675bfddf1e3315cad272bf3030d93401515b98912b36f392a08f6e162a6f93ed"
-    sha256 cellar: :any, ventura:       "6e3117b893ef5db5c496d9596f286213639be45922f66eea779f8e236a457467"
-    sha256               x86_64_linux:  "2f03d9da47d8aec34b5588e29fb5ed3805f965eeaf534256d06c7f737d5eac29"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "100fd9e37f999ded1ea0094a95f2ef9a7dc15251f5dca51e44107afed5831233"
+    sha256 cellar: :any,                 arm64_sequoia: "81595c5a9f1fd3fba4f5eec3aaa5eaaf1aaa187f5ea0bacad5058b4a4164bc93"
+    sha256 cellar: :any,                 arm64_sonoma:  "1f4d4b2900cbeb4923959a555d832d27d24498fa59d44ece4516b76a278c02a5"
+    sha256 cellar: :any,                 sonoma:        "462e3c9d703713bedca3e6152c113084eab8b4440a79245c2c459b46945bf389"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e432d600806ba0c6c594e791bfe2aaa664ebeb0a9caa516a989f4b37c6601cec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e3cf4fa567b7a0be93666a081cdb512489b7656c43a4d5b4a97ea601a4deab16"
   end
 
   depends_on "cmake" => [:build, :test]
+  depends_on "pyqt" => :test
   depends_on "boost"
   depends_on "cgns"
   depends_on "double-conversion"
@@ -34,9 +37,9 @@ class Vtk < Formula
   depends_on "nlohmann-json"
   depends_on "proj"
   depends_on "pugixml"
-  depends_on "pyqt"
-  depends_on "python@3.13"
-  depends_on "qt"
+  depends_on "python@3.14"
+  depends_on "qtbase"
+  depends_on "qtdeclarative"
   depends_on "sqlite"
   depends_on "theora"
   depends_on "utf8cpp"
@@ -44,21 +47,20 @@ class Vtk < Formula
 
   uses_from_macos "expat"
   uses_from_macos "libxml2"
-  uses_from_macos "tcl-tk"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "gl2ps"
     depends_on "libx11"
     depends_on "libxcursor"
     depends_on "mesa"
+    depends_on "zlib-ng-compat"
   end
 
-  # Apply Arch Linux patch to fix build with netcdf 4.9.3+
-  # Issue ref: https://gitlab.kitware.com/vtk/vtk/-/issues/19616
-  patch do
-    url "https://gitlab.archlinux.org/archlinux/packaging/packages/vtk/-/raw/b4d07bd7ee5917e2c32f7f056cf78472bcf1cec2/netcdf-4.9.3.patch"
-    sha256 "87535578bbb0023ede506fd64afae95cdf4fb698c543f9735e6267730634afbc"
+  # Backport fix for HDF5 2.0.0
+  patch :p2 do
+    url "https://github.com/Kitware/CMake/commit/27e558dfa5a5441954d8930f2b6d9ae700c95050.patch?full_index=1"
+    sha256 "ba4ecd3f9abfaae2c60c9be6978c250622bdb9979b42ddec52116d51d034f911"
+    directory "CMake/patches/99"
   end
 
   def install
@@ -71,7 +73,7 @@ class Vtk < Formula
       ENV.remove "HOMEBREW_DEPENDENCIES", "expat"
     end
 
-    python = "python3.13"
+    python = "python3.14"
     qml_plugin_dir = lib/"qml/VTK.#{version.major_minor}"
     vtkmodules_dir = prefix/Language::Python.site_packages(python)/"vtkmodules"
     rpaths = [rpath, rpath(source: qml_plugin_dir), rpath(source: vtkmodules_dir)]
@@ -126,7 +128,8 @@ class Vtk < Formula
   test do
     vtk_dir = lib/"cmake/vtk-#{version.major_minor}"
     vtk_cmake_module = vtk_dir/"VTK-vtk-module-find-packages.cmake"
-    assert_match Formula["boost"].version.to_s, vtk_cmake_module.read, "VTK needs to be rebuilt against Boost!"
+    assert_match Formula["boost"].version.major_minor_patch.to_s, vtk_cmake_module.read,
+                 "VTK needs to be rebuilt against Boost!"
 
     (testpath/"CMakeLists.txt").write <<~CMAKE
       cmake_minimum_required(VERSION 4.0 FATAL_ERROR)
@@ -159,5 +162,6 @@ class Vtk < Formula
     PYTHON
 
     system bin/"vtkpython", "Distance2BetweenPoints.py"
+    system bin/"vtkpython", "-c", "from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor"
   end
 end

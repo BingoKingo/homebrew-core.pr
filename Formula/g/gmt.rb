@@ -1,28 +1,26 @@
 class Gmt < Formula
   desc "Tools for manipulating and plotting geographic and Cartesian data"
   homepage "https://www.generic-mapping-tools.org/"
+  url "https://github.com/GenericMappingTools/gmt/releases/download/6.6.0/gmt-6.6.0-src.tar.xz"
+  mirror "https://mirrors.ustc.edu.cn/gmt/gmt-6.6.0-src.tar.xz"
+  sha256 "18ac98b11b8fc924463ce5138385c02e9426780fba9ff63a991e2e8ecdbd1082"
   license "LGPL-3.0-or-later"
-  revision 5
+  revision 1
   head "https://github.com/GenericMappingTools/gmt.git", branch: "master"
 
-  stable do
-    url "https://github.com/GenericMappingTools/gmt/releases/download/6.5.0/gmt-6.5.0-src.tar.xz"
-    mirror "https://mirrors.ustc.edu.cn/gmt/gmt-6.5.0-src.tar.xz"
-    sha256 "4022adb44033f9c1d5a4d275b69506449e4d486efe2218313f3ff7a6c6c3141e"
-
-    # Backport update to minimum CMake version
-    # https://github.com/GenericMappingTools/gmt/commit/e8d68a575c0427f66b82f28a63ba87cdbd91aca7
-    patch :DATA
+  livecheck do
+    url :stable
+    strategy :github_releases
   end
 
   bottle do
-    sha256 arm64_sequoia: "5099eeaa5088b8f8d4e5b95f00f229c7c8d5829f38c0827ca9dc587be4085162"
-    sha256 arm64_sonoma:  "92c4b8906c8e4f2c7c244190eeeaccdae01f61d4b9d76c8d3b14bfe1bd1b938a"
-    sha256 arm64_ventura: "5e1dc95be0096547acc16f6342ea231b1b1d9ff64697083d4fc664c43bb24fc2"
-    sha256 sonoma:        "085c08b1ed326b9f438a6293a9b9724cf7f2482cea78c237e59208e2823002d0"
-    sha256 ventura:       "f990c4b48bf01ee82b0403477cf2c6955df4b3f53cd71812f7100a0b3569bbcb"
-    sha256 arm64_linux:   "9a0b6ab41ce707202077a3f8f7765ff69d05290910afe718ddfa0085585d4f69"
-    sha256 x86_64_linux:  "b6b304e7413353d55c129c54fccc25342a430eec8f533988270274cfebdf62e1"
+    rebuild 1
+    sha256 arm64_tahoe:   "62b4a61ca7facf02308e342b040410293eb975c81e41bd5d7932b5e4ef4306f2"
+    sha256 arm64_sequoia: "bccfe823ce8298c14b07cc0219578045bf84b4251ae8c80ca196d04c809cac41"
+    sha256 arm64_sonoma:  "47b6ac952bc211853f31d86fce3877eb032d35d5d62873b51328e6c2479581b0"
+    sha256 sonoma:        "4c3cb71550b8dab5896bcf74e2ca10044fd89f3c56234abfbb3816207bed4002"
+    sha256 arm64_linux:   "e57abef6646bb5644e01a895eec9477a3bb20c69c88d6ce30943e0c6a895f9be"
+    sha256 x86_64_linux:  "fce66e4f910156ba3037405cf395e388d2459f8708a8f81699fccf294100c738"
   end
 
   depends_on "cmake" => :build
@@ -35,7 +33,10 @@ class Gmt < Formula
   depends_on "pcre2"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   resource "gshhg" do
     url "https://github.com/GenericMappingTools/gshhg-gmt/releases/download/2.3.7/gshhg-gmt-2.3.7.tar.gz"
@@ -96,16 +97,3 @@ class Gmt < Formula
     refute_predicate shell_output(cmd), :empty?
   end
 end
-
-__END__
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -46,7 +46,7 @@ if (${srcdir} STREQUAL ${bindir})
- endif (${srcdir} STREQUAL ${bindir})
- 
- # Define minimum CMake version required
--cmake_minimum_required (VERSION 2.8.12)
-+cmake_minimum_required (VERSION 3.16)
- message ("CMake version: ${CMAKE_VERSION}")
- 
- # Use NEW behavior with newer CMake releases

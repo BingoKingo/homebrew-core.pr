@@ -4,12 +4,12 @@ class Dmd < Formula
   license "BSL-1.0"
 
   stable do
-    url "https://github.com/dlang/dmd/archive/refs/tags/v2.111.0.tar.gz"
-    sha256 "40b64dd049642dcdaef60815451d5c718ef6c861b6a02a3da998a6a3377900c1"
+    url "https://github.com/dlang/dmd/archive/refs/tags/v2.112.0.tar.gz"
+    sha256 "33592dc18855bd113914ca065d9e88018745afaa5fbf85b971fbc1a6663c9ec5"
 
     resource "phobos" do
-      url "https://github.com/dlang/phobos/archive/refs/tags/v2.111.0.tar.gz"
-      sha256 "b4a7beb5acac54457dc6dc2ab0899a713e446be10a9a584089238babf4e16d5a"
+      url "https://github.com/dlang/phobos/archive/refs/tags/v2.112.0.tar.gz"
+      sha256 "99e046c1107bc3f365910f5cb52937483c9a5528f2d4ef543b8690ad66723f16"
 
       livecheck do
         formula :parent
@@ -17,10 +17,14 @@ class Dmd < Formula
     end
   end
 
+  livecheck do
+    url "https://downloads.dlang.org/releases/LATEST"
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
-    sha256 sonoma:       "58cc3b27e8e385cefb7105d6943a0ae6dec8718ca504901a165b6074bdf3d9d5"
-    sha256 ventura:      "dca27059dbaa82f6785ccf0255a5409ba0975d4ef525cd11945d78e82f3c4328"
-    sha256 x86_64_linux: "bd161341d03c4569d99398c857c4dba58118497300223acfce69fd747da0bca9"
+    sha256 cellar: :any_skip_relocation, sonoma:       "a746a1c494721caba7ca9193a97d9c9c550599dcc3bfec608a937d1460f3963d"
+    sha256                               x86_64_linux: "c54dda66e096b2640e6c0432c73b984033c16daede0f0da46d78caee726d320b"
   end
 
   head do
@@ -34,13 +38,20 @@ class Dmd < Formula
   depends_on "ldc" => :build
   depends_on arch: :x86_64
 
+  on_macos do
+    # Can be undeprecated if upstream decides to support arm64 macOS
+    # TODO: Make linux-only when removing macOS support
+    deprecate! date: "2025-09-25", because: "is unsupported, https://docs.brew.sh/Support-Tiers#future-macos-support"
+    disable! date: "2026-09-25", because: "is unsupported, https://docs.brew.sh/Support-Tiers#future-macos-support"
+  end
+
   def install
     odie "phobos resource needs to be updated" if build.stable? && version != resource("phobos").version
 
     dmd_make_args = %W[
       INSTALL_DIR=#{prefix}
       SYSCONFDIR=#{etc}
-      HOST_DMD=#{Formula["ldc"].opt_bin/"ldmd2"}
+      HOST_DMD=#{Formula["ldc"].opt_bin}/ldmd2
       ENABLE_RELEASE=1
       VERBOSE=1
     ]
@@ -69,20 +80,10 @@ class Dmd < Formula
     cp_r ["phobos/std", "phobos/etc"], include/"dlang/dmd"
     lib.install Dir["druntime/**/libdruntime.*", "phobos/**/libphobos2.*"]
 
-    dflags = "-I#{opt_include}/dlang/dmd -L-L#{opt_lib}"
-    # We include the -ld_classic linker argument in dmd.conf because it seems to need
-    # changes upstream to support the newer linker:
-    # https://forum.dlang.org/thread/jwmpdecwyazcrxphttoy@forum.dlang.org?page=1
-    # https://github.com/ldc-developers/ldc/issues/4501
-    #
-    # Also, macOS can't run CLT/Xcode new enough to need this flag, so restrict to Ventura
-    # and above.
-    dflags << " -L-ld_classic" if OS.mac? && DevelopmentTools.clang_build_version >= 1500
-
-    (buildpath/"dmd.conf").write <<~EOS
+    (buildpath/"dmd.conf").write <<~INI
       [Environment]
-      DFLAGS=#{dflags}
-    EOS
+      DFLAGS=-I#{opt_include}/dlang/dmd -L-L#{opt_lib}
+    INI
     etc.install "dmd.conf"
   end
 

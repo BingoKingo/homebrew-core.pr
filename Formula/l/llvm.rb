@@ -1,12 +1,22 @@
 class Llvm < Formula
   desc "Next-gen compiler infrastructure"
   homepage "https://llvm.org/"
-  # TODO: Rebase `clang-cl` patch.
-  url "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.6/llvm-project-20.1.6.src.tar.xz"
-  sha256 "5c70549d524284c184fe9fbff862c3d2d7a61b787570611b5a30e5cc345f145e"
   # The LLVM Project is under the Apache License v2.0 with LLVM Exceptions
   license "Apache-2.0" => { with: "LLVM-exception" }
+  compatibility_version 1
   head "https://github.com/llvm/llvm-project.git", branch: "main"
+
+  stable do
+    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1/llvm-project-22.1.1.src.tar.xz"
+    sha256 "9c6f37f6f5f68d38f435d25f770fc48c62d92b2412205767a16dac2c942f0c95"
+
+    # Fix triple config loading for clang-cl
+    # https://github.com/llvm/llvm-project/pull/111397
+    patch do
+      url "https://github.com/llvm/llvm-project/compare/1381ad497b9a6d3da630cbef53cbfa9ddf117bb6...40a8c7c0ff3f688b690e4c74db734de67f0f89e9.diff"
+      sha256 "f6dafd762737eb79761ab7ef814a9fc802ec4bb8d20f46691f07178053b0eb36"
+    end
+  end
 
   livecheck do
     url :stable
@@ -14,13 +24,12 @@ class Llvm < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "7e0a7283fd000753a1fb25c2dd276c1585076ce7267a06c4d48bcd170334f571"
-    sha256 cellar: :any,                 arm64_sonoma:  "3ddf94728a21e2086456cf811201574face0ae12b65a8afbc93b678b90806ccf"
-    sha256 cellar: :any,                 arm64_ventura: "e4c58f8ddcaf47869f1a411f4716d8048014157c1bfb1b45fddebcf7637460b7"
-    sha256 cellar: :any,                 sonoma:        "8f2d23c255749468b8be052b8c0e51a381908d782ea41ba001d3ef00f2b3418c"
-    sha256 cellar: :any,                 ventura:       "615bebeab4dadce6e0ec95df15b986022bcc403d8e1e1dc6267ecdb5f627b95b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7204edd9a15fb1f5c57c547361b71ffb0d83051346fa729fe301d997729b01e0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ce62255e430567f1391010cc3b052ebd39f681d63123ca41b61609109de1b6eb"
+    sha256                               arm64_tahoe:   "2e9357a9dc0143d1f9f71b0f84b2085c3266f5d510e7045574bc6128453ea5f2"
+    sha256                               arm64_sequoia: "75b1748d3ec6ccc427aec259b680bc73781504c152e612033d3ae04bcc335aac"
+    sha256                               arm64_sonoma:  "abf74a45f7b5ce253725b75315c8694c07ddce124a546f5ec5396de5e993381a"
+    sha256 cellar: :any,                 sonoma:        "aebac4aacc590fb33de2d3b665dda8397c8f0a301f262a91df55582fe3a4a4a6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ef1cdaf4ae35e7880cefde57b059a2c58babf6bcb7e136d7e560f1b91fec3674"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7d18a9a91d52c0ba8eec085fe3aa832644d963775793d0f31f75cb9f25ded1df"
   end
 
   keg_only :provided_by_macos
@@ -28,25 +37,24 @@ class Llvm < Formula
   # https://llvm.org/docs/GettingStarted.html#requirement
   depends_on "cmake" => :build
   depends_on "ninja" => :build
-  depends_on "swig" => :build
-  depends_on "python@3.13"
-  depends_on "xz"
+  depends_on "swig" => :build # for lldb
+  depends_on "python@3.14"
+  depends_on "xz" # for lldb
   depends_on "z3"
   depends_on "zstd"
 
   uses_from_macos "libedit"
-  uses_from_macos "libffi", since: :catalina
-  uses_from_macos "ncurses"
-  uses_from_macos "zlib"
+  uses_from_macos "libffi"
+  uses_from_macos "ncurses" # for lldb
 
   on_linux do
+    depends_on "binutils" => :build # needed for LLVMgold plugin
     depends_on "pkgconf" => :build
-    depends_on "binutils" # needed for gold
-    depends_on "elfutils" # openmp requires <gelf.h>
+    depends_on "zlib-ng-compat"
   end
 
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def clang_config_file_dir
@@ -54,10 +62,10 @@ class Llvm < Formula
   end
 
   def install
-    # The clang bindings need a little help finding our libclang.
+    # The clang bindings need a little help finding keg-only libclang.
     inreplace "clang/bindings/python/clang/cindex.py",
-              /^(\s*library_path\s*=\s*)None$/,
-              "\\1'#{lib}'"
+              "= os.environ.get(\"LIBCLANG_LIBRARY_PATH\")",
+              "= os.environ.get(\"LIBCLANG_LIBRARY_PATH\", \"#{lib}\")"
 
     projects = %w[
       clang
@@ -70,7 +78,6 @@ class Llvm < Formula
       libcxx
       libcxxabi
       libunwind
-      pstl
     ]
 
     unless versioned_formula?
@@ -87,14 +94,6 @@ class Llvm < Formula
                              .select { |name| name.start_with? "python@" }
                              .map { |py| py.delete_prefix("python@") }
     site_packages = Language::Python.site_packages(python3).delete_prefix("lib/")
-
-    # Work around build failure (maybe from CMake 4 update) by using environment
-    # variable for https://cmake.org/cmake/help/latest/variable/CMAKE_OSX_SYSROOT.html
-    # TODO: Consider if this should be handled in superenv as impacts other formulae
-    ENV["SDKROOT"] = MacOS.sdk_for_formula(self).path if OS.mac? && MacOS.sdk_root_needed?
-
-    # Apple's libstdc++ is too old to build LLVM
-    ENV.libcxx if ENV.compiler == :clang
 
     # compiler-rt has some iOS simulator features that require i386 symbols
     # I'm assuming the rest of clang needs support too for 32-bit compilation
@@ -150,10 +149,8 @@ class Llvm < Formula
 
     if OS.mac?
       macos_sdk = MacOS.sdk_path_if_needed
-      if MacOS.version >= :catalina
-        args << "-DFFI_INCLUDE_DIR=#{macos_sdk}/usr/include/ffi"
-        args << "-DFFI_LIBRARY_DIR=#{macos_sdk}/usr/lib"
-      end
+      args << "-DFFI_INCLUDE_DIR=#{macos_sdk}/usr/include/ffi"
+      args << "-DFFI_LIBRARY_DIR=#{macos_sdk}/usr/lib"
 
       libcxx_install_libdir = lib/"c++"
       libunwind_install_libdir = lib/"unwind"
@@ -161,6 +158,7 @@ class Llvm < Formula
 
       args << "-DLLVM_BUILD_LLVM_C_DYLIB=ON"
       args << "-DLLVM_ENABLE_LIBCXX=ON"
+      args << "-DLIBCXX_ENABLE_VENDOR_AVAILABILITY_ANNOTATIONS=ON"
       args << "-DLIBCXX_PSTL_BACKEND=libdispatch"
       args << "-DLIBCXX_INSTALL_LIBRARY_DIR=#{libcxx_install_libdir}"
       args << "-DLIBUNWIND_INSTALL_LIBRARY_DIR=#{libunwind_install_libdir}"
@@ -211,8 +209,9 @@ class Llvm < Formula
     end
 
     # Skip the PGO build on HEAD installs, non-bottle source builds, or versioned formulae.
-    # Catalina and earlier requires too many hacks to build with PGO.
-    pgo_build = build.stable? && build.bottle? && OS.mac? && (MacOS.version > :catalina) && !versioned_formula?
+    # Also skip Intel macOS which is slow and will be reduced to Tier 3 in Sept 2026.
+    # TODO: Fix Linux PGO build which is currently dead code
+    pgo_build = build.stable? && build.bottle? && OS.mac? && Hardware::CPU.arm? && !versioned_formula?
     lto_build = pgo_build && OS.mac?
 
     if ENV.cflags.present?
@@ -473,12 +472,10 @@ class Llvm < Formula
     arches = Set.new([:arm64, :x86_64, :aarch64])
     arches << arch
 
-    sysroot = if macos_version.blank? || (MacOS.version > macos_version && MacOS::CLT.separate_header_package?)
+    sysroot = if macos_version.blank? || MacOS.version > macos_version
       "#{MacOS::CLT::PKG_PATH}/SDKs/MacOSX.sdk"
-    elsif macos_version >= "10.14"
-      "#{MacOS::CLT::PKG_PATH}/SDKs/MacOSX#{macos_version}.sdk"
     else
-      "/"
+      "#{MacOS::CLT::PKG_PATH}/SDKs/MacOSX#{macos_version}.sdk"
     end
 
     {
@@ -529,6 +526,9 @@ class Llvm < Formula
 
         To use the bundled libc++ please use the following LDFLAGS:
           LDFLAGS="-L#{opt_lib}/c++ -L#{opt_lib}/unwind -lunwind"
+        Features newer than system libc++ will require the following define to enable
+        (support for this may be removed in a future major LLVM release):
+          CPPFLAGS="-D_LIBCPP_DISABLE_AVAILABILITY"
 
         NOTE: You probably want to use the libunwind and libc++ provided by macOS unless you know what you're doing.
       EOS
@@ -562,20 +562,23 @@ class Llvm < Formula
     assert_equal (lib/shared_library("libLLVM-#{soversion}")).to_s,
                  shell_output("#{bin}/llvm-config --libfiles").chomp
 
-    (testpath/"test.c").write <<~C
+    (testpath/"test.c").write <<~'C'
       #include <stdio.h>
       int main()
       {
-        printf("Hello World!\\n");
+        printf("Hello World!\n");
         return 0;
       }
     C
 
     (testpath/"test.cpp").write <<~CPP
       #include <iostream>
+      #include <string>
       int main()
       {
-        std::cout << "Hello World!" << std::endl;
+        std::string str = "Hello World!";
+        std::size_t str_hash = std::hash<std::string>{}(str);
+        std::cout << str << std::endl;
         return 0;
       }
     CPP
@@ -584,8 +587,7 @@ class Llvm < Formula
     system bin/"clang-cpp", "-v", "test.cpp"
 
     # Testing default toolchain and SDK location.
-    system bin/"clang++", "-v",
-           "-std=c++11", "test.cpp", "-o", "test++"
+    system bin/"clang++", "-v", "-std=c++11", "test.cpp", "-o", "test++"
     assert_includes MachO::Tools.dylibs("test++"), "/usr/lib/libc++.1.dylib" if OS.mac?
     assert_equal "Hello World!", shell_output("./test++").chomp
     system bin/"clang", "-v", "test.c", "-o", "test"
@@ -680,9 +682,9 @@ class Llvm < Formula
       # linking statically.
 
       system bin/"clang++", "-v", "-o", "test_pie_runtimes",
-                   "-pie", "-fPIC", "test.cpp", "-L#{opt_lib}",
-                   "-stdlib=libc++", "-rtlib=compiler-rt",
-                   "-static-libstdc++", "-lpthread", "-ldl"
+             "-pie", "-fPIC", "test.cpp", "-L#{opt_lib}",
+             "-stdlib=libc++", "-rtlib=compiler-rt",
+             "-static-libstdc++", "-lpthread", "-ldl"
       assert_equal "Hello World!", shell_output("./test_pie_runtimes").chomp
       (testpath/"test_pie_runtimes").dynamically_linked_libraries.each do |lib|
         refute_match(/lib(std)?c\+\+/, lib)
@@ -747,7 +749,7 @@ class Llvm < Formula
       }
     CPP
     assert_includes shell_output("#{bin}/scan-build make scanbuildtest 2>&1"),
-                    "warning: Use of memory after it is freed"
+                    "warning: Use of memory after it is released"
 
     (testpath/"clangformattest.c").write <<~C
       int    main() {

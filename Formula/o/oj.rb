@@ -1,19 +1,18 @@
 class Oj < Formula
   desc "JSON parser and visualization tool"
   homepage "https://github.com/ohler55/ojg"
-  url "https://github.com/ohler55/ojg/archive/refs/tags/v1.26.6.tar.gz"
-  sha256 "85754da53ac0b717e1c9068c71a73315bbe666e10520de488a84c4fd124d5d8c"
+  url "https://github.com/ohler55/ojg/archive/refs/tags/v1.28.0.tar.gz"
+  sha256 "8bb1bf65e024ee5cf54163b7dba391eca4cbf121503cbebc941672fbad718c62"
   license "MIT"
   head "https://github.com/ohler55/ojg.git", branch: "develop"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "659d69c48c89cb841e50608103d70ad2f23a58899fed7b22ea0ed64455fb8cbc"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "659d69c48c89cb841e50608103d70ad2f23a58899fed7b22ea0ed64455fb8cbc"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "659d69c48c89cb841e50608103d70ad2f23a58899fed7b22ea0ed64455fb8cbc"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8e8b7bbf89f0a231408f8ec64ab5b00d0578630b46e93f68bae6555021f82e06"
-    sha256 cellar: :any_skip_relocation, ventura:       "8e8b7bbf89f0a231408f8ec64ab5b00d0578630b46e93f68bae6555021f82e06"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b4a0c6208cf9b1155b53e3da21bb99085048f484e45c44b6095cb3206c5bb2a9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dcc78d06b2bf62ae33dc906c2575cae01751f4bed9b2dd49ffaa041af9a6ce0b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b3087d2ba3af46dd9f6832b465dc3d9807707edf664220825f7175bc301710e2"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b3087d2ba3af46dd9f6832b465dc3d9807707edf664220825f7175bc301710e2"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b3087d2ba3af46dd9f6832b465dc3d9807707edf664220825f7175bc301710e2"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6097bd7d7dfdd8cf700ea1f553c14b562846980054534194bf6d5bb016dc74ac"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "05a4db6ecbdd79f5f36767a8f8b6f75bbae08ab09236a52a96a6d63a04f67a97"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e28d6024130487fc9ed991c6ea51fdd17b69cb556fb1e532306b43cbaea0b781"
   end
 
   depends_on "go" => :build

@@ -1,8 +1,8 @@
 class MariadbAT114 < Formula
   desc "Drop-in replacement for MySQL"
   homepage "https://mariadb.org/"
-  url "https://archive.mariadb.org/mariadb-11.4.7/source/mariadb-11.4.7.tar.gz"
-  sha256 "bf20687ca12fa7efda8df89cab1f2a661288cea41acf8f53189b69d5294347d0"
+  url "https://archive.mariadb.org/mariadb-11.4.10/source/mariadb-11.4.10.tar.gz"
+  sha256 "14783ddc5edd966ff05aa0efd5ed6d3d369ed5b9e4080a448f00f87a9f0a4a6b"
   license "GPL-2.0-only"
 
   livecheck do
@@ -18,13 +18,12 @@ class MariadbAT114 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "900a98058fa384fe2e4614eda935dcb6a14ee3a2c53d742fb44a42549e716669"
-    sha256 arm64_sonoma:  "42a535a01903c36650e78a3dda18b816acbc76a95c95e964e3e46f2002e87d30"
-    sha256 arm64_ventura: "88510fe70d938366a13a4f876061951dbe46a0e3e390208ddb4d5b715e9c7c21"
-    sha256 sonoma:        "37c9456c6b7ecbb529e07f321cf57d0cb2d5193305c18dba22592e8ee2a2be96"
-    sha256 ventura:       "e23b6f8d0509895626a442e0ddbfe7d9136fc4809366febf9a366b3579b5aef7"
-    sha256 arm64_linux:   "1b9cc74ba0de7eced070ac6f2d868991f6aa51f90148f1bd9fc4040e994a38a7"
-    sha256 x86_64_linux:  "8b3962384c5517a36ca618f9c33e2717245f8a47d4561ea78aa1ce8246c2a18c"
+    sha256 arm64_tahoe:   "58129b221ec81433ac1c296fb8bfeb2c50aa475c2ce8e657e95407b1a8ca4f06"
+    sha256 arm64_sequoia: "439febdb2f016b852efe4b330160464a2e3a557fff8b32eed9453e53eba16be6"
+    sha256 arm64_sonoma:  "aed067eb3c76e3ed80382dd4027beca7da54723083b7d2145b406d3767f016fc"
+    sha256 sonoma:        "71d85367ad1bd4d44f3e84a6690793d80ddc47000a624e87d1e5d55d01c81b85"
+    sha256 arm64_linux:   "ca81cc0c995a9ee3e6319fc0984ac298064d768e78e306d264b5fc049b3cba28"
+    sha256 x86_64_linux:  "5465421afc4c33bd990583191e16c5eac231a77f393186e39ec818704ddc5adb"
   end
 
   keg_only :versioned_formula
@@ -51,7 +50,6 @@ class MariadbAT114 < Formula
   uses_from_macos "libxcrypt"
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "openjdk" => :build
@@ -59,6 +57,7 @@ class MariadbAT114 < Formula
 
   on_linux do
     depends_on "linux-pam"
+    depends_on "zlib-ng-compat"
   end
 
   def install

@@ -2,8 +2,8 @@ class Apt < Formula
   desc "Advanced Package Tool"
   homepage "https://wiki.debian.org/Apt"
   # Using git tarball as Debian does not retain old versions at deb.debian.org
-  url "https://salsa.debian.org/apt-team/apt/-/archive/3.1.0/apt-3.1.0.tar.bz2"
-  sha256 "69e6117b192491c6ffbdd74c60dbb37a9afa63daeba043ff219bad4d92182a07"
+  url "https://salsa.debian.org/apt-team/apt/-/archive/3.1.16/apt-3.1.16.tar.bz2"
+  sha256 "4c264dd6b21bb7543294dc7c5ecca9dca1d2a7e42e708108f0a1a9cafa6d62f5"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -12,11 +12,11 @@ class Apt < Formula
   end
 
   bottle do
-    sha256 arm64_linux:  "63cbae9a9b707ffb1d282a381b1a3631dcb0b3c4e1de1900ea1e8b7dd5b92503"
-    sha256 x86_64_linux: "826db8a183201f16a07ec73d4feb25cabc39c85b5763e1ce12bb53c46ec6eddf"
+    sha256 arm64_linux:  "1546f41f7c53e65dd6fc88c77abe102c234ee472bfa0373e6608a1b648689287"
+    sha256 x86_64_linux: "46c8307adabc6cf22e4c3c7347101d61a5699e817f5df78449033d42f3887426"
   end
 
-  keg_only "not linked to prevent conflicts with system apt"
+  keg_only "it conflicts with system apt"
 
   depends_on "cmake" => :build
   depends_on "docbook" => :build
@@ -24,13 +24,13 @@ class Apt < Formula
   depends_on "doxygen" => :build
   depends_on "gettext" => :build
   depends_on "libxslt" => :build
-  depends_on "llvm" => :build if DevelopmentTools.gcc_version("/usr/bin/gcc") < 13
   depends_on "po4a" => :build
   depends_on "w3m" => :build
 
   depends_on "berkeley-db@5" # keep berkeley-db < 6 to avoid AGPL-3.0 restrictions
   depends_on "bzip2"
   depends_on "dpkg"
+  depends_on "gcc"
   depends_on :linux
   depends_on "lz4"
   depends_on "openssl@3"
@@ -39,24 +39,28 @@ class Apt < Formula
   depends_on "systemd"
   depends_on "xxhash"
   depends_on "xz"
-  depends_on "zlib"
+  depends_on "zlib-ng-compat"
   depends_on "zstd"
 
   fails_with :gcc do
     version "12"
-    cause "error: static assertion failed: Cannot construct map for key type"
+    cause "Requires C++23 support for `std::ranges::contains`"
   end
 
   resource "triehash" do
     url "https://github.com/julian-klode/triehash/archive/refs/tags/v0.3.tar.gz"
     sha256 "289a0966c02c2008cd263d3913a8e3c84c97b8ded3e08373d63a382c71d2199c"
+
+    livecheck do
+      url :url
+      regex(/^v?(\d+(?:\.\d+)+)$/i)
+    end
   end
 
   def install
     # Find our docbook catalog
     ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
 
-    ENV.llvm_clang if DevelopmentTools.gcc_version("/usr/bin/gcc") < 13
     ENV.prepend_path "PATH", buildpath/"bin"
 
     resource("triehash").stage do

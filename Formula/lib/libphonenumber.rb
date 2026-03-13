@@ -1,8 +1,8 @@
 class Libphonenumber < Formula
   desc "C++ Phone Number library by Google"
   homepage "https://github.com/google/libphonenumber"
-  url "https://github.com/google/libphonenumber/archive/refs/tags/v9.0.6.tar.gz"
-  sha256 "0fc0f530f139de53b121a93b2b25cd96ab0d8bcfe95b4760be1f0213a75eadd2"
+  url "https://github.com/google/libphonenumber/archive/refs/tags/v9.0.26.tar.gz"
+  sha256 "f2ac2946d615df52da81f34780ee972fa80af63d1a09becc7b7bbe32ae01547c"
   license "Apache-2.0"
 
   livecheck do
@@ -11,21 +11,26 @@ class Libphonenumber < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "72c4fcf04b7f88b131d9140ac8ad63e2e961cc0cc0fbcf747613c437df1d66c0"
-    sha256 cellar: :any,                 arm64_sonoma:  "f00af52ab5f63ffb2496ed732c06b44b7aa24a7772025be91ccbc11fc57af3c3"
-    sha256 cellar: :any,                 arm64_ventura: "57bbc535d91f8e61ddd5b315d08263db7fe8268a871ba4a7ef092b0031608de8"
-    sha256 cellar: :any,                 sonoma:        "07211340020f52e35744605da8819c5b2eb09a90c7622ad67199403ecc592910"
-    sha256 cellar: :any,                 ventura:       "7b70ec79c3f8402a72a4f7bc3b3134c7d546039dd4d14dae3c29f0efaf0b320c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d51cff3b7351c0abb4f58450ef38434c24348a010dd5b119aa18bc23fd0f5463"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8cf7313fc95a65a6ed9d072edc11ae155146ff8e282faf5fa54dfe27d8db7877"
+    sha256 cellar: :any,                 arm64_tahoe:   "1de27631d2abfaaf4c2b0c074fa54559b03e0bf0eb22745c32eef529c63f829a"
+    sha256 cellar: :any,                 arm64_sequoia: "d337fe2591652af54a1383a539b5fd6c94d32a6385e0f91a7e6d706278f14b41"
+    sha256 cellar: :any,                 arm64_sonoma:  "71a055aaab344772dc23ead030dcee2700330c801c515fc0c495a8e525e0be47"
+    sha256 cellar: :any,                 sonoma:        "e221c9723b06fa2a17884cbcdef98b9bf2832030466d051093fbf96a502582ff"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9a93ad96e9e80f1d8018a7cd2919309c2ebdc534d73b26a0d10d0f9e650abe35"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dad18272c898b18cb85257e234f388e262838899a607aa74efb0343e958eade7"
   end
 
   depends_on "cmake" => [:build, :test]
   depends_on "openjdk" => :build
   depends_on "abseil"
   depends_on "boost"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "protobuf"
+
+  # Fix build with Boost 1.89.0, pr ref: https://github.com/google/libphonenumber/pull/3903
+  patch do
+    url "https://github.com/google/libphonenumber/commit/72c1023fbf00fc48866acab05f6ccebcae7f3213.patch?full_index=1"
+    sha256 "6bce9d77b45f35a84ef39831bf2cca793b11aa7b92bd6d71000397d3176f0345"
+  end
 
   def install
     ENV.append_to_cflags "-Wno-sign-compare" # Avoid build failure on Linux.

@@ -1,8 +1,8 @@
 class Libgsm < Formula
   desc "Lossy speech compression library"
   homepage "https://www.quut.com/gsm/"
-  url "https://www.quut.com/gsm/gsm-1.0.22.tar.gz"
-  sha256 "f0072e91f6bb85a878b2f6dbf4a0b7c850c4deb8049d554c65340b3bf69df0ac"
+  url "https://www.quut.com/gsm/gsm-1.0.24.tar.gz"
+  sha256 "a3c40c6471928383f4abfcb2e8f24012a1f562be2f17b8d672145d5986681a92"
   license "TU-Berlin-2.0"
 
   livecheck do
@@ -11,14 +11,12 @@ class Libgsm < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "73ab84857bda140ae2dbf8dcbba53376739db92a4943fa2aa5e9939ebe7365ba"
-    sha256 cellar: :any,                 arm64_sonoma:  "b67bf46ae228c9cdb566c31cbf903c2b36933a43c225600420b7c95a41516601"
-    sha256 cellar: :any,                 arm64_ventura: "873e314d6adc194af517d5e44f780822d23f39e19b13baec333bd28d990fa5ea"
-    sha256 cellar: :any,                 sonoma:        "b3ffd6c44c59f8cba9394605a52ac959cd69d50dc2e4173cdb6ea395bdbc493b"
-    sha256 cellar: :any,                 ventura:       "b8c2c17f921fb1fe0bdf21868c08d66b6792a14e419c4ac15ee0d4d79f15e628"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1d58e3f81b1b007ea285d82e680f1dff3fae11ebce2bb2c712af0d2dd0cca343"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2a2e88a7ac1d423da03aba16b51e7eb10eb69925ad46fd98259c5bf054301600"
+    sha256 cellar: :any,                 arm64_tahoe:   "e637baca84f26ef74730d06d4eed5cf3ea69730afb45a598f1b7a50a2aa91136"
+    sha256 cellar: :any,                 arm64_sequoia: "40de9bf0cb4821fca993112eadbdd1eaf40c9e71d48fc66dbb1f67ab9987ead7"
+    sha256 cellar: :any,                 arm64_sonoma:  "abbc1deea6a1453dd8bf458874fab528f6f1d672ef77dafe6fde9ae43651fc4f"
+    sha256 cellar: :any,                 sonoma:        "816cc99acd5699c74b201af8ae8df58090bcb71ffa3b07a37d36aae031c250c8"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "70194c209b3f6b130ab8b04450ee8ffb0f4f5463395191023ac19eb16007920c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ea4c6fb171d2c66eeaad24385c753a5bac62732a15700090b311248b6509d029"
   end
 
   conflicts_with "toast", because: "both install `toast` binaries"

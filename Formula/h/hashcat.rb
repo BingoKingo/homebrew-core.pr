@@ -1,15 +1,14 @@
 class Hashcat < Formula
   desc "World's fastest and most advanced password recovery utility"
   homepage "https://hashcat.net/hashcat/"
-  url "https://hashcat.net/files/hashcat-6.2.6.tar.gz"
-  mirror "https://github.com/hashcat/hashcat/archive/refs/tags/v6.2.6.tar.gz"
-  sha256 "b25e1077bcf34908cc8f18c1a69a2ec98b047b2cbcf0f51144dcf3ba1e0b7b2a"
+  url "https://hashcat.net/files/hashcat-7.1.2.tar.gz"
+  mirror "https://github.com/hashcat/hashcat/archive/refs/tags/v7.1.2.tar.gz"
+  sha256 "9546a6326d747530b44fcc079babad40304a87f32d3c9080016d58b39cfc8b96"
   license all_of: [
     "MIT",
     "LZMA-SDK-9.22", # deps/LZMA-SDK/
     :public_domain,  # include/sort_r.h
   ]
-  revision 1
   version_scheme 1
   head "https://github.com/hashcat/hashcat.git", branch: "master"
 
@@ -19,23 +18,18 @@ class Hashcat < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 arm64_sequoia:  "06e83f034f4146c057190a75ea05d9ede88a2205db694dacf643d7e4d88b8210"
-    sha256 arm64_sonoma:   "8b1640f18f1fcf6049869f3e461979401f811b1f46d1131676b0732a8b799c7b"
-    sha256 arm64_ventura:  "9b4475b3b7384c8186f3e42e1cef42df899148ecb496f1fdea5c1184773cee6d"
-    sha256 arm64_monterey: "d05a3da7fe49d7010b867b3fcfd5b71210a4013d1069a6eca4bb1085dec342ab"
-    sha256 sonoma:         "2c7627ab1623911e96f599e9c3cd2e7a29fd53ad3df2b280fb9a39433db8ce72"
-    sha256 ventura:        "ebba1034f159a47591071da81c48fa08dfd79416599d4540da0b01ea974d1aa3"
-    sha256 monterey:       "1f2d0c9bfb3c3b723a27448e9b26377287b4da0aed331c7f1df80e18a29b9089"
-    sha256 arm64_linux:    "7534a31d8feb58822f89d3396496d563092652c5578d1c37ebb17afd87cd3f45"
-    sha256 x86_64_linux:   "efd1c1f00684129f650a86d10c78873d44535502724731b5eca1976e8624d249"
+    rebuild 2
+    sha256 arm64_tahoe:   "e7a4a2f834223bbd0a6cc98fa37c322c50df75e3af42106973cd015c38d80f4f"
+    sha256 arm64_sequoia: "1e52f0146178dbee305dce189b2252cc8281bedc8cefaf6f6c0772330009a285"
+    sha256 arm64_sonoma:  "a1050a21c04753c0711f77d0cba6cdff0d5df3c64a14f16132faeb9ca89833d1"
+    sha256 sonoma:        "f48e951eb2e1d4779cedf97bc64f57dc77c34aa906d17af8952fbf629ae88006"
+    sha256 arm64_linux:   "2f87ec3529e895d0023ba9aad41bfa23561ec90f7d078e118f69cf94d1ae1fac"
+    sha256 x86_64_linux:  "71e6f0aca36375f3ce64d931210cbcf6e84f28e16d96c0f7af8e80be8e169ce4"
   end
 
-  depends_on macos: :high_sierra # Metal implementation requirement
+  depends_on "python@3.14" => :build
   depends_on "minizip"
   depends_on "xxhash"
-
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gnu-sed" => :build
@@ -45,17 +39,17 @@ class Hashcat < Formula
     depends_on "opencl-headers" => :build
     depends_on "opencl-icd-loader"
     depends_on "pocl"
+    depends_on "zlib-ng-compat"
   end
 
-  # Fix 'failed to create metal library' on macos
-  # extract from hashcat version 66b22fa, remove this patch when version released after 66b22fa
-  # hashcat 66b22fa link: https://github.com/hashcat/hashcat/commit/66b22fa64472b4d809743c35fb05fc3c993a5cd2#diff-1eece723a1d42fd48f0fc4f829ebbb4a67bd13cb3499f49196f801ee9143ee83R15
-  patch :DATA
-
   def install
-    # Remove all bundled dependencies other than LZMA-SDK (https://www.7-zip.org/sdk.html)
-    (buildpath/"deps").each_child { |dep| rm_r(dep) if dep.basename.to_s != "LZMA-SDK" }
-    (buildpath/"docs/license_libs").each_child { |dep| rm(dep) unless dep.basename.to_s.start_with?("LZMA") }
+    # Remove some bundled dependencies that are not needed
+    (buildpath/"deps").each_child do |dep|
+      rm_r(dep) if %w[OpenCL-Headers unrar xxHash zlib].include?(dep.basename.to_s)
+    end
+    (buildpath/"docs/license_libs").each_child do |dep|
+      rm(dep) unless %w[SSE2NEON LZMA].any? { |dep_name| dep.basename.to_s.start_with?(dep_name) }
+    end
 
     args = %W[
       CC=#{ENV.cc}
@@ -68,7 +62,7 @@ class Hashcat < Formula
     ]
     system "make", *args
     system "make", "install", *args
-    bin.install "hashcat" => "hashcat_bin"
+    mv bin/"hashcat", bin/"hashcat_bin"
     (bin/"hashcat").write_env_script bin/"hashcat_bin", XDG_DATA_HOME: share
   end
 
@@ -77,10 +71,8 @@ class Hashcat < Formula
     mkdir testpath/"hashcat"
 
     # OpenCL is not supported on virtualized arm64 macOS
-    no_opencl = OS.mac? && Hardware::CPU.arm? && Hardware::CPU.virtualized?
-    # MTLCreateSystemDefaultDevice() isn't supported on GitHub runners.
-    # Ref: https://github.com/actions/runner-images/issues/1779
-    no_metal = !OS.mac? || ENV["HOMEBREW_GITHUB_ACTIONS"].present?
+    no_opencl = OS.mac? && Hardware::CPU.arm?
+    no_metal = !OS.mac?
 
     args = %w[
       --benchmark
@@ -98,18 +90,3 @@ class Hashcat < Formula
     assert_equal "v#{version}", shell_output("#{bin}/hashcat_bin --version").chomp
   end
 end
-
-__END__
-diff --git a/OpenCL/inc_vendor.h b/OpenCL/inc_vendor.h
-index c39fce952..0916a30b3 100644
---- a/OpenCL/inc_vendor.h
-+++ b/OpenCL/inc_vendor.h
-@@ -12,7 +12,7 @@
- #define IS_CUDA
- #elif defined __HIPCC__
- #define IS_HIP
--#elif defined __METAL_MACOS__
-+#elif defined __METAL__
- #define IS_METAL
- #else
- #define IS_OPENCL

@@ -22,20 +22,25 @@ class DhallLspServer < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "bc15cc3642206d59076f34a82cb4280e2755d427065711763529f848a711c401"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8c3923f8db87be736d4ea429f0165383eba919facd3033ba3ffaa01e6607ec08"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "7d24735c86a2713a7016cc94bece0ab9421470f4be47e7fede73217b43c18d27"
-    sha256 cellar: :any_skip_relocation, sonoma:        "2978096a8175e81e0b89b4b55b3de417206850c0abbe14ca869c13faf916df34"
-    sha256 cellar: :any_skip_relocation, ventura:       "1bd665c5789efa9e61e36859dd4381663b05913c38c9d5e8e98e34783d3e8db1"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "386e383923218adddb93e597da6ec639d81f3bb0033a7bf197a683c003762ae3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "590cc648ccea52123ff837a8f00cf19983ac2672d1be0fe570bd7500bed6c2c2"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "62e173a901ac5df5613428d1453d556686766e950e039ca8448531048421dc23"
+    sha256 cellar: :any,                 arm64_sequoia: "f81418294d9b140abcff481884ca1821ba45d03bb216bcd44380fab63ddb2a24"
+    sha256 cellar: :any,                 arm64_sonoma:  "16cfd71bb784211c5d5ea281c31e9b3825d2ed6be743f795c32e44cd8f6be755"
+    sha256 cellar: :any,                 sonoma:        "50e77b999e1af1e2bb5b4cdc4a29f3e0061d69062e7a155eaa74171e5d6803e9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "00df60a9a813b1e271e7ca3760bf200d9fb9eb0aa55e055b217588ad7c0deed6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "921a9aa115b3dcf194ed4046ed626bea502bf14c7220c9dffb6942b242e4e0be"
   end
 
   depends_on "cabal-install" => :build
-  depends_on "ghc@9.10" => :build
+  depends_on "ghc" => :build
+  depends_on "gmp"
 
+  uses_from_macos "libffi"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = if build.head?
@@ -50,6 +55,9 @@ class DhallLspServer < Formula
       # https://github.com/dhall-lang/dhall-haskell/commit/277d8b1b3637ba2ce125783cc1936dc9591e67a7
       ["--allow-newer=dhall-json:aeson,dhall-json:text", "--constraint=aeson<2.3"]
     end
+
+    # Workaround to build aeson with GHC 9.14, https://github.com/haskell/aeson/issues/1155
+    args << "--allow-newer=base,containers,template-haskell"
 
     system "cabal", "v2-update"
     system "cabal", "v2-install", *args, *std_cabal_v2_args

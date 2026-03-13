@@ -1,9 +1,10 @@
 class Pcre2 < Formula
   desc "Perl compatible regular expressions library with a new API"
   homepage "https://www.pcre.org/"
-  url "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.bz2"
-  sha256 "21547f3516120c75597e5b30a992e27a592a31950b5140e7b8bfde3f192033c4"
+  url "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47.tar.bz2"
+  sha256 "47fe8c99461250d42f89e6e8fdaeba9da057855d06eb7fc08d9ca03fd08d7bc7"
   license "BSD-3-Clause"
+  revision 1
 
   livecheck do
     url :stable
@@ -11,17 +12,18 @@ class Pcre2 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "f2abc87de6796a4e639f93d42c6d515cad90418fd7b701bcf322fb8e1443704e"
-    sha256 cellar: :any,                 arm64_sonoma:  "549a4a79676a6e2c58896cb46cf7d36a8c86f3696e61c43f07dca6660c32cd08"
-    sha256 cellar: :any,                 arm64_ventura: "a780535fb2f47a39bd16d28f966da1c99b868d7e15b2d18b75b509b6deb85e0d"
-    sha256 cellar: :any,                 sonoma:        "5b1916e8e569da37aabc596561eb93a6bdf7cff4d55d35a351576c071ce723cc"
-    sha256 cellar: :any,                 ventura:       "83722732df9490388e3fa729d06063fbd3fe7e245b0269c5b67f736ffa8c9ba5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5081c77793061bb49fd74ffdefee2b52cdf49df0d2f9799888d943a826dac75a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8a5727c5e1b6d0aa922bc2d30ae6510dca32f1b738a7501bcdf18823c59e120e"
+    sha256 cellar: :any,                 arm64_tahoe:   "948b00bdaf75a842341f08a949ca3d414ae5333df2c305a7e371be31a2c30963"
+    sha256 cellar: :any,                 arm64_sequoia: "bef2e718b92e5e819a51723157e60eceb76acc4efb0894a10c315cd36abca13c"
+    sha256 cellar: :any,                 arm64_sonoma:  "f6d184fa59de4ca2f3115cb661f113c6c25ced2247b4e169dd99389c0d58be3f"
+    sha256 cellar: :any,                 tahoe:         "7503247c5411d7a67b2d29ef5a7464a14f114c0953a541bb61bf668454fae667"
+    sha256 cellar: :any,                 sequoia:       "167ef6d2b6337706884e23ee902cfc2ff8faeb455f2e07d23233e3061268867c"
+    sha256 cellar: :any,                 sonoma:        "72691a0ed5b0ec4d21641ee33aa00fad05e6e8ddbfa417fe27f4cd26521ed24a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1fb733022376752008209b8cd9235456eb11aab159114c562c2e845f9f4a34b0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "70d6e7a6d4257227d3b6c8e3b0bbcb244852eff6fc7a30fba6b6474316a4ea1d"
   end
 
   head do
-    url "https://github.com/PCRE2Project/pcre2.git", branch: "master"
+    url "https://github.com/PCRE2Project/pcre2.git", branch: "main"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
@@ -29,7 +31,10 @@ class Pcre2 < Formula
   end
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = %W[

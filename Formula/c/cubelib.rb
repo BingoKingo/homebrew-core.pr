@@ -1,8 +1,8 @@
 class Cubelib < Formula
   desc "Performance report explorer for Scalasca and Score-P"
   homepage "https://scalasca.org/software/cube-4.x/download.html"
-  url "https://apps.fz-juelich.de/scalasca/releases/cube/4.9/dist/cubelib-4.9.tar.gz"
-  sha256 "a0658f5bf3f74bf7dcf465ab6e30476751ad07eb93618801bdcf190ba3029443"
+  url "https://apps.fz-juelich.de/scalasca/releases/cube/4.9/dist/cubelib-4.9.1.tar.gz"
+  sha256 "d82a899af07ec6c34c88665a0dfddbbc33a760031b1a79f12d168301e8ea1e46"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,21 +11,24 @@ class Cubelib < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "066378b05ed9eb15c6bbf9202e641a932e72e5c4e24ed5071a8df8b95f36fbe3"
-    sha256 arm64_sonoma:  "0e1252ac62492b97973bbd9194104d68094c7b0c2fe66238a009e7883b027ad1"
-    sha256 arm64_ventura: "6db4378728b7fef0376f751dff698b109b1690cbbd8847ca2ed9d4dc5708c2c2"
-    sha256 sonoma:        "3b34171b089bddc118864151d5f16a6f9fd7ecf2061530b43a5f3d2f92ac9bd5"
-    sha256 ventura:       "6e8cee9a4b318d0bf9846d6ee66d82550f33188ea584415fc74f548a4ff0dee3"
-    sha256 arm64_linux:   "680d72e8b1a84ed6e454e16a859fcc5be4438e265ed62637b8ad0e6c57117999"
-    sha256 x86_64_linux:  "f23523ee48a74275d61f881645e96f3a1f37f18a8ca70570e2a915a62930f2dc"
+    rebuild 1
+    sha256 arm64_tahoe:   "af8563eab21f130a1c32ffebcbc1808975d166316d8ec5576a83dc2ebbc437c9"
+    sha256 arm64_sequoia: "1ccf40f98502d79ffbd32bcff4ae6212b8b96aa525e60db0665848183139da9f"
+    sha256 arm64_sonoma:  "09ebd4777ba76e31a2f4c41ee65144b9a797ee0d556278da43962164048fcfc9"
+    sha256 sonoma:        "d4013dbc7bb8da8188a0d17d09c52ebc14f36db09df5516150fe2a39ee2599bd"
+    sha256 arm64_linux:   "d9915686606c3dfa397292fdf87fec0a16af4407344ccacdadd10792a2542e45"
+    sha256 x86_64_linux:  "09faef23e866883d28efac0afb0d96a72cb574c558ff16ffe1b047b842b50fa5"
   end
 
   depends_on "pkgconf" => :build
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # Fix -flat_namespace being used on Big Sur and later.
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-big_sur.diff"
     sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
     directory "build-frontend"
   end

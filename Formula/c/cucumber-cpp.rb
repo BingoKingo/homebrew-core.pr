@@ -2,19 +2,17 @@ class CucumberCpp < Formula
   desc "Support for writing Cucumber step definitions in C++"
   homepage "https://cucumber.io"
   url "https://github.com/cucumber/cucumber-cpp.git",
-      tag:      "v0.7.0",
-      revision: "ceb025fb720f59b3c8d98ab0de02925e7eab225c"
+      tag:      "v0.8.0",
+      revision: "38bd34a3caaeb3fa6ab80d09b323e1a9d6fe24b7"
   license "MIT"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ebd1f734db83ae5e745b5a870609430170ac0a4db66d0a982054f17f9c11df23"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d9d57c131eb3c28dacc0dc5191e0db536837ff6c0c3e1c00b18bbde206cbccea"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "83b0a4ebd24369723ca462379eec507069b69745b0162aaf8e52fbd191912f8b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "552c285dcbfdfeeeee4918504197d55608bcdd7a6f545c7b128b9a3ec4de66bd"
-    sha256 cellar: :any_skip_relocation, ventura:       "f174b4c1f7188ec9cbfa63d42a7858b5b6055d46b4e8ef9e01603aa6a8f504a9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0b10926942356d39fb0ec167e488e3d170a265824e3afee947643ab71b8be4bd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0fdfd1f3eb9ae326c0490d8f17f4b68adebd5c48382bae283de89b9bb835b994"
+    sha256 cellar: :any,                 arm64_tahoe:   "35223aa4c6b55a58d5791ee51e2ae47359e11a8c4cf4512227e13150d443a4e3"
+    sha256 cellar: :any,                 arm64_sequoia: "22354d052564f4bf8e49d62f5b99f1789c39fadba6e1ae42aaf7d44ad4fd7a20"
+    sha256 cellar: :any,                 arm64_sonoma:  "c99200855796c764cf8fb723fe2f70ba8a4c53dfe5b880ee3c2fe2ac85dbfc68"
+    sha256 cellar: :any,                 sonoma:        "3b9169520a6eb955a10b97cdcd5de61709a49df4b047a60fb52db09e03a0b83b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "18c389442081099600284c429bcb1693cdbde8af1c2705750d4d358918e4cbfd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f94c8fe6c5d816f8b8a8e7cb6885d032e8a27431827ad6fd96aea155d37bc66c"
   end
 
   depends_on "cmake" => :build
@@ -24,12 +22,8 @@ class CucumberCpp < Formula
   depends_on "tclap"
 
   def install
-    # TODO: Remove these on next release as they are the defaults
     args = %w[
-      -DCUKE_ENABLE_BOOST_TEST=OFF
-      -DCUKE_ENABLE_GTEST=OFF
-      -DCUKE_ENABLE_QT=OFF
-      -DCUKE_TESTS_UNIT=OFF
+      -DBUILD_SHARED_LIBS=ON
     ]
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args

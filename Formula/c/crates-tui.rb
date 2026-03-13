@@ -7,6 +7,7 @@ class CratesTui < Formula
   head "https://github.com/ratatui/crates-tui.git", branch: "main"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7a4d3f4d546495d9eada59e3329b86c0172422e4796be32ca05c01eb3303e6f6"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "f56fcc14fa7ac18c23012b124c2c1332b496ca0e9ade5a07a6d531a5f7bb4e62"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "30f81c73519341098deba38f9709c99347db6b33612bba1550711e68a45a0501"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "3bb365cdc581270ec3b678e116906be8804b8456f9177a9da96c82596c5c4d8a"
@@ -30,12 +31,15 @@ class CratesTui < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/crates-tui --version")
 
-    # failed with Linux CI, `No such device or address (os error 6)`
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     begin
       output_log = testpath/"output.log"
-      pid = spawn bin/"crates-tui", [:out, :err] => output_log.to_s
+      if OS.mac?
+        pid = spawn bin/"crates-tui", [:out, :err] => output_log.to_s
+      else
+        require "pty"
+        r, _w, pid = PTY.spawn(bin/"crates-tui", [:out, :err] => output_log.to_s)
+        r.winsize = [80, 43]
+      end
       sleep 2
       assert_match "New Crates", output_log.read
     ensure

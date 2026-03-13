@@ -1,18 +1,17 @@
 class Cot < Formula
   desc "Rust web framework for lazy developers"
   homepage "https://cot.rs"
-  url "https://github.com/cot-rs/cot/archive/refs/tags/cot-v0.3.1.tar.gz"
-  sha256 "864f222df38563aaac0cb87d1866ba929c76b62b33b6a50497bf010f3053eeff"
+  url "https://github.com/cot-rs/cot/archive/refs/tags/cot-v0.5.0.tar.gz"
+  sha256 "cc0ecb18c0936faa6b45132b1f26165c78e5dc026385be5ffbf6583a37d410b3"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "adea33aaf2c5f5880be1781fde8ddcd10a8e88c6ff61c76610627c4725dc7236"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6a0ebd1d7e41a7c0e9850d9e4008724e6d9f179b03f48837f734a2cd39b08292"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "86c391ffa3164c7528eb72b603eec9781844a5d8c1c2b1681a421c6a2fdcf4a8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "42bbc1bb3a9ca8270ceea2f5101aa41e4d62cddb5ad2ca2611f885f6168e819f"
-    sha256 cellar: :any_skip_relocation, ventura:       "30b1e9be7ad094560fc5bfdb733988ae9c065d89270092c95ec6ae330fc23335"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "628bf486df5b8511197b1a1a996d22aeb7b3dd8d6f0a3012c33fa78b983847a5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2a346bf885aad13634135870685eac98467fb302065b1e5967e9152e5d43a08d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f49168ef7185f9913abec4529a3989942be8228f682d077d12ba56b2ae7cec1f"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "143d6ead2384a0304331c46aae4969e9b25f2d5427bfb10c2b00f39129b0685d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "48c8ad7a25c636a2faa1b9942be723f81b6a39e84731b01e803a71b3652cce5d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b62e01680e2916a7a93190fa70fb4bff1daa1a47dfd79af54bfe17fcc9f6c1e5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6908f2349a3ed8cfa0eb06fd2eb08d72441acd76fa6a05f7c0bd39beb1e469ca"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3eccbd8666727dbb6f0cf095d53e3369f907fd616b0a78b8139be4b8e2052033"
   end
 
   depends_on "rust" => :build

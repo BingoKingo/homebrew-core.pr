@@ -1,19 +1,18 @@
 class Rip2 < Formula
   desc "Safe and ergonomic alternative to rm"
   homepage "https://github.com/MilesCranmer/rip2"
-  url "https://github.com/MilesCranmer/rip2/archive/refs/tags/v0.9.4.tar.gz"
-  sha256 "e6d3143958b838ebbf421fb933d8e46ecc28c8298f435bdf09f647b4def452f6"
+  url "https://github.com/MilesCranmer/rip2/archive/refs/tags/v0.9.6.tar.gz"
+  sha256 "657ded2ee364e0d548697c0de28ae4e8d9564c0b5c63fd16b6718edba9a33554"
   license "GPL-3.0-or-later"
   head "https://github.com/MilesCranmer/rip2.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9ae3f478f94cdd1f8ee89a203e7512d8d3aa905ed3f3269d601c928043830386"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "45581b64a085df4f559d5042f855fb06aa75f8fe81e4dc44433aa6c850dc3337"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f09b242e19dd0070ad027b4cc0adade3f0686f55c5cf3e236df7c1017acaa9d9"
-    sha256 cellar: :any_skip_relocation, sonoma:        "241fec9cb680a7f54f5de39370bff16932810c5dbbbadfdf6b582502ecf3eef9"
-    sha256 cellar: :any_skip_relocation, ventura:       "77367b4f04e6b99826787e7c780288eb7964958bef28e3769be6941555897773"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f0aadb2f2e01fc633c9514cd812e03165c6bc0b1be630c934b5582cbf9e28513"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "263a41b50d75bfaa94c739dec7fd55cac5ee1e73c154e4c483e1913a3fa0fadc"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7a0e49f9192ce8230a4ed85ed3db21c92aa67a83528eed0cc7f84bf60972c6aa"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "eff959874609fee82ce0b0f3cf597cf5940ff57c293cad89d24889e8a17088f0"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bbb60b76782a258804c09b7367108f11de0f388bf9780c4278c9192bc383fdb6"
+    sha256 cellar: :any_skip_relocation, sonoma:        "4604458cdf5d35b317fc845448ff700c39151f070f7503794a38969f54bc41b4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8ab9740bddaace23b393153f08988f7afccd60b67c3f81c5319b88acc55b4d24"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6a582694b6bcd21a59f5393e5d56b648b3c553d5be2e1b31b49106a099d970a2"
   end
 
   depends_on "rust" => :build

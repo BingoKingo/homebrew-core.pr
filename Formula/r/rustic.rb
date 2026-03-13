@@ -1,19 +1,18 @@
 class Rustic < Formula
   desc "Fast, encrypted, and deduplicated backups powered by Rust"
   homepage "https://rustic.cli.rs"
-  url "https://github.com/rustic-rs/rustic/archive/refs/tags/v0.9.5.tar.gz"
-  sha256 "cb26f48325897946e7e6995d7617741586dfee0229ada1dfecb01e8ac90c4967"
+  url "https://github.com/rustic-rs/rustic/archive/refs/tags/v0.11.1.tar.gz"
+  sha256 "97e6fbcce30e04d3672453204aa1bb36e670d11e8b3c6df7046eacd2e5cdb7a4"
   license "Apache-2.0"
   head "https://github.com/rustic-rs/rustic.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "855e62b8c968742aa7c9a601d2e421559e9b78cb9f5ef3fbab6ca24fb456a89c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c336b3986e4d26df024f4f9e742a53141c3efd43484d1799de608ee37d8d4720"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "51334b62cb18ee4a9dadfbce90575732d0b3537aadc63fa12e83cffa95808df4"
-    sha256 cellar: :any_skip_relocation, sonoma:        "16894672e81b26c149d26c84d226e9bd544a39c68d27bfe831f2e6353722b2e8"
-    sha256 cellar: :any_skip_relocation, ventura:       "5f1b10b808848a9c702b2c2fd12ec10a28227e46f3824957e4e59b7bf0b9bbe3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3aa289175364ed60c1f3e6c37a8d363208698e158c5a9f0740cbbdeb5cb1569f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f7369c9e3bf775382e418080ed6395f31c02bcdeb2a7ba0a086beca02fa4d23b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f1a6de393ea1a8c3d6c2f527e5a3a9e5f4b6865c1a098e79d6ec3c1fa93f89fc"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4c0147b92e2559571e477462c19d8ceaabecf8628ec82a215f894ebdb66a4246"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "57d3af63633bf48b019241d6a587a8764634ca22298764e456895d60ed72c61d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "be3e1e3957eee4859f1cb9350f46954fd2c666028828fb9bc0eb9d9b8432e6ac"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "632b8038d9f6338b7bfc49c012700a01d6fdd61fdd842e71021914591f6222b6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c0628f4fb6a823deb7a5fe1b5631a4848fbba786e26c028d2418df52534aee2a"
   end
 
   depends_on "rust" => :build

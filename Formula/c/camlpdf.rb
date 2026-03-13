@@ -1,18 +1,17 @@
 class Camlpdf < Formula
   desc "OCaml library for reading, writing and modifying PDF files"
   homepage "https://github.com/johnwhitington/camlpdf"
-  url "https://github.com/johnwhitington/camlpdf/archive/refs/tags/v2.8.1.tar.gz"
-  sha256 "148994c70016f1b02fee1f5548ff7d36ba7d0a5716e03f95011160fcc495657b"
+  url "https://github.com/johnwhitington/camlpdf/archive/refs/tags/v2.9.tar.gz"
+  sha256 "2bbc222eb6e1be4ef6ec2900a1bba1da652704ff1343e742726689e077d35a27"
   license "LGPL-2.1-only" => { with: "OCaml-LGPL-linking-exception" }
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "34f2db85bff44fd2a7b00704e099a76106d85431dcb8f122a74ad530e585407d"
-    sha256 cellar: :any,                 arm64_sonoma:  "22e65fe30f42615d8711c07c4d9df5fe61942f4e315575725d274d9572b13bd3"
-    sha256 cellar: :any,                 arm64_ventura: "5b4993442c060aba6405e5518b9246e72d4c6369f31dc5632d58398fa9456c44"
-    sha256 cellar: :any,                 sonoma:        "804e849272f9ed7d58a318a199bae0a46169b46366ed87c136d7a6142b83bad0"
-    sha256 cellar: :any,                 ventura:       "0f9d1b46f0389a342fa7305efe0393526860c2e6704537ae5d66e4456619adbb"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5ce0aeb1507e9dfc7d1061644db37159269e094c72306989f01658744e8dd04a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ae56e872f83e5c2e5087e75108baa31c90171fe2de3c14495b6fb41d6dd7feb8"
+    sha256 cellar: :any,                 arm64_tahoe:   "8ea80573733f7a69935abe06422690752fce76edb6a27dac8bc1976b6fc3f0f0"
+    sha256 cellar: :any,                 arm64_sequoia: "00918247784d02e38897e119f5853059b59a80020203f852ce952ada2af11187"
+    sha256 cellar: :any,                 arm64_sonoma:  "f3b2796264a233801ddaec9906869105fda3aba8445c95414752803124c05554"
+    sha256 cellar: :any,                 sonoma:        "3f8747e524240ad6c3e6778e585a668dd1ac0f5f423ac033a8d39f861d83648b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b5d7a301e8215960741c3930db016f45dd3bceb130e7c7fe4b729d5aff760c39"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7457d2eeec4b15bfb5815f51d4e3a707bbbc29837063f5bf97231b0a98bd845f"
   end
 
   depends_on "ocaml-findlib" => :build

@@ -1,19 +1,18 @@
 class Openfortivpn < Formula
   desc "Open Fortinet client for PPP+TLS VPN tunnel services"
   homepage "https://github.com/adrienverge/openfortivpn"
-  url "https://github.com/adrienverge/openfortivpn/archive/refs/tags/v1.23.1.tar.gz"
-  sha256 "ecacfc7f18d87f4ff503198177e51a83316b59b4646f31caa8140fdbfaa40389"
+  url "https://github.com/adrienverge/openfortivpn/archive/refs/tags/v1.24.1.tar.gz"
+  sha256 "c40d33acd97b89c2e943bfd839c19b69e5a7a5997052e2fc9a595602745c0465"
   license "GPL-3.0-or-later" => { with: "openvpn-openssl-exception" }
   head "https://github.com/adrienverge/openfortivpn.git", branch: "master"
 
   bottle do
-    sha256 arm64_sequoia: "1ae366135c78e77a61e53bc6c8c05b5517f715f64b580ee20c7f380e4772b483"
-    sha256 arm64_sonoma:  "28994d4959537dbfe5702aed1d16e7c09096e6957b5640f3b89da6669deecefe"
-    sha256 arm64_ventura: "39bd9a1bd6b7a26eb5a10a4bbd2a3ed9d50b72aa1b80d64fffe95430734a36d8"
-    sha256 sonoma:        "638d300356138d5dfb66500e01e71b2e07d7fdfbf6151cf4b3d389db04744c33"
-    sha256 ventura:       "b3c8630701ae6d1ee308c0e4e72885e296d59bd83fec77eb21d7046e3c6a50fe"
-    sha256 arm64_linux:   "9803841bf3a552d2220d7a213b6337cbae3cdb6759632105aa5c98bedaeeee51"
-    sha256 x86_64_linux:  "9182218ccc8af0571af8445f8458843d61056e6186407293707c2d27f2e88903"
+    sha256 arm64_tahoe:   "1cb3b9c06cf1b8af8984fe264878a82a0fe7b4f58ae0d0a90640a9ed37965a90"
+    sha256 arm64_sequoia: "dc900e43087d6641174632f37b884dc806b6777546f3b0c9c45fecbdf1573886"
+    sha256 arm64_sonoma:  "bd784e7336c8d86dbd91cbc9877122518fb8641720abbadf9480fd93381354ea"
+    sha256 sonoma:        "445013d98ad9c0d85b93cbc56dba215ee5096660cf7c56b43643779685b2ab55"
+    sha256 arm64_linux:   "b839b8ec4aa6c6c666c68f79571a2ec0ac0b73e1eef6d04c27943012484504e2"
+    sha256 x86_64_linux:  "f977e5a39f774039ea8b06090d1b0e4459d3321233aa171a4b157e4d8419cbe8"
   end
 
   depends_on "autoconf" => :build

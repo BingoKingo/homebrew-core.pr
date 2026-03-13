@@ -4,37 +4,44 @@ class Klee < Formula
 
   desc "Symbolic Execution Engine"
   homepage "https://klee-se.org"
-  url "https://github.com/klee/klee/archive/refs/tags/v3.1.tar.gz"
-  sha256 "ae3d97209fa480ce6498ffaa7eaa7ecbbe22748c739cb7b2389391d0d9c940f7"
+  url "https://github.com/klee/klee/archive/refs/tags/v3.2.tar.gz"
+  sha256 "83d9b9ce0ba187e48c0e55623bf1a68b5eb61376da7ce82551c9d885715a21dd"
   license "NCSA"
-  revision 4
+  revision 1
   head "https://github.com/klee/klee.git", branch: "master"
 
   bottle do
-    sha256 arm64_sequoia: "ca3c457d1beb7493b543de0e7f437e553d3f8e4b3189e1cf8aed4af2def34b43"
-    sha256 arm64_sonoma:  "acae2eb29a27f2dba222d8a9ac0f7bd4e04c5f88f181a98f4acc8519817a9f1a"
-    sha256 arm64_ventura: "7681f61b63db83b4d972127364af4787b34cec6820e26f997bf955c2a5b7e277"
-    sha256 sonoma:        "529fb661a9bbab5e12aab061ccb627029807e2b66c08b567eadc0f1f4752f965"
-    sha256 ventura:       "3141e8037c193771a86ef0ec281a4d90dc7a1b41b6f23645d21f4a70f4308a68"
-    sha256 x86_64_linux:  "21be2951cd4759590f36a5c021c1531a595fd3b80e2813f41ff336625f4efabd"
+    rebuild 1
+    sha256 arm64_tahoe:   "5a6b573c25130976ca751247e04d9fccb13fcaed6c509c4c6b4fdad39344c470"
+    sha256 arm64_sequoia: "2a75e77d76dbf1c19948be54c31e5ea6f0f555ffb61a33919cc3c2594c03559d"
+    sha256 arm64_sonoma:  "c6e8559baf8e80ac61123eff04d32fed8523b2760dd8982f6041902b7a921f14"
+    sha256 sonoma:        "c5da5c3aa76ee6df601a07b20bc4c2c31ed07730a80d31764338a0684cf7318a"
+    sha256 x86_64_linux:  "92dd88ee1ef927f42257db072817fa552f0040c9cecb3128792de3643f1faf32"
   end
 
   depends_on "cmake" => :build
 
+  depends_on "cryptominisat"
   depends_on "gperftools"
   depends_on "llvm@16" # LLVM 17+ issue: https://github.com/klee/klee/issues/1754
-  depends_on "python@3.13"
+  depends_on "python@3.14"
   depends_on "sqlite"
   depends_on "stp"
   depends_on "wllvm"
   depends_on "z3"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "cryptominisat"
     depends_on "gmp"
     depends_on "minisat"
+  end
+
+  on_linux do
+    # klee seems to stall when run on arm64. May not be supported yet:
+    # * https://github.com/klee/klee/issues/1670
+    # * https://github.com/klee/klee/issues/1767
+    depends_on arch: :x86_64
+    depends_on "zlib-ng-compat"
   end
 
   # klee needs a version of libc++ compiled with wllvm
@@ -120,7 +127,7 @@ class Klee < Formula
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
 
-    venv = virtualenv_create(libexec/"venv", "python3.13")
+    venv = virtualenv_create(libexec/"venv", "python3.14")
     venv.pip_install resource("tabulate")
     rewrite_shebang python_shebang_rewrite_info(venv.root/"bin/python"), *bin.children
   end

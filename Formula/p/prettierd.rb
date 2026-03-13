@@ -1,19 +1,19 @@
 class Prettierd < Formula
   desc "Prettier daemon"
   homepage "https://github.com/fsouza/prettierd"
-  url "https://registry.npmjs.org/@fsouza/prettierd/-/prettierd-0.26.1.tgz"
-  sha256 "aae1a7c3dcdbc7e98b4aa456ad090adec954258c65308a0e7ef1c55c7f5e54c9"
+  url "https://registry.npmjs.org/@fsouza/prettierd/-/prettierd-0.27.0.tgz"
+  sha256 "a7a3b95cddf5860d315ccfaaf9df26eee4e7631534f427f68bfb7d1d182a163b"
   license "ISC"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "c32988c0ba23d111f611bdc5183ce8bc1ffe67209062029edc73435803c4587a"
+    sha256 cellar: :any_skip_relocation, all: "791eb749e993aebe804ed3fdddba9a9314566e8bec14f3a93ba011a8af825eb8"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

@@ -1,26 +1,28 @@
 class Code2prompt < Formula
   desc "CLI tool to convert your codebase into a single LLM prompt"
   homepage "https://code2prompt.dev/"
-  url "https://github.com/mufeedvh/code2prompt/archive/refs/tags/v3.0.2.tar.gz"
-  sha256 "08e45407b71bf5e5fb89930043b085cf8965a008dc5004d4aa4ac64db0e447e0"
+  url "https://github.com/mufeedvh/code2prompt/archive/refs/tags/v4.2.0.tar.gz"
+  sha256 "de0fe811914bee2d03a0025e734d702d1cb50472dd75c42017cc65ac9435e481"
   license "MIT"
   head "https://github.com/mufeedvh/code2prompt.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "ffb0a37cd1c18cfce0671d5f12893bf3e76861adeed8aebd0877bb0e297722aa"
-    sha256 cellar: :any,                 arm64_sonoma:  "bf804355c19b6f6be322938ed43f0cc80201f1b530a5fa26ef0f155326f19f5c"
-    sha256 cellar: :any,                 arm64_ventura: "2c8ece110e8e9691417400d8e011ed0954a9b7f3b160a3d0988632219cf0c5e3"
-    sha256 cellar: :any,                 sonoma:        "a9a016853a6abfd026b1ab3db2205faf4da346be2fec686a5504b7eac87071a2"
-    sha256 cellar: :any,                 ventura:       "7429f9f5fa52f3d55ce31b80a92feacbcf2d8dcd5a5a13ec5b3da1f50ff362a0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "61242b4adb9b40caf4e07985b0f3e8296574322f18b60cf459812cf6e8197e09"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ef85b418af9acc67de01f42ac222b996933588a6f8d02cd7b162346aae8084ff"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "14aa4f7a6f013ffc948306bbe0210b951ccc0523d78ebd1b1c5ef0a36c08f1c2"
+    sha256 cellar: :any,                 arm64_sequoia: "e7bdea92a684ab0483bad093e9aa554d2df195d77eb2676f1f469b71c524a7ed"
+    sha256 cellar: :any,                 arm64_sonoma:  "d25ee8e05d2016985e5ebcf1befe31d2ddbd9b67fc482ed9d00a39f0e61ff04b"
+    sha256 cellar: :any,                 sonoma:        "48fb47f8ece13be5215c64d39b3b641498fe3f9e46c901dedaa2123adddd9361"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8133b94fe8d8ff29a3b14dfadfd7c333b40f811193d0a0cc8fa81805e8851133"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "901f372469f56db97e43cb4ad0beff306ed34532bb7728be03d71cfd19ca8fa1"
   end
 
   depends_on "pkgconf" => :build
   depends_on "rust" => :build
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # Ensure the correct `openssl` will be picked up.

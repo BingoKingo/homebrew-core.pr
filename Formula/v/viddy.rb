@@ -7,6 +7,7 @@ class Viddy < Formula
   head "https://github.com/sachaos/viddy.git", branch: "master"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d7c01377ce6dc8d3cef31fa0ffefa6dcb6e2b3f0c4edc0519f937a0bf4e96a3a"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "618af16f6d99f7f2309e65cc33b60eea874f15ae8a0965b873c1a8ef1f9bda41"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a9475b43a3238107af27cd6d6f14621af0e5e0fd0504a3fddad1e33277f3b7af"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "5132a22bfe77049378f62158a9c2fb9e52ab6f04c426e9cfdff4e7c78a0de06f"
@@ -23,16 +24,12 @@ class Viddy < Formula
   end
 
   test do
-    # Errno::EIO: Input/output error @ io_fread - /dev/pts/0
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     begin
-      pid = fork do
-        system bin/"viddy", "--interval", "1", "date"
-      end
+      pid = spawn bin/"viddy", "--interval", "1", "date"
       sleep 2
     ensure
       Process.kill("TERM", pid)
+      Process.wait(pid)
     end
 
     assert_match "viddy #{version}", shell_output("#{bin}/viddy --version")

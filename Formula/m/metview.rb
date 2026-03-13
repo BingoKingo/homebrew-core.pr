@@ -1,49 +1,51 @@
 class Metview < Formula
   desc "Meteorological workstation software"
   homepage "https://metview.readthedocs.io/en/latest/"
-  url "https://confluence.ecmwf.int/download/attachments/51731119/MetviewBundle-2025.4.0-Source.tar.gz"
-  version "5.25.0"
-  sha256 "ebfa17e3db63c72a2caad5a13136d0e86f300cc8cdaa31c98ed4ff5034aebc09"
+  url "https://confluence.ecmwf.int/download/attachments/3964985/Metview-5.26.2-Source.tar.gz"
+  sha256 "6245b34909ac697f941f92ee1293f14f96c31c3919f41db5dba706de6c9d43e3"
   license "Apache-2.0"
 
   livecheck do
-    url "https://confluence.ecmwf.int/display/METV/The+Metview+Source+Bundle"
-    regex(%r{>\s*Metview\s*<.+?<td[^>]*?>\s*v?(\d+(?:\.\d+)+)\s*</td}im)
+    url "https://confluence.ecmwf.int/display/METV/Releases"
+    regex(/href=.*?Metview[._-]v?(\d+(?:\.\d+)+)-Source\.t/i)
   end
 
   bottle do
-    sha256 arm64_sonoma:  "876917b5c9621b6efb3b45381e33741484588dbbda49fa69d01c1af12f79f830"
-    sha256 arm64_ventura: "328738471e53512d4f170c1792eb7dd4f44210ae134391e5aefb87f14a5dc719"
-    sha256 sonoma:        "8436e13d3f7adbd5862345c1d8e366d5b479121f0d089c428573c5853a619872"
-    sha256 ventura:       "4b989db8ccf78dbec26dddc01b0a4601b47f647bc4896271ff80f71bcbf424c4"
-    sha256 x86_64_linux:  "9913a8f66586218ffe992531c8fb2d29ba5d45282b428fe18beb00166ac1550d"
+    rebuild 1
+    sha256                               arm64_tahoe:   "8ea0aac6d5efa12195864cd47b2a6c3f2947fb67c08dcd20484776aabc6ee1c8"
+    sha256                               arm64_sequoia: "8d3b1a19af31c9bd7e1c2bc0e9ee7d973531072b8a21809bf33c3f1fc1af19f2"
+    sha256                               arm64_sonoma:  "3c7f68f83c3a04ccf87213a3c2e658c5c1d8d3042e0bc938a6fc79c4822bceb5"
+    sha256 cellar: :any,                 sonoma:        "9967ae04346f24e99ef21b3f8cb173b2bd60adc0282f0f148bff79b7917d6923"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7924342f589a4aa78003c16731d9a13dfdf2ce19cc2c666f214083a263c667fe"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "81dbd92e9ed28d630b33df5e19c966dde006ce193601edb94713d1a8c7d4636c"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "cairo"
   depends_on "eccodes"
-  depends_on "eigen"
+  depends_on "eigen" => :no_linkage
   depends_on "fftw"
   depends_on "gdbm"
   depends_on "glib"
   depends_on "libaec"
-  depends_on "libpng"
   depends_on "lz4"
+  depends_on "magics"
   depends_on "netcdf"
   depends_on "netcdf-cxx"
-  depends_on "openssl@3"
   depends_on "pango"
-  depends_on "proj"
-  depends_on "qt"
+  depends_on "qt5compat"
+  depends_on "qtbase"
+  depends_on "qtsvg"
+  depends_on "snappy"
 
   uses_from_macos "bison" => :build
   uses_from_macos "flex"  => :build
   uses_from_macos "bzip2"
   uses_from_macos "curl"
-  uses_from_macos "expat"
 
   on_macos do
+    depends_on "gcc" # for gfortran
     depends_on "gettext"
     depends_on "harfbuzz"
   end
@@ -51,24 +53,22 @@ class Metview < Formula
   on_linux do
     depends_on "libtirpc"
     depends_on "openblas"
-    depends_on "snappy"
   end
 
   def install
-    # https://jira.ecmwf.int/plugins/servlet/desk/portal/4/SD-110363
-    inreplace "metview/CMakeLists.txt", "cmake_policy(SET CMP0046 OLD)", "cmake_policy(SET CMP0046 NEW)"
     args = %W[
-      -DBUNDLE_SKIP_ECCODES=1
       -DENABLE_MIR_DOWNLOAD_MASKS=OFF
       -DENABLE_BUILD_TOOLS=OFF
       -DENABLE_ECKIT_CMD=OFF
+      -DENABLE_TESTS=OFF
       -DFFTW_PATH=#{Formula["fftw"].opt_prefix}
     ]
 
     if OS.linux?
-      args += [
-        "-DRPC_PATH=#{Formula["libtirpc"].opt_prefix}",
-        "-DRPC_INCLUDE_DIR=#{Formula["libtirpc"].opt_include}/tirpc",
+      args += %W[
+        -DENABLE_CLANG_TIDY=OFF
+        -DRPC_PATH=#{Formula["libtirpc"].opt_prefix}
+        -DRPC_INCLUDE_DIR=#{Formula["libtirpc"].opt_include}/tirpc
       ]
     end
 

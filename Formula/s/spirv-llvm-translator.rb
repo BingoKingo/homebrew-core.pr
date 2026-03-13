@@ -1,18 +1,18 @@
 class SpirvLlvmTranslator < Formula
   desc "Tool and a library for bi-directional translation between SPIR-V and LLVM IR"
   homepage "https://github.com/KhronosGroup/SPIRV-LLVM-Translator"
-  url "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v20.1.3.tar.gz"
-  sha256 "8e953931a09b0a4c2a77ddc8f1df4783571d8ffca9546150346c401573866062"
+  url "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v22.1.0.tar.gz"
+  sha256 "a5d476404ab88ac0d148211da50428178c89caef8af8042a3ca8e71e58ed9427"
   license "Apache-2.0" => { with: "LLVM-exception" }
+  compatibility_version 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "a425c821bca1ff84930051d0fdc4db1389d2609fed9fd993c6dc088d8b69e4df"
-    sha256 cellar: :any,                 arm64_sonoma:  "83b56ad41ae4c697136b577db136fe4a5849d383fcfcac2693e4b8f3248ac500"
-    sha256 cellar: :any,                 arm64_ventura: "e31eeeb2f387b9767a33ac331825d96fda64c45853a756a5489f25c88414e174"
-    sha256 cellar: :any,                 sonoma:        "b4ce22d3a5687712eb5f7bbab2dea849f4c5ffcd17b8da4a3b80f1ee8cfbd21a"
-    sha256 cellar: :any,                 ventura:       "f755ec2710b712391af6fb000c48def3e115beb2db4c4f63f0a0f5a1b8d5fe88"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a81a25c23f85d2233cd3ffb2a943ef4e3ed2baee84e8ea7dc67adbc30e4c769e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e7eef72a4d06e38cd2b5ce0050991a623608d8b2468dd652d4d562454d7b711a"
+    sha256 cellar: :any,                 arm64_tahoe:   "966dcbc340c5a1dde90684f6bd65e50df47ac69d832b992384ac0667170748d4"
+    sha256 cellar: :any,                 arm64_sequoia: "91c12287f7da19448667091bc486fa8802bc3935f1a0c36fa83fe462910bb14c"
+    sha256 cellar: :any,                 arm64_sonoma:  "73b8c0b86c44d643b9561b0d0f42163bb96b50f0db2b9f9414f10a85a98547ff"
+    sha256 cellar: :any,                 sonoma:        "24eb73763db6e832ea4fcc7199ebf4ddd60993adca15ed5e142bef2031c1966c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "905eb3db62ca27e026f8cfc7ca931ebaf1fcca40478ecda51f5a8db6c9a58420"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "896dfc92eca87a325b98b440482f32948bba02ec80a6101631091d344ffee1da"
   end
 
   depends_on "cmake" => :build
@@ -37,14 +37,14 @@ class SpirvLlvmTranslator < Formula
   end
 
   test do
-    (testpath/"test.ll").write <<~EOS
+    (testpath/"test.ll").write <<~LLVM
       target datalayout = "e-i64:64-v16:16-v24:32-v32:32-v48:64-v96:128-v192:256-v256:256-v512:512-v1024:1024"
       target triple = "spir64-unknown-unknown"
 
       define spir_kernel void @foo() {
         ret void
       }
-    EOS
+    LLVM
     system llvm.opt_bin/"llvm-as", "test.ll"
     system bin/"llvm-spirv", "test.bc"
     assert_path_exists testpath/"test.spv"

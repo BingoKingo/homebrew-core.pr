@@ -1,8 +1,8 @@
 class Libgit2AT18 < Formula
   desc "C library of Git core methods that is re-entrant and linkable"
-  homepage "https://libgit2.github.com/"
-  url "https://github.com/libgit2/libgit2/archive/refs/tags/v1.8.4.tar.gz"
-  sha256 "49d0fc50ab931816f6bfc1ac68f8d74b760450eebdb5374e803ee36550f26774"
+  homepage "https://libgit2.org/"
+  url "https://github.com/libgit2/libgit2/archive/refs/tags/v1.8.5.tar.gz"
+  sha256 "ec70049b8af823b21032447f91a2274fd8d91c435ef326a533dff3824e21b27f"
   license "GPL-2.0-only" => { with: "GCC-exception-2.0" }
 
   livecheck do
@@ -11,13 +11,15 @@ class Libgit2AT18 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5a9fe4aae3865e5c977633107b829e639e6535d8f986c851d60d63bb2e5b0932"
-    sha256 cellar: :any,                 arm64_sonoma:  "d04a13a2da8d14c6f0bee82751d472b13aa0fd8ed688eff218f7a0a18d29bf59"
-    sha256 cellar: :any,                 arm64_ventura: "94ef273252c464c308e859ebfb3b78814516f6a740d40c57394805c4fbcbcb58"
-    sha256 cellar: :any,                 sonoma:        "4848894348322217f276122ab1d3307778f473430abbc51dc22818273b06cf83"
-    sha256 cellar: :any,                 ventura:       "9a389072e0da2cb33c2c82bf7d57c49844c92c82be47d19f7e25f0b6666aa8c2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d4d124965d0952c612e40c46a4fe3423220509d57cc61118fe15eecce3dbc2ce"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "105c2c951f86f9de73797b314f92b46bddab6b6bb779cee7303d9eebec8a1c18"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "906d5ccc5117c9e2c7273223571961fbc1942a61c652ed31f494f85423069af2"
+    sha256 cellar: :any,                 arm64_sequoia: "9a7f4f48320b87e7067589fb218d6edf9513f7ca9d522cbc2e119b002409ce8e"
+    sha256 cellar: :any,                 arm64_sonoma:  "b062e85c407f021ec8541b55c9f08787d665e61762f0834c29fee0fce2f2558d"
+    sha256 cellar: :any,                 tahoe:         "f13c93f8f111aa5b58366fae780223237438c3486be7481b4263bbad0a23dcee"
+    sha256 cellar: :any,                 sequoia:       "7e5064dbf31f18bf27010982d08f752bd478ebedd1377ed55fb262503f16a305"
+    sha256 cellar: :any,                 sonoma:        "b1175c63eaade8f8df89fbbe12a77f45d902c72566b3e6a14b977363b19a7b7c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1feecd76d9334b09f4a24b69eb19af77910d1e1d5b83508ea115e3c63bb50d98"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3a03d39fce85a0f92345248fcdfff263023ee9eaf6a1b0103191d4302f5bddde"
   end
 
   keg_only :versioned_formula
@@ -25,10 +27,10 @@ class Libgit2AT18 < Formula
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "libssh2"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "openssl@3" # Uses SecureTransport on macOS.
+    depends_on "zlib-ng-compat"
   end
 
   def install

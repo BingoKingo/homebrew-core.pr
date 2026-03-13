@@ -1,51 +1,50 @@
 class Brpc < Formula
   desc "Better RPC framework"
   homepage "https://brpc.apache.org/"
-  url "https://dlcdn.apache.org/brpc/1.13.0/apache-brpc-1.13.0-src.tar.gz"
-  sha256 "106f6be8bbc6038b975f611c0e7a862a1c3ea3f8c82ec83d3915790a1ca7f5d8"
+  url "https://dlcdn.apache.org/brpc/1.16.0/apache-brpc-1.16.0-src.tar.gz"
+  sha256 "4d5e84048e12512c008d24e52c9e0baa876b5f3f9b06f0aead38b55ea248fdc3"
   license "Apache-2.0"
+  revision 1
   head "https://github.com/apache/brpc.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5ee83db56a2bd4aa55b27f88d8df6754acad87376e96b599c8c12fb1fd346acc"
-    sha256 cellar: :any,                 arm64_sonoma:  "29041545a671e04b0db044b0b4fcae6a6bf719e3a615540d144fa5f9c9d14f1b"
-    sha256 cellar: :any,                 arm64_ventura: "a1b1d7416a05808f0c24a06b60e5791783dcc753d1dad49b0c4ddf7791785239"
-    sha256 cellar: :any,                 sonoma:        "1efc4ee86e1660947dec16f84120d0e52c19dd67aa9418e8c138de3aabe40c0f"
-    sha256 cellar: :any,                 ventura:       "8fbe818bba4ec1b11a8fd76116ee17e64851c0047bcb7ff615d58e8fa144b10d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "417ff56ecc578f7d6ed318d503344f3ae16a83df6aebf489542353fa6f7e0b66"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3d9334730f6fa20443c358d4c4c4657b38a44e2c54d59a63c0f233eaf880a4b8"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe:   "edf689ceb1b7f6f51524c95670c84475387d516a95b6f4862b332a0dfbf5344f"
+    sha256 cellar: :any, arm64_sequoia: "3a91db6a1c4b66e334a744dd2aa1150baf9e464e3595cdea0db8621695cb4588"
+    sha256 cellar: :any, arm64_sonoma:  "44961ac6282d2640b5c3d05d3e3e098b44cd785073420d9f821d68c83aa734c7"
+    sha256 cellar: :any, sonoma:        "591046cf78fbda05a35c75f084fd3ef2d2fef316bfd0731940e953af06c91a39"
+    sha256               arm64_linux:   "472bf124484071423230ee2f6d1b483164033331cfa40c5a71c3506ef65ad2f2"
+    sha256               x86_64_linux:  "8791f03b3104246637a4742e6a2f16f8d55f7740d1414b96772913e1dda25045"
   end
 
   depends_on "cmake" => :build
   depends_on "abseil"
   depends_on "gflags"
-  depends_on "gperftools"
   depends_on "leveldb"
   depends_on "openssl@3"
-  depends_on "protobuf@29"
+  depends_on "protobuf"
 
   on_linux do
     depends_on "pkgconf" => :test
   end
 
+  # Apply open PR to support Protobuf 34
+  # PR ref: https://github.com/apache/brpc/pull/3241
+  patch do
+    url "https://github.com/apache/brpc/commit/09b50d2c144e20e687c53829c89138caa7f1f31c.patch?full_index=1"
+    sha256 "85536080d6ef84b446c7a3277dd0a6b8ac9672366bde8709abb4e592dc5f61b5"
+  end
+
   def install
-    inreplace "CMakeLists.txt", "/usr/local/opt/openssl",
-                                Formula["openssl@3"].opt_prefix
-
-    # `leveldb` links with `tcmalloc`, so should `brpc` and its dependents.
-    # Fixes: src/tcmalloc.cc:300] Attempt to free invalid pointer 0x143e0d610
-    inreplace "CMakeLists.txt", "-DNO_TCMALLOC", ""
-    tcmalloc_ldflags = "-L#{Formula["gperftools"].opt_lib} -ltcmalloc"
-    ENV.append "LDFLAGS", tcmalloc_ldflags
-    inreplace "cmake/brpc.pc.in", /^Libs:(.*)$/, "Libs:\\1 #{tcmalloc_ldflags}"
-
-    args = %w[
+    args = %W[
       -DBUILD_SHARED_LIBS=ON
       -DBUILD_UNIT_TESTS=OFF
       -DDOWNLOAD_GTEST=OFF
       -DWITH_DEBUG_SYMBOLS=OFF
       -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      -DOPENSSL_ROOT_DIR=#{Formula["openssl@3"].opt_prefix}
     ]
+
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
@@ -80,23 +79,20 @@ class Brpc < Formula
       }
     CPP
 
-    protobuf = Formula["protobuf@29"]
-    gperftools = Formula["gperftools"]
+    protobuf = Formula["protobuf"]
     flags = %W[
       -I#{include}
       -I#{protobuf.opt_include}
       -L#{lib}
       -L#{protobuf.opt_lib}
-      -L#{gperftools.opt_lib}
       -lbrpc
       -lprotobuf
-      -ltcmalloc
     ]
     # Work around for undefined reference to symbol
     # '_ZN4absl12lts_2024072212log_internal21CheckOpMessageBuilder7ForVar2Ev'
     flags += shell_output("pkgconf --libs absl_log_internal_check_op").chomp.split if OS.linux?
 
-    system ENV.cxx, "-std=c++17", "test.cpp", "-o", "test", *flags
+    system ENV.cxx, "-std=gnu++17", "test.cpp", "-o", "test", *flags
     assert_equal "200", shell_output("./test")
   end
 end

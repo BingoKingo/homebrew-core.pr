@@ -7,6 +7,7 @@ class Pdfpc < Formula
   head "https://github.com/pdfpc/pdfpc.git", branch: "master"
 
   bottle do
+    sha256 arm64_tahoe:   "b76907d094e032d1c6d6f67be0b1774b0ceaaad44ec21102fcb82084ae8c94c2"
     sha256 arm64_sequoia: "76900b6a726ed5f8c747a89957da0b81dd8b18c8b5bda6765f7b1ac4de0c26de"
     sha256 arm64_sonoma:  "bfbfbdcfb242b5ca2c26764e5175596609bed8b681692a07cc3cf80e1a351de9"
     sha256 arm64_ventura: "102466bc213e5b6a13b8285441a3c3a22b80f73f47f197481cf20ea4331b6e71"
@@ -39,6 +40,7 @@ class Pdfpc < Formula
   end
 
   on_linux do
+    depends_on "xorg-server" => :test
     depends_on "webkitgtk"
   end
 
@@ -54,9 +56,8 @@ class Pdfpc < Formula
   end
 
   test do
-    # Gtk-WARNING **: 00:25:01.545: cannot open display
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"].present?
-
-    system bin/"pdfpc", "--version"
+    cmd = "#{bin}/pdfpc --version"
+    cmd = "#{Formula["xorg-server"].bin}/xvfb-run #{cmd}" if OS.linux? && ENV.exclude?("DISPLAY")
+    assert_match version.to_s, shell_output(cmd)
   end
 end

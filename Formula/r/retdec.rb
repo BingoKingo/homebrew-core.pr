@@ -9,14 +9,13 @@ class Retdec < Formula
   head "https://github.com/avast/retdec.git", branch: "master"
 
   bottle do
-    rebuild 2
-    sha256 cellar: :any,                 arm64_sequoia: "216414b394e83210cce369da37d371ac44b4e3b6f6008fa16191efacc4ea9eaa"
-    sha256 cellar: :any,                 arm64_sonoma:  "8b9441e8c153d05e91cbeef5688f58584b709eec12b38a9c5f0fcf7dd80b258f"
-    sha256 cellar: :any,                 arm64_ventura: "666d104c2c81ebf92f83b239aa716bf7e798362558b3855f83de08df4120b260"
-    sha256 cellar: :any,                 sonoma:        "12f78f71818e8477a1966f273a737e879246f72856e6a3d5cb3ddf134bbfe0fe"
-    sha256 cellar: :any,                 ventura:       "a6b2b8f1befd6b68df9dd0dc1786ac4204c4106c9fe2d8d2d2bf2973ed6bb6e2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8d18898575fd9cfdcdbef7fae747b2dccd25ef42383c30a52f7616e95552d282"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9e46385c01a262b114048e4af0eea56b6ea7cffab2a39569faa28fd6e76f4fe4"
+    rebuild 4
+    sha256 cellar: :any,                 arm64_tahoe:   "636b6b44b73121f25224e327ca950576cb95a2a5fd29890c882b7336993af7cc"
+    sha256 cellar: :any,                 arm64_sequoia: "2b66bd7a2b82e7c2984bf1cf7d527b8e689fa0915c5dae716500014a689d1c8b"
+    sha256 cellar: :any,                 arm64_sonoma:  "f51d9599b4ba56340e4db15fad2a5deedf84e9cb73efdc66ef8ccb35bd3fc7fd"
+    sha256 cellar: :any,                 sonoma:        "600a0786558e55c549ee2f437a05adb2370866ddf23212af0d018b57d22f923d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "cf3181456a91b4f47359036729f37ef32762af922cafd4f26451cf4f8e5eabd8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6400aaaa25aba6846a2d8efd43e7c20b608a181c0cb4a2bfddb5c99618b1ac93"
   end
 
   depends_on "autoconf" => :build
@@ -24,13 +23,21 @@ class Retdec < Formula
   depends_on "cmake" => :build
   depends_on "libtool" => :build
   depends_on "pkgconf" => :build
-  depends_on macos: :catalina
   depends_on "openssl@3"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
-  uses_from_macos "zlib"
+  on_sequoia do
+    depends_on xcode: ["16.4", :build]
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
+    # Workaround for CMake 4 compatibility with multiple vendored deps
+    ENV["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5"
+
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"

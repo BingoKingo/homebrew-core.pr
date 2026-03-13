@@ -1,24 +1,26 @@
 class Roxctl < Formula
   desc "CLI for Stackrox"
   homepage "https://www.stackrox.io/"
-  url "https://github.com/stackrox/stackrox/archive/refs/tags/4.7.3.tar.gz"
-  sha256 "5e6d08b85446d36dbf804cfdd9468b339d78b5e7fee72415be3b233faf775d98"
+  url "https://github.com/stackrox/stackrox/archive/refs/tags/4.10.0.tar.gz"
+  sha256 "859b52c9193942fcc55c3e83170765ca21843a0c33071dd9e924630d023ef353"
   license "Apache-2.0"
   head "https://github.com/stackrox/stackrox.git", branch: "master"
 
+  # Upstream maintains multiple major/minor versions and the "latest" release
+  # may be for a lower version, so we have to check multiple releases to
+  # identify the highest version.
   livecheck do
     url :stable
-    strategy :github_latest
+    strategy :github_releases
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9ac8c3e8bcd6371dc472620797137d648d7986d912339e6af9c79c35fbf6ffb7"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6aca654c20b635210618ac9a887df28dd5fca6e38be55dede1510ac2e4734154"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "da90686df6007e0ed53981c9e0fa0389e9f8d66bce3669b7b14e28d75f3f36f6"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d9e1a9df31e42688987103592beda1a89fb949d4535a1137ce0ac90eb2713b80"
-    sha256 cellar: :any_skip_relocation, ventura:       "62daa61b24b69c0ae5f898be75fd6065a1c7f7fcfa39adb1c2b306adb4aa314c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ee3ce7e447d322c5f41a54e6cc439f26b7e9d6cb3e3c67ef06c9d4bf1f54c1c0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0f9e4dad320346264fb4ea364fbf736660a674623e43ec82019f36f5b0c843e3"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b5af6316a5661f1ee34dca21c17d961806eed69cccdc1a1766dd959a074d74fa"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "68759f77e8d18f9173b29751d912b7476235d35ed5286a2fc7cd050b83072c0b"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9eb800d2d43f969513b2cf37f3927a8b703210c8dd2c7f398292a8e0c2beaa5f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "7368b968824bb43eca4442b21572dfd99c41d93e865268706491e43b594230f9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4fde6de66deddc6a9e41ace3608989452ea8b27291d1ef273afd0f38c7950442"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7c47d13b2545c582c0aeb61f7198988cab7544902d587eb3ef5dbcc246db0fdf"
   end
 
   depends_on "go" => :build
@@ -26,15 +28,12 @@ class Roxctl < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w"), "./roxctl"
 
-    generate_completions_from_executable(bin/"roxctl", "completion")
+    generate_completions_from_executable(bin/"roxctl", shell_parameter_format: :cobra)
   end
 
   test do
     output = shell_output("#{bin}/roxctl central whoami 2<&1", 1)
-    assert_match <<~EOS, output
-      ERROR:	obtaining auth information for localhost:8443: \
-      retrieving token: no credentials found for localhost:8443, please run \
-      "roxctl central login" to obtain credentials
-    EOS
+
+    assert_match "please run \"roxctl central login\" to obtain credentials", output
   end
 end

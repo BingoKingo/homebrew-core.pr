@@ -1,9 +1,9 @@
 class Aarch64ElfGcc < Formula
   desc "GNU compiler collection for aarch64-elf"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  sha256 "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea"
+  url "https://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  sha256 "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
   livecheck do
@@ -11,13 +11,13 @@ class Aarch64ElfGcc < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "2775914b08cd4cb33eb23aa380ed5d5ec3044ff654978b5e5a5d3410aba267a8"
-    sha256 arm64_sonoma:  "ea7af2549d31919b0cae18067e4e3e6804ff52b1135a84f7a21f0da3130ecb26"
-    sha256 arm64_ventura: "2764387f82ee47f63134da77db38050dea5e1c2c44bb60d3acea9a03c7beaec2"
-    sha256 sonoma:        "efd8112ddb6777583c4af5abc2cc9ea192cde2bad02e60e84e420d830803e369"
-    sha256 ventura:       "ddda9fcf0d64276c5cb34493ffcda10f76c43daef986a959cd6799f6c9d1a152"
-    sha256 arm64_linux:   "8e63a1b5044f6649d568113ca763cc890540d3e94bb3be9151b918a1e0d3b7f1"
-    sha256 x86_64_linux:  "fd7dea08552fe7b3f9405632d1f29c3e0dc07010a895ab22ed4a7401879ec795"
+    rebuild 1
+    sha256 arm64_tahoe:   "39189131b2a9ec33531819fde63a3c2c615a567534ec0ba374e7e3cd777ab71f"
+    sha256 arm64_sequoia: "f062b32aef147d3a3ed3cab81b1bb8035ecff41704a29396269ea9a26538f16f"
+    sha256 arm64_sonoma:  "e1b18592e811e0a49d41bd2127f3faa213f4eb5ba9d4cdcdee48a37dd10fb4c0"
+    sha256 sonoma:        "0e637245c9e661fe6b2ca5ca71d70de801b61eaf3f7ffefa28c65eead537d157"
+    sha256 arm64_linux:   "9d4aab0a30ebe5a41f85546bcfbb87e0372c493fb0774230fdeb555148c59b7f"
+    sha256 x86_64_linux:  "21b851cee98d065f9a40ad491b495677043850c9f246d8233c71e681cdae50ce"
   end
 
   depends_on "aarch64-elf-binutils"
@@ -27,7 +27,9 @@ class Aarch64ElfGcc < Formula
   depends_on "mpfr"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     target = "aarch64-elf"

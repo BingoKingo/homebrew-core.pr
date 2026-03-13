@@ -1,47 +1,44 @@
 class Btop < Formula
   desc "Resource monitor. C++ version and continuation of bashtop and bpytop"
   homepage "https://github.com/aristocratos/btop"
-  url "https://github.com/aristocratos/btop/archive/refs/tags/v1.4.3.tar.gz"
-  sha256 "81b133e59699a7fd89c5c54806e16452232f6452be9c14b3a634122e3ebed592"
+  url "https://github.com/aristocratos/btop/archive/refs/tags/v1.4.6.tar.gz"
+  sha256 "4beb90172c6acaac08c1b4a5112fb616772e214a7ef992bcbd461453295a58be"
   license "Apache-2.0"
   head "https://github.com/aristocratos/btop.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "489cced3f7450b6cea1f2261a91ecfbdf1bac5d34345a048493eb3dddeacc851"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b96231c24642d19ff74812f602d6bc01c968feb68bd02cdd5e2989ef757fd0c0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f915571ec57b88e6cf019b23f29bddb8dbe4826cfac1f5497936bbca0d1d4b15"
-    sha256 cellar: :any_skip_relocation, sonoma:        "807770d8ad61da28c1383494f66c464d003d3cf78cb0cc0caa84d34c5b384582"
-    sha256 cellar: :any_skip_relocation, ventura:       "9c59b21f9b75682d4643d9d3feddc7c0d3e22f64bbca95ffa350520242246e1d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1affce02155f1b2919633db263d0e3e4934148a514c7bcece6c1289da20d2a23"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "97214938f020732369eb717dd8f967519d2131903f3cc10dd0041e6d1c0e1773"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "80638535c550bc0c889dfb685e886d149fd46583f5f75052cdf06d02878ca9cc"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "12aa531d09c0715dd5ffda73f64634f7f2a38b09dca5bff68ea3083c6fb6b31b"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fbed3af9274a12efc813725d8dd156f3053c461413d12e016169ff3e80d32d47"
+    sha256                               sonoma:        "f9b95ebf0374cfe8fa4e949e8667964db4b2dc76be16c2470e8cfd154a07aa41"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8e62232a59ffd4afeb89d2656cdd875967bda73af235173798b29468fddfdb85"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "27379e9f992f8a4e33c48b0fc356f114bc8293c709a7b4c02f009ac435056a05"
   end
 
   depends_on "lowdown" => :build
 
   on_macos do
     depends_on "coreutils" => :build
-    depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1499
+    depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1600
   end
 
-  on_ventura do
-    # Ventura seems to be missing the `source_location` header.
-    depends_on "llvm" => :build
+  on_linux do
+    depends_on "gcc"
   end
 
-  # -ftree-loop-vectorize -flto=12 -s
-  # Needs Clang 16 / Xcode 15+
   fails_with :clang do
-    build 1499
-    cause "Requires C++20 support"
+    build 1600
+    cause "Requires C++23 support for `std::ranges::to`"
   end
 
   fails_with :gcc do
-    version "9"
-    cause "requires GCC 10+"
+    version "13"
+    cause "Requires C++23 support for `std::ranges::to`"
   end
 
   def install
-    ENV.llvm_clang if OS.mac? && (DevelopmentTools.clang_build_version <= 1499 || MacOS.version == :ventura)
+    ENV.append "CC", "-D_GNU_SOURCE" if OS.linux? && Hardware::CPU.intel?
+
     system "make", "CXX=#{ENV.cxx}", "STRIP=true"
     system "make", "PREFIX=#{prefix}", "install"
   end

@@ -1,10 +1,9 @@
 class Allegro < Formula
   desc "C/C++ multimedia library for cross-platform game development"
   homepage "https://liballeg.org/"
-  url "https://github.com/liballeg/allegro5/releases/download/5.2.10.1/allegro-5.2.10.1.tar.gz"
-  sha256 "2ef9f77f0b19459ea2c7645cc4762fc35c74d3d297bfc38d8592307757166f05"
+  url "https://github.com/liballeg/allegro5/releases/download/5.2.11.3/allegro-5.2.11.3.tar.gz"
+  sha256 "aba4679a5b1f2bf62482eba6e8814a94de7ffc86de5f8587ba199fcc61b4a04f"
   license "Zlib"
-  revision 1
   head "https://github.com/liballeg/allegro5.git", branch: "master"
 
   livecheck do
@@ -13,21 +12,21 @@ class Allegro < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "db24d012cd88b23d8587898aceab3203169a995e7bc874e0db849942459ececa"
-    sha256 cellar: :any,                 arm64_sonoma:  "871af04f1451b1064666dc3b696f810cb105fa4f0245125a61007d11d3210442"
-    sha256 cellar: :any,                 arm64_ventura: "cc0ab101b41137fa5ea75ca65427c21e51164ad3ddd0af841816d068e932de97"
-    sha256 cellar: :any,                 sonoma:        "0285e3c404d3351c218ed93958d982001a32092a6be106454772e5b981eebddb"
-    sha256 cellar: :any,                 ventura:       "4b0d776e4d1539a4826a9e6eb721a9c769110cd33d20657d5ca1c870ff47c4da"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7b00b980e261ff3cab81d54a8952e7e46868c55c03bce69da9a38b0314d21298"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "77d8fa148090e9335b24c1bcd37d711c5206657ac0124c6dc7275e7c8f3e8da2"
+    sha256 cellar: :any,                 arm64_tahoe:   "e3e3538d2dd7ac9ab3c79343acec0f77a2746a50a6435371dfc35a75715aba9b"
+    sha256 cellar: :any,                 arm64_sequoia: "8c04e595d03638289223bedd1696bacd8df8530f1a55721b3682af08c198a603"
+    sha256 cellar: :any,                 arm64_sonoma:  "5da777e9838c3f86978a15ea5359b928123e70d32ca7ac43670631f17e85458b"
+    sha256 cellar: :any,                 sonoma:        "1e0c9fe820bf392ee0707eff299fe523ebbd6e21d1327714f5c3ac36a53f3df7"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "70dbfd0353c0655b5a6bfe5520fabe067e17e423a209465b435cc067b1eec6bc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5ae31e6b786d07b263625a5c9d6ac16e77749a438492d9a8cf69a00e9be4b5ac"
   end
 
   depends_on "cmake" => :build
   depends_on "flac"
   depends_on "freetype"
+  depends_on "jpeg-turbo"
   depends_on "libogg"
   depends_on "libopenmpt"
+  depends_on "libpng"
   depends_on "libvorbis"
   depends_on "opusfile"
   depends_on "physfs"
@@ -39,8 +38,6 @@ class Allegro < Formula
   end
 
   on_linux do
-    depends_on "jpeg-turbo"
-    depends_on "libpng"
     depends_on "libx11"
     depends_on "libxcursor"
     depends_on "libxi"

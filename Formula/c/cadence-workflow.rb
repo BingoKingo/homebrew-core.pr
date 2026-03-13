@@ -2,9 +2,9 @@ class CadenceWorkflow < Formula
   desc "Distributed, scalable, durable, and highly available orchestration engine"
   homepage "https://cadenceworkflow.io/"
   url "https://github.com/uber/cadence.git",
-      tag:      "v1.3.0",
-      revision: "4134777c293b07e0df867f5a8f68bc2e6dcae3e8"
-  license "MIT"
+      tag:      "v1.4.0",
+      revision: "1a42a949010b4257020c0641f88cbcd385184bb8"
+  license "Apache-2.0"
   head "https://github.com/uber/cadence.git", branch: "master"
 
   # Upstream creates releases that use a stable tag (e.g., `v1.2.3`) but are
@@ -16,12 +16,12 @@ class CadenceWorkflow < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2a057edc4d4e294e9f868f0949208658da81865a7e33e79c5e5d523c7be90205"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8f334d5a15e41d04e07e24cd13d1394b3cc0cb02abe1d6fd0d2cf43d895c3ffd"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9b4ce71c795476fa278a46d0c3d825eae6651eba6a1cbfd6367b7f6114e5f9b1"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b309158aa47a4729246b49c5c6f23e666322c67e60ee06e7a5b53010414b1ded"
-    sha256 cellar: :any_skip_relocation, ventura:       "ac5c4906807fa8a4db6ae845565f33e75ed476c385aa124635a187bcee6fd084"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6bc7b05e63831241f86e8064e26a9187dd8bf2f51f0fd9cb97390a235dd5abb8"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c8a3964e7a66146c41e9513dc6c9a1186595e2e80e58ab4b008e146c4d2716b5"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3e2b72d6ad8a73fb6e918794eaaa96d599d51efeffbade48ed933e77bf2f39c3"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "168814777006447c91ae02f9aa9a6549b4949c6a00f44e1f578f7b16f1fe3d9f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "95c75946272ffdeb70ce9265054e41845b8741da3f25b65df63f03adc05aed81"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "980bb6386730269f3e5e4c8907cef1f1539e46aa82b908f93db1a54cfde78cda"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "91650d5bac50e659793533f28ab8fc036b77734fc30237d73061be3e6df5b41d"
   end
 
   depends_on "go" => :build

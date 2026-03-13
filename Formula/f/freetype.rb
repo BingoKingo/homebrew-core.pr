@@ -1,9 +1,9 @@
 class Freetype < Formula
   desc "Software library to render fonts"
   homepage "https://www.freetype.org/"
-  url "https://downloads.sourceforge.net/project/freetype/freetype2/2.13.3/freetype-2.13.3.tar.xz"
-  mirror "https://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz"
-  sha256 "0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289"
+  url "https://downloads.sourceforge.net/project/freetype/freetype2/2.14.2/freetype-2.14.2.tar.xz"
+  mirror "https://download.savannah.gnu.org/releases/freetype/freetype-2.14.2.tar.xz"
+  sha256 "4b62dcab4c920a1a860369933221814362e699e26f55792516d671e6ff55b5e1"
   license "FTL"
 
   livecheck do
@@ -12,22 +12,22 @@ class Freetype < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia:  "bcd39d3a523690cb0673df46122ff62763c5cd93bfff21bdcab856501d2dfb49"
-    sha256 cellar: :any,                 arm64_sonoma:   "939f90de3dd92919020832ba03d6617a0d2ec9a8e185f6a2c518f149c7b299f4"
-    sha256 cellar: :any,                 arm64_ventura:  "47122c7d025f841f3816f1bc2c14ad1e6b4227ccc56eae2827fa585d3b58dbc5"
-    sha256 cellar: :any,                 arm64_monterey: "ace9a5d707a94eb85c67fe349e48c9264287c2d80e0ce60f9bfe5772be2983f4"
-    sha256 cellar: :any,                 sonoma:         "e79e0ffb36311b2abbd0cd44abcf5e938768b2d63d6268e68d5eaa4d34d9323e"
-    sha256 cellar: :any,                 ventura:        "495efbb088b72c7a2881133bcd53375dd99925124d2bf1f0e0882a3c1a332b10"
-    sha256 cellar: :any,                 monterey:       "eb6099180cefba47b4e31f9680494fa8a1a60e50f190232b281f6beed53874a0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:    "b5d9d793c5dc7b6a1187e1266a133a39854d2ac32e77c2d1baab90882006fdc6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "4d847168ffbda85c4470d7599436263b0fd8623687863e26ee434db56cd5dde9"
+    sha256 cellar: :any,                 arm64_tahoe:   "0a6456b91679ce3fe560e78d36a92c2ed32acad819e60a011d308ef2ca6ffe1a"
+    sha256 cellar: :any,                 arm64_sequoia: "1a8a920fdc994f0d3ffe1020e8b97782cc0ba4ea4017d3109f85c603ccc2b185"
+    sha256 cellar: :any,                 arm64_sonoma:  "cd278332ace43fc2c55b2123159f53062ba563c7db6e272d226f0dea273f9849"
+    sha256 cellar: :any,                 sonoma:        "a7872ee2b74cc83ff972afe6284d9bc54a59c8b7673722e1247d0be907fe1585"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "87dd61e4c0f0075448069ad16cba072fed4e908b525617c7e42f451f621274c4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "aa7f81d1a77565eacc7f292ebefa6940aae860e0395b0fcb133fd4ac6e84e5a9"
   end
 
   depends_on "pkgconf" => :build
   depends_on "libpng"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # This file will be installed to bindir, so we want to avoid embedding the

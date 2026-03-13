@@ -1,18 +1,18 @@
 class Fn < Formula
   desc "Command-line tool for the fn project"
   homepage "https://fnproject.io"
-  url "https://github.com/fnproject/cli/archive/refs/tags/0.6.42.tar.gz"
-  sha256 "d89758dadc2859da8bb1b7b0356b8bd9bb6a12d9aa118cd2c1429639153e90f1"
+  url "https://github.com/fnproject/cli/archive/refs/tags/0.6.48.tar.gz"
+  sha256 "a345a98dfc48fb3152e15f1f38cf26016abe8635fdfda472ea3ada28d8ad1516"
   license "Apache-2.0"
   head "https://github.com/fnproject/cli.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "bc75dcc9e25a754b2496f20be3e7ca5a0f2a169aeb161e001b1901b743742b16"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bc75dcc9e25a754b2496f20be3e7ca5a0f2a169aeb161e001b1901b743742b16"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "bc75dcc9e25a754b2496f20be3e7ca5a0f2a169aeb161e001b1901b743742b16"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1be537487a7c5e06b6294e7f0bdd909577be3ac20bc24f86a1492e5d141ca2dd"
-    sha256 cellar: :any_skip_relocation, ventura:       "1be537487a7c5e06b6294e7f0bdd909577be3ac20bc24f86a1492e5d141ca2dd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "94c8785d4558767d638fa87b3086a8f2aa43e223165c991e092e62a8106d2ba2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "cf0d5e9b0d421a79554f945f35aff48c52da6af096ed8fb2befd474195b0c496"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cf0d5e9b0d421a79554f945f35aff48c52da6af096ed8fb2befd474195b0c496"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cf0d5e9b0d421a79554f945f35aff48c52da6af096ed8fb2befd474195b0c496"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d91059eb771012797a4926e414817294c292254a8e7d36721ea48461dd847ebc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "865d93df6f467635e6a8458986c1f54e58904ea9218e6537abc4591f3a5d80f4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f58cfa37abfed8c3b1bc4e0bea6ec71322a804ee7a038788e0825e0611c7e413"
   end
 
   depends_on "go" => :build

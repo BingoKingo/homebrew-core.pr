@@ -1,19 +1,17 @@
 class Freerdp < Formula
   desc "X11 implementation of the Remote Desktop Protocol (RDP)"
   homepage "https://www.freerdp.com/"
-  url "https://github.com/FreeRDP/FreeRDP/releases/download/3.15.0/freerdp-3.15.0.tar.gz"
-  sha256 "e8cd58decef4c970faea2fbea675970eea60e440ebe8033c54889acb83787371"
+  url "https://github.com/FreeRDP/FreeRDP/releases/download/3.24.0/freerdp-3.24.0.tar.gz"
+  sha256 "168011bd58eae8d898842ef39c6c9bf5761ab617a68ccad80d623a3e535d0367"
   license "Apache-2.0"
-  revision 1
 
   bottle do
-    sha256 arm64_sequoia: "9fa9067784958730b7969cff5556d67afd9896775727fbbc47a184dfb1358429"
-    sha256 arm64_sonoma:  "f8b1cd554604318870bae2990799b23b4d410c906025a881758609559cf39291"
-    sha256 arm64_ventura: "39a2322e3061ecf45f0693703e81e14fc0094363a4cfb463b0cb850421ee781c"
-    sha256 sonoma:        "f608e8023020140d9bd19248c65973bd985574a5472804d1b45382b7d4491a0f"
-    sha256 ventura:       "49011d6448a6aba277069cba61a2ee87e14fc2d6edec26ad536449ddb0aa3be7"
-    sha256 arm64_linux:   "8a1fde5ef00593aefb2be888f2e1ef14b1f838232b170036496b835b21a44230"
-    sha256 x86_64_linux:  "56afe805b646f6c5de2283a84e0d636f05674fb5ac7acab49a494814d144eb64"
+    sha256 arm64_tahoe:   "9a166c23ed9a4ad676d740e4e52cb46fa794e77160995e62868a86e3ab9df30a"
+    sha256 arm64_sequoia: "c8dafb554aff4b668f90111e35aa3970f3e86ca6e137a99d43d68aa165e5ef41"
+    sha256 arm64_sonoma:  "a3ff957931234ee35ed031208731438bbb5886452bc155ca165c739ba826e2e0"
+    sha256 sonoma:        "543b50d37790b4d2af8fd8081d3301ad6d18228fa7f3aae7f9bf9aceb68774af"
+    sha256 arm64_linux:   "dc4a9eb7028cc3ecb797f2f08d3d41cc27d0307bf1ec7863e3c2de1da1ec15e2"
+    sha256 x86_64_linux:  "f45bac69ed6488b8ad2edc34c6584a309bde570f18798a7210594b58bda06f27"
   end
 
   head do
@@ -42,16 +40,16 @@ class Freerdp < Formula
   depends_on "sdl3_ttf"
 
   uses_from_macos "cups"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "alsa-lib"
     depends_on "glib"
-    depends_on "icu4c@77"
+    depends_on "icu4c@78"
     depends_on "krb5"
     depends_on "libfuse"
     depends_on "systemd"
     depends_on "wayland"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -100,8 +98,6 @@ class Freerdp < Formula
   end
 
   test do
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     success = `#{bin}/xfreerdp --version` # not using system as expected non-zero exit code
     details = $CHILD_STATUS
     raise "Unexpected exit code #{$CHILD_STATUS} while running xfreerdp" if !success && details.exitstatus != 128

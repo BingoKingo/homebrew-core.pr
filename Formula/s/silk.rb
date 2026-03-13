@@ -1,8 +1,8 @@
 class Silk < Formula
   desc "Collection of traffic analysis tools"
   homepage "https://tools.netsa.cert.org/silk/"
-  url "https://tools.netsa.cert.org/releases/silk-3.23.5.tar.gz"
-  sha256 "58701cd3b7ceb951fb5cda9c241b171608036daab4bad4893f6882f4a29b1680"
+  url "https://tools.netsa.cert.org/releases/silk-3.24.0.tar.gz"
+  sha256 "9292f6c90cd324e2dde58faa77e74cacd1398c27b5cd6bc3f194409b07c4affc"
   license all_of: ["GPL-2.0-or-later", "LGPL-2.1-or-later"]
 
   livecheck do
@@ -11,13 +11,13 @@ class Silk < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "95e2f74ac394bb9327e6e54a9b60fa4a4f320f1b974c640898fea6689b42bac4"
-    sha256 arm64_sonoma:  "861f979e9ca355c2bfcbfa383f1b052eaf98bf8550c8b8eccea603a7ca83db1c"
-    sha256 arm64_ventura: "ad2454feb3a3a60d32b8e889ad387fdc0408c84522dfe9af6c34cb32710d8c2b"
-    sha256 sonoma:        "155ccf0867d12599b416cb34c00f1e082894cd43462b206a09a6ee8e0cab363d"
-    sha256 ventura:       "f730eb216f5b4bf435000d1dfe1197a87c2f2ac4d25c3ff45e7f9d433b6760d4"
-    sha256 arm64_linux:   "f13652d2d255490d21f8b4cac9f5da8f8e3aaf2c1d50032d6d3c000d53eaacfd"
-    sha256 x86_64_linux:  "1b93547929821cca240e813162e1d6ff3066c4dd6df50060c027b59f33b6f6bb"
+    rebuild 1
+    sha256 arm64_tahoe:   "62c5e375b47fcb9a747c75df78726a7af448ed64351b7fe05a9366edf12a5417"
+    sha256 arm64_sequoia: "b8104aeb3b0fdc9c27b9fb77c2571db56ae8321e19809429ff63b72d65e06925"
+    sha256 arm64_sonoma:  "b4e5dccbdeb34cb2e583c3a725c62fdc0157524e9b2e5235628c13c08e6c1bda"
+    sha256 sonoma:        "08fea9effd361b4ccedb1326cfcaf89dbf0d749be5a7da9eb13c6f5c5ff7e635"
+    sha256 arm64_linux:   "79817e939510b3a190a5bbe060f485db4a8a3407ffe9c6dd697ad3810af601d3"
+    sha256 x86_64_linux:  "aa66713652c68c56a72f918a90839498f9f04a197fe8ad9384c207bb73552601"
   end
 
   depends_on "pkgconf" => :build
@@ -27,11 +27,14 @@ class Silk < Formula
   depends_on "yaf"
 
   uses_from_macos "libpcap"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
     depends_on "openssl@3"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install

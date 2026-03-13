@@ -1,7 +1,8 @@
 class Enet < Formula
   desc "Provides a network communication layer on top of UDP"
   homepage "http://enet.bespin.org"
-  url "http://enet.bespin.org/download/enet-1.3.18.tar.gz"
+  url "https://cdn.netbsd.org/pub/pkgsrc/distfiles/enet-1.3.18.tar.gz"
+  mirror "http://enet.bespin.org/download/enet-1.3.18.tar.gz"
   sha256 "2a8a0c5360d68bb4fcd11f2e4c47c69976e8d2c85b109dd7d60b1181a4f85d36"
   license "MIT"
   head "https://github.com/lsalzman/enet.git", branch: "master"
@@ -12,6 +13,7 @@ class Enet < Formula
   end
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:    "174732c193f0fe91c3f9b91204153f8f17369666a87ec9f8ae7dfa52ef7c4f77"
     sha256 cellar: :any,                 arm64_sequoia:  "c1785264ccb278a9595c68354604b48a02d1e05f5c1d9ce1e8f2d3d6baa704d9"
     sha256 cellar: :any,                 arm64_sonoma:   "e078c1459c03714c7bfacf48e92c9245ac4d4842479826b4f76d9e49cca66e45"
     sha256 cellar: :any,                 arm64_ventura:  "8bcb6508f5e8ff25fe137e0f3373a3f005c3d26797881cbce22cef4056e76c1f"

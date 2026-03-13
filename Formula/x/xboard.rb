@@ -1,13 +1,15 @@
 class Xboard < Formula
   desc "Graphical user interface for chess"
   homepage "https://www.gnu.org/software/xboard/"
-  url "https://ftp.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz"
-  mirror "https://ftpmirror.gnu.org/xboard/xboard-4.9.1.tar.gz"
+  url "https://ftpmirror.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz"
+  mirror "https://ftp.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz"
   sha256 "2b2e53e8428ad9b6e8dc8a55b3a5183381911a4dae2c0072fa96296bbb1970d6"
   license "GPL-3.0-or-later"
   revision 4
 
   bottle do
+    sha256 arm64_tahoe:    "49fb2045c979c8788ec25bbba4416f8f5a38729d9018d610ea1dd41f2595263b"
+    sha256 arm64_sequoia:  "a3b2d95bd28d0e7034e8c740bb5daf60ebd131dec5586eda4c8caa491b96f99b"
     sha256 arm64_sonoma:   "286ed707d8d03708c836b4ac6a00777425e5984b6fe5be083ae571cfcfccb877"
     sha256 arm64_ventura:  "50cd0e9fe8b8c1e1cafca11ab050238c046b037db55561204c25bd238438cdd4"
     sha256 arm64_monterey: "90dd23652bb03fee8b0ff31fba73ad979861fcefc17602a19d9197d0eee77170"
@@ -25,6 +27,8 @@ class Xboard < Formula
     depends_on "automake" => :build
     depends_on "gettext" => :build
   end
+
+  deprecate! date: "2026-01-05", because: "uses deprecated polyglot"
 
   depends_on "pkgconf" => :build
   depends_on "cairo"

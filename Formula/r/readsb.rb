@@ -1,18 +1,17 @@
 class Readsb < Formula
   desc "ADS-B decoder swiss knife"
   homepage "https://github.com/wiedehopf/readsb"
-  url "https://github.com/wiedehopf/readsb/archive/refs/tags/v3.14.1682.tar.gz"
-  sha256 "180d652829c0bb13e1935f9ee4975b5f2c055281f113e5b0325e3444bd0f4685"
+  url "https://github.com/wiedehopf/readsb/archive/refs/tags/v3.16.10.tar.gz"
+  sha256 "2e41a44a7b80f7159149410069dcc7b40694af36be135b1f6291d9a52833d4f9"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5c5fa49116b7c87e42dd0032918325bd7bbd0d940dd2e73990968a28a4dba7cc"
-    sha256 cellar: :any,                 arm64_sonoma:  "fdd3e5c6838fc7a66224f9c457d929b62ae8b5825a015dcef960eddcb7b4c1db"
-    sha256 cellar: :any,                 arm64_ventura: "1854876b1a48e1226e50fdfa369547098bea94e6c1c31f7f27b77ca276130467"
-    sha256 cellar: :any,                 sonoma:        "a3123c9e05f016d865308b7724ce9d6bf9941e3a576c2bc5a4b7a3cfc799691f"
-    sha256 cellar: :any,                 ventura:       "1a171b804d92f3cf9a7d839b32c5d2f4e77334d5365ed83f1916e2afd9739a3b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "23f89fe2f22b76026c66322b9d185fe5b0e3a838545b0c68798d786cdd6044e5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "214fd1e751f5972472eef7559e0c67327d870b1f5f9fc487be0a4030ec3f3fd0"
+    sha256 cellar: :any,                 arm64_tahoe:   "7d7c845e293ef33793362c55a18398eb36d444923273703e130d209ef930b3e3"
+    sha256 cellar: :any,                 arm64_sequoia: "f6d9740fc8fc3afe962074f3a9ab6770b03bb117b4d77ecf5a95e55a70c1a317"
+    sha256 cellar: :any,                 arm64_sonoma:  "4d6f5cc5a67ef6ea8c438aebb4f25dd3ddf8e02a85677f9992c8c10204d94d1f"
+    sha256 cellar: :any,                 sonoma:        "6e2a9212edcd85f9a0393cd7da623b2fa12183f0db5d74dbaeaeb75476b48f05"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b83a062693b31150552368eb0d28644b0b84e1f8834a34bc57ca767c12d5bd90"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c0fff6863c5fb47de644f8a8a9d9d14debe5d3423e9395852f322e0361ab02c8"
   end
 
   depends_on "pkgconf" => :build
@@ -20,10 +19,13 @@ class Readsb < Formula
   depends_on "zstd"
 
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "libusb"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -57,6 +59,6 @@ class Readsb < Formula
     EOS
 
     (testpath/"input.bin").write Base64.decode64(enc)
-    assert_match "ICAO Address:", shell_output("#{bin}/readsb --device-type ifile --ifile input.bin 2>/dev/null")
+    assert_match "ICAO Address:", shell_output("#{bin}/readsb --device-type ifile --ifile input.bin 2>/dev/null", 1)
   end
 end

@@ -1,25 +1,28 @@
 class Stormlib < Formula
   desc "Library for handling Blizzard MPQ archives"
   homepage "http://www.zezula.net/en/mpq/stormlib.html"
-  url "https://github.com/ladislav-zezula/StormLib/archive/refs/tags/v9.30.tar.gz"
-  sha256 "a709a6b034d206404f5297d85e474371203ff5483639955195d99b737bbf7dfe"
+  url "https://github.com/ladislav-zezula/StormLib/archive/refs/tags/v9.31.tar.gz"
+  sha256 "c8d77e626cc907c8f2d00bb5c48f9d6c70344848d49cab4468f6234afaf815c1"
   license "MIT"
   head "https://github.com/ladislav-zezula/StormLib.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "8b6795782ad6b2795e25bdc5a551043daaa07350632a4832bb6cc1405f4fedf2"
-    sha256 cellar: :any,                 arm64_sonoma:  "bb576754765e94f0857c3c2185433e40049c6e27defe7ad2527a72d4c4371db2"
-    sha256 cellar: :any,                 arm64_ventura: "b7f557770e52c0f9174dcc39378f37e271039449a9c0440ca1e1ad29bcbdef0f"
-    sha256 cellar: :any,                 sonoma:        "18bae47580410061160fd52e508b6fc253ef4a07b8ec47049d29a3ec03706615"
-    sha256 cellar: :any,                 ventura:       "7aa4237edb1220fb6bd6176e6d7783b003089d991adb5e321c231871db752088"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f3893cc39b6b522946b66c160f243d917c951a26f6f65f2b8a883c1648d653b7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "61ecc0f8d4f072d3009874a20c7cc3419e8e7857a3be60865908880a9f949825"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "96e129fd5dd134918fc64ce2a706deb1e7911e7a6ea98bc709e207b797388d75"
+    sha256 cellar: :any,                 arm64_sequoia: "f2e00691eec59dc82510bc91264312663640b906b2f484f209e3d33efb4a813a"
+    sha256 cellar: :any,                 arm64_sonoma:  "4ffca97a33b072d0823035dc6a757c7fbf96041ee7bbf6581dfa6639481bb60d"
+    sha256 cellar: :any,                 sonoma:        "a2e153410331b03506c454ac4240ba49acd06da4e5149cf759f20a6a465d07ca"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "77271d55a05e72595f18e3a611b7994b607e6c8fdb7e181a143f80298228d792"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c22bb47d47efd4d54345ab1c348f4e9d9ab81149a3e59b129fd2e5703d3ace05"
   end
 
   depends_on "cmake" => :build
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # prevents cmake from trying to write to /Library/Frameworks/
   patch :DATA

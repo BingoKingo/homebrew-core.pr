@@ -1,8 +1,8 @@
 class Vice < Formula
   desc "Versatile Commodore Emulator"
   homepage "https://sourceforge.net/projects/vice-emu/"
-  url "https://downloads.sourceforge.net/project/vice-emu/releases/vice-3.9.tar.gz"
-  sha256 "40202b63455e26b87ecc63eb5a52322c6fa3f57cab12acf0c227cf9f4daec370"
+  url "https://downloads.sourceforge.net/project/vice-emu/releases/vice-3.10.tar.gz"
+  sha256 "8e5bac18cbcb9f192380ad3ef881f8790f5b75c41d7b3da65d831985d864d6d1"
   license "GPL-2.0-or-later"
   head "https://svn.code.sf.net/p/vice-emu/code/trunk/vice"
 
@@ -12,13 +12,13 @@ class Vice < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "8b78df5935aab1f83e0207ea2f728b96a74e66d69f5299e8507f990f11920822"
-    sha256 arm64_sonoma:  "729bb747eeb23ff89b1cb604520e7204880394934d91f316c9dc7aeef2f7f73f"
-    sha256 arm64_ventura: "076944a3a5d61b727aaa53724661d96a975f22092da741c06db0ab0a4d2a8adc"
-    sha256 sonoma:        "214a47453e12ef15db2adc4cece96aca944ae2dc4b785166bf5e6dc96323d621"
-    sha256 ventura:       "550d23369b47768525c093b7b7e7f7d737488060bef4e69919685a1dfdaf5c56"
-    sha256 arm64_linux:   "ab0b2b09715f4ef67be4be7dbf0eacea5a49211cfa2b7704759c0be64e3b6229"
-    sha256 x86_64_linux:  "752515da593a5bbddd5ab728ecba2bab8a5ae79ec449cd5471de3c2854ce893e"
+    rebuild 1
+    sha256 arm64_tahoe:   "6418080055eb645bc56525d0d902c9df649addb24ff8cef9756c149e6cfdbb29"
+    sha256 arm64_sequoia: "f174235f11f4a31dbcfe8e5d1ca149c2b0b925db9783b35d82fb1a63e6d7c664"
+    sha256 arm64_sonoma:  "eefe51be44c3fe3f8e82fdcbd5ece73f7ca1d00e4b6d6da3fdf090fc62defecb"
+    sha256 sonoma:        "58fd2917eb22933c25ee8584e29972b2f6cf7b79f1a8acf050db0a570f6875f3"
+    sha256 arm64_linux:   "1e99deba75899f6d0dfe9e4f0a85f3a8b1fecb983f6a4048c0c47f4aea7d82e3"
+    sha256 x86_64_linux:  "76eb6cfb7a1b879a8c6ee4fa2fdcfd72312d646b574262d8a48a1742fbb5c8b0"
   end
 
   depends_on "autoconf" => :build
@@ -48,7 +48,6 @@ class Vice < Formula
   uses_from_macos "bison" => :build
   uses_from_macos "flex" => :build
   uses_from_macos "curl"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
@@ -58,9 +57,11 @@ class Vice < Formula
   on_linux do
     depends_on "alsa-lib"
     depends_on "fontconfig"
+    depends_on "libevdev"
     depends_on "libx11"
     depends_on "mesa"
     depends_on "pulseaudio"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -77,7 +78,6 @@ class Vice < Formula
                           "--with-vorbis",
                           "--with-gif",
                           "--with-png",
-                          "--without-evdev", # TODO: needs libevdev
                           *std_configure_args
     system "make", "install"
   end

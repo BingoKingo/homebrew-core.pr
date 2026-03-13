@@ -1,19 +1,18 @@
 class CargoFlamegraph < Formula
   desc "Easy flamegraphs for Rust projects and everything else"
   homepage "https://github.com/flamegraph-rs/flamegraph"
-  url "https://github.com/flamegraph-rs/flamegraph/archive/refs/tags/v0.6.8.tar.gz"
-  sha256 "2673a04bd4de142220d42706e0c25a4dea08aee52cdffbf87cca5738cec649ff"
+  url "https://github.com/flamegraph-rs/flamegraph/archive/refs/tags/v0.6.11.tar.gz"
+  sha256 "371f81e674abe70cdaf3478d7d6ab04cee0b5af174767a858f45c5c42206089e"
   license any_of: ["Apache-2.0", "MIT"]
   head "https://github.com/flamegraph-rs/flamegraph.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "740ef8f614bf69783f1d25c138bc5eb7e57f0318d05ecb87c1de8796a84c6190"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "933b50f514c63ed78874e8443330c4e01fa0284c33f3b4dd2739d19233e5118e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "745ed3bedef3ac3b3a17a589edfe3321bd2731e4b1036cfaadfab9e7a5b37aee"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3d5c2847b5ec9787c6b4ca4b71dfd959c6171e283d0bd5752cef352e6417d1f4"
-    sha256 cellar: :any_skip_relocation, ventura:       "f2af510d43d381717f9ef3b1b8a631a9ce37a1b3c87d35126bb2e3e593e73254"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "53d4cd9e5880a2a350ab626769520f62c130060ab69a1c60f6b14f015583e695"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4f1a3f5a80fb194e66fe415e19881ecc18ebda99abac0a049988fc9d54954780"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ae0959bdde7eee2a73cca05edb1a9417522ec8dd7c58f406625fdf6ef5cde5c3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7285c8a79648b93876b6013c4ae1e1c615a09b6722e123b6a7470db110b59e79"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c73837d2112ba60af980e04502bf9a77ee3cd71a8a7c0297df07b9477b287e49"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e4ac8faf0ea320f484b299bdb2919efc9f6c779134174d32333bd335d0223857"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3efffd53380a13ba48f38fe4ba6ac87e38c941bebed189af5d641dfc9dbbb742"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6c1cdce6946ebe6b39185c46e4442eb98bd4e3621074137304a6610796898494"
   end
 
   depends_on "rust" => :build

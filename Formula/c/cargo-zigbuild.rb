@@ -1,19 +1,18 @@
 class CargoZigbuild < Formula
   desc "Compile Cargo project with zig as linker"
   homepage "https://github.com/rust-cross/cargo-zigbuild"
-  url "https://github.com/rust-cross/cargo-zigbuild/archive/refs/tags/v0.20.0.tar.gz"
-  sha256 "515fc1e815b21132fa82abfd5d9c8a0ee24fa18a1b63b454976a2cec2768836f"
+  url "https://github.com/rust-cross/cargo-zigbuild/archive/refs/tags/v0.22.1.tar.gz"
+  sha256 "47c2964464d7083fb53dd5feda6d2dae39346bd0f8f35d4a31c558e100e1c557"
   license "MIT"
   head "https://github.com/rust-cross/cargo-zigbuild.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "11124f1b7bc4089f1918c1f68a8fb0c6b224ac7ccbd2938aab80c4455cb4ef46"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "285a2f10af384726336effed66e13b5067e886ae028b3d81e1134ff8d7b5c2f7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5a344763915c8778a85d5499e99c7c76f235cb32ff7f4e2634198d48bb50d639"
-    sha256 cellar: :any_skip_relocation, sonoma:        "473ecf36aca0dd4eedb0a72ef5119c29f695413ad06849c6ff9a5ddf03886429"
-    sha256 cellar: :any_skip_relocation, ventura:       "0170524446d1a27fa6adcfba79a119fde3142e16ee858808d1b43262820e62cf"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e78355307ef2f77e73215a2d72e945b06c36ab13f6fb4327c85d111f010ab06f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "535ea9d8f507e5e53e33423ebc1d7ac351f630a119e47c5f8911bd0f4e2f4725"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "af5da4384db197c4fd9f58afcd0bca36e7442b20785646256bd76444d4b937e3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6e1f781493e06b04c5cd878cc1387bbfec4c1a767505d579386ea354c276725a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "adb9ca49fafef619b115b461eb6541c5dbd700c91861b50e7794409530e50047"
+    sha256 cellar: :any_skip_relocation, sonoma:        "656140a8d2f8aef82f7b26d218b0125c69a560778fe3fa98232201da85a76b7b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "71bcb6c332959f1802a65ce1113239c771841148ddde49ce64d4e1edac40f642"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "72ae5f06dc175d78a1321050436e69a2eef38189be77b3086f82d63f52b839aa"
   end
 
   depends_on "rust" => :build

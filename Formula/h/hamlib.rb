@@ -1,19 +1,18 @@
 class Hamlib < Formula
   desc "Ham radio control libraries"
   homepage "http://www.hamlib.org/"
-  url "https://github.com/Hamlib/Hamlib/releases/download/4.6.2/hamlib-4.6.2.tar.gz"
-  sha256 "b2ac73f44dd1161e95fdee6c95276144757647bf92d7fdb369ee2fe41ed47ae8"
+  url "https://github.com/Hamlib/Hamlib/releases/download/4.7.0/hamlib-4.7.0.tar.gz"
+  sha256 "24542b09cb2432458ba239b2ba8f5b7fb67cde64df6553f150e6eb8475a87a23"
   license "LGPL-2.1-or-later"
   head "https://github.com/hamlib/hamlib.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "9167a0022aa4c469cc54b917d0f4eccb1df3a8dd16c2bde575939a9bb363053f"
-    sha256 cellar: :any,                 arm64_sonoma:  "c4aa54f5b84ad20d5378a77c1860de8ef5307a36e2ba4d44252c3236115e7f68"
-    sha256 cellar: :any,                 arm64_ventura: "29ca12dd53120b6219a72cf06003ac4f9f7b0136d3a906f2f7c7e283a677ad27"
-    sha256 cellar: :any,                 sonoma:        "6e018327f7f25dc3826e923f7e1aff7c45f20a90a5682b9359f78d548b33e610"
-    sha256 cellar: :any,                 ventura:       "49b659bd45a24723430fc33d608f8bbd247678183a9f67e7cf2ff95d6344fc96"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "dd26f0e428ccfdf1090ce0a9ad4ea786949d88b3399e384084f5722dac54b877"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "39cd33fc06e7145cca060ed370d7c6b099dcd87eba63947403f947d9eac2d1a0"
+    sha256 cellar: :any,                 arm64_tahoe:   "795fb006175fc13444cf579440e6e125ac2b93f663eb91e465575ad928efb8b2"
+    sha256 cellar: :any,                 arm64_sequoia: "797eacb1d1c19c05626d504f2fc89d3879ff0815edad0a7fc5dd9bbbdebe6535"
+    sha256 cellar: :any,                 arm64_sonoma:  "cd7a308c3b60fd7eb35050f53d6d594c4aa396c882764d9de35ac377db85de8a"
+    sha256 cellar: :any,                 sonoma:        "07a248953520ac1cb124b0c2658c8c09be0368263978a72af2a0cb0bcae3e621"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "03dd51b236f22b14d4c4facdba2785626461b158f6b9cf5efec2dbfecbebc6ab"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fe36a3eb41674900111dd9754872026ced061dd66447d5e932fc7fd153e511eb"
   end
 
   depends_on "autoconf" => :build

@@ -1,8 +1,8 @@
 class Deark < Formula
   desc "File conversion utility for older formats"
   homepage "https://entropymine.com/deark/"
-  url "https://entropymine.com/deark/releases/deark-1.7.0.tar.gz"
-  sha256 "7c3752c2c783cd6c4e22e527f1d72dbee9166883a156d25fbf98f73a8c44c8be"
+  url "https://entropymine.com/deark/releases/deark-1.7.2.tar.gz"
+  sha256 "e2163169b18781425e87566abf21a235513cef457a4bd27c14c304cf9a872971"
   license "MIT"
 
   livecheck do
@@ -11,13 +11,12 @@ class Deark < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3f187e7332d8e5a0aa5e37bcd92428e3a67540169a447787e07105d91bded171"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8e0614b471960c3050b12098c9815a29da5238b8406bc72ddad21274f7bccd55"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "868b2f7a23d545977e5b68c3b7acb4e33ac1c9fe9a391d470c592799b5a5c6eb"
-    sha256 cellar: :any_skip_relocation, sonoma:        "9a568c638ba0e2e84a40a82b9cdcd0fee3442b3da5e05f5b20677a785e515e55"
-    sha256 cellar: :any_skip_relocation, ventura:       "b2914225b7ad22c0ccb2022c3a49431d8eee99c73882effe2200bbbfbbe2a3ad"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e993400488b4e8f3c36e0c84dcfc8affcf27edf212790004d66e3bf36ee7df9d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b00c25bc3f03a626a34e87c61993656345229bac72768bbe7503d5ec8ab7b5a7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7b1d89387da4b2e5c2626e39e67a38042b5ebb77c041be2fcc3e267bd59814e0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0ac463d89b1de8e703446ae41acc161e4b2188decceb0709fe188c11a0674bda"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "029dcced69ea218ee0dcdff678387ac17d421b2debe472b40b87e5dca8dd2afe"
+    sha256 cellar: :any_skip_relocation, sonoma:        "124d7842655076287bfb363bdd3cc0c7c97c7275125588ae9f44ab8a324c3262"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e4caec2711f3f0f3e3d9339a4efead42bf0c10a05d4a6986c466f976a877d119"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0dafff439bf4b70a04558225a992ff78f4da434d4dd6b7d6ced1da488341d1e6"
   end
 
   def install

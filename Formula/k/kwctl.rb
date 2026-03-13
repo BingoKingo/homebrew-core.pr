@@ -1,33 +1,33 @@
 class Kwctl < Formula
   desc "CLI tool for the Kubewarden policy engine for Kubernetes"
   homepage "https://www.kubewarden.io/"
-  url "https://github.com/kubewarden/kwctl/archive/refs/tags/v1.25.0.tar.gz"
-  sha256 "bcc1eb12b77d50c059353e6a78d7b4d7965cebd20bb7e6d69c7419ea1922e7d6"
+  url "https://github.com/kubewarden/kubewarden-controller/archive/refs/tags/v1.33.0.tar.gz"
+  sha256 "26407d202984acffaac4704617d82755d289a01075f40ab6d98fff73a8f88547"
   license "Apache-2.0"
-  head "https://github.com/kubewarden/kwctl.git", branch: "main"
+  head "https://github.com/kubewarden/kubewarden-controller.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "306ff1c2e1386cc48ff5569a1a9f7803348cfd9928c75868b4cbc1600c402f88"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4aa9af4a64641e86d1a5a3054b39fc609dff1824e6866bb367baa26fce56608b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5679c39c525e4f5c909741aba6645e4cc573bc617b535bebe27e937c6ef7b414"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f2b17fbe3cdebb992fae1602654fccfff5173ea9d7bc66a029103a7ca4dd806b"
-    sha256 cellar: :any_skip_relocation, ventura:       "bd0824dc4e1d600722945fbff47277802af5ffffa4835ee752d341e2df0939f5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "23cbc4c5f71c6e9c8978e402c4f6e909361fd8698138c82e0a527348770331e8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c49165293a7977e3930a5f68832b45a212eba9b94cd3215f9af3d1fab98dde89"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "0fca7f7642ece2c160ceefc71bdce66afa5f91c9d5729a22bbcc8c333e8ce6e7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fedd58812def280fbea19d7472bb8947fd114564b3baa74d31f1ebd63dbea8ad"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e1086119d74b81daeefeb303a06b583fb716cf6898106c2eec3199ec6f8c67a3"
+    sha256 cellar: :any_skip_relocation, sonoma:        "7fcef36c08598de3a9280a5ad9301a58f81ac8cefb3117b1cc6cd2c1de6af8d1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "dbe32f06878de140c7b135c5598c9122eb96f239b4be48d8432ee4bd414feecb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e0e3000ac285dd0415c7a6f7e682d4e02ed86c4506881f90ef5b655f55e548ef"
   end
 
   depends_on "pkgconf" => :build
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", *std_cargo_args
+    system "cargo", "install", *std_cargo_args(path: "crates/kwctl")
 
     generate_completions_from_executable(bin/"kwctl", "completions", "--shell")
   end
 
   test do
+    assert_match version.to_s, shell_output("#{bin}/kwctl --version")
+
     test_policy = "ghcr.io/kubewarden/policies/safe-labels:v0.1.7"
-    assert_equal "kwctl #{version}", shell_output("#{bin}/kwctl --version").strip.split("\n")[0]
     system bin/"kwctl", "pull", test_policy
     assert_match test_policy, shell_output("#{bin}/kwctl policies")
 

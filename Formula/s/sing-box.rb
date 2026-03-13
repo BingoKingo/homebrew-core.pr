@@ -1,27 +1,42 @@
 class SingBox < Formula
   desc "Universal proxy platform"
   homepage "https://sing-box.sagernet.org"
-  url "https://github.com/SagerNet/sing-box/archive/refs/tags/v1.11.11.tar.gz"
-  sha256 "31cc321efaa2fe9f3e3be9b065354552378f5a1dac49f6a24ce7e48d8a6c8979"
+  url "https://github.com/SagerNet/sing-box/archive/refs/tags/v1.13.2.tar.gz"
+  sha256 "04b72fcd355c36a85eb028f47986894e9cf4dadbea3fee79f6891481cabeb692"
   license "GPL-3.0-or-later"
-  head "https://github.com/SagerNet/sing-box.git", branch: "dev-next"
+  head "https://github.com/SagerNet/sing-box.git", branch: "testing"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e614ef31a63a5ad8c66bd63a99c92fe521bb276110625591354b3a4d2b004943"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "456d9d83214a7814ca33f91b4dda4b8418bd68d7e1f5b7ca411e3a4b5dcf9ad1"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "0f0a00c0eb31ac9c224abf4872fb48c4fad1e9e39018c5c3a18077a4fc3d7c8c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "97b8ad1975e095e1e0d397b35610f8d626f3d760a98302c84b04b843996d3dfb"
-    sha256 cellar: :any_skip_relocation, ventura:       "d0174842a207ab6c789d838ba3a15504ec169940a7182d5a1e683a6da447d452"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7fb6c95e210fe750d8655672c0de2465f2d815c91ad0ac27fc8690e3b676eba0"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f69e89ab844ff34edf9f0814c8510be14bb1949c52c5d6918a77901aa3097c67"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "17a8c92bbd43843631c2615d6102bbcb9c6c7d840a05eb2f14a3466d587d58a9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "14856923a7f405d427f1fa821ec72dead4e52f0a18a4fbbce8225260710a0d55"
+    sha256 cellar: :any_skip_relocation, sonoma:        "9d4c114ff8e71209a59e8470cc17d39f9fea0a7a336fea97b47cc7b8ffe2f23c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b25a72e1abb7565e7c96757bf29278100de04e4d2576a3741ae2a0ab2804b088"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "997f1e17a533cad87d3ad666fc0c44003ae39aa5d30b690d9f9570fb8ea0d960"
   end
 
   depends_on "go" => :build
 
+  on_linux do
+    depends_on "lld" => :build
+    depends_on "llvm" => :build
+  end
+
   def install
-    ldflags = "-s -w -X github.com/sagernet/sing-box/constant.Version=#{version} -buildid="
-    tags = "with_gvisor,with_quic,with_wireguard,with_utls,with_reality_server,with_clash_api"
+    tags = File.read("release/DEFAULT_BUILD_TAGS").strip.split(",")
+    ldflags_shared = File.read("release/LDFLAGS").strip
+
+    if OS.linux?
+      ENV["CC"] = Formula["llvm"].opt_bin/"clang"
+      ENV["CXX"] = Formula["llvm"].opt_bin/"clang++"
+      ENV["CGO_ENABLED"] = "1"
+      ENV["CGO_LDFLAGS"] = "-fuse-ld=#{Formula["lld"].opt_bin}/ld.lld"
+    end
+
+    ldflags = "-s -w -X github.com/sagernet/sing-box/constant.Version=#{version} #{ldflags_shared} -buildid="
     system "go", "build", *std_go_args(ldflags:, tags:), "./cmd/sing-box"
-    generate_completions_from_executable(bin/"sing-box", "completion")
+    generate_completions_from_executable(bin/"sing-box", shell_parameter_format: :cobra)
   end
 
   service do
@@ -45,7 +60,7 @@ class SingBox < Formula
         ]
       }
     JSON
-    server = fork { exec bin/"sing-box", "run", "-D", testpath, "-c", testpath/"shadowsocks.json" }
+    server = spawn bin/"sing-box", "run", "-D", testpath, "-c", testpath/"shadowsocks.json"
 
     sing_box_port = free_port
     (testpath/"config.json").write <<~JSON
@@ -69,15 +84,15 @@ class SingBox < Formula
       }
     JSON
     system bin/"sing-box", "check", "-D", testpath, "-c", "config.json"
-    client = fork { exec bin/"sing-box", "run", "-D", testpath, "-c", "config.json" }
+    client = spawn bin/"sing-box", "run", "-D", testpath, "-c", "config.json"
 
-    sleep 3
     begin
+      sleep 3
       system "curl", "--socks5", "127.0.0.1:#{sing_box_port}", "github.com"
     ensure
-      Process.kill 9, server
+      Process.kill "TERM", server
+      Process.kill "TERM", client
       Process.wait server
-      Process.kill 9, client
       Process.wait client
     end
   end

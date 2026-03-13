@@ -1,11 +1,11 @@
 class Octave < Formula
   desc "High-level interpreted language for numerical computing"
   homepage "https://octave.org/index.html"
-  url "https://ftp.gnu.org/gnu/octave/octave-9.4.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/octave/octave-9.4.0.tar.xz"
-  sha256 "fff911909ef79f95ba244dab5b8c1cb8c693a6c447d31deabb53994f17cb7b3d"
+  url "https://ftpmirror.gnu.org/gnu/octave/octave-11.1.0.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/octave/octave-11.1.0.tar.xz"
+  sha256 "8b3e2d0ec1809e8a2bed11de779014b6eb6a469c0caad1b339d29a6126e3cb6a"
   license "GPL-3.0-or-later"
-  revision 1
+  compatibility_version 1
 
   # New tarballs appear on https://ftp.gnu.org/gnu/octave/ before a release is
   # announced, so we check the octave.org download page instead.
@@ -15,15 +15,16 @@ class Octave < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:  "c31cf64c9ad5ceff127bf091ad83fa1dfde97862bf5a7bea232bad62ee5165c0"
-    sha256 arm64_ventura: "4484002e46653b1fed737d440fed9073419fde9d5c1a49f9a545d2bd62f0a62d"
-    sha256 sonoma:        "6df6e55cbee8648794e4356fda7da6682bd6a28cfcb3d542997f6494737993ca"
-    sha256 ventura:       "b2617d657cc068e9372a2bb7ca5c93724e0d366962fae0353e530daec3d94f8b"
-    sha256 x86_64_linux:  "7db574b909f0db5b5cf47b38b44105a97f75fc132041832e7610e4a7660772b4"
+    sha256 arm64_tahoe:   "eb9e33aae3eda5c4c6f317c870051bf760af6e8baffcabf495ec096a1ac552db"
+    sha256 arm64_sequoia: "60710c4bccda4b8d3758a9901ee362325a88f302ef037526a7ae765bcef931df"
+    sha256 arm64_sonoma:  "3718cbdecc5fd7e80b4cdb02fc132dc38a0ed985e49a0916d184bdeb6eae3f8b"
+    sha256 sonoma:        "b6da3844e5b5a94578bdca36291c38d84e0e163da6fd9ac118b737ea08615749"
+    sha256 arm64_linux:   "9c891f169b5a0bd821550baa5f63c7007e46b404acf526d912fdbf49e83422ca"
+    sha256 x86_64_linux:  "ae513c984d980c0ced1b4d3be890f5183b59cae6712b49162fdd65d57f412d2a"
   end
 
   head do
-    url "https://hg.savannah.gnu.org/hgweb/octave", branch: "default", using: :hg
+    url "https://hg.octave.org/octave", using: :hg
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
@@ -58,7 +59,9 @@ class Octave < Formula
   depends_on "qhull"
   depends_on "qrupdate"
   depends_on "qscintilla2"
-  depends_on "qt"
+  depends_on "qt5compat"
+  depends_on "qtbase"
+  depends_on "qttools"
   depends_on "rapidjson"
   depends_on "readline"
   depends_on "suite-sparse"
@@ -67,10 +70,13 @@ class Octave < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "curl"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "little-cms2"
+  end
+
+  on_sequoia :or_older do
+    depends_on "fast_float" => :build
   end
 
   on_linux do
@@ -78,21 +84,11 @@ class Octave < Formula
     depends_on "automake"
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "wayland"
+    depends_on "zlib-ng-compat"
   end
 
-  # Dependencies use Fortran, leading to spurious messages about GCC
-  cxxstdlib_check :skip
-
   def install
-    # Default configuration passes all linker flags to mkoctfile, to be
-    # inserted into every oct/mex build. This is unnecessary and can cause
-    # cause linking problems.
-    inreplace "src/mkoctfile.in.cc",
-              /%OCTAVE_CONF_OCT(AVE)?_LINK_(DEPS|OPTS)%/,
-              '""'
-
-    ENV.prepend_path "PKG_CONFIG_PATH", Formula["qt"].opt_libexec/"lib/pkgconfig" if OS.mac?
-
     system "./bootstrap" if build.head?
     args = [
       "--disable-silent-rules",
@@ -143,9 +139,12 @@ class Octave < Formula
 
   test do
     ENV["LC_ALL"] = "en_US.UTF-8"
+    ENV.delete "CXX" # make sure Octave's default works without manual -std=...
+
     system bin/"octave", "--eval", "(22/7 - pi)/pi"
     # This is supposed to crash octave if there is a problem with BLAS
     system bin/"octave", "--eval", "single ([1+i 2+i 3+i]) * single ([ 4+i ; 5+i ; 6+i])"
+
     # Test basic compilation
     (testpath/"oct_demo.cc").write <<~CPP
       #include <octave/oct.h>
@@ -153,17 +152,26 @@ class Octave < Formula
       { return ovl (42); }
     CPP
     system bin/"octave", "--eval", <<~MATLAB
-      mkoctfile ('-v', '-std=c++11', '-L#{lib}/octave/#{version}', 'oct_demo.cc');
+      mkoctfile ('-v', '-L#{lib}/octave/#{version}', 'oct_demo.cc');
       assert(oct_demo, 42)
     MATLAB
+
     # Test FLIBS environment variable
     system bin/"octave", "--eval", <<~MATLAB
       args = strsplit (mkoctfile ('-p', 'FLIBS'));
       args = args(~cellfun('isempty', args));
-      mkoctfile ('-v', '-std=c++11', '-L#{lib}/octave/#{version}', args{:}, 'oct_demo.cc');
+      mkoctfile ('-v', '-L#{lib}/octave/#{version}', args{:}, 'oct_demo.cc');
       assert(oct_demo, 42)
     MATLAB
-    ENV["QT_QPA_PLATFORM"] = "minimal"
-    system bin/"octave", "--gui"
+
+    if OS.linux?
+      ENV["QT_QPA_PLATFORM"] = "minimal"
+      system bin/"octave", "--gui"
+    else
+      pid = spawn(bin/"octave", "--gui")
+      sleep 5
+      system "pkill", "-KILL", "octave-gui"
+      Process.wait(pid)
+    end
   end
 end

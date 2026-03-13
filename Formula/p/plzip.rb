@@ -12,18 +12,32 @@ class Plzip < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "90e3cd08078f11ba7ceed4c93c1e0fdc788decf11d2d4d0855c52e803e3ade99"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c69f87f246b7b84977dd3690867ec9db32e05610a415d2fbe9a6be69ff4b63da"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "bedd1525dd0a949b298fc354e05ce35f3c08bc9b8edb9778ccc9186e838d0624"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3a6fa3ffd911737b50041ffbede6cf6d39cf54608be10093c755b28dae1d7121"
-    sha256 cellar: :any_skip_relocation, ventura:       "21bed828b80d4dd6b40a0e75b236996f334ab8b76f92155192b3ea984410df6e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d600a14782d931755a8998785a5b284296bbee80a13f76ebfadbbf69c0cf9ddb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a35aab3bc41f9112cd01216df0902af5b126cdbe340c91396acdbf006506fe3d"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "87bd7ffcf85a0d9cbf1ed155a5514e45867d84768ddaae9fad6bd4573f33a8b5"
+    sha256 cellar: :any,                 arm64_sequoia: "8dfc51f42cbb49c2d4b2a845fa7c8e16d1336344494472dad00e9aea1c8ff445"
+    sha256 cellar: :any,                 arm64_sonoma:  "c8de2539897f2006b34d24215dafcebec16f54533dc69c532eb3d6a42c2ef2d8"
+    sha256 cellar: :any,                 sonoma:        "e97fc21b0ca62568f80f5271108b7df9e4c75b5a4684675c616648a385a52659"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f889ea88d7b79ae7a9b23d8a81f7beee6758003716a8f7399d769c06aa971c5f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3199f435251873f53c8830e73bf813bcdbfc920cab72d6d6fa5170df4998e3e1"
   end
 
   depends_on "lzlib"
 
+  on_sequoia :or_newer do
+    depends_on "gcc"
+
+    # Binaries created by Apple Clang 1700+ are broken
+    fails_with :clang do
+      cause "'make check' fails with '(stdin): Not enough memory'"
+    end
+  end
+
+  fails_with :llvm_clang do
+    cause "'make check' fails with '(stdin): Not enough memory'"
+  end
+
   def install
+    # Not an autotools configure script
     system "./configure", "--prefix=#{prefix}"
     system "make"
     system "make", "check"

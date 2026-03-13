@@ -1,20 +1,20 @@
 class XkeyboardConfig < Formula
   desc "Keyboard configuration database for the X Window System"
   homepage "https://www.freedesktop.org/wiki/Software/XKeyboardConfig/"
-  url "https://xorg.freedesktop.org/archive/individual/data/xkeyboard-config/xkeyboard-config-2.44.tar.xz"
-  sha256 "54d2c33eeebb031d48fa590c543e54c9bcbd0f00386ebc6489b2f47a0da4342a"
+  url "https://xorg.freedesktop.org/archive/individual/data/xkeyboard-config/xkeyboard-config-2.47.tar.xz"
+  sha256 "e59984416a72d58b46a52bfec1b1361aa7d84354628227ee2783626c7a6db6b6"
   license "MIT"
   head "https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "fe749c953e59bccd2a20d2d5576a20bf1b2a29ce3830ed81f9b9a9658838682e"
+    sha256 cellar: :any_skip_relocation, all: "58c9440a4c0006174fcbe23281892cf4ccb3b79b7c009ddb3d75e6074faf5039"
   end
 
   depends_on "gettext" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => [:build, :test]
-  depends_on "python@3.13" => :build
+  depends_on "python@3.14" => :build
 
   uses_from_macos "libxslt" => :build
 

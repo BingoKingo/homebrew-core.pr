@@ -4,7 +4,7 @@ class Libmspub < Formula
   url "https://dev-www.libreoffice.org/src/libmspub/libmspub-0.1.4.tar.xz"
   sha256 "ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba"
   license "MPL-2.0"
-  revision 18
+  revision 19
 
   livecheck do
     url "https://dev-www.libreoffice.org/src/"
@@ -12,27 +12,27 @@ class Libmspub < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1847309881161a713cb9c37bec7a23c452cdc44bf87c28c016f449c101b57b84"
-    sha256 cellar: :any,                 arm64_sonoma:  "249d78a5299e65bd9ef5df4ea21d70aae17f40c3f075f34e04923b3880fb0257"
-    sha256 cellar: :any,                 arm64_ventura: "fca947dbb384a02a7384989d0f5aa87e74d51460ef01e90555414d3b6b221473"
-    sha256 cellar: :any,                 sonoma:        "363ef78cf1ad4658325059fb88d5ffbd1ff9dfb755a46480d7bf355dad00a07c"
-    sha256 cellar: :any,                 ventura:       "3ff4c780cd0546ea13e77aeffa63b9b8b5e31dd6a12c1b34bcc9275239942965"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "87665795cf7ed3a80d5798d80760aa4780ee5658512ee0563802951cb9057c60"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "256986816dfba4c397abe672d087ed464766aff3aaad05f80c4a99672fb155d4"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "5cecb8db1dca13e86f7b8a41e9270f34e37485235327f3cca023975fb2ce630c"
+    sha256 cellar: :any,                 arm64_sequoia: "4d212ebced14322c8c144697985552a703826c17d511d168b9ffc780ece1d421"
+    sha256 cellar: :any,                 arm64_sonoma:  "164c06f73c3cba7a6c97282455db62a070f69a2dccb0ccf694788e8e452a155f"
+    sha256 cellar: :any,                 sonoma:        "dc435295289043990c51abaca7c3030409065cd293202dcb0e4d38a426e3dc04"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b15fe31563699e7f8021c51965fcd4785e18399a29a933465f68fc1f73d35b3c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fdc0c07625d05b05a48378cda67ba1d66ea6e549c2489b386d104594381a5f5e"
   end
 
   depends_on "boost" => :build
   depends_on "libwpg" => :build
   depends_on "pkgconf" => :build
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "librevenge"
   depends_on "libwpd"
 
-  uses_from_macos "zlib"
-
-  # Fix for missing include needed to build with recent GCC. Remove in the next release.
-  # Commit ref: https://git.libreoffice.org/libmspub/+/698bed839c9129fa7a90ca1b5a33bf777bc028d1%5E%21
   on_linux do
+    depends_on "zlib-ng-compat"
+
+    # Fix for missing include needed to build with recent GCC. Remove in the next release.
+    # Commit ref: https://git.libreoffice.org/libmspub/+/698bed839c9129fa7a90ca1b5a33bf777bc028d1%5E%21
     patch :DATA
   end
 

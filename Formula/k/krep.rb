@@ -1,18 +1,17 @@
 class Krep < Formula
   desc "High-Performance String Search Utility"
   homepage "https://github.com/davidesantangelo/krep"
-  url "https://github.com/davidesantangelo/krep/archive/refs/tags/v1.2.1.tar.gz"
-  sha256 "eea570981c9c24ade2c9bdebfd3ff144a5d4d30ba940e1bcf2f0e3355421886f"
+  url "https://github.com/davidesantangelo/krep/archive/refs/tags/v2.2.0.tar.gz"
+  sha256 "9929a0b8a4d6502689e562657777f2ce47fc4e1d67ae81b6f1d2104ac1900b84"
   license "BSD-2-Clause"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "abeeaebb1a7106686f09dd6cd76eb69c7aa572d89658810236476531ec284e06"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e830eb2e2ed1a1886ecf0f296f06b72649624973c86f36b3f50736802463e124"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a6cf7e9459a67144232b853108c03b92b07668b9640c8da92f45fd3f377f4eca"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a2010747f0a200256ae54812a2043cfb7162e53158e4d63b74ed0c58e5e34612"
-    sha256 cellar: :any_skip_relocation, ventura:       "fb742f1f5789a0ca58e285aebc035b3d4c8c7864e5be9b8104f2909f27938de3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ccc749c33a0d9108badfbd1c08ed20bfe09d4cfbebb1bf1addc40ac357209ecb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d952331a6b919b3fb98d9ff2071038d83de71d2242fe39a1672133fc6b726360"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d99fae9a30396e953908f6cd63619ed879d838b0a539244f507f939af4716848"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "da80a539b5654fa9fa22336c74a78a637def2794ee77478db8a009a92afcf438"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c596acd523cd2d98a2cf92c75d58af3dbeb0d75c20720c4589d94a1564d903e5"
+    sha256 cellar: :any_skip_relocation, sonoma:        "253cd400937e1bc9ff303d848a41174dcd12127039ce60fce7d196db61ce56b1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f8f909892abf293dcdf6dcdf0ea684b281f167980ad35cceed8d8af52fed2989"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e0311b8223de6354143d8e91d395b5919b430aada13e01e46d951014618c2f98"
   end
 
   def install

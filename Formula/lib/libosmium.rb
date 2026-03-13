@@ -1,38 +1,38 @@
 class Libosmium < Formula
   desc "Fast and flexible C++ library for working with OpenStreetMap data"
   homepage "https://osmcode.org/libosmium/"
-  url "https://github.com/osmcode/libosmium/archive/refs/tags/v2.22.0.tar.gz"
-  sha256 "8f74e3f6ba295baa7325ae5606e8f74ad9056f1d6ab4555c50bff6aa8246f366"
+  url "https://github.com/osmcode/libosmium/archive/refs/tags/v2.23.0.tar.gz"
+  sha256 "2e7a4ab34a80843490a1d673811d600e5445e6d39a0cfc42609d0861eba24669"
   license "BSL-1.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "02ce13c6248f0566b846579f0325c94f2e2385e9f00c7163b04b27636304ce57"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, all: "cb25dc7303f0d4351ae7929fe2290e908bcd514ff1856ad3a32a34de52fd558a"
   end
 
   depends_on "boost" => :build
   depends_on "cmake" => :build
+  depends_on "protozero" => :build
   depends_on "lz4"
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
-  uses_from_macos "zlib"
 
-  resource "protozero" do
-    url "https://github.com/mapbox/protozero/archive/refs/tags/v1.8.0.tar.gz"
-    sha256 "d95ca543fc42bd22b8c4bce1e6d691ce1711eda4b4910f7863449e6517fade6b"
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install
-    resource("protozero").stage { libexec.install "include" }
-
     args = %W[
+      -DBUILD_EXAMPLES=OFF
+      -DBUILD_WITH_CCACHE=OFF
       -DINSTALL_GDALCPP=ON
       -DINSTALL_UTFCPP=ON
-      -DPROTOZERO_INCLUDE_DIR=#{libexec}/include
+      -DPROTOZERO_INCLUDE_DIR=#{Formula["protozero"].opt_include}
     ]
 
+    # We only install headers, so we can skip `cmake --build`.
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
-    system "cmake", "--build", "build"
     system "cmake", "--install", "build"
   end
 

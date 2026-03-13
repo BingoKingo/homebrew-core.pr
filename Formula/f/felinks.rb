@@ -1,19 +1,19 @@
 class Felinks < Formula
   desc "Text mode browser and Gemini, NNTP, FTP, Gopher, Finger, and BitTorrent client"
   homepage "https://github.com/rkd77/elinks"
-  url "https://github.com/rkd77/elinks/releases/download/v0.18.0/elinks-0.18.0.tar.xz"
-  sha256 "e56ef15996a1ca130789293ee6d49cbecf175c06266acfa676fa6edb271a1173"
+  url "https://github.com/rkd77/elinks/releases/download/v0.19.1/elinks-0.19.1.tar.xz"
+  sha256 "31960cd471246692b84008bffec89182f25818472f86ee1a41a09bf0dad09eeb"
   license "GPL-2.0-only"
   head "https://github.com/rkd77/elinks.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "529eb6faff1708b4e77d43909e658745d00b7eeacb37fb3db72e8b2bc7d558f9"
-    sha256 cellar: :any, arm64_sonoma:  "218fe1fdc56e6c73245834c41763b66d4277a85737b30a093eb4b15c38dd8c50"
-    sha256 cellar: :any, arm64_ventura: "fdee3c49900a48edafb82435144c94a2ddcaeecf30646b606a604e7ff3f4ca73"
-    sha256 cellar: :any, sonoma:        "c7d99c15f1ac89441b4de54cb413e22e6c096fc88828e5461822c5c6f8dcb856"
-    sha256 cellar: :any, ventura:       "0f268c3811c863f325f50c0d36bfffcb8d54d9d258871afa4501c2a6a71c2080"
-    sha256               arm64_linux:   "eff4235e7a240d220af0ab641c16c06e29a35ba2f655733d6fd6560cffaf0009"
-    sha256               x86_64_linux:  "f0ca366d10b01c506710abc06dec5f57ade08f76c4f233d2ce353e28c75bec2d"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe:   "1bb748fa85a2021054ecfbc078da2ed3201320744a218d340732298fd90536d8"
+    sha256 cellar: :any, arm64_sequoia: "2f33fbb408dfd33c93ef83260d52a7cd6a48fbc3cad7e9c49940adcc5e92f734"
+    sha256 cellar: :any, arm64_sonoma:  "4149fe333d1d8522477d583dfce6eb4ba8e7369d6fff378cc7f59b69b8faf343"
+    sha256 cellar: :any, sonoma:        "25835e28f28a67984128bdeafe0ad342be1a5a4b649a4d4176ba227ee7cce737"
+    sha256               arm64_linux:   "5b6fa5b978fe374293f29e46dd8870c7533d67ba94170285e8dc9f261340f159"
+    sha256               x86_64_linux:  "2bbd226d828e84ea9ea36a907498ff54712896f49f3a407a8709c904e567c02a"
   end
 
   depends_on "meson" => :build
@@ -34,7 +34,10 @@ class Felinks < Formula
   uses_from_macos "curl"
   uses_from_macos "expat"
   uses_from_macos "python"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = %w[

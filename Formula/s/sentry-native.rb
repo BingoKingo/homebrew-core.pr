@@ -1,34 +1,37 @@
 class SentryNative < Formula
   desc "Sentry SDK for C, C++ and native applications"
   homepage "https://docs.sentry.io/platforms/native/"
-  url "https://github.com/getsentry/sentry-native/archive/refs/tags/0.8.5.tar.gz"
-  sha256 "3fb8f15ae1e8e6dbe831711dbdbb4245a7936f25be1b416acfb6d0581875461e"
+  url "https://github.com/getsentry/sentry-native/archive/refs/tags/0.13.2.tar.gz"
+  sha256 "67513621fb1c64c2b225bda51701891516f13d9de8d428585b928ec8814aec9d"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "c3efa2cd40cef7ba25c2f1b24e24986d17725442f16b596cc901913279133f44"
-    sha256 cellar: :any,                 arm64_sonoma:  "3a3ae596edf78d565a9a12f0cf90fc6b1d11ce9e68f515e9b61e2873b818c0c4"
-    sha256 cellar: :any,                 arm64_ventura: "390cb9399ab622c44c735996fca5f1b053a4b562691916e0c56079037901b785"
-    sha256 cellar: :any,                 sonoma:        "28c7116f6c096c15321e0143f4e4cf26b6c361572ae028feab1071aa29b32db1"
-    sha256 cellar: :any,                 ventura:       "16ca56b23013df1a8b93eca50d4590ab080b8f15b490ddadd1b79c7504122376"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ab1ea85123a656a304851e797ad6e2f3737ee2e67549c5989cd2b016ee580fe9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "73a1db60efd90fb8457414f61ad8ce67a9aadcbd44190778ad191478291b4d4d"
+    sha256 cellar: :any,                 arm64_tahoe:   "aa62f3d1946409b732ad16b17e72a26179e2c128414149cb5e98d99da456ca51"
+    sha256 cellar: :any,                 arm64_sequoia: "0404db346742bc89836ad7b6f117aa4a4cc043fe51879629287b684affeb82fb"
+    sha256 cellar: :any,                 arm64_sonoma:  "c32620380e8cce7a78e12fa264bde1e03a12e3771c2b8dcb86b463d03faabe1e"
+    sha256 cellar: :any,                 sonoma:        "adf112a64d0da04fb62365f7cb006534272cebe3f0f1870d93ecd29e41a86d10"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "fac000682e97cc5f9cf7ab2540f2a00d6df7da69bcb2de701d1279fb863d1912"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ea6c8010e2cf3ef204242e0f1da57a6213d5c931479b863f7c961cea8d7de6aa"
   end
 
   depends_on "cmake" => :build
+
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # No recent tagged releases, use the latest commit
   resource "breakpad" do
     url "https://github.com/getsentry/breakpad.git",
-        revision: "ecff426597666af4231da8505a85a61169c5ab04"
+        revision: "47d70322c848012ed801e36841767d7ffb79412d"
   end
 
   # No recent tagged releases, use the latest commit
   resource "crashpad" do
     url "https://github.com/getsentry/crashpad.git",
-        revision: "a17b30d42ec667c92a99285429e4edf2f7196698"
+        revision: "eb5fa6e8576e79113b21296bd6af7e2a542839db"
   end
 
   # No recent tagged releases, use the latest commit

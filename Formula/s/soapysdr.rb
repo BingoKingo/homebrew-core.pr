@@ -15,31 +15,39 @@ class Soapysdr < Formula
   end
 
   bottle do
-    rebuild 3
-    sha256 cellar: :any,                 arm64_sequoia: "2cd1b0106c59df55ee3022f0e426718979343f8c0791a1cbf189a0230b582967"
-    sha256 cellar: :any,                 arm64_sonoma:  "037c6ec56ece7b022d890f8c42f9e8b7e012ec9a641901d4d73a961a8f7f069d"
-    sha256 cellar: :any,                 arm64_ventura: "d091d29209ae4319ddb8db5f2bc8c3f828953db36b619f2288df08c6cb2f2db1"
-    sha256 cellar: :any,                 sonoma:        "e90833db385d8e3ce0c8eb4f138834d1da1db6879ca46be2f5f52a4f68957e44"
-    sha256 cellar: :any,                 ventura:       "dbbc7e560136986fb5604d2c752890d5ee299725768fa61dc5ddd2bfd2e73be0"
-    sha256                               arm64_linux:   "20de753561fae444f356d230eff4d1d67dee481e6db1bed339dd419d710eaf64"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d1227202d6306ddbc0d33b3f94904cc51b6ebfd61802fd411fb51fdd306e2f4a"
+    rebuild 5
+    sha256                               arm64_tahoe:   "d10703185cc1b8b3312bdbc0621131238980f07481bab599dcc498a06e1c1106"
+    sha256                               arm64_sequoia: "a57f1047d84abdf6272e01276e21ca325a0ca8b5aa716fba5fd91f9b4bedcf44"
+    sha256                               arm64_sonoma:  "635b13fc20043aaee3de8be3c111caef4eb8213643ea04257b6ca7834ccddd49"
+    sha256 cellar: :any,                 sonoma:        "c2b21d678a8d0d0f785d8257a32c7d48a7992adef5b6a7c14e6cd4e34d79cf3b"
+    sha256                               arm64_linux:   "b92128272614278c0799f954abebd5cb9404ded017babda7f8a5767ffb60e8de"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c37220d056fd15397e731350bf2078625e70b50baf9033db994aa2a18e5f9f62"
   end
 
   depends_on "cmake" => :build
   depends_on "swig" => :build
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install
     args = %W[
       -DPYTHON_EXECUTABLE=#{which(python3)}
+      -DPYTHON3_EXECUTABLE=#{which(python3)}
       -DSOAPY_SDR_ROOT=#{HOMEBREW_PREFIX}
-      -DCMAKE_INSTALL_RPATH=#{rpath}
     ]
-    args << "-DSOAPY_SDR_EXTVER=release" unless build.head?
+    args << "-DSOAPY_SDR_EXTVER=release" if build.stable?
+
+    site_packages = prefix/Language::Python.site_packages(python3)
+    args << "-DCMAKE_INSTALL_RPATH=#{rpath};#{rpath(source: site_packages)}" if OS.mac?
+
+    # Workaround until next release to avoid backporting multiple commits
+    if build.stable?
+      args << "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+      odie "Remove `-DCMAKE_POLICY_VERSION_MINIMUM=3.5`" if version > "0.8.1"
+    end
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"

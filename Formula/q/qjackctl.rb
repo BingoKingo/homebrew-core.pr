@@ -1,10 +1,10 @@
 class Qjackctl < Formula
   desc "Simple Qt application to control the JACK sound server daemon"
   homepage "https://qjackctl.sourceforge.io/"
-  url "https://downloads.sourceforge.net/project/qjackctl/qjackctl/1.0.4/qjackctl-1.0.4.tar.gz"
-  sha256 "e3eb6f989d947dcd97b4fe774294347106a0a6829c0480a965393ebca97514ae"
+  url "https://downloads.sourceforge.net/project/qjackctl/qjackctl/1.0.5/qjackctl-1.0.5.tar.gz"
+  sha256 "ce6056dd17fd5c1e8cca928754357f3cc6a6ff8464c9e05b07f8011b2597ec61"
   license "GPL-2.0-or-later"
-  head "https://git.code.sf.net/p/qjackctl/code.git", branch: "master"
+  head "https://git.code.sf.net/p/qjackctl/code.git", branch: "main"
 
   livecheck do
     url :stable
@@ -12,17 +12,20 @@ class Qjackctl < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:  "6bc46dab635d6d238075bd40608f12f0e2b91da3ea35fcd0f111c950e236819d"
-    sha256 arm64_ventura: "d4e7befa66d433bda2982d1b2298cd7b031190e2f5341afb82df72aa57bdc126"
-    sha256 sonoma:        "4dcb152f927b45874dcb902c7fa5657c2699511c52a0157cf2f2852d82204aa7"
-    sha256 ventura:       "833e34b3aa6e9a987da110efc4a1e28ab9e9ce37e11d50fa6d17df3aa9f27358"
-    sha256 x86_64_linux:  "2d0274d62dd74b8cdb1edb6dff3137b21a48d73de5258b2e3dc3a714ed8eca40"
+    sha256 arm64_tahoe:   "920a75fe7293a69246900ad32076b30664108d832355a537f03ad4b9dffc74c0"
+    sha256 arm64_sequoia: "a0a31424e3de8d51f1dee15e5e92fea5a03d453731042707943758fba2d589a4"
+    sha256 arm64_sonoma:  "c8d960f0ba5c1de5ecef6fc877570098ec77125c603a1d3247ce48fc2aab2598"
+    sha256 sonoma:        "1b68ec180377ed8a00935ef037e7ff50a70738f03f5a5c46ccb4e4bbf8bf1fe5"
+    sha256 arm64_linux:   "dca44237f1bae122b317740ec831d3d68e132415b53cfd10c62db236117315f6"
+    sha256 x86_64_linux:  "06145fdf9dc0b34aaa2aac747efe52df93590b72f9916ee15fcf14b7c75797e8"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
+  depends_on "qttools" => :build
   depends_on "jack"
-  depends_on "qt"
+  depends_on "qtbase"
+  depends_on "qtsvg"
 
   on_linux do
     depends_on "alsa-lib"

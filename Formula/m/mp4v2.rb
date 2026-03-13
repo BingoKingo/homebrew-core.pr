@@ -6,6 +6,7 @@ class Mp4v2 < Formula
   license "MPL-1.1"
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:    "bf656d8a485b0663a730368ad755d921f3456ceeca347501c8cbcc401c63bbc6"
     sha256 cellar: :any,                 arm64_sequoia:  "1a2c9a7beb75abcc15327b7b7437a831ae61855cc781e1200d11a4c1cf34a299"
     sha256 cellar: :any,                 arm64_sonoma:   "e9bc1800a60417f19d19347569285480d631355b615ad520d2b5c4f28b219d28"
     sha256 cellar: :any,                 arm64_ventura:  "1eeebb5c4beeda316aec2ab260c37b2eb7375330af16ff7f80a5e63f61ca7042"
@@ -24,7 +25,7 @@ class Mp4v2 < Formula
 
   # Fix -flat_namespace being used on Big Sur and later.
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-big_sur.diff"
     sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
   end
 

@@ -1,19 +1,10 @@
 class Freediameter < Formula
   desc "Open source Diameter (Authentication) protocol implementation"
   homepage "https://github.com/freeDiameter/freeDiameter"
+  url "https://github.com/freeDiameter/freeDiameter/archive/refs/tags/1.6.0.tar.gz"
+  sha256 "0bb4ed33ada0b57ab681d86ae3fe0e3a9ce95892f492c401cbb68a87ec1d47bc"
   license "BSD-3-Clause"
   head "https://github.com/freeDiameter/freeDiameter.git", branch: "master"
-
-  stable do
-    url "https://github.com/freeDiameter/freeDiameter/archive/refs/tags/1.5.0.tar.gz"
-    sha256 "cc4ceafd9d0d4a6a5e3aa02bf557906fe755df9ec14d16c4fcd5dab6930296aa"
-
-    # Backport support for `libidn2`. Remove in the next release.
-    patch do
-      url "https://github.com/freeDiameter/freeDiameter/commit/da679d27c546e11f6e41ad8882699f726e58a9f7.patch?full_index=1"
-      sha256 "123fe68ede4713b8e78efa49bfe9db592291cc3c821bbdc58f930a1f291423b1"
-    end
-  end
 
   livecheck do
     url :stable
@@ -22,13 +13,12 @@ class Freediameter < Formula
 
   bottle do
     rebuild 2
-    sha256                               arm64_sequoia: "3a0fdc3ba68de137c1c7565a2bf1952cf239c35717276e185ef2c57d8f042a0f"
-    sha256                               arm64_sonoma:  "77cce28c5fae584b97aefe1d124bf14da292e5f40f62a4bfccb4b545feecf9f8"
-    sha256                               arm64_ventura: "a0a2bb922fe5286a90703eaf346ab465702d3bb43040b11f4c49f2b4296ec768"
-    sha256                               sonoma:        "40a30f89b5587df10f03275e37b9d17c4ca3a59098f2efddf5e521b9a71276b6"
-    sha256                               ventura:       "3b25d64d36dabbcdd24ca3d2c02bf05f8bff8ddcdb764f58d01c3fed25a50e57"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7f092135225eda295f1bd57f85b49c8b4cdcdf9241878b0d7c9971f28eb5a570"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "224a65066b5831f9a7c9d07c2f4439075fe60f8e287c3a4e19fbfc163124e5b7"
+    sha256                               arm64_tahoe:   "6101f02874dba7633196889ea14e9d5d397d8ec51d1c47f603d15413cb2ef6eb"
+    sha256                               arm64_sequoia: "dd54ac49636ecf8491ed2219ea3e8bc10fc1f0b29ac5f7125e5dfea54e2ac020"
+    sha256                               arm64_sonoma:  "0315d7812c32d103ddd734fcc28e80ad6b0ae947b6d672af24d4cf16990e3f2e"
+    sha256                               sonoma:        "1a07c7755a97e4d8e35bf575330316ab84b260d265205c963deb719d828a7dc7"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f8e8a5d5d8e5e831dbd4fd69a673c44828e663a96edbbf1c8da9178cf2c0ea62"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "217a7b1ac6a2719401fc8978f58b46e68f4daabe4e0d6dd4f21f950903581e9b"
   end
 
   depends_on "cmake" => :build
@@ -40,22 +30,25 @@ class Freediameter < Formula
   uses_from_macos "bison" => :build
   uses_from_macos "flex" => :build
 
+  # cmake rpath patch, upstream pr ref, https://github.com/freeDiameter/freeDiameter/pull/84
+  patch do
+    url "https://github.com/freeDiameter/freeDiameter/commit/3037ee7735b969d106b197818c1a5bcdb4586d77.patch?full_index=1"
+    sha256 "146a8e6586b1a1146f06771129609583d43a792bbd94eea7a3c0348f02eb26b2"
+  end
+
   def install
-    system "cmake", "-S", ".", "-B", "build",
-                    "-DDEFAULT_CONF_PATH=#{etc}",
-                    "-DDISABLE_SCTP=ON",
-                    *std_cmake_args
+    args = %W[
+      -DDEFAULT_CONF_PATH=#{etc}
+      -DDISABLE_SCTP=ON
+    ]
+    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
 
+    cp "doc/freediameter.conf.sample", "freeDiameter.conf"
+    etc.install "freeDiameter.conf"
     doc.install Dir["doc/*"]
     pkgshare.install "contrib"
-  end
-
-  def post_install
-    return if File.exist?(etc/"freeDiameter.conf")
-
-    cp doc/"freediameter.conf.sample", etc/"freeDiameter.conf"
   end
 
   def caveats

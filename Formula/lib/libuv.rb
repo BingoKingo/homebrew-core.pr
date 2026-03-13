@@ -1,43 +1,36 @@
 class Libuv < Formula
   desc "Multi-platform support library with a focus on asynchronous I/O"
-  homepage "https://libuv.org"
-  url "https://github.com/libuv/libuv/archive/refs/tags/v1.51.0.tar.gz"
-  sha256 "27e55cf7083913bfb6826ca78cde9de7647cded648d35f24163f2d31bb9f51cd"
+  homepage "https://libuv.org/"
+  url "https://dist.libuv.org/dist/v1.52.1/libuv-v1.52.1.tar.gz"
+  sha256 "66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7"
   license "MIT"
   head "https://github.com/libuv/libuv.git", branch: "v1.x"
 
   livecheck do
-    url :stable
+    url :head
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "916f444748e98c1e58083df123f6ff9d90d0b0af202f4da0862a5c456804d2f2"
-    sha256 cellar: :any,                 arm64_sonoma:  "571859f2cb6de90cfea1d1c6d059e3234ddf8b182e0d494bc9c902ebea191710"
-    sha256 cellar: :any,                 arm64_ventura: "5b883ed2838104b6a8026068ac4b9d6e04dc6fb8f899f522754b426afee4e801"
-    sha256 cellar: :any,                 sonoma:        "fb199706c025af4c6160825de25f9220c8d571499c5dba71c4b93a3874ea7a03"
-    sha256 cellar: :any,                 ventura:       "ced40d8e5768027c89dc194e21e1e52c15a38a932e04d8026a2ebc5ec4944422"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c1dcb33e480bb395e58b2c0e775f36041af343e7be3cf5d53d666fb55f753ee6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dd1d243f009617c2ff2d97c5cd08a93512f93accf7d7c1987a649db2b91ac03e"
+    sha256 cellar: :any,                 arm64_tahoe:   "6e8478545dc49bd505a4fac61617cd15d8fec4475d2add5ea1cc92f7281818bf"
+    sha256 cellar: :any,                 arm64_sequoia: "495b7322c4b9d0a2e5ceb96de24f5cc10d781e99179f94ca5e31d350547a235d"
+    sha256 cellar: :any,                 arm64_sonoma:  "6300ab64e5d20aa145fe987c40f65f994a54f571cf113d96100c07feb98e0c10"
+    sha256 cellar: :any,                 sonoma:        "4630cfebfbc75d75a085568e7e6183cc805271871aa8d70f5fa515b05141f641"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "601a1e2db4efec5d8464aba357970310183925c80fe32c7b449fbfc8b8d71b19"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ae4d9ac18871f6a4f4250be25da29e904755fb3067c8fb08d48fdc71311c623b"
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
-  depends_on "pkgconf" => :build
+  depends_on "cmake" => :build
   depends_on "sphinx-doc" => :build
 
   def install
     # This isn't yet handled by the make install process sadly.
-    cd "docs" do
-      system "make", "man"
-      man1.install "build/man/libuv.1"
-    end
+    system "make", "-C", "docs", "man"
+    man1.install "docs/build/man/libuv.1"
 
-    system "./autogen.sh"
-    system "./configure", "--disable-silent-rules", *std_configure_args
-    system "make"
-    system "make", "install"
+    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
   end
 
   test do

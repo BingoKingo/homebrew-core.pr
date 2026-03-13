@@ -4,20 +4,24 @@ class RonnNg < Formula
   url "https://github.com/apjanke/ronn-ng/archive/refs/tags/v0.10.1.tar.gz"
   sha256 "180f18015ce01be1d10c24e13414134363d56f9efb741fda460358bb67d96684"
   license "MIT"
-  revision 1
+  revision 2
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8d39afaff29b90a17336c9033eb12d405f5b8c29c7e804872a87281c889d84d9"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8d39afaff29b90a17336c9033eb12d405f5b8c29c7e804872a87281c889d84d9"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "8d39afaff29b90a17336c9033eb12d405f5b8c29c7e804872a87281c889d84d9"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f0d1bcdca16b8ce2b8641e8224a374ebe25cb744721c84047cd101e505e07f72"
-    sha256 cellar: :any_skip_relocation, ventura:       "f0d1bcdca16b8ce2b8641e8224a374ebe25cb744721c84047cd101e505e07f72"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d588a927ed953cb8901d41ab8af46b413fefc011d12e1e9c8aeabc23d582e35f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1b303b18ed67bc5b328597d421c4a2c0449a5e65372706b04ed58f0f9319d10e"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "cde2a1921cd09603374d28ee44d9c470f0b187add7b9d9eb0b526d7dbe5a3305"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cde2a1921cd09603374d28ee44d9c470f0b187add7b9d9eb0b526d7dbe5a3305"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cde2a1921cd09603374d28ee44d9c470f0b187add7b9d9eb0b526d7dbe5a3305"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e81143c3c8d224765b7db5c39a07caa7c2d7d2c9a291064f99186a1b6a7578d5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "43cce7ff99b681bb070ad22d1b9ee17a4c2093c79921cd5211095242a05222a1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e4fd9f3b447f24382a9d97e7a1aa2cfdda53eed5ad75f19b0e6d2ae6e210938e"
   end
 
-  # Nokogiri 1.9 requires a newer Ruby
   depends_on "ruby"
+  depends_on "xz"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "ronn", because: "both install `ronn` binaries"
 

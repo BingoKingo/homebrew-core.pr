@@ -1,20 +1,10 @@
 class Gmsh < Formula
   desc "3D finite element grid generator with CAD engine"
   homepage "https://gmsh.info/"
+  url "https://gmsh.info/src/gmsh-4.15.1-source.tgz"
+  sha256 "eba8e4064f6586c8ca880f1cfdf697f4d70f026f398a93b458f247f7e4364fed"
   license "GPL-2.0-or-later"
-  revision 3
   head "https://gitlab.onelab.info/gmsh/gmsh.git", branch: "master"
-
-  stable do
-    url "https://gmsh.info/src/gmsh-4.13.1-source.tgz"
-    sha256 "77972145f431726026d50596a6a44fb3c1c95c21255218d66955806b86edbe8d"
-
-    # Backport fix for newer fltk
-    patch do
-      url "https://gitlab.onelab.info/gmsh/gmsh/-/commit/3b3f0f7e16430939b345889a9e31b50104d5baf3.diff"
-      sha256 "194b2822123c36e18260db5c14b98127c2a6721de2f5272bd0bd9456580465c3"
-    end
-  end
 
   livecheck do
     url :homepage
@@ -22,13 +12,12 @@ class Gmsh < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "cf5c8f43758e346366f53bf60865e5d6f03298eba5e26f251a88e42af4716552"
-    sha256 cellar: :any,                 arm64_sonoma:  "8ba053b9490f1568a75c46dd7b2ec7d806a4dfa82c4a8461c98a6814ca101adb"
-    sha256 cellar: :any,                 arm64_ventura: "e659b97a98f1047d2b83b2265d3a05a1cc2ec8b819869979ca713fe0b12aaf57"
-    sha256 cellar: :any,                 sonoma:        "7c06d9608699dd84a080a9dc8e265260c3a666b834b9d76d7214e8075971bec3"
-    sha256 cellar: :any,                 ventura:       "e527cf0fa674c848605096e23d24c687455e2fa56b427d7d6e90bf6d9c345a87"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "053b6c6984b71f7bb1c5763dd75ee6c3c1adda0db4cfc080efcffe46443615f1"
+    sha256 cellar: :any,                 arm64_tahoe:   "1cb373fde7e3f6f31454676fbabb9cb508720c7efb9267316fbfbe80faf54c1a"
+    sha256 cellar: :any,                 arm64_sequoia: "78f00331e2c998f04ab0cd4282dbc15342703bd93a78c3223d2988e52a14478e"
+    sha256 cellar: :any,                 arm64_sonoma:  "838cfe7f30bd56988375465bef943da45392a4215fe5f4eca16385336cc9fdfc"
+    sha256 cellar: :any,                 sonoma:        "2eb1629e09d260b2a9176d62a169649dc778392f35cf7045f643d26232186573"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "86cbc296324aca959e4f5be71c292029f8dd05fcc96090dcaf69af41141ec33d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a27ddf2c2994932c0c879eb436ebf6e3036b10670ac3a7964ebb6ed3ce7966ef"
   end
 
   depends_on "cmake" => :build
@@ -41,8 +30,6 @@ class Gmsh < Formula
   depends_on "metis"
   depends_on "opencascade"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "freetype"
     depends_on "libomp"
@@ -51,6 +38,7 @@ class Gmsh < Formula
   on_linux do
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "zlib-ng-compat"
   end
 
   def install

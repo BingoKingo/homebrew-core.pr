@@ -4,7 +4,7 @@ class GnustepBase < Formula
   url "https://github.com/gnustep/libs-base/releases/download/base-1_31_1/gnustep-base-1.31.1.tar.gz"
   sha256 "e7546f1c978a7c75b676953a360194a61e921cb45a4804497b4f346a460545cd"
   license "GPL-2.0-or-later"
-  revision 1
+  revision 3
 
   livecheck do
     url :stable
@@ -17,14 +17,16 @@ class GnustepBase < Formula
     end
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "022cbc646ea0a05743c51cb7d804549b78d53bd2b9900113421ba9b37853e515"
-    sha256 cellar: :any,                 arm64_sonoma:  "c87551242fea4d1739d7c651a590113ef97ec2f25a7e5ed3067ef4d5d382d62b"
-    sha256 cellar: :any,                 arm64_ventura: "32af6ef0e1a74f765fb361e8012b32a0f8b0d47d8d0ccd3f37eb616992c554e0"
-    sha256 cellar: :any,                 sonoma:        "7ca4a56508b6eaa4fb8ba7d3f111795bf180588709537e3dda6657a86925b328"
-    sha256 cellar: :any,                 ventura:       "c396d40c48b47283351eff5a976ad62cb4d11a3456e9d96abd4364d2fd457c39"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3d2863a3711b39dc8c010b1dd8888245a5969b3ac88b7649fd532f83da050ccd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6fa791efd053cb237f8194a380d86325b69ed5a65fcc7ba442265f89bcb9c5ad"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "0693816f992adcfc685d2ee8464599a92a51bfb60a8fc428b7a41f77b6657266"
+    sha256 cellar: :any,                 arm64_sequoia: "ea087ac117a4ddee94f9ab38f7bff0e307b80b2cba871be2009711a234a54d11"
+    sha256 cellar: :any,                 arm64_sonoma:  "23da697180c63dec9c9690536bb3debe66b6d78c19ef0ce507571ab2436c8bac"
+    sha256 cellar: :any,                 sonoma:        "35f3f0a775c9e8f138a46ede7e827b2017dc00f4ff60338da1e2eb433d942a58"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0ca2baa3e217b0325cb5a5d8544abda7eda57237c21b50cecf04719c68773a33"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c3d1ac8a92a0cfe7ad301988d5018efa6e8f71f2a906723304dab14ba0448a33"
   end
 
   depends_on "gnustep-make" => :build
@@ -36,16 +38,19 @@ class GnustepBase < Formula
   uses_from_macos "libffi"
   uses_from_macos "libxml2"
   uses_from_macos "libxslt"
-  uses_from_macos "zlib"
 
   on_system :linux, macos: :big_sur_or_older do
-    depends_on "icu4c@77"
+    depends_on "icu4c@78"
   end
 
   on_linux do
     depends_on "libobjc2"
+    depends_on "zlib-ng-compat"
     depends_on "zstd"
-    fails_with :gcc
+  end
+
+  fails_with :gcc do
+    cause "GCC Objective-C support is insufficient"
   end
 
   def install
@@ -56,7 +61,7 @@ class GnustepBase < Formula
       Formula["gnustep-make"].share/"GNUstep/Makefiles"
     end
 
-    if OS.mac? && MacOS.version > :big_sur && (sdk = MacOS.sdk_path_if_needed)
+    if OS.mac? && MacOS.version > :big_sur && (sdk = MacOS.sdk_path)
       ENV["ICU_CFLAGS"] = "-I#{sdk}/usr/include"
       ENV["ICU_LIBS"] = "-L#{sdk}/usr/lib -licucore"
 

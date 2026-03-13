@@ -1,10 +1,19 @@
 class PerconaToolkit < Formula
   desc "Command-line tools for MySQL, MariaDB and system tasks"
   homepage "https://www.percona.com/software/percona-toolkit/"
-  url "https://www.percona.com/downloads/percona-toolkit/3.7.0/source/tarball/percona-toolkit-3.7.0.tar.gz"
-  sha256 "e79f53c3227ac31c858fad061d8a000162cb5ecf8b446b90b574adde9e9ab455"
   license any_of: ["GPL-2.0-only", "Artistic-1.0-Perl"]
-  head "lp:percona-toolkit", using: :bzr
+  head "https://github.com/percona/percona-toolkit.git", branch: "3.x"
+
+  stable do
+    url "https://downloads.percona.com/downloads/percona-toolkit/3.7.1/source/tarball/percona-toolkit-3.7.1.tar.gz"
+    sha256 "d5abd944905e75800e29176aff7fdeb7062da212511e82c265be50ac03b4c19b"
+
+    # Fix Makefile.PL to also install go tools
+    patch do
+      url "https://github.com/percona/percona-toolkit/commit/23be00fca557c7812ee0adfd3f9519429096d2ac.patch?full_index=1"
+      sha256 "1431e42904411c5011e174f94d7c0c063f9e4d6a2744ec76b7bf92f14ef01fda"
+    end
+  end
 
   livecheck do
     url "https://www.percona.com/products-api.php", post_form: {
@@ -15,12 +24,12 @@ class PerconaToolkit < Formula
 
   bottle do
     rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a37d5376a12782664896830ae588d515b1bbde0d4452156c9319e6b391a453ea"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a37d5376a12782664896830ae588d515b1bbde0d4452156c9319e6b391a453ea"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5986cbc073b8a2f0cf7b6b53b1a2a7e1029e2f498d0471dd46189067884f8f1a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f3cbec25f4fa8beb974b310c074a90e6ef1eb58bcef0c1274f59217931983a93"
-    sha256 cellar: :any_skip_relocation, ventura:       "51e79707676df290463b16f92541773bd254a0b1014dac67b4c238db6cbfb6e4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "40e8a0ed87eaa24b89d1b6c7c47bd3298281b8fa1ea653bd80761112cbf165d1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "05b3f3f28f2b13b7d4f7ba1b325d82a617a6d27447d6bc6262d5f00c735bae40"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "80bef441d4e161079ff09264e1c60b8de590aa1ffea7780fd1bd0bf393b9b4e1"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9d4361cdd519c35383e8670636c42ca57617136638f85f1e5dc75cfce9be3b89"
+    sha256 cellar: :any_skip_relocation, sonoma:        "c3c89c731b466953de715f23f17798208ee16137d87fabd7d121f041ba445dc2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "fac3d2a5ec59955b3a7296e6adc223e02fc63f23328686245f885695d9da979f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "989cfa41ec604acfb78a5625b686f0c0ab09b1d9b3a9f3d3db9855fa7c3c24f7"
   end
 
   depends_on "go" => :build

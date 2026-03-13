@@ -3,17 +3,18 @@ class Stella < Formula
   homepage "https://stella-emu.github.io/"
   url "https://github.com/stella-emu/stella/archive/refs/tags/7.0c.tar.gz"
   version "7.0c"
-  sha256 "1b40955f24f3f1f00dff0f4cb46bc1cab4c5e1b9017521b525c5e304be554e3a"
+  sha256 "b9309198aa5746cd568e91caaea10bbeab4ca8155493d0243694b41bdb39d7ca"
   license "GPL-2.0-or-later"
   head "https://github.com/stella-emu/stella.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "01b8c2228d4e79fe4353b9a84ce3a25fb60dfe8a7616feec7909d0f6f9fa0aa2"
-    sha256 cellar: :any,                 arm64_sonoma:  "1c4bd3b235c0bc7eed68982e3d7aadf17d7d0b576850043d14622ccda12f9a01"
-    sha256 cellar: :any,                 arm64_ventura: "9006d2d1c2a917ffb68711f4dea71afb2eafe4c3d0ebc4ad719d2523cdfabc4b"
-    sha256 cellar: :any,                 sonoma:        "a6538fcd6efcdd248764b6608f05f02a5589c820196d752af28501a873177959"
-    sha256 cellar: :any,                 ventura:       "fe04bbcb3564ebd30f3a507a1c488f4ef8ffb57c8da468f32ac73175e59dc5a0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c87bac821cbd8b547480bd72554baa71fd960b5e60d662760f34c3c1e31a2bb9"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "41e3a16e64aaf77fe123ddbd981aeeba3e994390c7d89c0c65f1c2925e7b7e9a"
+    sha256 cellar: :any,                 arm64_sequoia: "91cbc6e702faf484f0f8155e09bc0c58b554d8ad83806f6fbccc175a5a2ee029"
+    sha256 cellar: :any,                 arm64_sonoma:  "0b918bf3b40909f05f9efb55ffd1ea30edc2c5559f4bdbe005be7701e2d78364"
+    sha256 cellar: :any,                 sonoma:        "bdf6adb03cc6b6c704ef07ba259ed76dd8079c8188ec6bffa533143da369f42e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ecb978e4c694527a4ff05657d3eeee7afada54f357e13c145e1f49a61dec59cc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "217c38a50c75643714b44317e94b3eef8118cd15ec1327277641a5cdaf76f78a"
   end
 
   depends_on "pkgconf" => :build
@@ -22,11 +23,14 @@ class Stella < Formula
   depends_on "sdl2"
 
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # ventura build patch, upstream pr ref, https://github.com/stella-emu/stella/pull/1064
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/932732469b2d4ace873187b55973cce3e1627b34/stella/7.0c-ventura.patch"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/stella/7.0c-ventura.patch"
     sha256 "6295953eced4509376f4deb7b1ab511df5fed10cff4fab40feaa4ca8c53922ad"
   end
 
@@ -54,7 +58,7 @@ class Stella < Formula
                             "--enable-release",
                             "--with-sdl-prefix=#{sdl2.prefix}",
                             "--with-libpng-prefix=#{libpng.prefix}",
-                            "--with-zlib-prefix=#{Formula["zlib"].prefix}"
+                            "--with-zlib-prefix=#{Formula["zlib-ng-compat"].prefix}"
       system "make", "install"
     end
   end

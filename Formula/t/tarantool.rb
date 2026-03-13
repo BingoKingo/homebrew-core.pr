@@ -1,8 +1,8 @@
 class Tarantool < Formula
   desc "In-memory database and Lua application server"
   homepage "https://tarantool.org/"
-  url "https://download.tarantool.org/tarantool/src/tarantool-3.4.0.tar.gz"
-  sha256 "3ff1e8de285943eedef6b2cd14caacb51e7998d9da2e4d75eb4d9a770b3173b4"
+  url "https://download.tarantool.org/tarantool/src/tarantool-3.6.2.tar.gz"
+  sha256 "20759ba83cb635532ace908313d418daaa9161fa8bf5836545dc9c9a41759a59"
   license "BSD-2-Clause"
   version_scheme 1
   head "https://github.com/tarantool/tarantool.git", branch: "master"
@@ -15,54 +15,35 @@ class Tarantool < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "73684e6d5d5a89273b6a87cf2557983a269b71e75ce60139fbb3b6a404fe88ad"
-    sha256 cellar: :any,                 arm64_sonoma:  "102b5400e01ce56e4f576b7e533550d3baf17d9e338cf59658102491a925a9be"
-    sha256 cellar: :any,                 arm64_ventura: "0b87ea083232f4b91b1ea94258bb89bbb51c9b43c412a057e16d1aa915101725"
-    sha256 cellar: :any,                 sonoma:        "8140e9c6b27304a62ebc8ef8abb3840c6cf7b95c50f58a7987a9debcf24d5b02"
-    sha256 cellar: :any,                 ventura:       "5110a32a70c67ba1a9c50ce13bd87922bfe65c780fc92197e34b9294c39b1bf3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f302f6f11b0a9ca7fee5ad2903d29e70ee806774adf0de1e4c519f9c45210bb6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b2dc785b9f64d0ca6fd04c859a1235edabc33bed12e32b6940aec6b91c317312"
+    sha256 cellar: :any,                 arm64_tahoe:   "1c2347f82df86f84d570b975d2d5ad55160a1840583b70019f69211361a6d4bc"
+    sha256 cellar: :any,                 arm64_sequoia: "f983e673bc4d5dda9a91fe64a85e44d81a5ff67af8e981d300d417840b213057"
+    sha256 cellar: :any,                 arm64_sonoma:  "c3a4a8d067a2366a72c9e201ed23baa3072612466cdb0976a0aa98e92b42959d"
+    sha256 cellar: :any,                 sonoma:        "805fc0af3f0df03cab242970d3933136f0514dc22dfe7156e09018178a7d66e5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c244bc5235b092aab6a807de1fe7d32c9b0f81b86a95897314eafcf7a624118b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "63b6a3b25c08ad62a323bf867183d10d5bc985ac1ce5dd58683139e4993ab3c0"
   end
 
   depends_on "cmake" => :build
-  depends_on "curl" # curl 8.4.0+
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "libyaml"
   depends_on "openssl@3"
   depends_on "readline"
   depends_on "zstd"
 
+  uses_from_macos "curl", since: :sonoma # curl 8.4.0+
   uses_from_macos "ncurses"
 
   on_linux do
     depends_on "libunwind"
   end
 
-  # cmake 4 build patch, upstream pr ref, https://github.com/tarantool/tarantool/pull/11382
-  patch do
-    url "https://github.com/tarantool/tarantool/commit/68d591d8eb43d0a5de35cf7492955f18598629f2.patch?full_index=1"
-    sha256 "7aeace515b991cf45a477e706a69b2ee5621d45a0394065bf75b92dcb1086534"
-  end
-
   def install
-    # cmake 4 build patch for third parties
-    ENV["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5"
-
-    # Workaround for clang >= 16 until upstream fix is available[^1].
-    # Also, trying to apply LuaJIT commit[^2] worked on Xcode 16 but caused issue on Xcode 15.
-    #
-    # [^1]: https://github.com/tarantool/tarantool/issues/10566
-    # [^2]: https://github.com/LuaJIT/LuaJIT/commit/2240d84464cc3dcb22fd976f1db162b36b5b52d5
-    ENV.append "LDFLAGS", "-Wl,-no_deduplicate" if DevelopmentTools.clang_build_version >= 1600
-
     icu4c = deps.find { |dep| dep.name.match?(/^icu4c(@\d+)?$/) }
                 .to_formula
     args = %W[
       -DCMAKE_INSTALL_SYSCONFDIR=#{etc}
       -DCMAKE_INSTALL_LOCALSTATEDIR=#{var}
       -DENABLE_DIST=ON
-      -DCURL_ROOT=#{Formula["curl"].opt_prefix}
-      -DCURL_ROOT_DIR=#{Formula["curl"].opt_prefix}
       -DICU_ROOT=#{icu4c.opt_prefix}
       -DOPENSSL_ROOT_DIR=#{Formula["openssl@3"].opt_prefix}
       -DREADLINE_ROOT=#{Formula["readline"].opt_prefix}
@@ -72,13 +53,12 @@ class Tarantool < Formula
       -DENABLE_BUNDLED_ZSTD=OFF
       -DLUAJIT_NO_UNWIND=ON
     ]
+    args << "-DCURL_ROOT_DIR=#{MacOS.sdk_for_formula(self).path}/usr" if OS.mac?
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
-  end
 
-  def post_install
     (var/"lib/tarantool").mkpath
     (var/"log/tarantool").mkpath
     (var/"run/tarantool").mkpath
@@ -97,6 +77,6 @@ class Tarantool < Formula
       end
       os.exit(0)
     LUA
-    system bin/"tarantool", "#{testpath}/test.lua"
+    system bin/"tarantool", testpath/"test.lua"
   end
 end

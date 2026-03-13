@@ -1,23 +1,42 @@
 class FancyCat < Formula
   desc "PDF reader for terminal emulators using the Kitty image protocol"
   homepage "https://github.com/freref/fancy-cat"
-  url "https://github.com/freref/fancy-cat/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 "bce101d5eb009ec9057f7b87f6ad767ee96238abcee8854a9db7febd0229a2bf"
+  url "https://github.com/freref/fancy-cat/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "7191c8b6259f8124d2bef4c38ab0bcb7f13923dd84a6ec5cb5512f729765f5b5"
   license "AGPL-3.0-or-later"
-  revision 4
+  revision 5
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "858207c07f258a550d2d97ddd34d25050370a3952a874e88c52fdcfae1367417"
-    sha256 cellar: :any,                 arm64_sonoma:  "2414d4df19efcbf8b6ac444b51506001b6d5dc3569572e6f6735c6a3181421fe"
-    sha256 cellar: :any,                 arm64_ventura: "b062e87e41ba0e891a04f6270889353e0693f744a6e20a1ed1a94f8d53d932d2"
-    sha256 cellar: :any,                 sonoma:        "2ad1b39acc2edbe40af0b4aeb5878f5130c99fb0f109accafdd246671ab15b53"
-    sha256 cellar: :any,                 ventura:       "09831309e4bd91134168aebe7ef9c052bba29aaa8b0958b950a1e71c55507fb4"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b84ed2488e51c145f8eecfde84daf86889945904e05df93c1f1cadf8e8bae949"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "06e9a9771687070f658d364a241b312e79a39fad68edf164c396eb4b2f04109e"
+    sha256 cellar: :any,                 arm64_tahoe:   "fcc2aba1bcfa939b6714837a17bb06db78a66a0c80f30369fd88b8df3bf49939"
+    sha256 cellar: :any,                 arm64_sequoia: "bb835f8f806f9a8c6f6c641daf8d2c954e8c280d10b6b5e4a66fa04ade4c0211"
+    sha256 cellar: :any,                 arm64_sonoma:  "70f21c246bb76c1e5648d7e57e15cd2f0e1ffe0850a577a06fb28160308f2a00"
+    sha256 cellar: :any,                 sonoma:        "f283332082fdba66dd6c1faec52841e9cef4e12611f392c32c59caa49a35ed62"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8a7827e7014c9e3aefd337503312cfaae8060adc43d1317a37c518fbc3a5a037"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "16d2018532c3849119a0d66c7ba11df7ad69aef5e194de2d3d271e853706ce37"
   end
 
   depends_on "zig" => :build
+  depends_on "mujs"
   depends_on "mupdf"
+
+  # Patches for zig patch prior to that
+  patch do
+    url "https://github.com/freref/fancy-cat/commit/9839e77a0949f44ffa6615517e6b866a8f6e0222.patch?full_index=1"
+    sha256 "0bd4725ee0e3415a1c33816bad5ec713806506c5cce6ccf474f400f0a623aee9"
+  end
+  patch do
+    url "https://github.com/freref/fancy-cat/commit/50b106635f03163e12b7407ba3fe7e5a5563f545.patch?full_index=1"
+    sha256 "e9250d6b033794c84d2af9827233f8f71939d97fbb4b3b834ea3c1328f222637"
+  end
+  patch do
+    url "https://github.com/freref/fancy-cat/commit/033d32d5bb3f11cc194deaa80c7eb8cd4d583c04.patch?full_index=1"
+    sha256 "5818a2845f396371bebc421c882ed190eca544035c818a86a5db15475ce361d9"
+  end
+  # Fix build with Zig 0.15.2
+  patch do
+    url "https://github.com/freref/fancy-cat/commit/f304c5907e52a62f4cf42953e9043d21ad9b47e9.patch?full_index=1"
+    sha256 "9e4400ca09aac07f0641666b9da70f822c04c3c79811c7beddbd0aa0ac075ac2"
+  end
 
   def install
     # Fix illegal instruction errors when using bottles on older CPUs.
@@ -31,11 +50,11 @@ class FancyCat < Formula
     args = []
     args << "-Dcpu=#{cpu}" if build.bottle?
 
-    system "zig", "build", *std_zig_args, *args
+    system "zig", "build", *args, *std_zig_args
   end
 
   test do
-    # fancy-cat is a TUI application, unfortunately we cannot test it properly
+    # fancy-cat is a TUI application
     assert_match version.to_s, shell_output("#{bin}/fancy-cat --version")
   end
 end

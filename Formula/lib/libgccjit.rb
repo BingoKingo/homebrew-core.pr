@@ -5,15 +5,15 @@ class Libgccjit < Formula
   head "https://gcc.gnu.org/git/gcc.git", branch: "master"
 
   stable do
-    url "https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-    mirror "https://ftpmirror.gnu.org/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-    sha256 "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea"
+    url "https://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+    mirror "https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+    sha256 "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
 
     # Branch from the Darwin maintainer of GCC, with a few generic fixes and
     # Apple Silicon support, located at https://github.com/iains/gcc-14-branch
     patch do
       on_macos do
-        url "https://raw.githubusercontent.com/Homebrew/formula-patches/575ffcaed6d3112916fed77d271dd3799a7255c4/gcc/gcc-15.1.0.diff"
+        url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/gcc/gcc-15.1.0.diff"
         sha256 "360fba75cd3ab840c2cd3b04207f745c418df44502298ab156db81d41edf3594"
       end
     end
@@ -24,14 +24,15 @@ class Libgccjit < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "76bcb930ece20a2661c706bac2f2ce4faf790b3af0554b86a8967677fcab03ce"
-    sha256 arm64_sonoma:  "cb3db229fd88a28d6583fffd1ee487b0351851b377900d8976c5b70b37585c56"
-    sha256 arm64_ventura: "95f990b545ceae9a01f1e012ab2d7950dc5207d06cefe7796cf783b19a177b92"
-    sha256 sequoia:       "0a212155fa554028b11389062636c750a7b08d37d2c84b3ff739f6dedff476db"
-    sha256 sonoma:        "09cd9fe841f73b81e91e3bd36a911737f5eb07dddf0111eee53bb513113e4eb2"
-    sha256 ventura:       "71229a70381ea76eeb9af7d146332b44329d85d631ca20d3935f49a348700fc5"
-    sha256 arm64_linux:   "952b111d72702f44b432646b02f6ccdfb6d5c3deffa38cdb0d718b5b2d07d4d6"
-    sha256 x86_64_linux:  "aa9f48a7a846126612a53530b7ec91bc0089d56049b59ed8c9055ee379ad9082"
+    rebuild 1
+    sha256 arm64_tahoe:   "e25a101a9c694e6414fd821fb92081c9eee03f23de41cc1ad691ac06369f6e70"
+    sha256 arm64_sequoia: "52c78f1896d08bb5b30a2d63e73ce1d43046ba0844a56b1b8af75816571f4aea"
+    sha256 arm64_sonoma:  "e89c26e4a61f1def2a7febc62298949938fc1859f195f0c882f76ca82bc1c0ea"
+    sha256 tahoe:         "4ad10d772c3ff17360cd4e0800c804acc6ed3bd0ccff03da05805e5673256117"
+    sha256 sequoia:       "c7acde534e2ce4975bd5f56ff80a27e1deb12f97a7d260bb0ee5734aa914a616"
+    sha256 sonoma:        "19bb523cfdd273b2564c67fd3ecf617c2526a67b8393260e653bb18819fdc1ef"
+    sha256 arm64_linux:   "ff1091b71f82a9f6c670ca7c2ea711f7f69c20a01805ba282e688db81a195b06"
+    sha256 x86_64_linux:  "d6545f11da7e51ee8b9b798dc116855a40b7ca9ab46b5a0c80765c19209a3db4"
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
@@ -45,16 +46,15 @@ class Libgccjit < Formula
   depends_on "mpfr"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
-
   on_macos do
     on_intel do
       depends_on "gcc"
     end
   end
 
-  # GCC bootstraps itself, so it is OK to have an incompatible C++ stdlib
-  cxxstdlib_check :skip
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # GCC will suffer build errors if forced to use a particular linker.
@@ -79,7 +79,7 @@ class Libgccjit < Formula
       --with-system-zlib
     ]
 
-    make_args = if OS.mac?
+    if OS.mac?
       cpu = Hardware::CPU.arm? ? "aarch64" : "x86_64"
       args << "--build=#{cpu}-apple-darwin#{OS.kernel_version.major}"
 
@@ -90,22 +90,25 @@ class Libgccjit < Formula
       # Avoid this semi-random failure:
       # "Error: Failed changing install name"
       # "Updated load commands do not fit in the header"
-      %w[BOOT_LDFLAGS=-Wl,-headerpad_max_install_names]
-    else
-      # Fix cc1: error while loading shared libraries: libisl.so.15
-      args << "--with-boot-ldflags=-static-libstdc++ -static-libgcc #{ENV.ldflags}"
+      ldflags = %w[-Wl,-headerpad_max_install_names]
 
+      # Fix linkage with `libgcc_s.1.1`. See: https://github.com/orgs/Homebrew/discussions/5364
+      if Hardware::CPU.intel?
+        ldflags << "-Wl,-rpath,#{rpath(source: lib/"gcc/current", target: Formula["gcc"].opt_lib/"gcc/current")}"
+      end
+
+      make_args = %W[BOOT_LDFLAGS=#{ldflags.join(" ")}]
+    else
       # Fix Linux error: gnu/stubs-32.h: No such file or directory.
       args << "--disable-multilib"
 
       # Change the default directory name for 64-bit libraries to `lib`
       # https://stackoverflow.com/a/54038769
       inreplace "gcc/config/i386/t-linux64", "m64=../lib64", "m64="
+      inreplace "gcc/config/aarch64/t-aarch64-linux", "lp64=../lib64", "lp64="
 
-      %W[
-        BOOT_CFLAGS=-I#{Formula["zlib"].opt_include}
-        BOOT_LDFLAGS=-I#{Formula["zlib"].opt_lib}
-      ]
+      ENV.append_path "CPATH", Formula["zlib-ng-compat"].opt_include
+      ENV.append_path "LIBRARY_PATH", Formula["zlib-ng-compat"].opt_lib
     end
 
     # Building jit needs --enable-host-shared, which slows down the compiler.
@@ -122,16 +125,6 @@ class Libgccjit < Formula
 
     # Provide a `lib/gcc/xy` directory to align with the versioned GCC formulae.
     (lib/"gcc"/version.major).install_symlink (lib/"gcc/current").children
-
-    return if OS.linux? || Hardware::CPU.arm?
-
-    lib.glob("gcc/current/#{shared_library("libgccjit", "*")}").each do |dylib|
-      next if dylib.symlink?
-
-      # Fix linkage with `libgcc_s.1.1`. See: Homebrew/discussions#5364
-      gcc_libdir = Formula["gcc"].opt_lib/"gcc/current"
-      MachO::Tools.add_rpath(dylib, rpath(source: lib/"gcc/current", target: gcc_libdir))
-    end
   end
 
   test do

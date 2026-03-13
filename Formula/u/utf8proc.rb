@@ -1,23 +1,27 @@
 class Utf8proc < Formula
   desc "Clean C library for processing UTF-8 Unicode data"
   homepage "https://juliastrings.github.io/utf8proc/"
-  url "https://github.com/JuliaStrings/utf8proc/archive/refs/tags/v2.10.0.tar.gz"
-  sha256 "6f4f1b639daa6dca9f80bc5db1233e9cbaa31a67790887106160b33ef743f136"
+  url "https://github.com/JuliaStrings/utf8proc/archive/refs/tags/v2.11.3.tar.gz"
+  sha256 "abfed50b6d4da51345713661370290f4f4747263ee73dc90356299dfc7990c78"
   license all_of: ["MIT", "Unicode-DFS-2015"]
   head "https://github.com/JuliaStrings/utf8proc.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "81533530b545ad8ebf73b33a3bdca4bd7fd79c08b43b36065f01786e303474bb"
-    sha256 cellar: :any,                 arm64_sonoma:  "077fcc508fb1911325da5deaea023cfaaf0ca58fdde2097d415779bca397c285"
-    sha256 cellar: :any,                 arm64_ventura: "be90c358d69294427f51905783aa6bb9fd9e10f3b5c2fa499f7629186fc61d6c"
-    sha256 cellar: :any,                 sonoma:        "94a054d454bd5df62734457a4ac938ab20b3637ae8ee9d36e37fa72fb9adaf41"
-    sha256 cellar: :any,                 ventura:       "7086a1eb8b0caa36a1abfad15c613a158ba78800bdfe3f8539d78ad8f10f8a1d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f7fac4dfa22dc71bd6f850963bf2aa3833c18febd6eae8ee1285b60598b8c925"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9b814bb33469856d652a662d92121da8b878a2fa3630dda62ba6646d943dae7e"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "f3b03f1fb1f7da91b28d6b7edb0a8ff056378b689e5c904877dfb6d1cb9da5fc"
+    sha256 cellar: :any,                 arm64_sequoia: "3e044d7b72b8fbf7d260cd9a1145cccc32e5f1ad4c93ff7d3cb0e4bd04fa5b37"
+    sha256 cellar: :any,                 arm64_sonoma:  "3943b2f6243a92d060a0d1fe867e14ef062db81604488013a0868683c812413c"
+    sha256 cellar: :any,                 sonoma:        "ca594194ca639a162e078a88fd0da6d22d0ec8c588f12e3b32545455851aff6e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "33be13d215561053302eb151cae47d9e3656af6b3869b6a6ca0f044dcf9050e2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c44de6245cc5167aa4ec1b8c56d2d2e60378e421db4768a9842283a7602d2561"
   end
 
+  depends_on "cmake" => :build
+
   def install
-    system "make", "install", "prefix=#{prefix}"
+    system "cmake", "-S", ".", "-B", "build", "-DBUILD_SHARED_LIBS=ON", *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
   end
 
   test do

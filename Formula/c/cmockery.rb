@@ -22,6 +22,7 @@ class Cmockery < Formula
 
   # see thread, https://github.com/google/cmockery/issues/72
   deprecate! date: "2024-07-07", because: :unmaintained
+  disable! date: "2025-07-07", because: :unmaintained
 
   on_macos do
     depends_on "autoconf" => :build
@@ -33,7 +34,7 @@ class Cmockery < Formula
   # It is safe to remove it on the next version
   # More info on https://code.google.com/p/cmockery/issues/detail?id=3
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/cmockery/0.1.2.patch"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/cmockery/0.1.2.patch"
     sha256 "4e1ba6ac1ee11350b7608b1ecd777c6b491d952538bc1b92d4ed407669ec712d"
   end
 

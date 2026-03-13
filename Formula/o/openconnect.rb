@@ -2,8 +2,10 @@ class Openconnect < Formula
   desc "Open client for Cisco AnyConnect VPN"
   homepage "https://www.infradead.org/openconnect/"
   url "https://www.infradead.org/openconnect/download/openconnect-9.12.tar.gz"
+  mirror "https://deb.debian.org/debian/pool/main/o/openconnect/openconnect_9.12.orig.tar.gz"
   sha256 "a2bedce3aa4dfe75e36e407e48e8e8bc91d46def5335ac9564fbf91bd4b2413e"
   license "LGPL-2.1-only"
+  revision 1
 
   livecheck do
     url "https://www.infradead.org/openconnect/download.html"
@@ -11,16 +13,13 @@ class Openconnect < Formula
   end
 
   bottle do
-    rebuild 2
-    sha256 arm64_sequoia:  "76a21b129bbc6a7dbcd67f88f4b2e2a0ca6cb3d5188b7ba763ef669013b58b7c"
-    sha256 arm64_sonoma:   "a6594e9c2ba4bfa4f235839a9f504f354e82722ae1a2f6e7f3d9a17727ece429"
-    sha256 arm64_ventura:  "c1f6c601ae384e7ccb83c875c762ab73134dac41ce77a8cfc0fd41d166dda58a"
-    sha256 arm64_monterey: "63304d1ce4715c73c59abd0777fc34f1f77e413c4ce4d1933d78b629abb7d95e"
-    sha256 sonoma:         "330f76952b9e047eaab8fbc0e55378e600367504cded0c4c2879630559a0f6eb"
-    sha256 ventura:        "c6b26f039f0ad3f5ce853111ebb62556885c48fba36cd63f48353f8dd8a12287"
-    sha256 monterey:       "236d104feadaa7f99b8c10fef77adf469fa7499ffd55de499db04da7fd47a710"
-    sha256 arm64_linux:    "a02ae24c78dd35967c78c1212f92e47867615fca7275aa37c9f0aad836014bf3"
-    sha256 x86_64_linux:   "35d66b532fb2760b5265d32eca18f98fb8a938edcef09498fe6126e81c9fd085"
+    rebuild 1
+    sha256 arm64_tahoe:   "fbcb589590fc3a10a33601e2dfafabaec8e58000357a655b0976e95a80f42aaf"
+    sha256 arm64_sequoia: "b5067d6b52fc350aa1391393cf637643fb8f4eb0f70536575099d8451a068123"
+    sha256 arm64_sonoma:  "5b3b175974886107af03dc6cd3ef87e69f3265123fd0ebddb6bd67f40715c2b4"
+    sha256 sonoma:        "968aca8e8f7d13c995ca44e15dbcb98bec6d7449186d47e64fc7cf2f3fcf31d1"
+    sha256 arm64_linux:   "9edbd927405417ac939217c28428d0e12fef1d3d4cb70e4d5bc5cb629d7fa5d1"
+    sha256 x86_64_linux:  "16f82b8f546ddd8a65a41c40a68e71d90829a928d567cd72f7c41ad5380fd0ed"
   end
 
   head do
@@ -41,10 +40,13 @@ class Openconnect < Formula
   depends_on "stoken"
 
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   resource "vpnc-script" do
@@ -78,20 +80,19 @@ class Openconnect < Formula
     system "make", "install"
   end
 
-  def caveats
-    s = <<~EOS
-      A `vpnc-script` has been installed at #{etc}/vpnc/vpnc-script.
-    EOS
-
-    s += if (etc/"vpnc/vpnc-script.default").exist?
-      <<~EOS
-
-        To avoid destroying any local changes you have made, a newer version of this script has
+  def post_install
+    if (etc/"vpnc/vpnc-script.default").exist?
+      opoo <<~EOS
+        To avoid destroying any local changes you have made, a newer version of `vpnc-script` has
         been installed as `vpnc-script.default`.
       EOS
-    end.to_s
+    end
+  end
 
-    s
+  def caveats
+    <<~EOS
+      A `vpnc-script` has been installed at #{etc}/vpnc/vpnc-script.
+    EOS
   end
 
   test do

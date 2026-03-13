@@ -1,18 +1,17 @@
 class Yash < Formula
   desc "Yet another shell: a POSIX-compliant command-line shell"
   homepage "https://magicant.github.io/yash/"
-  url "https://github.com/magicant/yash/releases/download/2.59/yash-2.59.tar.xz"
-  sha256 "299a50ea70f23dcbb94cf278f3e99e788b20b613185a0426ed5fdd189b1711ee"
+  url "https://github.com/magicant/yash/releases/download/2.61/yash-2.61.tar.xz"
+  sha256 "a214966f4ff8b293aa5521a4d3ef6e87d707579eee616aa2f8218edaa920d447"
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 arm64_sequoia: "41f426ba54fdffc5d4268b54bb785b4244af0448459a8c56c429552ff5a0c13c"
-    sha256 arm64_sonoma:  "a07798ce2eb7e193860da5aa67f45d00520b102e122e1fcdb5659d013f40b711"
-    sha256 arm64_ventura: "341778e242efa6a5966d00e13a4eb09ddbe9a462557d8caf747f4c9fcc786383"
-    sha256 sonoma:        "c40888effd879a9b14b1c7348bfebbf980a7899bc143360cfd55654fe9151bea"
-    sha256 ventura:       "74c532d36d767b362e6852adaa511a97d535fd61f730e246869248401d73fe3c"
-    sha256 arm64_linux:   "767918f66d255a55c2fe13abab8f8ca75924df9c989f5aa2487923be4ed3901a"
-    sha256 x86_64_linux:  "c792d79a9395f94d8155878614249008f72798f58496bfff55522dcdcb85c038"
+    sha256 arm64_tahoe:   "46f099f162e3f4662a0175e1c63afbf9021bf504863a8fce232234dd1ffe018b"
+    sha256 arm64_sequoia: "3aeb8587ce93e7cc6f20ad085aa182c8566e8f200ddf5ffe89a4dade16b8ae66"
+    sha256 arm64_sonoma:  "92bd275d4409ac5a5008bebd24b8ad0d33a894951c33109d33bf3d12aa7bd5ee"
+    sha256 sonoma:        "285ef911cd740e054a202981e84afe4675fd23ae13bb2a67c0c21b009d38537c"
+    sha256 arm64_linux:   "5c532a1a557fcd41f9db0992442d8565c678404f14f3b1903cd45cfa48d4d55a"
+    sha256 x86_64_linux:  "7e73a8a59ca2879eee08bcd2e4a3b4262685536ed0197b6cadbc6977aef87ede"
   end
 
   head do

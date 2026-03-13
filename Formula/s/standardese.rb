@@ -3,7 +3,7 @@ class Standardese < Formula
   homepage "https://standardese.github.io"
   # TODO: use resource blocks for vendored deps
   license "MIT"
-  revision 21
+  revision 23
   head "https://github.com/standardese/standardese.git", branch: "master"
 
   # Remove stable block when patch is no longer needed.
@@ -18,16 +18,28 @@ class Standardese < Formula
       url "https://github.com/standardese/standardese/commit/15e05be2301fe43d1e209b2f749c99a95c356e04.patch?full_index=1"
       sha256 "e5f03ea321572dd52b9241c2a01838dfe7e6df7e363a8d19bfeac5861baf5d3f"
     end
+
+    # Fix build with `boost` 1.85.0. Remove in the next release.
+    # PR ref: https://github.com/standardese/standardese/pull/247
+    patch do
+      url "https://github.com/standardese/standardese/commit/0593c8fbaee48ffac022e2ea95865d808cc149ce.patch?full_index=1"
+      sha256 "4b204256b97a4058b88c7b2350941d2c59a6c38aeb91e4112e1d267fdd092d03"
+    end
+
+    # Fix build with Boost 1.89.0, pr ref: https://github.com/standardese/standardese/pull/249
+    patch do
+      url "https://github.com/standardese/standardese/commit/d0c2073f9f13d26abd1be872b809e089ed20c9f6.patch?full_index=1"
+      sha256 "506c3cd1d2654aee37e200c57b9095c9bbad09de1d7a27efc545ea7c092cd4f0"
+    end
   end
 
   bottle do
-    sha256                               arm64_sequoia: "0c085a6553e072c5de272972f6ac567de96866d7f1f9e1bce5fbca086c0dc41f"
-    sha256                               arm64_sonoma:  "3f8eecb4c36f352b2e85f937e39a1ffd10191e4947f97db531d441520cb59963"
-    sha256                               arm64_ventura: "2877cca2dec0e5d25a13b0f871f124e6b6f151c820290a3f629b18a6a2fc35e3"
-    sha256                               sonoma:        "d7337d180cbf90b86e5def03d8031d26bea1fa8b9a68e09676f47ba2ddf6663f"
-    sha256                               ventura:       "d0da799b3b0175478642e0fcc104a11d40757f3da3d0c48f694b7372a4de9ee3"
-    sha256                               arm64_linux:   "35dbdc939daa2cc20d576caaa16f4e3a3b60c883f0f641e9c56e953abd6221ba"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "84e681ed07036aeb3b06e8be4d6bd6acecbb6b90840ab72c17e5a2a7eabbd2a5"
+    sha256                               arm64_tahoe:   "842c08d83d331c26b95f718e07b43df23a1f9c5ef4f6df0c9920c3099773353f"
+    sha256                               arm64_sequoia: "a9662431f2198cfd684c82f08671fd792a5038f79d63ddc5aea0e612a0740d92"
+    sha256                               arm64_sonoma:  "190e0fa5e3adda972a28e6c2d18e9634f4890320b1f9b4928da67de1cb8392a7"
+    sha256                               sonoma:        "f28825f01b0cbbe6f6ec257a3b81cd4e0f8c2883550fb12de3ffb9bbb3220e05"
+    sha256                               arm64_linux:   "9152354c175bc7115c52d5e876332dd323d6f590b953b33fe0993894b5ba79a8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31405149c51d6b9ae4e25e1b10ecd5b822d7f1a6b38a748920a310719bcf7e8d"
   end
 
   depends_on "cmake" => :build
@@ -39,13 +51,12 @@ class Standardese < Formula
   resource "type_safe" do
     url "https://github.com/foonathan/type_safe/archive/refs/tags/v0.2.4.tar.gz"
     sha256 "a631d03c18c65726b3d1b7d41ac5806e9121367afe10dd2f408a2d75e144b734"
-  end
 
-  # Fix build with `boost` 1.85.0 using open PR.
-  # PR ref: https://github.com/standardese/standardese/pull/247
-  patch do
-    url "https://github.com/standardese/standardese/commit/0593c8fbaee48ffac022e2ea95865d808cc149ce.patch?full_index=1"
-    sha256 "4b204256b97a4058b88c7b2350941d2c59a6c38aeb91e4112e1d267fdd092d03"
+    # Backport fix for newer Clang
+    patch do
+      url "https://github.com/foonathan/type_safe/commit/cdf334cd8e5fcb5e21ab470decdfcbd190ef7347.patch?full_index=1"
+      sha256 "f9ab60828058f133c726f77ce8358714c6aa994c9cce29b703cf7a5fbdb2ae00"
+    end
   end
 
   def install

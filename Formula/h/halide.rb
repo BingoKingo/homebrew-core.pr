@@ -1,16 +1,11 @@
 class Halide < Formula
   desc "Language for fast, portable data-parallel computation"
   homepage "https://halide-lang.org"
+  url "https://github.com/halide/Halide/archive/refs/tags/v21.0.0.tar.gz"
+  sha256 "aa6b6f5e89709ca6bc754ce72b8b13b2abce0d6b001cb2516b1c6f518f910141"
   license "MIT"
   revision 1
-
-  stable do
-    url "https://github.com/halide/Halide/archive/refs/tags/v19.0.0.tar.gz"
-    sha256 "83bae1f0e24dc44d9d85014d5cd0474df2dd03975680894ce3fafd6e97dffee2"
-
-    depends_on "lld@19"
-    depends_on "llvm@19" # TODO: Use `lld`/`llvm` in both stable and head in Halide 20
-  end
+  head "https://github.com/halide/Halide.git", branch: "main"
 
   livecheck do
     url :stable
@@ -18,20 +13,12 @@ class Halide < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "33f39347076af5498e35bed325acfb3f3251de6efb4d54c72380901a3524ec70"
-    sha256 cellar: :any,                 arm64_sonoma:  "5fde8b88d62f8e6320f235828f0e81a91c021c1854688edfdb2203da69701a82"
-    sha256 cellar: :any,                 arm64_ventura: "14d6bd1d3b21ddd8c2048fb026c0602be863df3126f686e9e830ff0a475ccd9f"
-    sha256 cellar: :any,                 sonoma:        "aae907b9c881d5a750264f333ba2f3991fbe95c8d3dd50e6b2246fdbe0b37665"
-    sha256 cellar: :any,                 ventura:       "25f68206d87d7f26f557115db0f87686df2d2d378e619e0fd692d61c9333884a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "fa6fe703b19d08cfee1366d5366fc1f5a9e93286566a91634007fa3191410417"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "559910d964d788f02580e34bb3483e083f4a292cd9cfb3ee52ee8d6fe0d76c24"
-  end
-
-  head do
-    url "https://github.com/halide/Halide.git", branch: "main"
-
-    depends_on "lld"
-    depends_on "llvm"
+    sha256 cellar: :any,                 arm64_tahoe:   "2971971113569192c7c113fc28e6e403037b5678aa1e18a4fdadbf198da94cd1"
+    sha256 cellar: :any,                 arm64_sequoia: "40779827ae67ed29c0cf27f0837e6a6d158d1352d3eee19f81d80cc24f2c6256"
+    sha256 cellar: :any,                 arm64_sonoma:  "cbc3e5f59f48c7360f53a841c14f9c90b364760be44eada0da13851053f0946f"
+    sha256 cellar: :any,                 sonoma:        "3d797396c4285b0123b7498d8fa794984c135b9e1b7985e7706ed927ec1fd4a3"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5c69185c4c47845f19b7abc2be16eda2dfeba014a8ffcc357afce2ba44960339"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6731e04b241447c0e900d54b50d3d69429250d46b2384fd3a9601a520555a33e"
   end
 
   depends_on "cmake" => :build
@@ -39,7 +26,9 @@ class Halide < Formula
   depends_on "flatbuffers"
   depends_on "jpeg-turbo"
   depends_on "libpng"
-  depends_on "python@3.13"
+  depends_on "lld@21"
+  depends_on "llvm@21"
+  depends_on "python@3.14"
   depends_on "wabt"
 
   on_macos do
@@ -47,10 +36,19 @@ class Halide < Formula
   end
 
   def python3
-    "python3.13"
+    "python3.14"
+  end
+
+  # Backport support for wabt 1.0.39
+  patch do
+    url "https://github.com/halide/Halide/commit/7d7f0b4422594296fed1d561a43dc262d163d2b8.patch?full_index=1"
+    sha256 "6b861e585ce4d71aec53b225562e078086ee310e8c6e7a052bf3fd53f03322ab"
   end
 
   def install
+    # Disable SVE feature as broken: https://github.com/halide/Halide/issues/8529
+    inreplace "src/Target.cpp", /^\s*initial_features.push_back\(Target::SVE/, "// \\0"
+
     llvm = deps.map(&:to_formula).find { |f| f.name.match?(/^llvm(@\d+(\.\d+)*)?$/) }
     site_packages = prefix/Language::Python.site_packages(python3)
     rpaths = [rpath, rpath(source: site_packages/"halide")]

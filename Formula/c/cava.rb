@@ -1,19 +1,18 @@
 class Cava < Formula
   desc "Console-based Audio Visualizer for ALSA"
   homepage "https://github.com/karlstav/cava"
-  url "https://github.com/karlstav/cava/archive/refs/tags/0.10.4.tar.gz"
-  sha256 "5a2efedf2d809d70770f49349f28a5c056f1ba9b3f5476e78744291a468e206a"
+  url "https://github.com/karlstav/cava/archive/refs/tags/0.10.7.tar.gz"
+  sha256 "43f994f7e609fab843af868d8a7bc21471ac62c5a4724ef97693201eac42e70a"
   license "MIT"
   head "https://github.com/karlstav/cava.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "fc71ed1ee831644035fdce90d1a95ec22e6b628cf8272fe021a96c541915a5a3"
-    sha256 cellar: :any, arm64_sonoma:  "5dbaed52f9b4450cda2ee03f98538d49f9d8a071a637a4ec583a1f112d86e404"
-    sha256 cellar: :any, arm64_ventura: "9a28fd6da1772968860f7e90e7f4de6d3f733e9f8131d4cc35ea0d089207b681"
-    sha256 cellar: :any, sonoma:        "4195486bcc4c14f0c9dfa0f229ef4a2f17a577132b50e402af480df0263ed5bd"
-    sha256 cellar: :any, ventura:       "fc4e24b6e06d3c7b6839fe7c9ddf089cb874e2cf3b2b69ae98fa21ca21c9cf2e"
-    sha256               arm64_linux:   "a47b2f16fb7660eea601173a303838c4b7d56f317f152afef4369fa9b5d96c84"
-    sha256               x86_64_linux:  "e85e6e26804aff07eb2d748904dd810a1427d2cbd3e328e912356fcace9102e1"
+    sha256 cellar: :any, arm64_tahoe:   "40bfbe3b8229358b42a646fad6d31616cf84ecc6f758d0cdf17b32f88b2e2430"
+    sha256 cellar: :any, arm64_sequoia: "1016458731ecffadbafeb4a10ad4aacc307b67a11568cfb8842344012893938b"
+    sha256 cellar: :any, arm64_sonoma:  "48381551d630ab4220cc39267c036c552f0ddea37afcfdfdb62f7d234009bacc"
+    sha256 cellar: :any, sonoma:        "e012cc6ab3a2bbf0f76244641e809882eea9190d94f34668d2dabfe83d6401d2"
+    sha256               arm64_linux:   "1e38d63792ba6bbbb12c1a1fe5d700e676f403bcce6c21681f000be9402d44e5"
+    sha256               x86_64_linux:  "43eda213bfc5d7e6f33894e04be08f1a32fcea5c230a65de659d73967ee6bf6e"
   end
 
   depends_on "autoconf" => :build

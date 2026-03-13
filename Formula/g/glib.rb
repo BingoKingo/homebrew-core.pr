@@ -3,18 +3,17 @@ class Glib < Formula
 
   desc "Core application library for C"
   homepage "https://docs.gtk.org/glib/"
-  url "https://download.gnome.org/sources/glib/2.84/glib-2.84.2.tar.xz"
-  sha256 "88e960dd937057407d61fcb3b45a860704b25923c37ae2478b85f2ecb5a4021f"
+  url "https://download.gnome.org/sources/glib/2.86/glib-2.86.4.tar.xz"
+  sha256 "d4e2b5d791d5015ffd8c6971ad8e975a0a55c1a14926cdb25cf843ff00682260"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 arm64_sequoia: "4c797e5a42c6e0cb3eb846e15634662d4cc29f10e47609353bbad80c51fec38d"
-    sha256 arm64_sonoma:  "fdd4ba3170e88633247a549e762975ac8bbc5a96b83c00ec5344589f7b23f4d3"
-    sha256 arm64_ventura: "19c865731de411165c2483c724aa24eaac93148c53586e2319fb17b261e894a3"
-    sha256 sonoma:        "a6dd1ee84d6b53274e54f71967d4399d70abde7b6d58724c1169311f1db1de72"
-    sha256 ventura:       "fdea4e18b6a38635abe211f39ca8b8af2d22208ca81d070ae284f72f37ed4d8d"
-    sha256 arm64_linux:   "2db2d2450692ed5cbd6d0f0229689e693f5fbdc06a3afd28bb70e63a50177325"
-    sha256 x86_64_linux:  "112d241effbde9f06aa8310fce62a4a874022312a7359b803ea29ecc04d58c17"
+    sha256 arm64_tahoe:   "6239b7f0d4fa176cfce317640ee848b56bc643e7b70c80eeaeec17fb9c00b480"
+    sha256 arm64_sequoia: "c2d59a276fc89372adabed651186a08283cf674fd12f27a0ed89e7933255a820"
+    sha256 arm64_sonoma:  "b5df39d42bf4357ad252f9d6345cc62a736cdc57a159698310e14e08cf38ff52"
+    sha256 sonoma:        "d5d408b46ba5ab2e8deb62fc453141d17869e14f6762ebbaec3d413c67a45537"
+    sha256 arm64_linux:   "d2ec01124c6e60ee14210953f8c0dd7d758d1364a1bbfc60af94829be85aad8f"
+    sha256 x86_64_linux:  "c13fa54ab2cff5059169676fae878b3966fd36b5c3a4702d05086e4f63dca1f2"
   end
 
   depends_on "bison" => :build # for gobject-introspection
@@ -23,13 +22,12 @@ class Glib < Formula
   depends_on "ninja" => :build
   depends_on "pkgconf" => :build
   depends_on "python-setuptools" => :build # for gobject-introspection
-  depends_on "python@3.13" => :build
+  depends_on "python@3.14" => :build
   depends_on "pcre2"
 
   uses_from_macos "flex" => :build # for gobject-introspection
-  uses_from_macos "libffi", since: :catalina
+  uses_from_macos "libffi"
   uses_from_macos "python"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
@@ -38,6 +36,7 @@ class Glib < Formula
   on_linux do
     depends_on "dbus"
     depends_on "util-linux"
+    depends_on "zlib-ng-compat"
   end
 
   # These used to live in the now defunct `glib-utils`.
@@ -50,8 +49,8 @@ class Glib < Formula
                  "share/gir-1.0/GObject-2.0.gir", "share/gir-1.0/Gio-2.0.gir"
 
   resource "gobject-introspection" do
-    url "https://download.gnome.org/sources/gobject-introspection/1.84/gobject-introspection-1.84.0.tar.xz"
-    sha256 "945b57da7ec262e5c266b89e091d14be800cc424277d82a02872b7d794a84779"
+    url "https://download.gnome.org/sources/gobject-introspection/1.86/gobject-introspection-1.86.0.tar.xz"
+    sha256 "920d1a3fcedeadc32acff95c2e203b319039dd4b4a08dd1a2dfd283d19c0b9ae"
 
     livecheck do
       formula "gobject-introspection"
@@ -60,7 +59,7 @@ class Glib < Formula
 
   # replace several hardcoded paths with homebrew counterparts
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/b46d8deae6983110b4e39bb2971bcbd10bb59716/glib/hardcoded-paths.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/glib/hardcoded-paths.diff"
     sha256 "d846efd0bf62918350da94f850db33b0f8727fece9bfaf8164566e3094e80c97"
   end
 
@@ -128,14 +127,6 @@ class Glib < Formula
       s.gsub! "Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include",
               "Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include -I#{gettext.opt_include}"
     end
-    return if MacOS.version >= :catalina
-
-    # `pkg-config --print-requires-private gobject-2.0` includes libffi,
-    # but that package is keg-only so it needs to look for the pkgconfig file
-    # in libffi's opt path.
-    inreplace lib/"pkgconfig/gobject-2.0.pc",
-              "Requires.private: libffi",
-              "Requires.private: #{Formula["libffi"].opt_lib}/pkgconfig/libffi.pc"
   end
 
   def post_install

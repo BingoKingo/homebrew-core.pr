@@ -2,24 +2,26 @@ class Periscope < Formula
   desc "Organize and de-duplicate your files without losing data"
   homepage "https://github.com/anishathalye/periscope"
   url "https://github.com/anishathalye/periscope.git",
-      tag:      "v1.0.0",
-      revision: "3d398cb7c9d8e41690c54371861d1b0a0119c485"
+      tag:      "v1.0.1",
+      revision: "a279bfd38e6ff8f4730e52fc670d8e24b98eda7a"
   license "GPL-3.0-only"
   head "https://github.com/anishathalye/periscope.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9640cda5271196d7ae0b4ec8fd4aac56378bf70a89529dcae21995c9bb53ab36"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b2c4e1a39fe80211258e6269f9ad212d261519b223e89f1f0f93f84c64f18d00"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1d3a14af2b8bbc5def8dc556de099ddb30f2c4f129743ddfde14226af0f2397a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "9a2d6787de19316613a10a7c2e1cc921047575b031ac6363e2dadf9425e91ca5"
-    sha256 cellar: :any_skip_relocation, ventura:       "2eef76919c4d079f13b3f67dc36c45e24b64daced55875b33d3537fdaee34c9c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "37af0b84717118647d205579a7afda747ba18dd3be41d9506c9c046e5d00799f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "730c36044c98b82acf32c59bb4137e3b572970e0b8bd0d05198f8bd24d79ac83"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3189320a2bd3be0f1919621582743539f0af9915a92b26c2d4e95dc43466dc21"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c40e9cc889cfec650492994dbe0e5a9a17a9755f925bc73f904dd0844801fccb"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5f9fa628d7186231bf8115aad5b52202c36849701479b555742c16ff846227ea"
+    sha256 cellar: :any_skip_relocation, sonoma:        "3e3e839701f4e03c35810ccbbdff7a656e0c378bd41aa45bd3043b05c9b24878"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "345da8c73fe8c8f7a7be4162ada3b06ac3c7bb5dcb713e901175867a6ea8b19a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "abf9ca3d7a4b3289def2009de76d1a93969011bdc3dcd344845fe3fbc9ca69ca"
   end
 
   depends_on "go" => :build
 
   def install
+    ENV["CGO_ENABLED"] = "1" if OS.linux? && Hardware::CPU.arm?
+
     ldflags = %W[
       -s -w
       -X main.version=#{version}
@@ -27,7 +29,7 @@ class Periscope < Formula
     ]
     system "go", "build", *std_go_args(output: bin/"psc", ldflags:), "./cmd/psc"
 
-    generate_completions_from_executable(bin/"psc", "completion")
+    generate_completions_from_executable(bin/"psc", shell_parameter_format: :cobra)
   end
 
   test do

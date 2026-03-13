@@ -1,18 +1,22 @@
 class Prog8 < Formula
   desc "Compiled programming language targeting the 8-bit 6502 CPU family"
   homepage "https://prog8.readthedocs.io"
-  url "https://github.com/irmen/prog8/archive/refs/tags/v11.3.2.tar.gz"
-  sha256 "39612423f6afe025fbd24baeaee2f5d61399ae85b186118bfdd609ca7f85b157"
+  url "https://github.com/irmen/prog8/archive/refs/tags/v12.1.1.tar.gz"
+  sha256 "34ede7105af1c5eabc6e457d1eed0b9ef5655498d215197739bbb1c1ed71cc7a"
   license "GPL-3.0-only"
 
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e344f91aa025a43bb4dfb6ef80427a6b478a9a28f6331dace1ebb4b5d246c132"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5598c73083fb8ff691d02dc8ee4804d3a54c504940cd9dfc8e30352f05bf4814"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "7cbb13a489ddeacfab5fcae06883d3e2a72fe744ef542343ecc80b23085d31c7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d63a966cbc3cdd8dcc03fefb6d49359479ac958db7db535b6f5113cf9e6ddee0"
-    sha256 cellar: :any_skip_relocation, ventura:       "cfc9589da9661c562130bbc27af11d4ee9f55c8add4df376e0c4ab565e569d84"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4287878ae4f311ce7a610a9be14160d79051e77276318f4e9702a06b0b40bcc0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cf5e61604b9294ec1db85479d8620b3ab5bd042db434ea6e59ab029857468374"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ba0938701b0d057c9e8e37a0465854cad58077ad0a2ea371d57c49ac6c55118a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3e31e094f79aef84ef2f706b1a6d65d1f55657e793e83a290021cb92fdd37617"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7d5adf3941983e932c50416ddb34c455bfdea187387915212f057e0cdfcbfa7d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "9ba0760196e702e6b2ce31eb89b30bbc52f2ef9644c34e0bc143a3b427d7301e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "be5491e2071cecbe66a83e4fa5da9b4e3a9ef58f0af25c0eb9b4b5324e83ecf1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7aaaf99528177558c2f1cc6109efd62281810ed8aad6dc307d703dedc763f387"
   end
 
   depends_on "gradle" => :build
@@ -33,6 +37,6 @@ class Prog8 < Formula
 
   test do
     system bin/"prog8c", "-target", "c64", "#{pkgshare}/examples/primes.p8"
-    assert_match "; 6502 assembly code for 'primes'", File.open(testpath/"primes.asm").first
+    assert_match "; 6502 assembly code for 'primes'", (testpath/"primes.asm").readlines.first
   end
 end

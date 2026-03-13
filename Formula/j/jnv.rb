@@ -1,19 +1,18 @@
 class Jnv < Formula
   desc "Interactive JSON filter using jq"
   homepage "https://github.com/ynqa/jnv"
-  url "https://github.com/ynqa/jnv/archive/refs/tags/v0.6.0.tar.gz"
-  sha256 "8220bf433728b57ddb174920a48c1750c5087b52154567074020b6800d6579d3"
+  url "https://github.com/ynqa/jnv/archive/refs/tags/v0.6.2.tar.gz"
+  sha256 "767226c67378381d1e71ffe0e631a5b5ffc00e957a05780a9b23b6a65023bb44"
   license "MIT"
   head "https://github.com/ynqa/jnv.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "868d0e7996d85cc836e6c960afdeb90c99b169ee2c23e0070988e8957439cd4b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dcdfa08801f21e518a4266af55108d88408b25dbf74a5dc454997bf973458ba5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "6aa1d7c82025eb2e7f3bfdcc9a9a0f18b71336048df06cc4798b5d93f3fbd944"
-    sha256 cellar: :any_skip_relocation, sonoma:        "462b69793597865aa518a58d74c292897b48a240e5a674bd27012de6ef69741d"
-    sha256 cellar: :any_skip_relocation, ventura:       "fe8abec51096410939da83933523f5a2dd2be3f5eb5e7c3a24cebf7439ce6876"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "133259d9690645a87aab683e8d09a6e7f269df570f15cf6c91a427ca04f120d2"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5bea05489eb962c26df754b18931fb62752d741db352789d64b4199ba666da71"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "fc43618a6dd580b20af4dd52152c1e6fee6bc781664b226fdc3117de1632bab9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "212a1eb491a041caba040a7a25619a86898f8a144ac6c8d4fdb018d842b33977"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f15e0603e1aa975615b25e194b0296b5393f8a3c33cfbd705ef3757eb021534d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "a1f94e2da0507ed5fbccbce883672a77ae65434a8bbb7c2338b25595a5b5d7bc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0a35d5569a5c3e9d7ae07d510b76e6e074f168b2cd48586760d4ed71b9151ac1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8c17cec2f694a06164ab359d4605bf21e358cdca3883da79e0cc31bf1b94800b"
   end
 
   depends_on "rust" => :build
@@ -23,7 +22,7 @@ class Jnv < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output(bin/"jnv --version")
+    assert_match version.to_s, shell_output("#{bin}/jnv --version")
 
     output = pipe_output("#{bin}/jnv 2>&1", "homebrew", 1)
     expected_output = if OS.mac?

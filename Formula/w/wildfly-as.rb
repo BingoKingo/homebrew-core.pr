@@ -1,8 +1,8 @@
 class WildflyAs < Formula
   desc "Managed application runtime for building applications"
   homepage "https://www.wildfly.org/"
-  url "https://github.com/wildfly/wildfly/releases/download/36.0.1.Final/wildfly-36.0.1.Final.tar.gz"
-  sha256 "1a0f71680cac962cef03173e81f5ff8886175f18292db158b75c8077cf4ac38d"
+  url "https://github.com/wildfly/wildfly/releases/download/39.0.1.Final/wildfly-39.0.1.Final.tar.gz"
+  sha256 "30ce0874378d1100289d4820fce1f7646ab1278f8c30c7ae9bb84c16cbd510cb"
   license "Apache-2.0"
 
   livecheck do
@@ -11,11 +11,10 @@ class WildflyAs < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "3227b34a4c0c8a1f4e9fdc304cda6a6858a0e2dc8d00313dc12b66f783888eee"
-    sha256 cellar: :any, arm64_sonoma:  "3227b34a4c0c8a1f4e9fdc304cda6a6858a0e2dc8d00313dc12b66f783888eee"
-    sha256 cellar: :any, arm64_ventura: "3227b34a4c0c8a1f4e9fdc304cda6a6858a0e2dc8d00313dc12b66f783888eee"
-    sha256 cellar: :any, sonoma:        "4cf412f1900615e8dfdfc370fde2022397abcf9cdf517ef13089f3369de4ef45"
-    sha256 cellar: :any, ventura:       "4cf412f1900615e8dfdfc370fde2022397abcf9cdf517ef13089f3369de4ef45"
+    sha256 cellar: :any, arm64_tahoe:   "517a2a569b58e638fca4cb6fe98229af72d3ae567a7293d6d2516df00a05ceb8"
+    sha256 cellar: :any, arm64_sequoia: "71e35def71769915026776c48a02d4aaaa5f2bb0286a054b8cb146f336c97dcf"
+    sha256 cellar: :any, arm64_sonoma:  "71e35def71769915026776c48a02d4aaaa5f2bb0286a054b8cb146f336c97dcf"
+    sha256 cellar: :any, sonoma:        "f64f965a4165eccc9a83ddf2ed5358eff7ac790c904c59d801c36baa54e54d13"
   end
 
   # Installs a pre-built `libartemis-native-64.so` file with linkage to libaio.so.1
@@ -71,15 +70,12 @@ class WildflyAs < Formula
     mkdir testpath/"standalone"
     mkdir testpath/"standalone/deployments"
     cp_r libexec/"standalone/configuration", testpath/"standalone"
-    fork do
-      exec opt_libexec/"bin/standalone.sh", "--server-config=standalone.xml",
-                                            "-Djboss.http.port=#{port}",
-                                            "-Djboss.server.base.dir=#{testpath}/standalone"
-    end
-    sleep 10
-    sleep 10 if Hardware::CPU.intel?
-
+    spawn opt_libexec/"bin/standalone.sh", "--server-config=standalone.xml",
+                                           "-Djboss.http.port=#{port}",
+                                           "-Djboss.server.base.dir=#{testpath}/standalone"
     begin
+      sleep 10
+      sleep 10 if Hardware::CPU.intel?
       system "curl", "-X", "GET", "localhost:#{port}/"
       output = shell_output("curl -s -X GET localhost:#{port}")
       assert_match "Welcome to WildFly", output

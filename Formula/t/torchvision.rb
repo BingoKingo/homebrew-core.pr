@@ -3,10 +3,9 @@ class Torchvision < Formula
 
   desc "Datasets, transforms, and models for computer vision"
   homepage "https://pytorch.org/vision/stable/index.html"
-  url "https://github.com/pytorch/vision/archive/refs/tags/v0.20.1.tar.gz"
-  sha256 "7e08c7f56e2c89859310e53d898f72bccc4987cd83e08cfd6303513da15a9e71"
+  url "https://github.com/pytorch/vision/archive/refs/tags/v0.25.0.tar.gz"
+  sha256 "a7ac1b3ab489d71f6e27edfad1e27616e4b8a9b1517e60fce4a950600d3510e8"
   license "BSD-3-Clause"
-  revision 3
 
   livecheck do
     url :stable
@@ -14,23 +13,25 @@ class Torchvision < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "05ad6434595d32adb338a250c188b1c4bdbc9dd6cc002667775a940610d03aaa"
-    sha256 cellar: :any,                 arm64_sonoma:  "bb50c0817c495dda4b4a5a2bf01c8cf01033ea76b24a9e7aa9e9e3bd589f8507"
-    sha256 cellar: :any,                 arm64_ventura: "aea7d5b0c1a146c2ecb2c65eceed96b382775b97a840a496e16c7a65cc050a47"
-    sha256 cellar: :any,                 sonoma:        "e4e2d058603a89e0c8a20ebc53c795265ae785bf513e827091416070c13e4543"
-    sha256 cellar: :any,                 ventura:       "bb1e8f8730e76a7ec674ead6d9140b8053726b7f705916da713426918a489680"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "33991a057cb3b39910bfe3e1edf1e28efe209c6088958aeeb30d3377a6ec01f8"
+    sha256 cellar: :any,                 arm64_tahoe:   "539634362d5cc968e3f9a820c1c0dd8c2e9b7d9ac5ad81e2592cddf4426ed23a"
+    sha256 cellar: :any,                 arm64_sequoia: "e0340d938d02c2c16302e8c6a5ed68bd337af67bd56a3c1192384a7e0ba4396c"
+    sha256 cellar: :any,                 arm64_sonoma:  "b69e69ee7951e0936a54c6abc14ba984baf6fa8c7b2cdea0fc4c759e1309940d"
+    sha256 cellar: :any,                 sonoma:        "82ccb650c5e1c4da6eb8a03e701b5907aa94c0fcd88e6eccdfa5246a0358d1a2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "96244faf35c835f31285e3856371b904ea0a5cbde635f5c480928447f178417e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "23c3bc0afba26b0e02eb1dea014694aa5b45ea2d2d159f151f99984cd9534bc5"
   end
 
   depends_on "cmake" => :build
   depends_on "ninja" => :build
-  depends_on "python@3.13" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
   depends_on "jpeg-turbo"
   depends_on "libpng"
   depends_on "numpy"
   depends_on "pillow"
   depends_on "pytorch"
+  depends_on "webp"
+
+  pypi_packages exclude_packages: %w[certifi numpy pillow torch]
 
   def install
     # Avoid overlinking to `abseil`, `libomp` and `protobuf`
@@ -45,14 +46,14 @@ class Torchvision < Formula
       'jpeg_found, jpeg_include_dir, jpeg_library_dir = find_library(header="jpeglib.h")',
       "jpeg_found, jpeg_include_dir, jpeg_library_dir = True, '#{jpeg.include}', '#{jpeg.lib}'"
 
-    python3 = "python3.13"
+    python3 = "python3.14"
     venv = virtualenv_create(libexec, python3)
     venv.pip_install resources
 
     # We depend on pytorch, but that's a separate formula, so install a `.pth` file to link them.
     # This needs to happen _before_ we try to install torchvision.
     # NOTE: This is an exception to our usual policy as building `pytorch` is complicated
-    site_packages = Language::Python.site_packages(python3)
+    site_packages = Language::Python.site_packages(venv.root/"bin/python3")
     pth_contents = "import site; site.addsitedir('#{Formula["pytorch"].opt_libexec/site_packages}')\n"
     (venv.site_packages/"homebrew-pytorch.pth").write pth_contents
 

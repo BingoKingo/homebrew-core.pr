@@ -1,8 +1,8 @@
 class Tin < Formula
   desc "Threaded, NNTP-, and spool-based UseNet newsreader"
   homepage "http://www.tin.org"
-  url "https://sunsite.icm.edu.pl/pub/unix/news/tin/v2.6/tin-2.6.4.tar.xz"
-  sha256 "c66a1e8db30ddabe7e3313e6870f7877fe20f0da99afb65db3d8c41012fe55f7"
+  url "https://sunsite.icm.edu.pl/pub/unix/news/tin/v2.6/tin-2.6.5.tar.xz"
+  sha256 "91384d133d72671863494dd9742bc622b4089ea8ea760884a5b8c34095d76dc5"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,24 +11,27 @@ class Tin < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "3d597df858bc4fffb3f8be38154eaf650d981fbd36a609e1a0eb8b1113a01086"
-    sha256                               arm64_sonoma:  "e729c23660a5a51cb38391405c50fec69f2713c8517e319e4f425894ac1d98c5"
-    sha256                               arm64_ventura: "0bab093b5385450e3f87471243afe4b341443a141b971f5a02f7ad82a161f13b"
-    sha256                               sonoma:        "b426577ee9e85591383eb389a0b2077228699af99fe7f7fdf5cc942f8b486264"
-    sha256                               ventura:       "e9ee890eefb1b3cdde1c3c4420fab41c632163b30ce7429d74a67bf03b092fd6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "59fbbd067f08e1c809d0eac35d969b80b53dddddd7b0e447a06b3a33ad785727"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7da69315726b0f03dd42918f5e545befd3afc660d08f2b6ec70f1a651c421abb"
+    rebuild 1
+    sha256                               arm64_tahoe:   "96069ba7501f4b095fa09d2cb6b60e6e3c613ca546422cf8c5cbac897947d1e4"
+    sha256                               arm64_sequoia: "205f564b17a2d485cdbecda830945eda2074f80f51ea235f967ac43161c193ff"
+    sha256                               arm64_sonoma:  "75e3cae279ac058854a43d4d83b0d0dceba012427bb0da4c38bfdaff33d50f14"
+    sha256                               sonoma:        "5240d4c495d46cdcc73409c3ba63bb3a16244defa0cdc24174c2ac2baffe2b6b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "48098319c7de44f58c85885af2cede333bb309c9f663b86cf59f6635e86b92af"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31ab2a4d9691671a8b512319dc59c3cc4112ddb678a5b3079722fdec7cbd601e"
   end
 
   depends_on "pcre2"
 
   uses_from_macos "bison" => :build
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
     depends_on "libunistring"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with "mutt", because: "both install mmdf.5 and mbox.5 man pages"
@@ -37,9 +40,9 @@ class Tin < Formula
     # Remove bundled libraries
     rm_r buildpath/"pcre"
 
-    system "./configure", *std_configure_args,
-                          "--mandir=#{man}",
-                          "--with-pcre2-config=#{Formula["pcre2"].opt_prefix}/bin/pcre2-config"
+    system "./configure", "--mandir=#{man}",
+                          "--with-pcre2-config=#{Formula["pcre2"].opt_prefix}/bin/pcre2-config",
+                          *std_configure_args
     system "make", "build"
     system "make", "install"
   end

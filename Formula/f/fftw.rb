@@ -4,7 +4,7 @@ class Fftw < Formula
   url "https://fftw.org/fftw-3.3.10.tar.gz"
   sha256 "56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467"
   license all_of: ["GPL-2.0-or-later", "BSD-2-Clause"]
-  revision 2
+  revision 3
 
   livecheck do
     url :homepage
@@ -12,22 +12,19 @@ class Fftw < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "9a89853940caaca128e46545d3999540ea0723767c8ef8245db8f2419a1b2565"
-    sha256 cellar: :any,                 arm64_sonoma:  "a1105be9ac0dd78978175a1b07b8ef429bf3d3c9074ad39a128fe5f01b910feb"
-    sha256 cellar: :any,                 arm64_ventura: "32a67cfa0e6452c6a8cba5ab8f0cf337ef1f3cb1f55125443332b930c7a307d7"
-    sha256 cellar: :any,                 sonoma:        "8b8af4f154be3b186932fd0050840760227958399093cee5241455194faf7505"
-    sha256 cellar: :any,                 ventura:       "70d0f25e977df25d22f29010ccfb0c4be49438f0b35f525acff56fa7f29c15dd"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "fd7685235ce26f62a06f3b227658415d0ec0899885a05e1e4bd827262907b2bb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7d30800e3ad1513ceb764c62303bb2011a04256a0080b13f9e7803cfc1a4fa43"
+    sha256 cellar: :any,                 arm64_tahoe:   "5cd394c2c385450a83f767935d5d6678aa5a8fb1eb6c687b26477370a881cb5f"
+    sha256 cellar: :any,                 arm64_sequoia: "09266ec049017eb0e54ee29249d66e44bde84081f7379a683acaba378c2834e8"
+    sha256 cellar: :any,                 arm64_sonoma:  "fffda09169aeed7f83343d88e8d7abe0f33c436fa3aa34a18c59093009aba067"
+    sha256 cellar: :any,                 sonoma:        "01d05e976e388312e41888856168f914c0c0e0fd4fd628cdc4159dbb25a614db"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0518314dfcdfbc7926812980da07121706708ffda83cf0f600df909945d4a4f5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "062535068e14404ec86b816c0c1987d9d90213d05c27cfaaa9767c22c7c8b636"
   end
 
-  depends_on "open-mpi"
+  depends_on "open-mpi" => :build
 
   on_macos do
-    depends_on "gcc"
+    depends_on "libomp"
   end
-
-  fails_with :clang
 
   # Fix the cmake config file when configured with autotools, upstream pr ref, https://github.com/FFTW/fftw3/pull/338
   patch do
@@ -36,43 +33,38 @@ class Fftw < Formula
   end
 
   def install
-    ENV.runtime_cpu_detection
-
-    args = [
-      "--enable-shared",
-      "--disable-debug",
-      "--prefix=#{prefix}",
-      "--enable-threads",
-      "--disable-dependency-tracking",
-      "--enable-mpi",
-      "--enable-openmp",
-    ]
+    if OS.mac?
+      ENV["OPENMP_CFLAGS"] = "-Xpreprocessor -fopenmp"
+      ENV.append "LDFLAGS", "-lomp -Wl,-dead_strip_dylibs"
+    end
 
     # FFTW supports runtime detection of CPU capabilities, so it is safe to
     # use with --enable-avx and the code will still run on all CPUs
+    ENV.runtime_cpu_detection
     simd_args = []
     simd_args += %w[--enable-sse2 --enable-avx --enable-avx2] if Hardware::CPU.intel?
 
-    # single precision
-    # enable-sse2, enable-avx and enable-avx2 work for both single and double precision
-    system "./configure", "--enable-single", *(args + simd_args)
-    system "make", "install"
+    common_args = %w[
+      --enable-shared
+      --enable-threads
+      --enable-mpi
+      --enable-openmp
+    ]
+    # Not default yet: https://github.com/FFTW/fftw3/pull/315#issuecomment-2630106315
+    common_args << "--enable-armv8-cntvct-el0" if Hardware::CPU.arm64?
 
-    # clean up so we can compile the double precision variant
-    system "make", "clean"
-
-    # double precision
-    # enable-sse2, enable-avx and enable-avx2 work for both single and double precision
-    system "./configure", *(args + simd_args)
-    system "make", "install"
-
-    # clean up so we can compile the long-double precision variant
-    system "make", "clean"
-
-    # long-double precision
-    # no SIMD optimization available
-    system "./configure", "--enable-long-double", *args
-    system "make", "install"
+    # enable-sse2, enable-avx and enable-avx2 work for both single and double precision.
+    # long-double precision has no SIMD optimization available.
+    {
+      "single"      => ["--enable-single", *simd_args],
+      "double"      => simd_args,
+      "long-double" => ["--enable-long-double"],
+    }.each do |precision, args|
+      mkdir "build-#{precision}" do
+        system "../configure", *args, *common_args, *std_configure_args
+        system "make", "install"
+      end
+    end
   end
 
   test do

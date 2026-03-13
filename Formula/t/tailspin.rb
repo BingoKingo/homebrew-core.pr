@@ -1,19 +1,20 @@
 class Tailspin < Formula
   desc "Log file highlighter"
   homepage "https://github.com/bensadeh/tailspin"
-  url "https://github.com/bensadeh/tailspin/archive/refs/tags/5.4.4.tar.gz"
-  sha256 "5c7829245c1b02cc19e0c5a23222ab955dd0b36e8c11e135db4257e393a7c236"
+  url "https://github.com/bensadeh/tailspin/archive/refs/tags/5.5.0.tar.gz"
+  sha256 "e9d7cefb865585bb048a2ccbfcc1f900ae344134d71132a7c48ee0d5af09cdaf"
   license "MIT"
   head "https://github.com/bensadeh/tailspin.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "12dd8c6a640bcbf84f4ba351978399a055c9b84521abc96de5f3514a7cf0e99c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a4d0884fa13813f1a516fc60f3550ec163ea25cdfc4d8005c7c8d38d26fc5955"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "15bcab094c86d4a6470fb0f1791f8484725961f4dcd0e2d5d50229fe65578218"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4ab40356b2b2d8da2f1d98a8fde3cb7dfb9c2b39b2a26cad56fa5de1e010ee19"
-    sha256 cellar: :any_skip_relocation, ventura:       "d5e93420e1c8be0c6e991882f309b5fa76c875d52ade5686709926b48f4967de"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "786524577485d83a41abace9600a7a8b00ccfc5717dcefb83401614d045a53ec"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "102926218f5e5efd1bc1388ddec3fa0a3ced925acfc9c2d06eb4170eac84c44f"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "95494039cb74f12c62c4d37a73dda0cdeffd7289e8d943e3e2886edf0b9202fb"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "44586a6dcad6fb8267c8740d76404ad12bf7e089c429247e2ace1c8619277110"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7b72108e7744f6539b7478ef15df4b3e8ca8c3ba20809b4ecdb0cf4ace12d608"
+    sha256 cellar: :any_skip_relocation, arm64_ventura: "a5a88936ed1623af9aa4560bdce4a641275bf630c06ac380b382fe84e38a2abd"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b12c37ddda9f095c000238c85caa5f97045f782fd9f573a859a1268257e1bb3b"
+    sha256 cellar: :any_skip_relocation, ventura:       "38be0ff04c8a3539a1e5f93339f2e3627fa989afc813062e20d1f660669620a4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c9b8c4d226fe1c26a0ceab3934e20a74a252dd839c426dc26dde346336b044b6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5aca6beeb105f23fa5564d72ed192d7994351a7faa1c0e89e167472c9dadfe6c"
   end
 
   depends_on "rust" => :build

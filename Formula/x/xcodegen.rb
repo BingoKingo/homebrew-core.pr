@@ -1,20 +1,19 @@
 class Xcodegen < Formula
   desc "Generate your Xcode project from a spec file and your folder structure"
   homepage "https://github.com/yonaskolb/XcodeGen"
-  url "https://github.com/yonaskolb/XcodeGen/archive/refs/tags/2.43.0.tar.gz"
-  sha256 "d79a89ea056ccc3cf84b736ee52c7b5184a560e54808e51f418f34d292869d66"
+  url "https://github.com/yonaskolb/XcodeGen/archive/refs/tags/2.45.3.tar.gz"
+  sha256 "b8df8b3cffc65621838133fcc168afe4f444dbe9dc74cd32d1445d93380b4389"
   license "MIT"
   head "https://github.com/yonaskolb/XcodeGen.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1d08e16ea70ce5f323dd53197ed1204c6a78be04e629bb8e8cd11329b5d13c5d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b52935ffdb916dcfa90efef93419cbc050764f0d29e139ef951b8b994ee492c3"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "db60cd9e7757912208a1ba128f1652f9dd49beac21d7b83bfd9d16d59bc6241f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "58ca67427dc960bc75413e651a476926eeed167e10dec790dfd16d560334fa70"
-    sha256 cellar: :any_skip_relocation, ventura:       "6efa069b3f9ade5e77b7d0dd1fa76b3dae8d3914d45a3da5ff48a8e79e3a5f75"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d6d74e8fa238c41653e0149561f31902fd2381b6f2299508dc9eaf74afd10a9b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4c725804686c82bfa237d841e89a845306791c42c1a7e81de936953975311c96"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fc1bec985217dd2d69db5cedc89d465d5de0bc9593a9d47503c5d84370e83761"
+    sha256 cellar: :any_skip_relocation, sonoma:        "db8e32720ad4d57a749fc0b2262240f280beb102021d5abbcb8022cdb199b6a1"
   end
 
-  depends_on xcode: ["14.0", :build]
+  depends_on xcode: ["15.3", :build]
   depends_on :macos
 
   uses_from_macos "swift"

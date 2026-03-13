@@ -1,8 +1,8 @@
 class Qsv < Formula
   desc "Ultra-fast CSV data-wrangling toolkit"
   homepage "https://qsv.dathere.com/"
-  url "https://github.com/dathere/qsv/archive/refs/tags/5.0.3.tar.gz"
-  sha256 "3df998802030fd9a3e2cab12f2369ae75077ee74a7076c773298efbc30a4f61a"
+  url "https://github.com/dathere/qsv/archive/refs/tags/17.0.0.tar.gz"
+  sha256 "433f0ad953ae04ecbd2bff737b824c2b1aff84c4fdb675c4e8184335c806d36c"
   license any_of: ["MIT", "Unlicense"]
   head "https://github.com/dathere/qsv.git", branch: "master"
 
@@ -15,13 +15,12 @@ class Qsv < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b101516623fba87ffe16e879d6b6aa0c0c327dee7d3150633c79e43464afd607"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "561ed5fe0cc5b0259bbb66fa2b2380dac8d965751107da2a85ff7b8053f9e404"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "3f565a3366cc8e9e5e0e6a490b2e8154490b1265993f7f721c66f63103311f95"
-    sha256 cellar: :any_skip_relocation, sonoma:        "cf8c715c0373702bf144fb9894373d37be21fcc535e00e499f2ed76a5939c1fb"
-    sha256 cellar: :any_skip_relocation, ventura:       "2f94499e561a9e6b94aa17b46995bdf3f408be508bf3087fb09721c65efb5984"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "46329a37301014303e1f2eb8fec47bdd86a0f57c99eaa29ecdcdcd81e1f01afa"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cdb21b32db5699f380fd4783e342cdfdfa4ebab21bc810ce79bc6a4d3202ec29"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "5394865618e07590fce0698bb1ca2dbab10e324afaa74ae9fbdbdfb8d1ee2a64"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1ae742a9a4f355a2e5c0e56366f6b4805d00477453f4098b1af6e0bef0c319cb"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d66f67ea410278710a7e074888d117061c58836a64a6995f17fd57201f1e8caa"
+    sha256 cellar: :any_skip_relocation, sonoma:        "09a0110b8a627817842818cccd8787050d7d21f58a96c3bc4ef4ed50f1907745"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7348af6b0eb1ed197ded3f161b7fdb72f368450bd2e21248e7c1b69f8182da6e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dfab3df20b2f5ed6f11c0e1c068dbeeee2beb3a512f14d7879b6940a0fae3911"
   end
 
   depends_on "cmake" => :build # for libz-ng-sys
@@ -35,24 +34,23 @@ class Qsv < Formula
   def install
     # Use explicit CPU target instead of "native" to avoid brittle behavior
     # see discussion at https://github.com/briansmith/ring/discussions/2528#discussioncomment-13196576
-    ENV["RUSTFLAGS"] = "-C target-cpu=apple-m1" if OS.mac? && Hardware::CPU.arm?
+    ENV.append_to_rustflags "-C target-cpu=apple-m1" if OS.mac? && Hardware::CPU.arm?
 
-    system "cargo", "install", *std_cargo_args, "--features", "apply,luau,feature_capable"
+    features = %w[apply fetch foreach geocode lens luau to feature_capable]
+    system "cargo", "install", *std_cargo_args(features:)
+
     bash_completion.install "contrib/completions/examples/qsv.bash" => "qsv"
     fish_completion.install "contrib/completions/examples/qsv.fish"
     zsh_completion.install "contrib/completions/examples/qsv.zsh" => "_qsv"
+    pwsh_completion.install "contrib/completions/examples/qsv.ps1" => "qsv"
   end
 
   test do
     (testpath/"test.csv").write("first header,second header")
-    assert_equal <<~EOS, shell_output("#{bin}/qsv stats --dataset-stats test.csv")
-      field,type,is_ascii,sum,min,max,range,sort_order,sortiness,min_length,max_length,sum_length,avg_length,stddev_length,variance_length,cv_length,mean,sem,geometric_mean,harmonic_mean,stddev,variance,cv,nullcount,max_precision,sparsity,qsv__value
-      first header,NULL,,,,,,,,,,,,,,,,,,,,,,0,,,
-      second header,NULL,,,,,,,,,,,,,,,,,,,,,,0,,,
-      qsv__rowcount,,,,,,,,,,,,,,,,,,,,,,,,,,0
-      qsv__columncount,,,,,,,,,,,,,,,,,,,,,,,,,,2
-      qsv__filesize_bytes,,,,,,,,,,,,,,,,,,,,,,,,,,26
-      qsv__fingerprint_hash,,,,,,,,,,,,,,,,,,,,,,,,,,589aa48c29e0a4abf207a0ff266da0903608c1281478acd75457c8f8ccea455a
+    assert_equal <<~EOS, shell_output("#{bin}/qsv stats test.csv")
+      field,type,is_ascii,sum,min,max,range,sort_order,sortiness,min_length,max_length,sum_length,avg_length,stddev_length,variance_length,cv_length,mean,sem,geometric_mean,harmonic_mean,stddev,variance,cv,nullcount,n_negative,n_zero,n_positive,max_precision,sparsity
+      first header,NULL,,,,,,,,,,,,,,,,,,,,,,0,,,,,
+      second header,NULL,,,,,,,,,,,,,,,,,,,,,,0,,,,,
     EOS
   end
 end

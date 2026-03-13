@@ -1,8 +1,8 @@
 class Libpano < Formula
   desc "Build panoramic images from a set of overlapping images"
   homepage "https://panotools.sourceforge.net/"
-  url "https://downloads.sourceforge.net/project/panotools/libpano13/libpano13-2.9.22/libpano13-2.9.22.tar.gz"
-  sha256 "affc6830cdbe71c28d2731dcbf8dea2acda6d9ffd4609c6dbf3ba0c68440a8e3"
+  url "https://downloads.sourceforge.net/project/panotools/libpano13/libpano13-2.9.23/libpano13-2.9.23.tar.gz"
+  sha256 "e7c076d37a14c39434962115e47ddbe18452ca3de5ce40e2aaefa7cf5815ea28"
   license "GPL-2.0-or-later"
   version_scheme 1
 
@@ -12,15 +12,13 @@ class Libpano < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia:  "e0b93764142133cf6a62e5d9512bd7ba1a82ebabc2ae3660c62b345cf49c8af3"
-    sha256 cellar: :any,                 arm64_sonoma:   "42f3f8617fa4d805513768324ee0de1ab490e90078a7481c8c1344a75850b7dc"
-    sha256 cellar: :any,                 arm64_ventura:  "c2776938006e3a0b5bdc316e4a1dbcc4244a9193b43fa92b8dc04d251385af1f"
-    sha256 cellar: :any,                 arm64_monterey: "9446d3ebad930d7626cd713b2145c58a0f41a128669a26f7f8597a9836339b7b"
-    sha256 cellar: :any,                 sonoma:         "0af56e6b3b09c834eeb1e761601077adf59aa8182c2bb3e7bb6b0af281d7b786"
-    sha256 cellar: :any,                 ventura:        "7ed03995775f0db50976850f24874ea177cfb4dce9110ac0efbac4b9952f3bf3"
-    sha256 cellar: :any,                 monterey:       "8c972fc65b94671e0d619e86fbcdd48b04fd4223c3b3cdd9888ae4e944447919"
-    sha256 cellar: :any_skip_relocation, arm64_linux:    "5a4729da262a95f93470e8ceb3646a42d86f1375fcf624c462f867411743b044"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "30623a39cfd32fb1230f6ac0326235ef16c71e907fdfa0757c689e5d495b0980"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "bed5e7b25e2109ea77ea76567c3197f60752d2e866aefaf18ac4ddf2c248cce4"
+    sha256 cellar: :any,                 arm64_sequoia: "a4d99700b3f78d2d2127aa44af61277d21aa9af993af1561bf37d8709391480e"
+    sha256 cellar: :any,                 arm64_sonoma:  "a98362bc2e1df8ab509bf95808ec9b06478231620ea1643388dd50dac292206e"
+    sha256 cellar: :any,                 sonoma:        "eb39a8e4827912f36aa9693b13dd0ed1f588c98f3a37112ab85977569c9aabe4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0a42aea9bc8bd4019a965019b13c7147670db0b28780e31105dd2ddc68e9dbec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f128fb8a847e170a59c01964478ae7f141ae3be4683a26a3f008366376ac28b6"
   end
 
   depends_on "cmake" => :build
@@ -28,12 +26,17 @@ class Libpano < Formula
   depends_on "libpng"
   depends_on "libtiff"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   patch :DATA
 
   def install
-    system "cmake", "-S", ".", "-B", "build", "-DCMAKE_INSTALL_RPATH=#{rpath}", *std_cmake_args
+    args = %W[-DCMAKE_INSTALL_RPATH=#{rpath}]
+    # Workaround for CMake 4 compatibility
+    args << "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
   end

@@ -1,9 +1,9 @@
 class X8664ElfGdb < Formula
   desc "GNU debugger for x86_64-elf cross development"
   homepage "https://www.gnu.org/software/gdb/"
-  url "https://ftp.gnu.org/gnu/gdb/gdb-16.3.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gdb/gdb-16.3.tar.xz"
-  sha256 "bcfcd095528a987917acf9fff3f1672181694926cc18d609c99d0042c00224c5"
+  url "https://ftpmirror.gnu.org/gnu/gdb/gdb-17.1.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gdb/gdb-17.1.tar.xz"
+  sha256 "14996f5f74c9f68f5a543fdc45bca7800207f91f92aeea6c2e791822c7c6d876"
   license "GPL-3.0-or-later"
   head "https://sourceware.org/git/binutils-gdb.git", branch: "master"
 
@@ -12,25 +12,26 @@ class X8664ElfGdb < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "28f100b92ecb7457ced120b8d0522a178c1c7b41602ce928a135573196f0f118"
-    sha256 arm64_sonoma:  "f3bfe8ae0d22a8a29df3487ab9a02183c03ebc40aee4dbb791f951152739d451"
-    sha256 arm64_ventura: "12f8ce79c5b517f25f323720050fb2f348e556f90cd510b4d58e3f5ae20fc3dc"
-    sha256 sonoma:        "e4b1c236f1b4317c08f212b2ee18e12c511edf81adb3a376697da97e286b88c0"
-    sha256 ventura:       "6a08a716548bb8e045f191db3854584be6d48619a64886e69d2f6617bf09c623"
-    sha256 arm64_linux:   "8b54865a39c1be49422e670ffd3992d391159acba028d87a1b73affa796c86cd"
-    sha256 x86_64_linux:  "38caa41e87bae9d85259c0497a9300af7c51f236e299476a8fc38da29f7d76ca"
+    rebuild 1
+    sha256 arm64_tahoe:   "ffc4d91060bee0a77349a4197c4693478b6633b423dfa0541ca0ff5667c1a0ee"
+    sha256 arm64_sequoia: "df1f80eeb99a9d22809f68670468532a4b80671817cc5673c30b1b269533d981"
+    sha256 arm64_sonoma:  "955b0c8f0b10163206ad3a889440f2f855b96357d875fca9779ec07d77508fd6"
+    sha256 sonoma:        "40968878872648a819ced969094383478b7dbfee0ce34a01420a2f616cda5f60"
+    sha256 arm64_linux:   "dfb0bc11911d42e039f52cd1014d59c612ce4a4427f2c58add1efd709c5d857f"
+    sha256 x86_64_linux:  "37d0aeaaf689eb0a90eb915f02cb99eea4c89d0009a932b12323f948449b86c7"
   end
 
+  depends_on "pkgconf" => :build
   depends_on "x86_64-elf-gcc" => :test
-
   depends_on "gmp"
   depends_on "mpfr"
-  depends_on "python@3.13"
+  depends_on "ncurses" # https://github.com/Homebrew/homebrew-core/issues/224294
+  depends_on "python@3.14"
+  depends_on "readline"
   depends_on "xz" # required for lzma support
+  depends_on "zstd"
 
   uses_from_macos "expat", since: :sequoia # minimum macOS due to python
-  uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   # Workaround for https://github.com/Homebrew/brew/issues/19315
   on_sequoia :or_newer do
@@ -43,6 +44,10 @@ class X8664ElfGdb < Formula
     depends_on "texinfo" => :build
   end
 
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
   def install
     target = "x86_64-elf"
     args = %W[
@@ -51,10 +56,16 @@ class X8664ElfGdb < Formula
       --includedir=#{include}/#{target}
       --infodir=#{info}/#{target}
       --mandir=#{man}
-      --with-lzma
-      --with-python=#{which("python3.13")}
-      --with-system-zlib
       --disable-binutils
+      --disable-nls
+      --enable-tui
+      --with-curses
+      --with-expat
+      --with-lzma
+      --with-python=#{which("python3.14")}
+      --with-system-readline
+      --with-system-zlib
+      --with-zstd
     ]
 
     mkdir "build" do

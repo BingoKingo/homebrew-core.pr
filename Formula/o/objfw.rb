@@ -1,43 +1,37 @@
 class Objfw < Formula
   desc "Portable, lightweight framework for the Objective-C language"
   homepage "https://objfw.nil.im/"
-  url "https://objfw.nil.im/downloads/objfw-1.3.tar.gz"
-  sha256 "de9e8a84437c01dacb9e83d7de0e3f7add3152165707d51a4caec640e4f56ba6"
+  url "https://objfw.nil.im/downloads/objfw-1.5.1.tar.gz"
+  sha256 "fde83565ad1c6aaea2713770ede8f47f1b1e464c9251dde4801e1c614930cdf6"
   license "LGPL-3.0-only"
-  head "https://objfw.nil.im/", using: :fossil
+  head "https://git.nil.im/ObjFW/ObjFW.git", branch: "main"
 
   livecheck do
-    url "https://objfw.nil.im/wiki?name=Releases"
+    url "https://git.nil.im/ObjFW/ObjFW/releases"
     regex(/href=.*?objfw[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 arm64_sequoia: "4c9acb6b2cbb4c5f60327bc0b45eaded42f416f56efcaa4b079b1841b563e486"
-    sha256 arm64_sonoma:  "e07a67967f009dad95cac824238475e5509ddabb2908c8a8318ed600b54bef8c"
-    sha256 arm64_ventura: "c2263362599830bcb994be5ec834960386f52542d8aed892837c418d6b821fb8"
-    sha256 sonoma:        "105960305b587763883ef15b78e9babb71bd74d64328e37d4c438ab4dbaedfe2"
-    sha256 ventura:       "e13c3bf6a4a1f6d389d75978d3c8ccc3236d0c599a4c24b133a024dcf48274fc"
-    sha256 arm64_linux:   "02e8e1ec91e72f84e041911ab4fadd221c5d54d78b3660dcd84d4d705a028f6d"
-    sha256 x86_64_linux:  "abc0b34c221438f218cb7b667bde87c888d05a1c6f4bafe333e2052d668305a4"
+    sha256 arm64_tahoe:   "4aca22fe35b66db1f2c0b8808520780e46b6a17cf9238262f4c7d8c2aba55396"
+    sha256 arm64_sequoia: "8d6a02fb7c647068536cdcc7ac56ee53b945e9e0ae1ac1f01002ec75edfcb7d7"
+    sha256 arm64_sonoma:  "10bbac85b100f0fe4f24ff5ec41cb7c339418a131269a3ce7896f5c3dc3a6b04"
+    sha256 sonoma:        "38797298bcdd01e52e7926cdf6523c49ab24ff36eefc72f3523be211ac32ae2a"
+    sha256 arm64_linux:   "132fde952366c5234483410e288bcc77b99c2d1fdf0e35e679372f4fe1e39004"
+    sha256 x86_64_linux:  "a68440b6b1f6e5b9aea52a4beb2a5a732e6e9c33c4a7035d4a2d4f26d7b9ad6e"
   end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
+  depends_on "openssl@3"
 
   on_linux do
     depends_on "llvm"
-    depends_on "openssl@3"
-    depends_on "zlib"
+    depends_on "zlib-ng-compat"
   end
 
   fails_with :gcc
 
   patch :DATA
-  patch do
-    # Fix building for macOS 13 with old SDK, as used by Homebrew.
-    url "https://github.com/ObjFW/ObjFW/commit/2d297b2d3702d24662819016b57f0a67d902990d.patch?full_index=1"
-    sha256 "39ccc15f5f5123dae4c86ce6dfbb21ce08a4b4b600e6d6faa19268657e5cf3e8"
-  end
 
   def install
     ENV.clang if OS.linux?
@@ -68,8 +62,7 @@ index 3ec1cc5c..c0c31cac 100644
  			FRAMEWORK_LDFLAGS_INSTALL_NAME='-Wl,-install_name,@executable_path/Frameworks/$$out/$${out%.framework}'
  		], [
 -			FRAMEWORK_LDFLAGS_INSTALL_NAME='-Wl,-install_name,@executable_path/../Frameworks/$$out/$${out%.framework}'
-+			FRAMEWORK_LDFLAGS_INSTALL_NAME='-Wl,-install_name,${prefix}/Library/Frameworks/$$out/$${out%.framework}'
++			FRAMEWORK_LDFLAGS_INSTALL_NAME='-Wl,-install_name,@loader_path/../../../$$out/$${out%.framework}'
  		])
  
  		AC_SUBST(FRAMEWORK_LDFLAGS)
-

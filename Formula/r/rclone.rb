@@ -1,19 +1,18 @@
 class Rclone < Formula
   desc "Rsync for cloud storage"
   homepage "https://rclone.org/"
-  url "https://github.com/rclone/rclone/archive/refs/tags/v1.69.3.tar.gz"
-  sha256 "ff6d17d187dd23648bfd33f20ff48902f7f08d2d9231f1f11825109903356b21"
+  url "https://github.com/rclone/rclone/archive/refs/tags/v1.73.2.tar.gz"
+  sha256 "1bbb94dedf84fff7bb769a40fafda148d5987f97e26a3a3ceef08dcf18c7e534"
   license "MIT"
   head "https://github.com/rclone/rclone.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1a68f9f61f3d375d71ee51f276d0a22d11902ea1525bf1aaa0cf6a14b2e40876"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "66d574b317412061e35b3f5dbe72d677dc1147c7642a62bca721be6df4d4f8b3"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "180411120c0caf156d73481bbd7d73553e30cdf9e6ca611cf49671652ba2d57a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "655b770e1560d1fb67e2c53018425420e25733f40e145c272eeffe0df3d68c3a"
-    sha256 cellar: :any_skip_relocation, ventura:       "2246e2b974c8c6ef03a6509434dc2d47f583403288a5accfc9eb418ffa08047e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c8111eb9652a49b8b70a5f391414264988ab0a00d2f12e1ebf912f3a58b45d5c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "53b4a81d1083edcbac8f53f87017952c76826b09399ea6eb65620a781f11fba1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "e5553e81bd020ada84540300d10b573a413a87dae23016b077083133f8e1e4c9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fa5f7201c63637bbc6ee82403db27f0cd4d515a987456d4440e367dced1127da"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fe8f3946dedb97df1b85a84713221e4e792b0de1062b324108546c6e1fd19c53"
+    sha256 cellar: :any_skip_relocation, sonoma:        "cd4e026ddb0bade33bc6dea6b7142a3bc09864276c44e523e70ba74e2d67a425"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0faea04ca428cbdc8ed3643bf254751174049b92e97ded79b2a664bd5bb44036"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bea33396903d3b5fe8c69a756a85914dded40a2312048cf1a6d95f5b0e768561"
   end
 
   depends_on "go" => :build

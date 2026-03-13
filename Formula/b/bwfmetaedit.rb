@@ -1,8 +1,8 @@
 class Bwfmetaedit < Formula
   desc "Tool for embedding, validating, and exporting BWF file metadata"
   homepage "https://mediaarea.net/BWFMetaEdit"
-  url "https://mediaarea.net/download/binary/bwfmetaedit/25.04/BWFMetaEdit_CLI_25.04_GNU_FromSource.tar.xz"
-  sha256 "4e7f4606bc83829a9ac1742c10d0e5d730da2189cfcb8cab9b739211e094ce75"
+  url "https://mediaarea.net/download/binary/bwfmetaedit/26.01/BWFMetaEdit_CLI_26.01_GNU_FromSource.tar.xz"
+  sha256 "bd04770fe8a30541151b65bdcd25252705f390297d992ac461c9dc3c885de2b4"
   license "0BSD"
 
   livecheck do
@@ -11,13 +11,12 @@ class Bwfmetaedit < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ada25a119a8c8c7e44971889d228b77bc2f09062eb5dcdc6671dbb8cd0ee5a8c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f1d559f8aa1a0134eb6be9263845ca2ce2e0e1b5be84d8eb99a3bb684a74b4be"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b46ff3c597d15626a9b43b0e7ee92426e9cb4e9c68422f98d6ad7f8e8f35e071"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d39509378a55eb0278668436faaac2274a9d702488180300c8ed17880335f362"
-    sha256 cellar: :any_skip_relocation, ventura:       "f7e1e0fe0fd5c8982325e0208d55b0cb2f68235d4ed4cf01c47ecb93b138dfad"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8abba81e78de3d8dc5512552bec11d7d5fead6598266f7f8a4f9a3469343999b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "66f8c9ff2de246093fd6829c4a80d56ad06e6d3e5ef5381949b50f1248fd36d7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "518fbf320e175c0ee0334e2237c30f9b6d58306d242c544c0be03ce470c46763"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8ce116495823ddb61a7e0114f4e1271798af02a15cb040d5f7772572568a00bf"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3d42c59d32633a32bfa3fe907916c78a4295bd1d1cd7f0e65edce539155de67d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b517115003660a83189a6aea3b142b4caf6ca00110b1a6db0d24c4cb9d7a86a4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ef6f068bbbd8191e98da8589ea5c5d9c82209a72629e2e8160e5a6d47c30e93f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "664fc4e93a220a62f5bc59b2fb928296eab3532d739434826f4920288d090ce2"
   end
 
   def install

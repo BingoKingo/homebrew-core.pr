@@ -1,8 +1,8 @@
 class AwsConsole < Formula
   desc "Command-line to use AWS CLI credentials to launch the AWS console in a browser"
   homepage "https://github.com/aws-cloudformation/rain"
-  url "https://github.com/aws-cloudformation/rain/archive/refs/tags/v1.23.0.tar.gz"
-  sha256 "820724a0cde1066345982b81b42921af86906966d0e51151ed24a6e3c1f08740"
+  url "https://github.com/aws-cloudformation/rain/archive/refs/tags/v1.24.3.tar.gz"
+  sha256 "f56190d874985e0bcea79cc1ca233846173164d000f0c4f1d0051f2e26fee20b"
   license "Apache-2.0"
   head "https://github.com/aws-cloudformation/rain.git", branch: "main"
 
@@ -11,18 +11,20 @@ class AwsConsole < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "624c2e9a156e183546ca612af7e293d44ba60e29267e8b288c85defc3bb6a505"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "624c2e9a156e183546ca612af7e293d44ba60e29267e8b288c85defc3bb6a505"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "624c2e9a156e183546ca612af7e293d44ba60e29267e8b288c85defc3bb6a505"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0f4b7f1b4ae0bbfd1eba137db3e02f61b582f0abac18a8354f96f5bcd2c52d47"
-    sha256 cellar: :any_skip_relocation, ventura:       "0f4b7f1b4ae0bbfd1eba137db3e02f61b582f0abac18a8354f96f5bcd2c52d47"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0f2fc520617b2f25edbfa951b4aa501796e845683688a8d0127e3f0be438415d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "9d2fb3068e56b9af49e4c00557bc21382183b86b4650fedf2ddeb70b26d83240"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9d2fb3068e56b9af49e4c00557bc21382183b86b4650fedf2ddeb70b26d83240"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9d2fb3068e56b9af49e4c00557bc21382183b86b4650fedf2ddeb70b26d83240"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6102d31d5fee5dd6341f1b3d511bcdb1034fbccb0b7c0a1881c12c5f537b64e2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "aeb8dab79eaa20337c7da7de5336dc7c7bb0084e7c939141efdcbea33e231e2e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "87841f67c0c336b6bcd299b59efbef9545bddc435780653795a9e0bf144638e0"
   end
 
   depends_on "go" => :build
 
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w"), "./cmd/aws-console"
+
+    generate_completions_from_executable(bin/"aws-console", shell_parameter_format: :cobra)
   end
 
   test do

@@ -1,24 +1,25 @@
 class Skeema < Formula
   desc "Declarative pure-SQL schema management for MySQL and MariaDB"
   homepage "https://www.skeema.io/"
-  url "https://github.com/skeema/skeema/archive/refs/tags/v1.12.3.tar.gz"
-  sha256 "a29c42436967b61e6a5b1475b0166e38583c7f0f6381412409d76eaba9cced7b"
+  url "https://github.com/skeema/skeema/archive/refs/tags/v1.13.2.tar.gz"
+  sha256 "05d259e214d81908880b7d3b3c0b99cecc8674e8df4220474863c5003a9ac215"
   license "Apache-2.0"
   head "https://github.com/skeema/skeema.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cbcc88c91395e39c504ee1ea7fe2e9ba1a2ff731d17281209b2131df8cf8b247"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cbcc88c91395e39c504ee1ea7fe2e9ba1a2ff731d17281209b2131df8cf8b247"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "cbcc88c91395e39c504ee1ea7fe2e9ba1a2ff731d17281209b2131df8cf8b247"
-    sha256 cellar: :any_skip_relocation, sonoma:        "02a449d113eadd1c3cc6fc6bb48460b0d01b13166c929f01720c5837d7b99794"
-    sha256 cellar: :any_skip_relocation, ventura:       "02a449d113eadd1c3cc6fc6bb48460b0d01b13166c929f01720c5837d7b99794"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a148cf88c9e449ce572fb8db7441c42a6205968be27f170ed1ed431fe5c1cb36"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "09e95c80f0ea94675863694669cfaf9afe84c4c12e783f4dadb10c84763649dd"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "09e95c80f0ea94675863694669cfaf9afe84c4c12e783f4dadb10c84763649dd"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "09e95c80f0ea94675863694669cfaf9afe84c4c12e783f4dadb10c84763649dd"
+    sha256 cellar: :any_skip_relocation, sonoma:        "45ba7f03929b542b272931c89bb008b0dae549292dd5213cb78686bc82e7b807"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "18cff9e58173dcadb4f6466de695af0de6e35eb73896d7680619d3f0e5b2ed77"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5f81f006ded0059c9c04220b9d1ad0c2595e5b54470557bfa7b7ac37c936090a"
   end
 
   depends_on "go" => :build
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w")
+    ldflags = "-s -w -X main.version=#{version} -X main.commit=#{tap.user} -X main.date=#{time.iso8601}"
+    system "go", "build", *std_go_args(ldflags:)
   end
 
   test do

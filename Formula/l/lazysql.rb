@@ -1,8 +1,8 @@
 class Lazysql < Formula
   desc "Cross-platform TUI database management tool"
   homepage "https://github.com/jorgerojas26/lazysql"
-  url "https://github.com/jorgerojas26/lazysql/archive/refs/tags/v0.3.7.tar.gz"
-  sha256 "de14848d91db3bd70dac399030fd7f5053b8fd6479d2b15fdafcda03ff136724"
+  url "https://github.com/jorgerojas26/lazysql/archive/refs/tags/v0.4.8.tar.gz"
+  sha256 "bc6f00759376a30cbeb28af3200a0df2ab3df07f41717be2cf08122827e1671f"
   license "MIT"
   head "https://github.com/jorgerojas26/lazysql.git", branch: "main"
 
@@ -12,18 +12,19 @@ class Lazysql < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f80bf40ed7c5573d1fc5c22026043110c1820cf02274dcf7d434f3829d17252f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f80bf40ed7c5573d1fc5c22026043110c1820cf02274dcf7d434f3829d17252f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f80bf40ed7c5573d1fc5c22026043110c1820cf02274dcf7d434f3829d17252f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "cb4e54f06a410993248d8f300f67da31a84e31976d899eda2872df2fe2405f9f"
-    sha256 cellar: :any_skip_relocation, ventura:       "cb4e54f06a410993248d8f300f67da31a84e31976d899eda2872df2fe2405f9f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "680e0bf2cdf005493e942aa6460d453dc2e697259f86317272d1517c04155428"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "21e8091f4b59cf599cec6bcbd323c2825350577373d3930b0824ec0ed09d9050"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "21e8091f4b59cf599cec6bcbd323c2825350577373d3930b0824ec0ed09d9050"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "21e8091f4b59cf599cec6bcbd323c2825350577373d3930b0824ec0ed09d9050"
+    sha256 cellar: :any_skip_relocation, sonoma:        "c981b5288659a472d370bc1bc6c7f8b98a01d2ce902f61380e19c8ba013f5540"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "807b7ea9ec4d09264eb5c08226debf956a61654663ba7cba3bdd473e95479583"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2a933b0b3e60b99dd02c9c1771d204e3f5be1a2bb9939d1d08f6646bb4430722"
   end
 
   depends_on "go" => :build
   uses_from_macos "sqlite" => :test
 
   def install
+    ENV["CGO_ENABLED"] = OS.mac? ? "1" : "0"
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}")
   end
 

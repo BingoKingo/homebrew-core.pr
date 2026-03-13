@@ -1,21 +1,18 @@
 class DroneCli < Formula
   desc "Command-line client for the Drone continuous integration server"
   homepage "https://drone.io"
-  url "https://github.com/harness/drone-cli/archive/refs/tags/v1.8.0.tar.gz"
-  sha256 "715e1187b8ccace88111671999c296dbd91e7523e09b0ee22dfb328f1a1d831b"
+  url "https://github.com/harness/drone-cli/archive/refs/tags/v2.0.0.tar.gz"
+  sha256 "789cf088d76ec1e19c25e77f1a504cb3a603b772cc6fb19335452e9ae7044151"
   license "Apache-2.0"
   head "https://github.com/harness/drone-cli.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia:  "32169cc3c88c8673a10a0667ad401d8ec22cc38873044b6da6dcf5ebe92d9d9a"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "8fc8dfba68da80112f85551c3dce05fc6cb269a6ae4a4f4aa7a1732d8098a85e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "8fc8dfba68da80112f85551c3dce05fc6cb269a6ae4a4f4aa7a1732d8098a85e"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "8fc8dfba68da80112f85551c3dce05fc6cb269a6ae4a4f4aa7a1732d8098a85e"
-    sha256 cellar: :any_skip_relocation, sonoma:         "bdb5c00c40d6176cd7f9dcf1d5d2e16bd73301687f8feca565f6ac7ab99b5651"
-    sha256 cellar: :any_skip_relocation, ventura:        "bdb5c00c40d6176cd7f9dcf1d5d2e16bd73301687f8feca565f6ac7ab99b5651"
-    sha256 cellar: :any_skip_relocation, monterey:       "bdb5c00c40d6176cd7f9dcf1d5d2e16bd73301687f8feca565f6ac7ab99b5651"
-    sha256 cellar: :any_skip_relocation, arm64_linux:    "e416b331781eb265b5d9c17160bbf733290c38927a64dbe173da68935572d00f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "c9f53894149db17b3bb43aeaf2b72cf81f4d9f564fe810b1e7ec241645a5be2e"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "9bbe92d919f24bd17bc6150081e6d6d14bb55538bac20ddcb7ec8351415448b1"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9bbe92d919f24bd17bc6150081e6d6d14bb55538bac20ddcb7ec8351415448b1"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9bbe92d919f24bd17bc6150081e6d6d14bb55538bac20ddcb7ec8351415448b1"
+    sha256 cellar: :any_skip_relocation, sonoma:        "553c5043ffbccd798bf7ae272f65b175bbcef6e879c0f66c5a2e3c9c7909d894"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2ed89c6356881d8c201965ed129782f6d1f4cd4d866d79cd71f5ae34c074d39e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2aeff93b304ed8ecf51189c9751a9578c5779ce5ae2ea796dd305f0a57402f75"
   end
 
   depends_on "go" => :build

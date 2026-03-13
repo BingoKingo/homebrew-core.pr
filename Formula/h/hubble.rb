@@ -1,8 +1,8 @@
 class Hubble < Formula
   desc "Network, Service & Security Observability for Kubernetes using eBPF"
   homepage "https://github.com/cilium/hubble"
-  url "https://github.com/cilium/hubble/archive/refs/tags/v1.17.3.tar.gz"
-  sha256 "79afdd77b2b9406bb6cdd90c0a5990fdfe9457c08837af458a7bb7717b58d560"
+  url "https://github.com/cilium/hubble/archive/refs/tags/v1.18.6.tar.gz"
+  sha256 "294d3cdf79db7e6a1930007a60b67c719db867aab7f106190f5b797fa98c875e"
   license "Apache-2.0"
   head "https://github.com/cilium/hubble.git", branch: "main"
 
@@ -15,25 +15,25 @@ class Hubble < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b4210634cbfb63e325c4fcb0caa54d95600c68ee72efb43c0f6c0b7d37171b2c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5d729dec4e8f713d1e0e77ba55306ffb68a5a68c9a4c0f0acd5b70a96f3da651"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "4d34e4e9eef900d79d172443b2d73fe6f41a34b96e3b1a5e48336bc12d650b86"
-    sha256 cellar: :any_skip_relocation, sonoma:        "cae4b36388efba845b960cc11b96d1080f2c1005be4ea312c66d05bf44def11f"
-    sha256 cellar: :any_skip_relocation, ventura:       "65c8bd611be75a636bd448ab9a13f20185001851497940796aaefeaf4ede1265"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "48bb390c83f4682abef8122759a1d994ad631e3fbda78e028ed573e32f98f130"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "aec6dcc7737747c056c029a1279b93e3141e82bd92aea0cf1f3804981860a495"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "15a05af2fe3d35be2b25f0f91e4ba9bf42ebdb63b6a2a21233269fca2b967409"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2b37e3d99df342a13b38f27b06088926e7653b199c6a1a007e464088909d8a24"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0c3ec5b97f05511c512e4e07166b7dd133965d97485fdf08fc39f08b908a8a08"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6586ffb82d4f9260d412b9394b6e5b45ceed6b3b2670167b8f7a1bc3c08964a5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0318082aaab8c9828fe07748bbf35cc112654635f9d38b358799a97cef2acf9f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "125080b4d2f4d6fabf25922579fbbae209e19eea9d396434e1590fe34f096762"
   end
 
   depends_on "go" => :build
 
   def install
-    ldflags = "-s -w -X github.com/cilium/hubble/pkg.Version=#{version}"
+    ldflags = "-s -w -X github.com/cilium/cilium/hubble/pkg.Version=#{version}"
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"hubble", "completion")
+    generate_completions_from_executable(bin/"hubble", shell_parameter_format: :cobra)
   end
 
   test do
     assert_match(/tls-allow-insecure:/, shell_output("#{bin}/hubble config get"))
+    assert_match version.to_s, shell_output("#{bin}/hubble version")
   end
 end

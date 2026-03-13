@@ -1,24 +1,25 @@
 class Threatcl < Formula
   desc "Documenting your Threat Models with HCL"
   homepage "https://github.com/threatcl/threatcl"
-  url "https://github.com/threatcl/threatcl/archive/refs/tags/v0.2.4.tar.gz"
-  sha256 "0f4b73b4ae878ba1be624c3089c51fcbb298548f160ab26f52412e1407d762c8"
+  url "https://github.com/threatcl/threatcl/archive/refs/tags/v0.4.3.tar.gz"
+  sha256 "3f556b33fee8f2c16076e26a6573651599126349b48373e2ca87e74bcff7a2f7"
   license "MIT"
   head "https://github.com/threatcl/threatcl.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0e497682ed959de11b926acb83dbae171570044a7e53fefd5a3d387c42e2155b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "506db8b6b2f9dee428b700fe7ab43f1de1327e3d84e4911d1c3a2ec84cc82c88"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d94034e5b346ef3ffe5243a6f667948b1d776e1162c75e891f867e5a15842c0f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b8f00ecbe796c5ac8e7e10b9a0698bf1fbbc54d2a699cd7df04c325d5e1eae23"
-    sha256 cellar: :any_skip_relocation, ventura:       "53bf7140cabf4bfbc3672693135078f6f371018af67a71a6c2087eb603d86b4e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "80a355421d8d42280c76963720be6f75846e7aed77ddde545cc07ababff58d84"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "eacd0a15abb6284ed16f0be1ddae2dac8833aeb571d4ad159284a09069815113"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c663e7c1d82304c6ff9a5f01d74e074cc21bdaf8aa0a2a2e78ceea69f798dda4"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cb439c7fb779e668a5a43f8e72f02f4335b0c1e769506641a4e6dba98c72f029"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cba7461c89f21d747c6e6ab82c87288e41db18bee89fb9d870ce142e8949dc73"
+    sha256 cellar: :any_skip_relocation, sonoma:        "65019618369eceffef536051b61569b4a0ea6e8f01529aa044b01ed1aa42de67"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d28a81c239b1d3ed101b40c78ee967ad9664439870783ea5342b0de6330ed892"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "10501b62fecd136bb4a34f0fda34707237850745298a10d0e1fff85a310bc96b"
   end
 
   depends_on "go" => :build
 
   def install
+    ENV["CGO_ENABLED"] = "1"
+
     system "go", "build", *std_go_args(ldflags: "-s -w"), "./cmd/threatcl"
 
     pkgshare.install "examples"

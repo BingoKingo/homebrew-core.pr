@@ -3,17 +3,17 @@ class Fobis < Formula
 
   desc "KISS build tool for automatically building modern Fortran projects"
   homepage "https://github.com/szaghi/FoBiS"
-  url "https://files.pythonhosted.org/packages/0c/b0/6c713be09d7d0cb3af98e3f5ec3d29aa74d85de571936242ba2cb0b51736/FoBiS.py-3.1.0.tar.gz"
-  sha256 "1c1df040c42596de49e402b00823e6feec1c06b2d6bc7ffcb1a6db605e75e9e1"
+  url "https://files.pythonhosted.org/packages/59/c8/541b8121ede7b1f127c0fcfb50ce3de337d86e6be6f30f9538211c33f38a/fobis_py-3.5.4.tar.gz"
+  sha256 "4686d3ccb268fd347be63f6026f444f1583efd77c59f8363c81e10915529d7d1"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "1b1f66d81ce0cdbbe8e74af5922384040aec477f8e9fdbf76bfae4672bd17f0e"
+    sha256 cellar: :any_skip_relocation, all: "a20eea9fc35d16547706c397d69dad23b89fd8396aa7dab93bd176665d275eb5"
   end
 
   depends_on "gcc" # for gfortran
   depends_on "graphviz"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   resource "configparser" do
     url "https://files.pythonhosted.org/packages/8b/ac/ea19242153b5e8be412a726a70e82c7b5c1537c83f61b20995b2eda3dcd7/configparser-7.2.0.tar.gz"

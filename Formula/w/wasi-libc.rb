@@ -9,39 +9,34 @@ class WasiLibc < Formula
   head "https://github.com/WebAssembly/wasi-libc.git", branch: "main"
 
   stable do
-    # Check the commit hash of `src/wasi-libc` corresponding to the latest tag at:
-    # https://github.com/WebAssembly/wasi-sdk
-    url "https://github.com/WebAssembly/wasi-libc/archive/574b88da481569b65a237cb80daf9a2d5aeaf82d.tar.gz"
-    version "25"
-    sha256 "7d11a801570972e7f32639eed3f8f7d0e997f276b3c85b7aa03283e1265e4b8e"
+    url "https://github.com/WebAssembly/wasi-libc/archive/refs/tags/wasi-sdk-31.tar.gz"
+    sha256 "ccb72023597c610b59e4c6c3dcac00b13651dfc633471c24aa33cbfe9cc601ff"
 
     resource "WASI" do
-      # Check the commit hash of `tools/wasi-headers/WASI` from the commit hash above.
+      # Check the commit hash of `tools/wasi-headers/WASI` from the commit of the tag above.
       url "https://github.com/WebAssembly/WASI/archive/59cbe140561db52fc505555e859de884e0ee7f00.tar.gz"
       sha256 "fc78b28c2c06b64e0233544a65736fc5c515c5520365d6cf821408eadedaf367"
     end
   end
 
-  livecheck do
-    url "https://github.com/WebAssembly/wasi-sdk.git"
-  end
-
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "89f102505760c8d6b154f1574e619e2755e2fd7ff878596ec6c49ea5b62e4da1"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "89f102505760c8d6b154f1574e619e2755e2fd7ff878596ec6c49ea5b62e4da1"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "89f102505760c8d6b154f1574e619e2755e2fd7ff878596ec6c49ea5b62e4da1"
-    sha256 cellar: :any_skip_relocation, sonoma:        "89f102505760c8d6b154f1574e619e2755e2fd7ff878596ec6c49ea5b62e4da1"
-    sha256 cellar: :any_skip_relocation, ventura:       "89f102505760c8d6b154f1574e619e2755e2fd7ff878596ec6c49ea5b62e4da1"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f5c41b46943d6e2ca2dd20a049b8c6b7eb1aa67eac40b135673cf6eb65dad9b7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bbe27ea11d50c62ecfba2922e3a4ff27b16f215eeae08738413ef7f9b01d2a95"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "52f4c779b8430f998170a45563f2e31ba3ddbef8aa289ec59f5d4081a08b5f1c"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "52f4c779b8430f998170a45563f2e31ba3ddbef8aa289ec59f5d4081a08b5f1c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "52f4c779b8430f998170a45563f2e31ba3ddbef8aa289ec59f5d4081a08b5f1c"
+    sha256 cellar: :any_skip_relocation, sonoma:        "52f4c779b8430f998170a45563f2e31ba3ddbef8aa289ec59f5d4081a08b5f1c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9c4080a7ff64539ae8f292ccdc4421f9dfbeb62ee00b336b44109083a8ef8b53"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9c4080a7ff64539ae8f292ccdc4421f9dfbeb62ee00b336b44109083a8ef8b53"
   end
 
+  depends_on "cmake" => :build
+  depends_on "lld" => [:build, :test]
   depends_on "llvm" => [:build, :test]
-  depends_on "lld" => :test
-  depends_on "wasmtime" => :test
+  depends_on "ninja" => :build
+  depends_on "wasm-micro-runtime" => :test
 
-  # Needs clang
-  fails_with :gcc
+  fails_with :gcc do
+    cause "requires Clang, see https://github.com/WebAssembly/wasi-libc/blob/main/README.md#building-from-source"
+  end
 
   def install
     resource("WASI").stage buildpath/"tools/wasi-headers/WASI" if build.stable?
@@ -49,14 +44,22 @@ class WasiLibc < Formula
     # We don't want to use superenv here, since we are targeting WASM.
     ENV.remove_cc_etc
     ENV.remove "PATH", Superenv.shims_path
+    ENV.prepend_path "PATH", Formula["lld"].opt_bin
 
-    # Flags taken from Arch:
-    # https://gitlab.archlinux.org/archlinux/packaging/packages/wasi-libc/-/blob/main/PKGBUILD
-    make_args = [
-      "WASM_CC=#{Formula["llvm"].opt_bin}/clang",
-      "WASM_AR=#{Formula["llvm"].opt_bin}/llvm-ar",
-      "WASM_NM=#{Formula["llvm"].opt_bin}/llvm-nm",
-      "INSTALL_DIR=#{share}/wasi-sysroot",
+    llvm_bin = Formula["llvm"].opt_bin
+    clang = llvm_bin/"clang"
+    clang_resource_dir = Pathname.new(Utils.safe_popen_read(clang, "--print-resource-dir").chomp)
+    inreplace "CMakeLists.txt", "add_compile_options(--target=${TARGET_TRIPLE})",
+                               "add_compile_options(--target=${TARGET_TRIPLE} -resource-dir=#{clang_resource_dir})"
+
+    cmake_args = %W[
+      -DCMAKE_AR=#{llvm_bin}/llvm-ar
+      -DCMAKE_C_COMPILER=#{clang}
+      -DCMAKE_INSTALL_PREFIX=#{share}/wasi-sysroot
+      -DCMAKE_LINK_DEPENDS_USE_LINKER=FALSE
+      -DCMAKE_NM=#{llvm_bin}/llvm-nm
+      -DCMAKE_RANLIB=#{llvm_bin}/llvm-ranlib
+      -DCHECK_SYMBOLS=ON
     ]
 
     # See targets at:
@@ -69,14 +72,11 @@ class WasiLibc < Formula
       wasm32-wasi-threads
     ]
 
-    # See target flags at:
-    # https://github.com/WebAssembly/wasi-sdk/blob/5e04cd81eb749edb5642537d150ab1ab7aedabe9/cmake/wasi-sdk-sysroot.cmake#L117-L135
-    target_flags = Hash.new { |h, k| h[k] = [] }
-    targets.each { |target| target_flags[target] << "THREAD_MODEL=posix" if target.end_with?("-threads") }
-    target_flags["wasm32-wasip2"] << "WASI_SNAPSHOT=p2"
-
     targets.each do |target|
-      system "make", *make_args, "TARGET_TRIPLE=#{target}", "install", *target_flags[target]
+      build_dir = "build-#{target}"
+      system "cmake", "-S", ".", "-B", build_dir, "-G", "Ninja", *cmake_args, "-DTARGET_TRIPLE=#{target}"
+      system "cmake", "--build", build_dir
+      system "cmake", "--install", build_dir
     end
   end
 
@@ -101,10 +101,11 @@ class WasiLibc < Formula
     clang = Formula["llvm"].opt_bin/"clang"
     clang_resource_dir = Pathname.new(shell_output("#{clang} --print-resource-dir").chomp)
     testpath.install_symlink clang_resource_dir/"include"
-    resource("builtins").stage testpath/"lib/wasm32-unknown-wasi"
-    (testpath/"lib/wasm32-unknown-wasi").install_symlink "libclang_rt.builtins-wasm32.a" => "libclang_rt.builtins.a"
+    builtins_dir = testpath/"lib/wasm32-unknown-wasi"
+    resource("builtins").stage builtins_dir
+    builtins_dir.install_symlink "libclang_rt.builtins-wasm32.a" => "libclang_rt.builtins.a"
     wasm_args = %W[--target=wasm32-wasi --sysroot=#{share}/wasi-sysroot]
-    system clang, *wasm_args, "-v", "test.c", "-o", "test", "-resource-dir=#{testpath}"
-    assert_equal "the answer is 42", shell_output("wasmtime #{testpath}/test")
+    system clang, *wasm_args, "test.c", "-o", "test", "-resource-dir=#{testpath}"
+    assert_equal "the answer is 42", shell_output("iwasm #{testpath}/test")
   end
 end

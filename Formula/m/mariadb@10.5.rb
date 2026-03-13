@@ -4,27 +4,16 @@ class MariadbAT105 < Formula
   url "https://archive.mariadb.org/mariadb-10.5.29/source/mariadb-10.5.29.tar.gz"
   sha256 "de49ed417f6fa90e8fee72a41e526e0983dc47f388caff9e703803cec263b826"
   license "GPL-2.0-only"
-
-  livecheck do
-    url "https://downloads.mariadb.org/rest-api/mariadb/all-releases/?olderReleases=false"
-    strategy :json do |json|
-      json["releases"]&.map do |release|
-        next unless release["release_number"]&.start_with?(version.major_minor)
-        next if release["status"] != "stable"
-
-        release["release_number"]
-      end
-    end
-  end
+  revision 1
 
   bottle do
-    sha256 arm64_sequoia: "fbc6c60828c5b08de909657354aa0ae4b61ed7016e16fe3cb0ba0202f761a163"
-    sha256 arm64_sonoma:  "4d82bc0d05b270c8d6b1aff58a8303b9eaaa694c4c6d99ffb3f980dd95a9ad6e"
-    sha256 arm64_ventura: "b639bb146a4e838d542810b16b2fe090b5223428d1d832e7bca6afdf0a976555"
-    sha256 sonoma:        "9820c413100a32e67e7efb0027a18b8a314eedd15dcd7fb6bb91b34c3fdef322"
-    sha256 ventura:       "12ef4bda287ca4dde510dbb1cee7ebddc8abdf8f2117fcc8f37cb23263d21015"
-    sha256 arm64_linux:   "50752547002571ba3b54aa3624e7ac74b8d3a514b9a23513c6c3e27336c6b64b"
-    sha256 x86_64_linux:  "a35b606e2aac03025965c0ac65a7894de48d6c1eb94e9786c60cc5ac3f9514db"
+    rebuild 1
+    sha256 arm64_tahoe:   "fe4dac40b0ef256e6b3d3b48e58b0c36d2ff75811d225fe8673918ee04c67f08"
+    sha256 arm64_sequoia: "e28cf1d51ca7872ec49817ad4967b1ef24805a6bb2035d02c7ab305be49ef337"
+    sha256 arm64_sonoma:  "79903cc215b1fb2c68623442d9ae69b5c9364cb6a1f1625d9c2fef4a9f43165e"
+    sha256 sonoma:        "dd6f0e3477b424a3502a3a6f285da3bc707952193eb8249c3a7e6edc9476094f"
+    sha256 arm64_linux:   "49d373ef0630a82d961b46621a5af8507567bec808573063895a204ae32fac0f"
+    sha256 x86_64_linux:  "33a68407a176c5fe8d5f345bcf24e53fcdf1e68309d973612c6f6261b35aab2b"
   end
 
   keg_only :versioned_formula
@@ -32,6 +21,7 @@ class MariadbAT105 < Formula
   # See: https://mariadb.com/kb/en/changes-improvements-in-mariadb-105/
   # End-of-life on 2025-06-24: https://mariadb.org/about/#maintenance-policy
   deprecate! date: "2025-06-24", because: :unsupported
+  disable! date: "2026-06-24", because: :unsupported
 
   depends_on "bison" => :build
   depends_on "cmake" => :build
@@ -52,10 +42,10 @@ class MariadbAT105 < Formula
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
   uses_from_macos "xz"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "linux-pam"
+    depends_on "zlib-ng-compat"
   end
 
   def install

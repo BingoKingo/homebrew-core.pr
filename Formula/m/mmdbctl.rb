@@ -1,18 +1,19 @@
 class Mmdbctl < Formula
   desc "MMDB file management CLI supporting various operations on MMDB database files"
   homepage "https://github.com/ipinfo/mmdbctl"
-  url "https://github.com/ipinfo/mmdbctl/archive/refs/tags/mmdbctl-1.4.7.tar.gz"
-  sha256 "b871a2d0ad556868ce9610cf819447fc38566aeace7a66294f00ab5544588a77"
+  url "https://github.com/ipinfo/mmdbctl/archive/refs/tags/mmdbctl-1.4.8.tar.gz"
+  sha256 "373154b545a9f940738868f7e2259c89803dc966646e7b8c599d26b703424d80"
   license "Apache-2.0"
   head "https://github.com/ipinfo/mmdbctl.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "32af5fb6ace4686dc1a624dadabb094be9c280f58fad3b10f892a452eeb415a5"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "32af5fb6ace4686dc1a624dadabb094be9c280f58fad3b10f892a452eeb415a5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "32af5fb6ace4686dc1a624dadabb094be9c280f58fad3b10f892a452eeb415a5"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8152bb594c50bfea37db1fce61244638710bada48c1cf4e25377018e6b80f9c0"
-    sha256 cellar: :any_skip_relocation, ventura:       "8152bb594c50bfea37db1fce61244638710bada48c1cf4e25377018e6b80f9c0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b989aa9b091f0af0fb337c856e4ea5ae1cf1ef09f20977f82b5c529d5bfa25d2"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "bb1d20f3c8c716938b346034fb20381b864ed7d6ac63ae6fc156b9eb38ad7fc6"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "bb1d20f3c8c716938b346034fb20381b864ed7d6ac63ae6fc156b9eb38ad7fc6"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bb1d20f3c8c716938b346034fb20381b864ed7d6ac63ae6fc156b9eb38ad7fc6"
+    sha256 cellar: :any_skip_relocation, sonoma:        "980000b0e67d53d0a6b6aedf2d665ee25a24400ea07ca4b5e0544dcd9dff81f7"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "01fec8071fa10233cc0465a6ce62a6f0870719502e89b517cf178073ca643016"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3af00b80cd2a68401e3df838b6d40bfbcdcf58b59f9f2c04eccb9144b61e17fd"
   end
 
   depends_on "go" => :build
@@ -20,7 +21,7 @@ class Mmdbctl < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w")
 
-    generate_completions_from_executable(bin/"mmdbctl", "completion")
+    generate_completions_from_executable(bin/"mmdbctl", shell_parameter_format: :cobra)
   end
 
   test do

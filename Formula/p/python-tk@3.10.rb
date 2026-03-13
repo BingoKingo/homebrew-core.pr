@@ -1,8 +1,8 @@
 class PythonTkAT310 < Formula
   desc "Python interface to Tcl/Tk"
   homepage "https://www.python.org/"
-  url "https://www.python.org/ftp/python/3.10.17/Python-3.10.17.tgz"
-  sha256 "8fcda0fbdc131859a4a4223abb925fd522a77e3fb3b52c46cea5f3bc2ae0cd9f"
+  url "https://www.python.org/ftp/python/3.10.20/Python-3.10.20.tgz"
+  sha256 "4ff5fd4c5bab803b935019f3e31d7219cebd6f870d00389cea53b88bbe935d1a"
   license "Python-2.0"
 
   livecheck do
@@ -10,16 +10,19 @@ class PythonTkAT310 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "4a01d642ccdc00918edf1d1d7b98ed2f16cfe51d33b7e71c32fec64563bb5879"
-    sha256 cellar: :any,                 arm64_sonoma:  "620622c1b79a62e6b44917024469937e773f99ac7c4f6386de3a1036e27ef749"
-    sha256 cellar: :any,                 arm64_ventura: "c6bc2fa3384949b69cfc44a4e3b0db03717e3ff319b06145ff2ce631ad66a1d9"
-    sha256 cellar: :any,                 sonoma:        "29de8774c5638894b20592447ca8812b0982c0eae4e2abaeda961223711f459f"
-    sha256 cellar: :any,                 ventura:       "26c2e7c3e1f958bc89a3bedbc6011aa20d8bfff502d8a88b973ff7363baae17c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d039a25172dfd16b51a49eb019a9710cf537255cf4f194d68b83e684ee067724"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2a8c2852664e43e4ea79488192dbd32d22aae7f9304c77d59f366ef57bbf891a"
+    sha256 cellar: :any,                 arm64_tahoe:   "c5b7ebf5aa4eee41ed74526a1f5df037f13bfa83f258f8b4fb7f3b30b3a31da8"
+    sha256 cellar: :any,                 arm64_sequoia: "a1ce7593863791c5787d9f763e8a3c137434c00f7bcda6c636dbe92c3d007b82"
+    sha256 cellar: :any,                 arm64_sonoma:  "3586decc40d9b1cfff773d46c7c29a3014f21f1fe641c96bd96462fd76ca2598"
+    sha256 cellar: :any,                 sonoma:        "8b510d6efa0411c1edf47448e6a25c619c0e5a6fd836a86dc7bb97f7b26da05b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7931159f029a33ee29f6bc71f0b3252ec32ce025285004a51111c5be5b70bcc7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c1e7c94c4c5f549a657817e444191f033cb8aa7e33e4398569b062a2b62bf89f"
   end
 
   keg_only :versioned_formula
+
+  # https://devguide.python.org/versions/#versions
+  deprecate! date: "2026-10-15", because: :deprecated_upstream
+  disable! date: "2027-10-15", because: :deprecated_upstream
 
   depends_on "python@3.10"
   depends_on "tcl-tk@8"

@@ -11,8 +11,11 @@ class Automysqlbackup < Formula
     regex(%r{url=.*?/automysqlbackup[._-]v?(\d+(?:\.\d+)+(?:[._-]?rc\d+)?)\.t}i)
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
     rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "47848e3272f89cc4d30787693b27799507fe8d7593d51b2586431e88eb92c6dc"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "eae5fa097a6796bd0aeb27e2a4026257d8b8a868263f292a693723c32404a0d3"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "eae5fa097a6796bd0aeb27e2a4026257d8b8a868263f292a693723c32404a0d3"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "eae5fa097a6796bd0aeb27e2a4026257d8b8a868263f292a693723c32404a0d3"
@@ -54,6 +57,6 @@ class Automysqlbackup < Formula
   end
 
   test do
-    system "#{sbin}/automysqlbackup", "--help"
+    system sbin/"automysqlbackup", "--help"
   end
 end

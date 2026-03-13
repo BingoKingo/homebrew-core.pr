@@ -1,12 +1,28 @@
 class ClickhouseOdbc < Formula
   desc "Official ODBC driver implementation for accessing ClickHouse as a data source"
   homepage "https://github.com/ClickHouse/clickhouse-odbc"
-  # Git modules are all for bundled libraries so can use tarball without them
-  url "https://github.com/ClickHouse/clickhouse-odbc/archive/refs/tags/v1.2.1.20220905.tar.gz"
-  sha256 "ca8666cbc7af9e5d4670cd05c9515152c34543e4f45e2bc8fa94bee90d724f1b"
   license "Apache-2.0"
-  revision 9
   head "https://github.com/ClickHouse/clickhouse-odbc.git", branch: "master"
+
+  stable do
+    # Git modules are all for bundled libraries so can use tarball without them
+    url "https://github.com/ClickHouse/clickhouse-odbc/archive/refs/tags/v1.5.3.20260311.tar.gz"
+    sha256 "bb9311b48ddcd499ed2222a72a07f168f3d4909bd77ec69a78c665784b81c1c1"
+
+    # TODO: Consider adding formula for https://github.com/nanodbc/nanodbc
+    resource "nanodbc" do
+      url "https://github.com/ClickHouse/nanodbc/archive/69a9376d033e1fcf483a08e2feb9f09399cf56b6.tar.gz"
+      version "69a9376d033e1fcf483a08e2feb9f09399cf56b6"
+      sha256 "898ecf9bb614d6275e29266960811c1642946cece1f79e50643fa8022789bf89"
+
+      livecheck do
+        url "https://api.github.com/repos/ClickHouse/clickhouse-odbc/contents/contrib/nanodbc?ref=v#{LATEST_VERSION}"
+        strategy :json do |json|
+          json["sha"]
+        end
+      end
+    end
+  end
 
   livecheck do
     url :stable
@@ -14,54 +30,54 @@ class ClickhouseOdbc < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "823b627489c0eb6132863b4801bbb35d72d0a0a94e6a05e1db727626d6610a97"
-    sha256 cellar: :any,                 arm64_sonoma:  "e3319686c6b8b190cac07657b005815d52b5e9ae2cdce502dc0547b2beec2d33"
-    sha256 cellar: :any,                 arm64_ventura: "fd57a1b662562034e4438ef7a3f504a13b9bb41fd1fdf0fba65881457c3dbad9"
-    sha256 cellar: :any,                 sonoma:        "9e6d19fe3f32091196b620af7a2505a67e1bff07af8379a328f98e99ae5f8c6e"
-    sha256 cellar: :any,                 ventura:       "b05b85f7872bdea82c386d7f6f8a865237e6691539f9f7fa51d0b91513fabde0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "83be34ed8d3397d1b48962b0c5584093442d667208061fab3f699401d943f580"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6d8fcd33563bd470e0c3642123a9be187196aa6678061134a4590d4679e841a1"
+    sha256 cellar: :any,                 arm64_tahoe:   "1df9cf15a855b47086b80a385370b3ef22f14774e00ed0331e3c88a8a8903644"
+    sha256 cellar: :any,                 arm64_sequoia: "147b475605d4ac0c15f1771dbb69288166cfafbe62e63b99615981d28daaf21c"
+    sha256 cellar: :any,                 arm64_sonoma:  "17447a50428f93393df7a4323e833e1ce764de04080dd308dc89a5756b241b2c"
+    sha256 cellar: :any,                 sonoma:        "21214053e2d879a639eda76e026496a4124f96ac232989d135839ff518f60425"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3da5879f8430d83a25b9d32ddb1996f311088f8f0bc04cde08c4114c443a76a7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3c2c3d6cfa04a1e0fc9c6ce0d34a3dd6d59ded916928aa0be17d33b4b407fbf1"
   end
 
   depends_on "cmake" => :build
   depends_on "folly" => :build
-  depends_on "pkgconf" => :build
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "openssl@3"
   depends_on "poco"
-  depends_on "utf8proc"
-
-  on_macos do
-    depends_on "libiodbc"
-    depends_on "pcre2"
-  end
-
-  on_linux do
-    depends_on "unixodbc"
-  end
-
-  # build patch for utf8proc, no needed for newer version, as folly got removed per https://github.com/ClickHouse/clickhouse-odbc/pull/456
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/c76519fcbfa664cd37a8901deb76403b1af1bec1/clickhouse-odbc/1.2.1.20220905-Utf8Proc.patch"
-    sha256 "29f3aeaa05609d53b942903868cb52ddcfcb3b35d32e8075d152cd2ca0ff5242"
-  end
+  depends_on "unixodbc"
 
   def install
-    # Remove bundled libraries
-    %w[folly googletest nanodbc poco ssl].each { |l| rm_r(buildpath/"contrib"/l) }
+    resource("nanodbc").stage("contrib/nanodbc")
 
-    icu4c_dep = deps.find { |dep| dep.name.match?(/^icu4c(@\d+)?$/) }
-    args = %W[
+    # Avoid trying to build LLVM libc++ and libunwind
+    inreplace "cmake/linux/default_libs.cmake" do |s|
+      s.gsub! "include (cmake/cxx.cmake)", ""
+      s.gsub! "include (cmake/unwind.cmake)", ""
+    end
+
+    # Unbundle dependencies
+    inreplace "CMakeLists.txt" do |s|
+      s.gsub! "add_subdirectory(contrib/poco)", ""
+      s.gsub! "add_subdirectory (contrib EXCLUDE_FROM_ALL)", <<~CMAKE
+        find_package(ICU REQUIRED COMPONENTS i18n uc data)
+        add_library(_icu INTERFACE)
+        target_link_libraries(_icu INTERFACE ICU::i18n ICU::uc ICU::data)
+        add_library(ch_contrib::icu ALIAS _icu)
+
+        find_package(ODBC REQUIRED)
+        add_library(ch_contrib::unixodbc ALIAS ODBC::Driver)
+
+        find_package(Poco REQUIRED Net NetSSL Util)
+        add_library(Poco::Net::SSL ALIAS Poco::NetSSL)
+
+        \\0
+      CMAKE
+    end
+
+    args = %w[
       -DCH_ODBC_PREFER_BUNDLED_THIRD_PARTIES=OFF
       -DCH_ODBC_THIRD_PARTY_LINK_STATIC=OFF
-      -DICU_ROOT=#{icu4c_dep.to_formula.opt_prefix}
-      -DOPENSSL_ROOT_DIR=#{Formula["openssl@3"].opt_prefix}
+      -DODBC_PROVIDER=UnixODBC
     ]
-    args += if OS.mac?
-      ["-DODBC_PROVIDER=iODBC", "-DODBC_DIR=#{Formula["libiodbc"].opt_prefix}"]
-    else
-      ["-DODBC_PROVIDER=UnixODBC", "-DODBC_DIR=#{Formula["unixodbc"].opt_prefix}"]
-    end
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
@@ -107,20 +123,10 @@ class ClickhouseOdbc < Formula
     ENV["ODBCINSTINI"] = "my.odbcinst.ini"
     ENV["ODBCINI"] = "#{ENV["ODBCSYSINI"]}/my.odbc.ini"
 
-    if OS.mac?
-      ENV["ODBCINSTINI"] = "#{ENV["ODBCSYSINI"]}/#{ENV["ODBCINSTINI"]}"
+    assert_match "Connected!",
+      pipe_output("#{Formula["unixodbc"].bin}/isql 'ClickHouse ODBC Test DSN A'", "quit\n")
 
-      assert_match "SQL>",
-        pipe_output("#{Formula["libiodbc"].bin}/iodbctest 'DSN=ClickHouse ODBC Test DSN A'", "exit\n")
-
-      assert_match "SQL>",
-        pipe_output("#{Formula["libiodbc"].bin}/iodbctestw 'DSN=ClickHouse ODBC Test DSN W'", "exit\n")
-    elsif OS.linux?
-      assert_match "Connected!",
-        pipe_output("#{Formula["unixodbc"].bin}/isql 'ClickHouse ODBC Test DSN A'", "quit\n")
-
-      assert_match "Connected!",
-        pipe_output("#{Formula["unixodbc"].bin}/iusql 'ClickHouse ODBC Test DSN W'", "quit\n")
-    end
+    assert_match "Connected!",
+      pipe_output("#{Formula["unixodbc"].bin}/iusql 'ClickHouse ODBC Test DSN W'", "quit\n")
   end
 end

@@ -1,8 +1,8 @@
 class Neo4j < Formula
   desc "Robust (fully ACID) transactional property graph database"
   homepage "https://neo4j.com/"
-  url "https://neo4j.com/artifact.php?name=neo4j-community-2025.05.0-unix.tar.gz"
-  sha256 "561f985e6355e98cf6f2b4f106599bfceb27a5adeffdc0856c71a2c5bb008f68"
+  url "https://neo4j.com/artifact.php?name=neo4j-community-2026.02.2-unix.tar.gz"
+  sha256 "4e95626e21348a30109799a44639c2169bc24e27e1a1371972ff2583c3d8493c"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -12,17 +12,14 @@ class Neo4j < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "13b2e6e54ec4ec8ed1413e1edf5a5546e9cee812228b44cf0a24c70668b4b6d7"
+    sha256 cellar: :any_skip_relocation, all: "8a1435d95de5978a06dd506b20e9cbb38e8638baeb36d57c5b096c1c3550e038"
   end
 
   depends_on "cypher-shell"
   depends_on "openjdk@21"
 
   def install
-    env = {
-      JAVA_HOME:  Formula["openjdk@21"].opt_prefix,
-      NEO4J_HOME: libexec,
-    }
+    env = Language::Java.java_home_env("21").merge(NEO4J_HOME: libexec)
     # Remove windows files
     rm(Dir["bin/*.bat"])
 
@@ -30,8 +27,6 @@ class Neo4j < Formula
     libexec.install Dir["*"]
 
     bash_completion.install (libexec/"bin/completion").children
-    # Ensure uniform bottles by replacing comments that reference `/usr/local`.
-    inreplace bash_completion.children, "/usr/local", HOMEBREW_PREFIX
     rm_r libexec/"bin/completion"
 
     # Symlink binaries
@@ -45,9 +40,7 @@ class Neo4j < Formula
       server.directories.data=#{var}/neo4j/data
       server.directories.logs=#{var}/log/neo4j
     EOS
-  end
 
-  def post_install
     (var/"log/neo4j").mkpath
     (var/"neo4j").mkpath
   end
@@ -55,7 +48,7 @@ class Neo4j < Formula
   service do
     run [opt_bin/"neo4j", "console"]
     keep_alive false
-    working_dir var
+    working_dir var/"neo4j"
     log_path var/"log/neo4j.log"
     error_log_path var/"log/neo4j.log"
   end

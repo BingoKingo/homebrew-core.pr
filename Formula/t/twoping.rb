@@ -3,25 +3,26 @@ class Twoping < Formula
 
   desc "Ping utility to determine directional packet loss"
   homepage "https://www.finnie.org/software/2ping/"
-  url "https://www.finnie.org/software/2ping/2ping-4.5.1.tar.gz"
-  sha256 "b56beb1b7da1ab23faa6d28462bcab9785021011b3df004d5d3c8a97ed7d70d8"
+  url "https://www.finnie.org/software/2ping/2ping-4.6.1.tar.gz"
+  sha256 "c8352b6653c3194af1f869107655df3f98ab18b560e8bce86eabac08d73c72eb"
   license "MPL-2.0"
-  revision 1
   head "https://github.com/rfinnie/2ping.git", branch: "main"
 
   bottle do
-    rebuild 5
-    sha256 cellar: :any_skip_relocation, all: "5153c17a69826ba8fa3274c858acc3c608cf7b9208fa683043fcda9bed6311c1"
+    sha256 cellar: :any_skip_relocation, all: "dffea297eab0918d416048efafdfb69f32c7d1f56b740a1455d80853b8755550"
   end
 
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   def install
     virtualenv_install_with_resources
 
     man1.install "doc/2ping.1"
     man1.install_symlink "2ping.1" => "2ping6.1"
-    bash_completion.install "2ping.bash_completion" => "2ping"
+    # Upstream removed the sample bash completion script in v4.6:
+    # https://github.com/rfinnie/2ping/commit/e5f62bbc412b6f1bb14c4139a1dbcb97c32b5c81
+    # Downstream guidance is tracked in:
+    # https://github.com/rfinnie/2ping/issues/10
   end
 
   service do

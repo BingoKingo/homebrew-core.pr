@@ -1,17 +1,18 @@
 class Fcrackzip < Formula
   desc "Zip password cracker"
-  homepage "http://oldhome.schmorp.de/marc/fcrackzip.html"
-  url "http://oldhome.schmorp.de/marc/data/fcrackzip-1.0.tar.gz"
+  homepage "https://oldhome.schmorp.de/marc/fcrackzip.html"
+  url "https://oldhome.schmorp.de/marc/data/fcrackzip-1.0.tar.gz"
   sha256 "4a58c8cb98177514ba17ee30d28d4927918bf0bdc3c94d260adfee44d2d43850"
   license "GPL-2.0-or-later"
 
   livecheck do
-    url "http://oldhome.schmorp.de/marc/data/"
+    url "https://oldhome.schmorp.de/marc/data/"
     regex(/href=.*?fcrackzip[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
     rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:    "7c9ec0de20570467b787bfe40641aad62b1c0426f8d8441491d169f255daeac2"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:  "5e8664e8c1bc24e41f3d6c16b32eec831c057d13c191245d0d9d726709a23cb5"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:   "700f97b777acb4ab39338dc9b973e5ab40ffee93835841df970a6a392a17e6b7"
     sha256 cellar: :any_skip_relocation, arm64_ventura:  "f647bed7b093952f1bb75429f8f7f00105d0468c7d6b5648db46d8b1ea39c190"

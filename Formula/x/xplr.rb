@@ -1,19 +1,18 @@
 class Xplr < Formula
   desc "Hackable, minimal, fast TUI file explorer"
   homepage "https://github.com/sayanarijit/xplr"
-  url "https://github.com/sayanarijit/xplr/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "72e9b53552b4fce61805c32c739d8d7db4723f80b4586c9eb5e9921e1ae32ce0"
+  url "https://github.com/sayanarijit/xplr/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "7948683c546fdf374f6bec7855726cf4e3f1bc4abf1c2a292cbdfa6ff16f6143"
   license "MIT"
   head "https://github.com/sayanarijit/xplr.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "d0e94ec68f4de399d20267cb847e859594ad550edceb378797fa005eda5fba5d"
-    sha256 cellar: :any,                 arm64_sonoma:  "8d14184eb28e3c9e4aad281d8bd86bdaefc76f1ccc9153e97211b3cf71b3e604"
-    sha256 cellar: :any,                 arm64_ventura: "7629449d18d25d39455dcff74f2746c8531292f709116dad4701673627039a65"
-    sha256 cellar: :any,                 sonoma:        "11b427f5313b5a86ae5007553903eb1702f3f73cecfd33f044a79c64a79a2fbc"
-    sha256 cellar: :any,                 ventura:       "255db6ba076943720b3500a46d51e9985c1abe09095edb74d13e8a90c746fbe7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f8b97ff3140ef328d4dc330c7082c1d0bffdb61555d04aaef779fac7552da2f3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5fb6dcaa884f339e2b63da4a7b1284f8619e778f32eb459c09f6bb56a761da57"
+    sha256 cellar: :any,                 arm64_tahoe:   "81fd46b952f4e77c21f80a2ed0846d6eab2f427448b6c419968e035134cebc45"
+    sha256 cellar: :any,                 arm64_sequoia: "d45b3241a18aa1600ac9f7a28e91aeddd802c0276c5e60c684a83e5df7d84248"
+    sha256 cellar: :any,                 arm64_sonoma:  "3ebef346bbdf33d58fee01f749fbc82cf3da11815573df193baaef401d8071ce"
+    sha256 cellar: :any,                 sonoma:        "3d3e87f43f39d456b01d425f102d4cdc6e775c131b515a7d8e2571a00be46d75"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "eb602d89f46080d0da072cdc9496fb9e150c86aa15bc8defe3aff9cab9ef887f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "580c25a69c5e025bc2ca4c26a6c9ceb0344ddbef285d87589d3df58d7a221b4c"
   end
 
   depends_on "pkgconf" => :build

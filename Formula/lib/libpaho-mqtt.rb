@@ -1,18 +1,17 @@
 class LibpahoMqtt < Formula
   desc "Eclipse Paho C client library for MQTT"
   homepage "https://eclipse-paho.github.io/paho.mqtt.c/MQTTClient/html/"
-  url "https://github.com/eclipse-paho/paho.mqtt.c/archive/refs/tags/v1.3.14.tar.gz"
-  sha256 "7af7d906e60a696a80f1b7c2bd7d6eb164aaad908ff4c40c3332ac2006d07346"
+  url "https://github.com/eclipse-paho/paho.mqtt.c/archive/refs/tags/v1.3.16.tar.gz"
+  sha256 "8b960f51edc7e03507637d987882bc486d8f4be6e79431bf99e2763344fd14c5"
   license "EPL-2.0"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "d55229a93fe81c43dcde42d0e91a30560f59706fbcafaf498f89dd7fce239f90"
-    sha256 cellar: :any,                 arm64_sonoma:  "863dc484fc7e89fb897247383508a65671150dc19658c77a4d5ae845741ecdcd"
-    sha256 cellar: :any,                 arm64_ventura: "157eb3c732c87b9076c20ddf800a2a2f715411a1f740655efc12b62b00d17e33"
-    sha256 cellar: :any,                 sonoma:        "58a80e95499276f4aba24dbe00ea4db55488018d3d36a3a20b65f52b6df7e0e1"
-    sha256 cellar: :any,                 ventura:       "c21e0cee9e3dfe56df0fad42da8ec929b22bdccbc486ec234413b1af62642864"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ec8c25b958082700fff41cbdd68dd824d443563e6836c9e9bde0adbdce4b2817"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "411c4aadc6df1cb439016386644145a4f2bd412282dda6b3ab4b52b111632f54"
+    sha256 cellar: :any,                 arm64_tahoe:   "16433282b65e480ba201c3d7be20a04f9a467df60ca0dd8656759edbb3be7b58"
+    sha256 cellar: :any,                 arm64_sequoia: "b96324bc57c2bdb2e2dde3b4179f240c9474dad0e0421f33a32c845cba22c4af"
+    sha256 cellar: :any,                 arm64_sonoma:  "2aa9e33c14b99b5ab12843a7ff761d09a2fb21053727c8278648f4c5ac8ffb8b"
+    sha256 cellar: :any,                 sonoma:        "93be86edbcb744aca1ba39596adf2a4f0e461dfb8be17f273d8e342306278770"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "edfda6f2d2cbc26452874c4f12234ca9e188f7be4e8c4052447463b5e5ea7a96"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0f742ea550c8656fa6e967dd1a444acce319272b57e42649f54781508b3fa398"
   end
 
   depends_on "cmake" => :build

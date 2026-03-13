@@ -1,13 +1,13 @@
 class Nifi < Formula
   desc "Easy to use, powerful, and reliable system to process and distribute data"
   homepage "https://nifi.apache.org"
-  url "https://www.apache.org/dyn/closer.lua?path=/nifi/2.4.0/nifi-2.4.0-bin.zip"
-  mirror "https://archive.apache.org/dist/nifi/2.4.0/nifi-2.4.0-bin.zip"
-  sha256 "3937c5b1a6fbd28be4b2aab5b588d19993b8d2a416970f18a81d5fe2e330550f"
+  url "https://www.apache.org/dyn/closer.lua?path=/nifi/2.8.0/nifi-2.8.0-bin.zip"
+  mirror "https://archive.apache.org/dist/nifi/2.8.0/nifi-2.8.0-bin.zip"
+  sha256 "ffbca25d383454eb67af04330f1dce464af244addf0c604b91556f54f9ddadd7"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "28c357c40be403487a5eac16e68d4810906a75c76290628b6a9f57ad86b4c943"
+    sha256 cellar: :any_skip_relocation, all: "7f378f643fdce80e5748668aea070f67e1b813282727b24f598a37969947b046"
   end
 
   depends_on "openjdk@21"
@@ -17,9 +17,6 @@ class Nifi < Formula
 
     (bin/"nifi").write_env_script libexec/"bin/nifi.sh",
                                   Language::Java.overridable_java_home_env("21").merge(NIFI_HOME: libexec)
-
-    # ensure uniform bottles
-    inreplace libexec/"python/framework/py4j/java_gateway.py", "/usr/local", HOMEBREW_PREFIX
   end
 
   test do

@@ -1,20 +1,18 @@
 class Pastel < Formula
   desc "Command-line tool to generate, analyze, convert and manipulate colors"
   homepage "https://github.com/sharkdp/pastel"
-  url "https://github.com/sharkdp/pastel/archive/refs/tags/v0.10.0.tar.gz"
-  sha256 "7848cd6d2ad8db6543b609dece7c9c28b4720c09fb13aeb204dd03d152159dd2"
+  url "https://github.com/sharkdp/pastel/archive/refs/tags/v0.12.0.tar.gz"
+  sha256 "2903853f24d742fe955edd9bea17947eb8f3f44000a8ac528d16f2ea1e52b78b"
   license any_of: ["Apache-2.0", "MIT"]
   head "https://github.com/sharkdp/pastel.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e812865926cc13b1568b5d4b1e201d2beb9266a4c4c9c8e3ea484b258938061b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "15d534aa1d21c0f2b1a5ef082a24e7ef5ab01d43cc2019e9ac69a1abf0bd050e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "57803257b4273b72d306b3a75e8a9caa5187a693a67f62f5044d30f646d8021f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b735957971ed222ad72bf9e6e2aa6da522ec06840667ae398e7d5ff1e38c26f2"
-    sha256 cellar: :any_skip_relocation, ventura:       "6a0219597bb7b66fac01792cf31430bccc9fc9491f778d34f7c7885ea48013a9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "96bb15eb536e16cd183a3482fb3873ee1297fd9a316a1e60ff20152247fa894d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8ed39ba06bbc613002a222b647bb81c1280e3630e89c6944bf8758b78216ee5f"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "89d06442647a10897cd8bc0bbe66f4d30ab81783a4621318bf1bacd4fdba2173"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "72f9eefc623c703f761ede7bc3788e58af4ef92faefae6afbf546825d33d1e36"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7c8f2b3d8d4a73b155605cd3afea957b8f8be6cd0a32c70a2e73e9d222825a7f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0fed916e4b23ebd294469b3f91eba4e4bb15732c91a5a3f90ebb3e0b10071d77"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "fc2150ac3309e6c8bc38cc52447438a45a5ae94b397fa11299887cc017cdc085"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "81d7d99fd7882266f0151351968c4a34ced4697258db1ca0860d5674af052154"
   end
 
   depends_on "rust" => :build

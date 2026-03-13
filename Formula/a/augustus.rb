@@ -4,25 +4,28 @@ class Augustus < Formula
   url "https://github.com/Gaius-Augustus/Augustus/archive/refs/tags/v3.5.0.tar.gz"
   sha256 "5ed6ce6106303b800c5e91d37a250baff43b20824657b853ae04d11ad8bdd686"
   license "Artistic-1.0"
-  revision 10
+  revision 12
   head "https://github.com/Gaius-Augustus/Augustus.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "f47cdb45ef4200baba259b2121c4ff8a891718d1fdb05d2dde50bf05cff4c6e9"
-    sha256 cellar: :any,                 arm64_sonoma:  "f1aebc2cc4d9edea554a9d6c8d97fe7a9cc1c5472f4fce02a52ef24bdafb39b3"
-    sha256 cellar: :any,                 arm64_ventura: "c1ca454de2e8c22ba3bf665bbeaaaf817bcfeab300cc0bb4c554304d7438e80c"
-    sha256 cellar: :any,                 sonoma:        "a90a9c0bc0d71ea9e05ac892b70674c96761a58cd7de65d9c1faf88da530019b"
-    sha256 cellar: :any,                 ventura:       "66bb31467b3216cf1f87dd1dde80d276a32efc9e66b20e1bc7c06874fc3b77c3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b8ba8fa93a2f0295ca879dc553cf209e47f831519aad7d7aa45a7423eb77d8cf"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ac23536a2d77a19a651f49b26ff56382cbc3c9b535b1ce015831375165548dfa"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "6fb256fa27a7d7406a7c9d24c4430f62195b2ecaf6af40a0d0169457368d315e"
+    sha256 cellar: :any,                 arm64_sequoia: "7d3013ce2953816508ecacd0c17c4de3b4e82dc5446065261e6102be55ec40cd"
+    sha256 cellar: :any,                 arm64_sonoma:  "1edf24cdb462f94ca203a06f647528dcf751b2cc9df3d7a7ff1e9218d4a895f4"
+    sha256 cellar: :any,                 sonoma:        "5f447d39caacea7d384d9eba20dcfeeb1b860d0a7547e66d1a85f7956b924631"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "49800030d9a1c940f8e41aab80d1710bcb11805d26083bc72782e2b69f414629"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "473fb7831cc994c642bd11d7b873ac7e46e9b0640784ecae596dd5020c1762d4"
   end
 
   depends_on "bamtools"
   depends_on "boost"
   depends_on "htslib"
 
-  uses_from_macos "python" => :build, since: :catalina
-  uses_from_macos "zlib"
+  uses_from_macos "python" => :build
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # Compile executables for macOS. Tarball ships with executables for Linux.

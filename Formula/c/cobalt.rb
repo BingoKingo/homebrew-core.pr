@@ -1,18 +1,17 @@
 class Cobalt < Formula
   desc "Static site generator written in Rust"
   homepage "https://cobalt-org.github.io/"
-  url "https://github.com/cobalt-org/cobalt.rs/archive/refs/tags/v0.20.0.tar.gz"
-  sha256 "a425be77478230b25f5c64431e82633a35d03dd6719bf740e4ae6624a69ffca1"
+  url "https://github.com/cobalt-org/cobalt.rs/archive/refs/tags/v0.20.4.tar.gz"
+  sha256 "0e3b8f23b23f0cd488399b0c13f08eadf9d7fca5bb52fef433fc075fbd050c39"
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7905ef78bb3e756be2089f0bf7957d77349548ca9252c023d47934b73ac990c0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3e49c03ac7d5cbd1b84aeaa2d00853edcebb901e5d2586abc9324f0f850ee0d7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "2c22c2fe56beb9508ea4a8b17fde0b753d5e280cf7f9a6ed8f472fae0a3e2d79"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4dd697c918d2ddeba21001a1137c4757000f61d608aea6fb6790dc580f24e0a3"
-    sha256 cellar: :any_skip_relocation, ventura:       "07b06d6fa5007b9218cb3ac94bf33b70ac2ba1b277c77319570b1ec4964d8477"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "302f4c25808c4f96f28439a3dbc27527f72864038387a7a6cf7a26d52018e897"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fe587ed78c7928e4d6d07b5943addebf8805f0818fa12f4aaacf2d972ea2db55"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7f3e66329a31b4bd2cfc2c4104c33fa18c8e3d29b8e31ec8bacddc433e9eeee3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "366acaee9d6f099ef35c78f4c343ed150462a46907c1b29e66f83d295c3b6ded"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bce9ba78d6061d536289c6fdb642642bea584f03cc011e475d4cf1f27b6049e8"
+    sha256 cellar: :any_skip_relocation, sonoma:        "f8421b9bc3aade05d10ea0744ca9cf2b4696ff85283a7e1b5eaeecccba431a74"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "addedad1239ca5cf0bfc4d65199d26c33f980041407d0f1fb64c0fc63b06d91c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6e75ee3e155b750a00833882cef7a966a3d02feabeb8ab965fa8091af6e7b808"
   end
 
   depends_on "rust" => :build

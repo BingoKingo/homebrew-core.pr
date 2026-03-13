@@ -7,25 +7,29 @@ class BoostAT185 < Formula
   revision 3
 
   bottle do
-    sha256                               arm64_sequoia: "0d57280eb03360e23f3693d33604711f5912a47c6400fbcf7a78ce4829d35db6"
-    sha256                               arm64_sonoma:  "a4d8d3af279e68a17a5d177dfbb716757d59b91448ba82dc8c015bc8749b6e0c"
-    sha256                               arm64_ventura: "c60cdfef891f2f447509c8a460db5fd1b16e07111c7169457044eaa46674c9f3"
-    sha256 cellar: :any,                 sonoma:        "21d45293e2b2ded9f5ac1c8bfa04867fd0e5d02f15911aa24e73a69665968d69"
-    sha256 cellar: :any,                 ventura:       "834cb3ac5b69ae8a4768e2e1773798d7a1ae01aadb761a9e737ff84b8d07a837"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c7fd2dc979f3b442f80669bfbb081f05eae3bfa4dd12fa46d21594154104600f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1afa1ddd0506aa3991d3e6b86941fb066fae250feecc9adeaad82780efac55da"
+    rebuild 2
+    sha256                               arm64_tahoe:   "8ebc8c02aee17d821fb71e08dc2df9cece6f9c27920a08afb77e987949cd6a9f"
+    sha256                               arm64_sequoia: "86f1d77d5e7aaf72aea541bfe5b3846ecd7ecba66c810eba4282a96ec5365598"
+    sha256                               arm64_sonoma:  "fe46b68ddc038313a967ed74ea32daf49dc247bc42cf552ff89f7f62bb444510"
+    sha256 cellar: :any,                 sonoma:        "770617eb0d409303c0b96cb73abfcfb1af7ab6397ef3f0d69f6d031e51d48c6a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7bb9de4627dfb79f061a64bee88fbd9123ea114caa362ee91b6c1ef94af57fcb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c3733808e2e612773e6c06b8fd75777c98f1c3acbd831de85c600e64a1582a30"
   end
 
   keg_only :versioned_formula
 
   deprecate! date: "2025-04-05", because: :versioned_formula
+  disable! date: "2026-04-05", because: :versioned_formula
 
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "xz"
   depends_on "zstd"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # Force boost to compile with the desired compiler

@@ -1,18 +1,17 @@
 class DuoUnix < Formula
   desc "Two-factor authentication for SSH"
   homepage "https://www.duosecurity.com/docs/duounix"
-  url "https://github.com/duosecurity/duo_unix/archive/refs/tags/duo_unix-2.1.0.tar.gz"
-  sha256 "29666b135d577c91f2a89730e18808d98c3a5c75a462dd3181fdc0cec5ae72c1"
+  url "https://github.com/duosecurity/duo_unix/archive/refs/tags/duo_unix-2.2.3.tar.gz"
+  sha256 "53e57e2471978851b7d7e3d0b479ce8d8e68fff1298cb2e597106f0c57ff22ff"
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 arm64_sequoia: "1cd758e3427dfaa7a1a2a284ce476934f234a52351d0d3af9b7d3689c2d49383"
-    sha256 arm64_sonoma:  "5b082a4d6c08755254f63997bc37a1a1777bcc22b358740b3db075215213ca1d"
-    sha256 arm64_ventura: "f249c95d4e3e81555b2e84eca807456f5ad25551b04ba6a8b438da1f9bfbf561"
-    sha256 sonoma:        "8645ee577645d4d7b28304df06edb5d1477ec20ed1fa1ef1133c06f20b289745"
-    sha256 ventura:       "9991909cb62c285d217000dcd1c00b633e1ed96fa9cb1cd0cde69af40ac70af8"
-    sha256 arm64_linux:   "f29d7f096f966eb543b0d727afdee0812996cc1accbbc9c681d990bc0644876b"
-    sha256 x86_64_linux:  "b60c4758d2786248237e8c94f022c80479bfe45c22f65c62180145f0f091a880"
+    sha256               arm64_tahoe:   "76285c5a46ff71f3d834c49b7c4ecc96daa7141c03a272c62b56e8be8de28e18"
+    sha256               arm64_sequoia: "4d4ad2acc77052130723256349822836d7046ade8c8759753ce5c6ce12aa4d81"
+    sha256               arm64_sonoma:  "ed3201349e3aa724d05e121ea58643c7a272eb5705ac3c68802b05f784e82e9d"
+    sha256 cellar: :any, sonoma:        "dc2def25dde741ed3a88deb37d6b864079f21e0c59a94d56a248e754c5336cb6"
+    sha256               arm64_linux:   "dde0bca5fbf5c159f16571f85545240787e67b156eab72b148c9d89a076e28e8"
+    sha256               x86_64_linux:  "e6b732ccd3f10ab695925616ef0b031454eec757e5b9fe7c2d854254f30db884"
   end
 
   depends_on "autoconf" => :build
@@ -38,7 +37,7 @@ class DuoUnix < Formula
   end
 
   test do
-    system "#{sbin}/login_duo", "-d", "-c", "#{etc}/login_duo.conf",
-                                "-f", "foobar", "echo", "SUCCESS"
+    system sbin/"login_duo", "-d", "-c", "#{etc}/login_duo.conf",
+                             "-f", "foobar", "echo", "SUCCESS"
   end
 end

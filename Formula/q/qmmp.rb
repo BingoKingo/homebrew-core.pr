@@ -1,25 +1,27 @@
 class Qmmp < Formula
   desc "Qt-based Multimedia Player"
   homepage "https://qmmp.ylsoftware.com/"
-  url "https://qmmp.ylsoftware.com/files/qmmp/2.2/qmmp-2.2.6.tar.bz2"
-  sha256 "270eca6fd728d9a0bc7f19e94e0e0e1f6a3c44dade648dffa58a0dbb7396cb4b"
+  url "https://qmmp.ylsoftware.com/files/qmmp/2.3/qmmp-2.3.1.tar.bz2"
+  sha256 "a61d1c1faa9c411c75292a5710999182b918831b8f0f200c87149e3ff353bea9"
   license "GPL-2.0-or-later"
-
+  revision 1
   livecheck do
     url "https://qmmp.ylsoftware.com/downloads.php"
     regex(/href=.*?qmmp[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "e0abc143771291b8281fa0a707532a871758df2b2d45181e8774a6575d957799"
-    sha256 cellar: :any,                 arm64_ventura: "dd805083638e6deef16d2eda280c7fda4007c0c0f3ba2318de1677bee3267421"
-    sha256 cellar: :any,                 sonoma:        "4ce82db5c1b1a28e4af3487920d72d3e4a6634e55df3b2cc90b62b59ba2651dc"
-    sha256 cellar: :any,                 ventura:       "296144784c048def7c715310da50a8ae0c4cbaf610f00ece201577bcc0aa9b10"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "50f977ff70a93525433229b540ce97f95ddf2f9571febcbd611152d9f9537705"
+    sha256 cellar: :any,                 arm64_tahoe:   "325c1290350157b642ffbd3571937e81e8c2baff0a48930a3303c9831f79f857"
+    sha256 cellar: :any,                 arm64_sequoia: "4d5a4086a5587a7eee245b3394da3bef3f0fbc46ae46f927f83e0e4a10297478"
+    sha256 cellar: :any,                 arm64_sonoma:  "09462312d1c684873aed7d297e0681a38c81081f55f37e95205ca08b1f5e783a"
+    sha256 cellar: :any,                 sonoma:        "fb2823cea55e2f56de666f0dc2f636646124cdca8e2ec6c379b5be86754c20f1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2ee446b2d6e0bb504d563a00cfdac8bc212bb50c188e92861bb296745da082d7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "93e249d6775b45f06d7e24053e57f8263ca2389c67a491ccff2ef9b9cce22dc3"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
+  depends_on "qttools" => :build
 
   # TODO: on linux: pipewire
   depends_on "faad2"
@@ -31,6 +33,7 @@ class Qmmp < Formula
   depends_on "libbs2b"
   depends_on "libcddb"
   depends_on "libcdio"
+  depends_on "libcdio-paranoia"
   depends_on "libmms"
   depends_on "libmodplug"
   depends_on "libogg"
@@ -39,7 +42,6 @@ class Qmmp < Formula
   depends_on "libsndfile"
   depends_on "libsoxr"
   depends_on "libvorbis"
-  depends_on "libxcb"
   depends_on "libxmp"
   depends_on "mad"
   depends_on "mpg123"
@@ -49,7 +51,8 @@ class Qmmp < Formula
   depends_on "opusfile"
   depends_on "projectm"
   depends_on "pulseaudio"
-  depends_on "qt"
+  depends_on "qtbase"
+  depends_on "qtmultimedia"
   depends_on "taglib"
   depends_on "wavpack"
   depends_on "wildmidi"
@@ -64,12 +67,13 @@ class Qmmp < Formula
   on_linux do
     depends_on "alsa-lib"
     depends_on "libx11"
+    depends_on "libxcb"
     depends_on "mesa"
   end
 
   resource "qmmp-plugin-pack" do
-    url "https://qmmp.ylsoftware.com/files/qmmp-plugin-pack/2.2/qmmp-plugin-pack-2.2.2.tar.bz2"
-    sha256 "0e85c8290b49aceddb7a52f9452d9c0c008539b6fba4ab2296b59a67d0b0846b"
+    url "https://qmmp.ylsoftware.com/files/qmmp-plugin-pack/2.3/qmmp-plugin-pack-2.3.0.tar.bz2"
+    sha256 "a23c202f90faaf6aebb97a9c02ee21fb3c8164b07755514349ccb3e1acb81ab5"
 
     livecheck do
       url "https://qmmp.ylsoftware.com/plugins.php"
@@ -78,8 +82,9 @@ class Qmmp < Formula
   end
 
   def install
+    rpaths = [rpath, "#{loader_path}/../.."]
     cmake_args = %W[
-      -DCMAKE_INSTALL_RPATH=#{rpath}
+      -DCMAKE_INSTALL_RPATH=#{rpaths.join(";")}
       -DCMAKE_STAGING_PREFIX=#{prefix}
       -DUSE_SKINNED=ON
       -DUSE_ENCA=ON
@@ -97,7 +102,7 @@ class Qmmp < Formula
 
     ENV.append_path "PKG_CONFIG_PATH", lib/"pkgconfig"
     resource("qmmp-plugin-pack").stage do
-      system "cmake", "-S", ".", "-B", "build", "-DCMAKE_INSTALL_RPATH=#{rpath}", *std_cmake_args
+      system "cmake", "-S", ".", "-B", "build", "-DCMAKE_INSTALL_RPATH=#{rpaths.join(";")}", *std_cmake_args
       system "cmake", "--build", "build"
       system "cmake", "--install", "build"
     end

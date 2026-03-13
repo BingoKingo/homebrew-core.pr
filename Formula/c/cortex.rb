@@ -1,8 +1,8 @@
 class Cortex < Formula
   desc "Long term storage for Prometheus"
   homepage "https://cortexmetrics.io/"
-  url "https://github.com/cortexproject/cortex/archive/refs/tags/v1.19.0.tar.gz"
-  sha256 "7cb6b312f67263e40fef3a99afb7d12bce69fe035e7b787b9c1efb4bf7a693bc"
+  url "https://github.com/cortexproject/cortex/archive/refs/tags/v1.20.1.tar.gz"
+  sha256 "606c4b3b2c25b2e339a53bb4d103dc31417742acbf078c4bb2333f66c331f09e"
   license "Apache-2.0"
   head "https://github.com/cortexproject/cortex.git", branch: "master"
 
@@ -12,12 +12,12 @@ class Cortex < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ddcda7547e90bde4e7466eed576f853d1b024fa730f6a2083f35db2ece003a0f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ddcda7547e90bde4e7466eed576f853d1b024fa730f6a2083f35db2ece003a0f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ddcda7547e90bde4e7466eed576f853d1b024fa730f6a2083f35db2ece003a0f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "6b2f54b88703909eb151d7d7af35b576a36bb1d6f58c1401f7b1e884e14ca123"
-    sha256 cellar: :any_skip_relocation, ventura:       "6b2f54b88703909eb151d7d7af35b576a36bb1d6f58c1401f7b1e884e14ca123"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2e5fd77ae5c2bc6afe90da427f3a780adb07896bb655c09c57b92e5b0423de2c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3e86a0a76dd5d0c010675f07735b3cbbf94f487a5332764915f54697eb4db89b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "da6e0316585d857d5325c9ad80d64b8a7cc19b715e517b64f2aa6184bc0a8e82"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5256ca98ca78dc9c65feb1cee165a67067ffca426c8b91545d35cf962aec2dc5"
+    sha256 cellar: :any_skip_relocation, sonoma:        "cecedb96cd0e90c2c5214da360068360140864f71773b0c077e8756ec8b0e128"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "649fa031a84da07ea86a2b8d8a26d685b92dc2dc65126d694abd27bcbcf7d9bf"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "208cf7780d98e6531262b1242560688cffaa2a43aef6d1cd98f792a41dc17974"
   end
 
   depends_on "go" => :build

@@ -1,19 +1,19 @@
 class NestopiaUe < Formula
   desc "NES emulator"
   homepage "http://0ldsk00l.ca/nestopia/"
-  url "https://github.com/0ldsk00l/nestopia/archive/refs/tags/1.53.1.tar.gz"
-  sha256 "21aa45f6c608fe290d73fdec0e6f362538a975455b16a4cc54bcdd10962fff3e"
+  url "https://github.com/0ldsk00l/nestopia/archive/refs/tags/1.53.2.tar.gz"
+  sha256 "7783d2673ad496109e7dd3d75756cfef30c5b400409131b83b45c2fa3ddd735b"
   license "GPL-2.0-or-later"
   head "https://github.com/0ldsk00l/nestopia.git", branch: "master"
 
   bottle do
-    sha256 arm64_sequoia: "9a00ff8b6b1eff8d5774ed427afbdb669cb512905268409ca102f15d32e7757b"
-    sha256 arm64_sonoma:  "536e84f8e7dddec0baa5f84701f03022bc71019b4249475ea69d452f998c8468"
-    sha256 arm64_ventura: "4e9a0b4a72e6e41b6ce1064504e0784f56282f8e923baf7be176c98a3cc262d5"
-    sha256 sonoma:        "ae9bddfba1d0fcb99e3b6fcb0a1c8f5671db3c76431ce9e3654fb7387da0a8ee"
-    sha256 ventura:       "107be843559d0aa3bb8b331cd75a3e1361eac8c2ce73463c73e944d0ff9fd66f"
-    sha256 arm64_linux:   "7d2a96b45a372cb24b73391d12423a3056dfc2167f4926528b292b4de763efa1"
-    sha256 x86_64_linux:  "a04a201661a975527c42693e5b84b11f2f3eff999a78c7ee966483165959d7ed"
+    rebuild 1
+    sha256 arm64_tahoe:   "d433e13be22c6651a8a1ad25e011a5b3f5340fbd29f3f58a88f168d0bc3ac76c"
+    sha256 arm64_sequoia: "d9155957178136cfe1e8494ff9ba1ffe7841aa452540d3677491a714a45043d2"
+    sha256 arm64_sonoma:  "289266bf2f32e6dca98e612a1896f385bd7a44cd6706fc3a0e50ace17af3e148"
+    sha256 sonoma:        "d2118e22924e3c4f428a954f8230df35d049726daa7b501af2f75ee3f7c4dfbc"
+    sha256 arm64_linux:   "eab980f6188ad357386a163665909f24049db02e743bdf3ccffbfaf98bbed5fa"
+    sha256 x86_64_linux:  "4c258b217dc499e3f126049d71a9e6e1aa8e5863154563ae692d011997347508"
   end
 
   depends_on "autoconf" => :build
@@ -27,10 +27,9 @@ class NestopiaUe < Formula
   depends_on "libsamplerate"
   depends_on "sdl2"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "mesa"
+    depends_on "zlib-ng-compat"
   end
 
   def install

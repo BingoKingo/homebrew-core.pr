@@ -1,25 +1,26 @@
 class StyleDictionary < Formula
   desc "Build system for creating cross-platform styles"
   homepage "https://github.com/style-dictionary/style-dictionary"
-  url "https://registry.npmjs.org/style-dictionary/-/style-dictionary-5.0.0.tgz"
-  sha256 "f8ee73b6b55f75db63eab440f2a72a91efd2fb175baf168294dd067ed63e3bf5"
+  url "https://registry.npmjs.org/style-dictionary/-/style-dictionary-5.3.3.tgz"
+  sha256 "9093717ac26b6e2a1f615ffc9fa47e748e5568b00873554e36c442ae4601ec71"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8c57727da1d5247d0df445e3a713f4f4b05c079de39097f7305e7294a0ed889f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8c57727da1d5247d0df445e3a713f4f4b05c079de39097f7305e7294a0ed889f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "8c57727da1d5247d0df445e3a713f4f4b05c079de39097f7305e7294a0ed889f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0ea502e55352ddc783a2fe366c25fca345b98097f825c71434d0071c102cdfc0"
-    sha256 cellar: :any_skip_relocation, ventura:       "0ea502e55352ddc783a2fe366c25fca345b98097f825c71434d0071c102cdfc0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8c57727da1d5247d0df445e3a713f4f4b05c079de39097f7305e7294a0ed889f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8c57727da1d5247d0df445e3a713f4f4b05c079de39097f7305e7294a0ed889f"
+    sha256 cellar: :any_skip_relocation, all: "8802d081d40841a4c19fe4813057642c229c7bdbfca39f4e5e38fab94cd775f8"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
+
+    # Build an `:all` bottle by removing example files
+    examples = libexec/"lib/node_modules/style-dictionary/examples"
+    rm %w[
+      advanced/create-react-native-app/android/app/proguard-rules.pro
+      complete/android/demo/proguard-rules.pro
+    ].map { |file| examples/file }
   end
 
   test do

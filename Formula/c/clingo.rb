@@ -4,6 +4,7 @@ class Clingo < Formula
   url "https://github.com/potassco/clingo/archive/refs/tags/v5.8.0.tar.gz"
   sha256 "4ddd5975e79d7a0f8d126039f1b923a371b1a43e0e0687e1537a37d6d6d5cc7c"
   license "MIT"
+  revision 1
 
   livecheck do
     url :stable
@@ -11,13 +12,12 @@ class Clingo < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "35d24c0f73cd44d4c42517ba3621df5d6a400ff7f4fd8306cc2f4622d40b008f"
-    sha256 cellar: :any,                 arm64_sonoma:  "e76e8773450698143ffdacc0bfc1d489caada722d4b2bd5714b66b4a5d0c59fe"
-    sha256 cellar: :any,                 arm64_ventura: "2db3b04fe55e9957addd3bbc2e7a211a9b1be4d114b3b5b04795f1a0576659ed"
-    sha256 cellar: :any,                 sonoma:        "ee580dd3486d3a83a0b71d5a3a9f0c3853862004079e3cb36e5c03226ff7f74a"
-    sha256 cellar: :any,                 ventura:       "acf4bec16f8de6c2f8c5d3c9139dc607a2d9ebfbb44da8777bfd4f84af449f9a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "6b945753340a64e78a96e4aa1f030e9f5734937c33111c948be3e25cac089d5d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bcb0aa794aab95ff9376eaf61ecd30a803bdde61cf061998881b734687bdaedf"
+    sha256 cellar: :any,                 arm64_tahoe:   "7d606936da6a7f4091d200cf507e6d84dbadab7e44ccea7ddf1f85b04e1c92ec"
+    sha256 cellar: :any,                 arm64_sequoia: "cadf7db4623f11e771514eb2a29b08625bffacb5e38289d7f6b8bf76ac84bf36"
+    sha256 cellar: :any,                 arm64_sonoma:  "b6a25764a9f579481219b13cc37b85370e1711d65479ac5157aa174de25dfa38"
+    sha256 cellar: :any,                 sonoma:        "0ce74dea22d40520801a1bad792df7cb8ea148b39f57fa7f24076beae86f01f0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "295fb70cc8ee473656c529f06107ca59bd4b439fb98fc50af1db18003940a109"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "790e57292114c711904b97f44dfcd4f6bb09535f73b9d0e54d61f4e862d40156"
   end
 
   head do
@@ -30,7 +30,7 @@ class Clingo < Formula
   depends_on "doxygen" => :build
   depends_on "cffi"
   depends_on "lua"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   # This formula replaced the clasp & gringo formulae.
   # https://github.com/Homebrew/homebrew-core/pull/20281
@@ -41,7 +41,7 @@ class Clingo < Formula
   link_overwrite "bin/reify"
 
   def python3
-    which("python3.13")
+    which("python3.14")
   end
 
   def install

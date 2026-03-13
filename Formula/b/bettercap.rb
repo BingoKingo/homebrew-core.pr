@@ -1,19 +1,18 @@
 class Bettercap < Formula
   desc "Swiss army knife for network attacks and monitoring"
   homepage "https://www.bettercap.org/"
-  url "https://github.com/bettercap/bettercap/archive/refs/tags/v2.41.0.tar.gz"
-  sha256 "6c2161acb85599a066bea2d28805f72cde68c13fefb8e67c5c72f3c31c3372c1"
+  url "https://github.com/bettercap/bettercap/archive/refs/tags/v2.41.5.tar.gz"
+  sha256 "85513871e105a182eb92f80ba9563ac37cb8a48bcfa98d30e1197e74c42ff15a"
   license "GPL-3.0-only"
   head "https://github.com/bettercap/bettercap.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "601b640cb814873f4bc494568d8e6bac3e0437d7e0f9b2dcae10050428c28285"
-    sha256 cellar: :any,                 arm64_sonoma:  "6614522833be6dfbc677602367365feffb179216512c0d1ffd9e486003ee91ff"
-    sha256 cellar: :any,                 arm64_ventura: "eafe12346381ada74b4731575c798968bb578c17b83f872ed83da548d0503780"
-    sha256 cellar: :any,                 sonoma:        "e52b66aca3679d41baead4ba4dae3f239ad4f83c6387aa48bbfddf6f6b5e2959"
-    sha256 cellar: :any,                 ventura:       "6d62416e253212a3d212fd0f904cf429782bcda5aa138da4ba0383f54cf51d75"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "289ba4d5fafb3902334b73fa4a6ceaf9f1879d5f1eb1c13a2d82b2ff813c3227"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "682d2dad8463513c60ff7eb7918b4f561d28d6dfdd8c7471ac136cdbb5935bf9"
+    sha256 cellar: :any,                 arm64_tahoe:   "15b798189de67d4dc426ab5c94cdccab4bf59182278b310a9aaadb7117eb6325"
+    sha256 cellar: :any,                 arm64_sequoia: "e6203b04e0be9c73b1c6ea04fb1e7fd34bd128fc176b015b84342d0ef4ad1dab"
+    sha256 cellar: :any,                 arm64_sonoma:  "668174c52388b7774f3fc48be0f033e62d0cc8b5ec9f6d36df143a43cef86f6b"
+    sha256 cellar: :any,                 sonoma:        "fe3eec9287d1c782de232d5b4058a78618a8bf441bc07798cf3ca00dd2aceb95"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e103cd293cf7d899effe2c623ceee4e44dfc83f0742a2ab18d9bc242fb61a4a6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9d77279baf4543717c4c2799faacdb567499b07167b4958237208650b032ea51"
   end
 
   depends_on "go" => :build
@@ -28,10 +27,11 @@ class Bettercap < Formula
 
   resource "ui" do
     url "https://github.com/bettercap/ui.git",
-        revision: "6e126c470e97542d724927ba975011244127dbb1"
+        revision: "ca482e9820552bc71acba6047504efbd0a05043f"
   end
 
   def install
+    ENV["CGO_ENABLED"] = "1" if OS.linux? && Hardware::CPU.arm?
     (buildpath/"modules/ui/ui").install resource("ui")
     system "make", "build"
     bin.install "bettercap"
@@ -50,6 +50,6 @@ class Bettercap < Formula
     else
       "Permission Denied"
     end
-    assert_match expected, shell_output(bin/"bettercap 2>&1", 1)
+    assert_match expected, shell_output("#{bin}/bettercap 2>&1", 1)
   end
 end

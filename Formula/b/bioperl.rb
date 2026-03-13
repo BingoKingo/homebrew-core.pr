@@ -4,7 +4,7 @@ class Bioperl < Formula
   url "https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/BioPerl-1.7.8.tar.gz"
   sha256 "c490a3be7715ea6e4305efd9710e5edab82dabc55fd786b6505b550a30d71738"
   license any_of: ["Artistic-1.0-Perl", "GPL-1.0-or-later"]
-  revision 2
+  revision 4
   head "https://github.com/bioperl/bioperl-live.git", branch: "master"
 
   # We specifically match versions with three numeric parts because upstream
@@ -17,13 +17,12 @@ class Bioperl < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2908dce831726ddab69edcb252b8b45b1d9b4ba2995bbefc6410dea49a6b230e"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d44c606e7a067575bfe21428d84fcd57c7e45daa8b2af2a2cf7b6ae766611b0c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "cce1be0687ce0d7b8cbaaaa2192dcc0ee3e624978c7e5296c2676099fb9c647e"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a79018530a34ea3fc2515bf85a4db9ed4379ccf7aeb9ef5d744d5fdb3009596e"
-    sha256 cellar: :any_skip_relocation, ventura:       "ff98f524ac97416bd3893e5decb6f4e5deb9340f27fbca59a5b8f231bd800829"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "14e32e55fcf6f8242d16b3200ca0df932f03752526af6d26c08256f98acbe8d6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c28697f03736035682992843bd2dae185e38958cea70dde760636d5fe5661f13"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "17405e0b0b17e484a222e76279b4b9732b3d1010f0ef33a05552d8ee4cec1272"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "61acb5dde612cf25bbc0f07789dc4275f0b630f09c3b264c36e1d015f8b9eb52"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cc1d1db579a29a458201328a3607ab29ed9ad2702fbece0f6f3152f32614c5b1"
+    sha256 cellar: :any_skip_relocation, sonoma:        "3b8c427638890704e973ffabfaedf465c9f26da45019d3b0a06a0ed35982d804"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "55291459382b946db20a86f1dc47d828263b2cb79470351fe18a3396880db4d2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c47f38eb54d21c53685df9838272b3cc06a7ded2ec3c51a3a6a75160a3c0abcf"
   end
 
   depends_on "cpanminus" => :build

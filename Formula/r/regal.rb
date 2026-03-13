@@ -1,18 +1,18 @@
 class Regal < Formula
   desc "Linter and language server for Rego"
-  homepage "https://docs.styra.com/regal"
-  url "https://github.com/StyraInc/regal/archive/refs/tags/v0.34.0.tar.gz"
-  sha256 "ced1e3c6d6e9652b87dd84d2ea828c493eb33b858da0c8f2da8d23e404331bf2"
+  homepage "https://www.openpolicyagent.org/projects/regal"
+  url "https://github.com/open-policy-agent/regal/archive/refs/tags/v0.39.0.tar.gz"
+  sha256 "b42f7dc0640500b78a04ef26f2ee35b1a1d1d7c6e3e942eb1a55d23b1fe84840"
   license "Apache-2.0"
-  head "https://github.com/StyraInc/regal.git", branch: "main"
+  head "https://github.com/open-policy-agent/regal.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "731746fe9d510ff77511d631eab2d8c142e0469927151c8fb1e49deaad56c4db"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8f612566e2e059475e038c5f299a01c83c39f455d573ec5e99eb043d945cb12b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b24db853f3d38d9e6f0050fd11afabd71d76c8b77154e25fd048195144275bfd"
-    sha256 cellar: :any_skip_relocation, sonoma:        "e2798e9634e25f51f45e3e5a3e5135760f00f33ce666ec80041a381c49b9b554"
-    sha256 cellar: :any_skip_relocation, ventura:       "e1e23a0695f4814f4416ae9d9f88949997c6614862d920df693487beb391365c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "16762017788d066c91828f619c9801439900144e8a5f14996c7aa927325586c8"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "38c9dc42a238d294e8af8d1845a95d3f78653f50a6e85156bb612953afec71ef"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "38c9dc42a238d294e8af8d1845a95d3f78653f50a6e85156bb612953afec71ef"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "38c9dc42a238d294e8af8d1845a95d3f78653f50a6e85156bb612953afec71ef"
+    sha256 cellar: :any_skip_relocation, sonoma:        "18c5bfc4a88448032222accf5a1c995dbf2a7407385aa65be0137c2394f6b95f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "958b0dc157f3981db595d4e07cacf717584060e637367ea075ebb734fe0ce018"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c63569d05111bc400e338a73131f2750c3f24e8f0d5ccbe8132182542a770d9b"
   end
 
   depends_on "go" => :build
@@ -20,14 +20,14 @@ class Regal < Formula
   def install
     ldflags = %W[
       -s -w
-      -X github.com/styrainc/regal/pkg/version.Version=#{version}
-      -X github.com/styrainc/regal/pkg/version.Commit=#{tap.user}
-      -X github.com/styrainc/regal/pkg/version.Timestamp=#{time.iso8601}
-      -X github.com/styrainc/regal/pkg/version.Hostname=#{tap.user}
+      -X github.com/open-policy-agent/regal/pkg/version.Version=#{version}
+      -X github.com/open-policy-agent/regal/pkg/version.Commit=#{tap.user}
+      -X github.com/open-policy-agent/regal/pkg/version.Timestamp=#{time.iso8601}
+      -X github.com/open-policy-agent/regal/pkg/version.Hostname=#{tap.user}
     ]
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"regal", "completion")
+    generate_completions_from_executable(bin/"regal", shell_parameter_format: :cobra)
   end
 
   test do

@@ -1,18 +1,18 @@
 class Runme < Formula
   desc "Execute commands inside your runbooks, docs, and READMEs"
   homepage "https://runme.dev/"
-  url "https://github.com/runmedev/runme/archive/refs/tags/v3.14.0.tar.gz"
-  sha256 "24d88f4c6eafe4b36893e06ea9395351a2363df88571c79f8b816698c57ef74e"
+  url "https://github.com/runmedev/runme/archive/refs/tags/v3.16.5.tar.gz"
+  sha256 "a4fb24c2af29e14586e7a75353a37a5ac901624662593e5663679001cab3259d"
   license "Apache-2.0"
   head "https://github.com/runmedev/runme.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cc0752ae0c5865acded0003fd1bb786e174b0ff5cee7a064b8c5253c9d6621d0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cc0752ae0c5865acded0003fd1bb786e174b0ff5cee7a064b8c5253c9d6621d0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "cc0752ae0c5865acded0003fd1bb786e174b0ff5cee7a064b8c5253c9d6621d0"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b0d7fd8e160e417eb50de94060c536737aa187b7fbdf83b854b3c7a88e662544"
-    sha256 cellar: :any_skip_relocation, ventura:       "b0d7fd8e160e417eb50de94060c536737aa187b7fbdf83b854b3c7a88e662544"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0276b00ae5741544db5f8c2baa648ec8f803d39c3ee9a9ac53014ffb79c295be"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "bda0e61227f5a597835d07637d4f8e384cf15e67b63c151cfd8856faf192bb42"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ef3f3c9b3f1500a5c192f4bc7a5006932b42202eb2b2e80e455ba7a0a2732bb7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f2c0af34a27838319c13908567a46e17d50bf7bdd098ded7fbc71616d257ffc2"
+    sha256 cellar: :any_skip_relocation, sonoma:        "22adcc64e262ba08150046439c88822f988e08195b6eed73d55b1f3f9fb44b24"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "19a56c27a5371dc2cbfd88a11cbcf487e774d91fae856ec58e56d2d14f15a56f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "877e785fa88a28ca95ecba232b01c1ca75da6c03e68491da19361900b51921b7"
   end
 
   depends_on "go" => :build
@@ -26,7 +26,7 @@ class Runme < Formula
     ]
 
     system "go", "build", *std_go_args(ldflags:)
-    generate_completions_from_executable(bin/"runme", "completion")
+    generate_completions_from_executable(bin/"runme", shell_parameter_format: :cobra)
   end
 
   test do

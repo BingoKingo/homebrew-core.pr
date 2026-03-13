@@ -1,8 +1,8 @@
 class Omega < Formula
   desc "Packaged search engine for websites, built on top of Xapian"
   homepage "https://xapian.org/"
-  url "https://oligarchy.co.uk/xapian/1.4.29/xapian-omega-1.4.29.tar.xz"
-  sha256 "4fba4e9d496b4e4dba0a409ce2342e5958a69c6ab3e60ee4dda25be5c20cf83e"
+  url "https://oligarchy.co.uk/xapian/1.4.31/xapian-omega-1.4.31.tar.xz"
+  sha256 "a7dfb608dd8b3ea53dde85236d475796826069c4d126189ea33a793349b2317a"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -11,13 +11,12 @@ class Omega < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "9872cd039fdb166ea6e2725bc555a0d4a810abfc455a5f295e94dfa50a82e1a4"
-    sha256 arm64_sonoma:  "2c2ce6e31a93ef3ab2a346675d1afe9243ec606bc448b3d3e9b2d7c0849b05ae"
-    sha256 arm64_ventura: "ceda263ce18b87eea2430765bfa2eeebb905ab8b67a8ab63ad81178c0787cb49"
-    sha256 sonoma:        "801e64be4f8663f856b9b2716ed3c4428dce9dbba21983650017cea9a011f88e"
-    sha256 ventura:       "8984d07d97d61fb6e211c3cca3fec3f649cbefa6f01effc63a0ee9239084a8cd"
-    sha256 arm64_linux:   "577c8aace1e6aa8595bf462ea0f58ab26ac2bcc0264d3eedaa793b92bc1bc38f"
-    sha256 x86_64_linux:  "ddf2a15db4c87fb65d1e39c01cd07a361b2e4c3f8345c17dcb62a2869f3b3ad1"
+    sha256 arm64_tahoe:   "cee10369fe7fee6df22ca0aa69a14c71d4c8268b9bf71da6439f663929dd635d"
+    sha256 arm64_sequoia: "218d20322c0ff49d314d37565d9e313fd7fb5dc8993ef83aca107976a486647c"
+    sha256 arm64_sonoma:  "35f5fc8ab55e384a088f46880d43b920e21f344902861fa96ee70b7de8bd18ff"
+    sha256 sonoma:        "2e86d65f179c025508632fea7a415bfa07283748e9bb0efb1e2f2909e431d7d2"
+    sha256 arm64_linux:   "9eeef925be6b3e3406591605fc0d230a1314be3bfa74f62061003fa4d13e4430"
+    sha256 x86_64_linux:  "29f27f623abb65bcbe5a2715cb6e9d2a21b802df6e58bf7bcc5f92d797caf02a"
   end
 
   depends_on "pkgconf" => :build
@@ -25,7 +24,9 @@ class Omega < Formula
   depends_on "pcre2"
   depends_on "xapian"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./configure", "--disable-silent-rules", *std_configure_args

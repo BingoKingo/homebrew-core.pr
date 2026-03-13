@@ -1,28 +1,28 @@
 class Osm2pgsql < Formula
   desc "OpenStreetMap data to PostgreSQL converter"
   homepage "https://osm2pgsql.org"
-  url "https://github.com/openstreetmap/osm2pgsql/archive/refs/tags/2.1.1.tar.gz"
-  sha256 "b084e4a79317043410ff13ece4350a801384bd34e6c2c5959fa1e1424ce195b0"
+  url "https://github.com/osm2pgsql-dev/osm2pgsql/archive/refs/tags/2.2.0.tar.gz"
+  sha256 "567dad078f8a66d6d706ac1876b5251b688109d16974909d89ce2056d6e9f258"
   license "GPL-2.0-only"
-  head "https://github.com/openstreetmap/osm2pgsql.git", branch: "master"
+  head "https://github.com/osm2pgsql-dev/osm2pgsql.git", branch: "master"
 
   bottle do
-    sha256 arm64_sequoia: "ae6732f4577555118510370adccaeefe194a43638f3edf8c6fa7d74883b70daa"
-    sha256 arm64_sonoma:  "602428b81887e949678e2f9782e11ab3896374620192652e7ddb6f5454ea5151"
-    sha256 arm64_ventura: "fdfaabdf6101e1536d70b8e21b37c5a1cecaf347e191dd957b032a853be0d09e"
-    sha256 sonoma:        "16d621193033944ea29ecfb9e66d73ace20b600f6847cf8ebfc1532cdc6e1904"
-    sha256 ventura:       "7f08026614bfb7a6322d5b35f8f3f143aec648c28de9fd6856db4c7a493bd030"
-    sha256 arm64_linux:   "9733201f7d985df8d12dfb1c16f9b6d36ed9615ac3fa0102ddf9866795514ef7"
-    sha256 x86_64_linux:  "a8ca71c29e64154abd15af163974e84eb4b78f603a0efa3a2c492df80af18274"
+    rebuild 1
+    sha256 arm64_tahoe:   "a5f9ab6a4a201781ae815d913f773583684dca4538e0aff2d992ca8e9b5a177a"
+    sha256 arm64_sequoia: "c22d991054d0f3ca640e949d2be019afc6d5e7bd8825f359eab3e8b7604acda8"
+    sha256 arm64_sonoma:  "14964a21c76e55705881b99d27a459ed1a098126fe6d3632368df967129ea9dc"
+    sha256 sonoma:        "77ff1260704e17ec3aa45de6bcc3947b3dddf0c31693b266305201ca7f148545"
+    sha256 arm64_linux:   "c554b99264e3a52791e14c304dae74e0c37f9d87082752e79169b00b6c1ef231"
+    sha256 x86_64_linux:  "719e9ab7dbc8d76cc317006f9492c619bcd79a40b24b76056e04a9d6f9264b11"
   end
 
   depends_on "boost" => :build
   depends_on "cli11" => :build
   depends_on "cmake" => :build
-  depends_on "fmt" => :build
   depends_on "libosmium" => :build
   depends_on "lua" => :build
   depends_on "nlohmann-json" => :build
+  depends_on "protozero" => :build
 
   depends_on "libpq"
   depends_on "luajit"
@@ -30,7 +30,10 @@ class Osm2pgsql < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # This is essentially a CMake disrespects superenv problem
@@ -40,14 +43,14 @@ class Osm2pgsql < Formula
                                      "set(LUA_VERSIONS5 #{lua_version})"
 
     # Remove bundled libraries
-    rm_r("contrib")
+    rm_r(Dir["contrib/*"] - ["contrib/fmt"])
 
-    args = %W[
+    # TODO: Switch to external fmt when v12+ is supported
+    args = %w[
       -DEXTERNAL_CLI11=ON
-      -DEXTERNAL_FMT=ON
+      -DEXTERNAL_FMT=OFF
       -DEXTERNAL_LIBOSMIUM=ON
       -DEXTERNAL_PROTOZERO=ON
-      -DPROTOZERO_INCLUDE_DIR=#{Formula["libosmium"].opt_libexec}/include
       -DWITH_LUAJIT=ON
     ]
 

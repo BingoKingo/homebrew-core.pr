@@ -1,18 +1,18 @@
 class Mani < Formula
   desc "CLI tool to help you manage repositories"
   homepage "https://manicli.com"
-  url "https://github.com/alajmo/mani/archive/refs/tags/v0.31.0.tar.gz"
-  sha256 "dd44bd7f409c5b2a755beca45229cbc9be02712be55c099bd6a01f6cc3441df2"
+  url "https://github.com/alajmo/mani/archive/refs/tags/v0.32.0.tar.gz"
+  sha256 "63151cc156130b335b1f844c6e88049670647c44d4a42516510a9fd70edff9b0"
   license "MIT"
   head "https://github.com/alajmo/mani.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2df96b3f4f0206dbf5571b270269341d3d0c62e3c29826b682107501551a007f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2df96b3f4f0206dbf5571b270269341d3d0c62e3c29826b682107501551a007f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "2df96b3f4f0206dbf5571b270269341d3d0c62e3c29826b682107501551a007f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "26dd3a03b1e5519eaa222b13a63617d03e89dbc771cd8c2ae50906e5bac2b38d"
-    sha256 cellar: :any_skip_relocation, ventura:       "26dd3a03b1e5519eaa222b13a63617d03e89dbc771cd8c2ae50906e5bac2b38d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "64dfe83672401b0bf18860dd973a212f6c352517ca47f2955eae2a32ffceb636"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "4fd99addf4ca0ecc539b7b2e55ed95cca0e0c9aea8f7edb7814d2ed964a51602"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4fd99addf4ca0ecc539b7b2e55ed95cca0e0c9aea8f7edb7814d2ed964a51602"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4fd99addf4ca0ecc539b7b2e55ed95cca0e0c9aea8f7edb7814d2ed964a51602"
+    sha256 cellar: :any_skip_relocation, sonoma:        "27be6de31d5b65fc29273df8968b5bb60d9a3979ad2d4f490576d824310a38b7"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d0ba27a8d4b80afc88021e279a24bc1c5684611e3d920d20eba9a8101dcafd45"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ae938083622d72bb131aa2210a0568e0a5a2a60527469e41080866040f85cce1"
   end
 
   depends_on "go" => :build
@@ -26,7 +26,7 @@ class Mani < Formula
       -X github.com/alajmo/mani/cmd.date=#{time.iso8601}
     ]
     system "go", "build", *std_go_args(ldflags:, tags: "netgo")
-    generate_completions_from_executable(bin/"mani", "completion")
+    generate_completions_from_executable(bin/"mani", shell_parameter_format: :cobra)
     system bin/"mani", "gen"
     man1.install "mani.1"
   end

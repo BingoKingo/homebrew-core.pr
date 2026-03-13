@@ -1,19 +1,19 @@
 class Couchdb < Formula
   desc "Apache CouchDB database server"
   homepage "https://couchdb.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=couchdb/source/3.5.0/apache-couchdb-3.5.0.tar.gz"
-  mirror "https://archive.apache.org/dist/couchdb/source/3.5.0/apache-couchdb-3.5.0.tar.gz"
-  sha256 "6a98b90a9a980bbef2c35b4996a8e71a2f1ae5227546c85f04c436101bdf78bf"
+  url "https://www.apache.org/dyn/closer.lua?path=couchdb/source/3.5.1/apache-couchdb-3.5.1.tar.gz"
+  mirror "https://archive.apache.org/dist/couchdb/source/3.5.1/apache-couchdb-3.5.1.tar.gz"
+  sha256 "c22cf31d6d91a3f5aa04f0cad493babdc723213494cb5e6170a507d359c50136"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "494834ac7eb89abaa626f40da8e36d66d1baa25208461e4291ee8b137a966046"
-    sha256 cellar: :any,                 arm64_sonoma:  "a2bc0d8e0b255d86fcf372d4018c9f93e9b3c7edc909b6c620eb29d3a24a8076"
-    sha256 cellar: :any,                 arm64_ventura: "330edda7ac863727ff503967b804b4478b56ed77da7bdf224e003f170e079233"
-    sha256 cellar: :any,                 sonoma:        "d20b7f7a61e7ee14a2cf4bf79c6c2ab9a0bd04e87b1c9b21caec8960ec2eef5b"
-    sha256 cellar: :any,                 ventura:       "caf1090e2e3afa205a16fd65a7eaf2648b357345485f33b2d739398f9d0ac6bb"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f9f7686fac2918b759cf2b144a4bab228da34dbd4b6562ce8a615b68634cc9d6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6950b0cef1186e7176df89242bab15c8840cae22df96f1adbbef0f18cf6c4b78"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "b82b5b5a4b8eb3288a1a4fae6c95c275580ea9559f1caaebd287a06584208b21"
+    sha256 cellar: :any,                 arm64_sequoia: "f0e6024d3ff3e28497c84bd5276c7c6670cebdfae50bf4c619aab8df47e83cf6"
+    sha256 cellar: :any,                 arm64_sonoma:  "a8fbb5840644059150b97b5ceea647f9ee2c52eedbe6ee471b0b6ff284a345a9"
+    sha256 cellar: :any,                 sonoma:        "6829502be2b2ef5a4caabeb6f6471838e7125f3cc1b0d44625025faaac4d24cb"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b5a37c144e35ca34649860426938a992fb8e84a97c254da671508b2d648bf4ca"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ed51cd3f5e7a3362173412c76b84393a68855bfec5b01dc68a9bc3513b559236"
   end
 
   depends_on "autoconf" => :build
@@ -22,11 +22,14 @@ class Couchdb < Formula
   depends_on "erlang" => :build
   depends_on "libtool" => :build
   depends_on "pkgconf" => :build
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "openssl@3"
 
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "ejabberd", because: "both install `jiffy` lib"
 
@@ -39,9 +42,6 @@ class Couchdb < Formula
     rm("rel/couchdb/bin/couchdb.cmd")
     # install files
     prefix.install Dir["rel/couchdb/*"]
-  end
-
-  def post_install
     # creating database directory
     (var/"couchdb/data").mkpath
   end
@@ -63,16 +63,14 @@ class Couchdb < Formula
   test do
     cp_r prefix/"etc", testpath
     port = free_port
-    inreplace "#{testpath}/etc/default.ini", "port = 5984", "port = #{port}"
-    inreplace "#{testpath}/etc/default.ini", "#{var}/couchdb/data", "#{testpath}/data"
-    inreplace "#{testpath}/etc/local.ini", ";admin = mysecretpassword", "admin = mysecretpassword"
-
-    fork do
-      exec "#{bin}/couchdb -couch_ini #{testpath}/etc/default.ini #{testpath}/etc/local.ini"
+    inreplace "etc/local.ini", ";admin = mysecretpassword", "admin = mysecretpassword"
+    inreplace "etc/default.ini" do |s|
+      s.gsub! "port = 5984", "port = #{port}"
+      s.gsub! "#{var}/couchdb/data", testpath/"data"
     end
-    sleep 30
 
-    output = JSON.parse shell_output("curl --silent localhost:#{port}")
+    spawn bin/"couchdb", "-couch_ini", testpath/"etc/default.ini", testpath/"etc/local.ini"
+    output = JSON.parse(shell_output("curl --silent --retry 5 --retry-connrefused localhost:#{port}"))
     assert_equal "Welcome", output["couchdb"]
   end
 end

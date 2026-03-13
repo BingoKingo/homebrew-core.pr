@@ -1,8 +1,8 @@
 class Firefly < Formula
   desc "Create and manage the Hyperledger FireFly stack for blockchain interaction"
   homepage "https://hyperledger.github.io/firefly/latest/"
-  url "https://github.com/hyperledger/firefly-cli/archive/refs/tags/v1.3.3.tar.gz"
-  sha256 "9cde332c2afea87b4f363ce2a556ef863ba31e95b1ee946fc517da2fe0ba7583"
+  url "https://github.com/hyperledger/firefly-cli/archive/refs/tags/v1.4.0.tar.gz"
+  sha256 "05375efa4e849695c60e70ec3e332b7a4c8dbe666f1b76b8de3f12944b85b60c"
   license "Apache-2.0"
   head "https://github.com/hyperledger/firefly-cli.git", branch: "main"
 
@@ -12,12 +12,13 @@ class Firefly < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e101999f5d8b27bfaf00e4822e13f1b31ed099a2917236dd1bbbb5de867b15f8"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e101999f5d8b27bfaf00e4822e13f1b31ed099a2917236dd1bbbb5de867b15f8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9db7722ad8d9636a1563900fa6d100f4278d265a1b817a7270390dc24288ec4a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ea6aa3be782ff5689b8cb5b32defa20e31dd55a3b13f79685bdbffe8e26d7d80"
-    sha256 cellar: :any_skip_relocation, ventura:       "ac34aa5129b946ddc1acd7b1b18f750cc8c7a5fa45e984b0d43c681525c9f632"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0034f50fa03c4d36f6dd4bbb7b0a6ce3cf977e544a853de00ffe98881b589ab9"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "adbf91b1583f58b9cdf99e5b5f4702e7e382b68678d1a65038dac45a79d266bf"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e65c9e835856a687ce4758d8de149fbec354041ef361e19bb16a29b44a55c86f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dde58aad5d6ce8e08b375223c5632a992f15dc010ff73db649d00f5d5fc94957"
+    sha256 cellar: :any_skip_relocation, sonoma:        "9e58a9911ab5d61f995508662d10c94c6f75f9d4dabc6297e8e830b76130fbb9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8487d1cff3e216289b07a109fd41186c425d789eed7921e354c41a2d10bbbe60"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "14926594845c1055febc3c85ac56b950804433b2cd42014731881fe414bcf6c6"
   end
 
   depends_on "go" => :build
@@ -31,7 +32,7 @@ class Firefly < Formula
     ]
     system "go", "build", *std_go_args(ldflags:), "./ff"
 
-    generate_completions_from_executable(bin/"firefly", "completion")
+    generate_completions_from_executable(bin/"firefly", shell_parameter_format: :cobra)
   end
 
   test do

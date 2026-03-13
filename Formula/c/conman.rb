@@ -6,6 +6,7 @@ class Conman < Formula
   license "GPL-3.0-or-later"
 
   bottle do
+    sha256 arm64_tahoe:    "3e0eeafbb0e2a0f4be6952f0a557232cf2ab06d7316fe798202562e7c1af9eb4"
     sha256 arm64_sequoia:  "1173da53dd141c2960aea7c848be0ea4c65897ba0c47e5549656f4142879e2c0"
     sha256 arm64_sonoma:   "12e867d583636858f7ed1b9feb145c2783448252837b0a384f22247f7c9ca605"
     sha256 arm64_ventura:  "a0be94a97c0d77a9078b71d6f7be6066c5ba7f0fbb43d9c129a014804b4221f0"
@@ -31,9 +32,7 @@ class Conman < Formula
   end
 
   def caveats
-    <<~EOS
-      Before starting the conmand service, configure some consoles in #{etc}/conman.conf.
-    EOS
+    "Before starting the conmand service, configure some consoles in #{etc}/conman.conf."
   end
 
   service do
@@ -51,7 +50,7 @@ class Conman < Formula
       console name="test-sleep2" dev="/bin/sleep 30"
     EOS
 
-    fork { exec "#{sbin}/conmand", "-F", "-c", conffile }
+    spawn sbin/"conmand", "-F", "-c", conffile
     sleep 5
     assert_match(/test-sleep\d\ntest-sleep\d\n/, shell_output("#{bin}/conman -q 2>&1"))
   end

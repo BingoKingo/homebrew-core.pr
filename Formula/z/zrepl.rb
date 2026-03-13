@@ -1,20 +1,18 @@
 class Zrepl < Formula
   desc "One-stop ZFS backup & replication solution"
   homepage "https://zrepl.github.io"
-  url "https://github.com/zrepl/zrepl/archive/refs/tags/v0.6.1.tar.gz"
-  sha256 "263c82501b75a1413f8a298c1d67d7e940c1b0cb967979790773237e2a30adbd"
+  url "https://github.com/zrepl/zrepl/archive/refs/tags/v0.7.0.tar.gz"
+  sha256 "d451ad1d05a0afdc752daf1dada9327aa338f691eca91e1c8fc9828eebd89757"
   license "MIT"
   head "https://github.com/zrepl/zrepl.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia:  "467d9021d507942a4f74a1c64983a1a216e3215110b67ca591101a1350a93928"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "cb2b36b880afd2cf11fc4bbb7e2f544f40287e180bdd06c47da63be1c9bb2970"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "aedcf0ebb00175cef1e063bddb652c1d291c5c388a90878ec95719cd5ed93a04"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "3c301f823c74d52657a946000964f3b4a3089a0a914deb6cf68f69d150ee057c"
-    sha256 cellar: :any_skip_relocation, sonoma:         "b96ec21a1745a2b7eac7265f8db9e342c6ec01ddc2c7e3a9b7d7c24f2cbe0687"
-    sha256 cellar: :any_skip_relocation, ventura:        "d09931af39605cdf1215017138bda34463802609db9c72cf61a22d9918b323c4"
-    sha256 cellar: :any_skip_relocation, monterey:       "80344778b7d3a7007e38e86e066541a53796b318673eba51d869095e49935a3c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "67d6e26dd731da07445fa18d19f25c41c5ca41e48d9c829f92e1f7f487143fd2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "208277fa477884e0419b882934545194b9cc42f94b429bb94cec29095f8294de"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "83603ff9603be60833fc8448a17a35eaf01598a52b467335225cc46c470e14e1"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bdfdc9ae054e19a5976218ec1e94ca3e777bd4c7125858aadd3c0c4ab3a20be5"
+    sha256 cellar: :any_skip_relocation, sonoma:        "65f3263bab397da62393bedef12b5b8ed811e0cd747f57fad5bbf7f89c4683d6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "bbf631d984241bf60b21e381ed24570835fa12a40ba3840fdbd73bbda4f8ae26"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "97a0feee7878c048a4e3a54f09a4706d433ac1cef303f42e278b074a8f86b84d"
   end
 
   depends_on "go" => :build
@@ -26,9 +24,6 @@ class Zrepl < Formula
 
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/zrepl/zrepl/version.zreplVersion=#{version}")
-  end
-
-  def post_install
     (var/"log/zrepl").mkpath
     (var/"run/zrepl").mkpath
     (etc/"zrepl").mkpath

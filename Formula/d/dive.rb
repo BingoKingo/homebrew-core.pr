@@ -7,18 +7,22 @@ class Dive < Formula
   head "https://github.com/wagoodman/dive.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f09a27e21a4b76122d74e9a776219ab7377efaf30dff7d8d7e3016aac375d14a"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f09a27e21a4b76122d74e9a776219ab7377efaf30dff7d8d7e3016aac375d14a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f09a27e21a4b76122d74e9a776219ab7377efaf30dff7d8d7e3016aac375d14a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "676549efe805835ddb82aed795bd168b5ea9bb07ffbdb6500965c59474e035ca"
-    sha256 cellar: :any_skip_relocation, ventura:       "676549efe805835ddb82aed795bd168b5ea9bb07ffbdb6500965c59474e035ca"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a0eea0c4d2dc63bfa43c121fc136bd18ba3b1fed57f5e3aedae0ca2c57b35097"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "a2a98b730f1f2fdd600b00603db02e66f43334a703e3e42f7ea019e333d9c426"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a2a98b730f1f2fdd600b00603db02e66f43334a703e3e42f7ea019e333d9c426"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a2a98b730f1f2fdd600b00603db02e66f43334a703e3e42f7ea019e333d9c426"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2a6716f77316ff980b2a7b4bf794192abdf9e135968eed6dc486d4528478c272"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "964ca148b9e1b73a5565a266db9a61678e145666d9326c6bd86aaa521ec3a8f8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ea8b52ef11f336b96dcf14916b461f5da574a13da8e7fa6b29d12a058646af2e"
   end
 
   depends_on "go" => :build
 
   def install
+    ENV["CGO_ENABLED"] = OS.mac? ? "1" : "0"
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}")
+
+    generate_completions_from_executable(bin/"dive", shell_parameter_format: :cobra)
   end
 
   test do

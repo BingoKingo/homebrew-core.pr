@@ -1,18 +1,17 @@
 class Fastp < Formula
   desc "Ultra-fast all-in-one FASTQ preprocessor"
   homepage "https://github.com/OpenGene/fastp"
-  url "https://github.com/OpenGene/fastp/archive/refs/tags/v0.25.0.tar.gz"
-  sha256 "55fa7d9b8166200e901ff59a1825ba6455ec1a322d9465ce40aae6d145c3146f"
+  url "https://github.com/OpenGene/fastp/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "d3e909466fc893a92434fd68ddc3efd9d732447a0a55b7c77b8d0b55b0681f69"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "af02e4c10512d505e6d7b0aa8518369a769843ae6b1effe99873a436e585d6df"
-    sha256 cellar: :any,                 arm64_sonoma:  "827b8becefcd46525899f074e7ac0d7adc9be63e4b13318f93fea483bc246332"
-    sha256 cellar: :any,                 arm64_ventura: "514ede48a29fa497975e4d25b7426a26b19cb7d1a3c3130a3e50b8003a3c637f"
-    sha256 cellar: :any,                 sonoma:        "79904c37db018628e8ea1ec5bd0dbc698daf0127f7a6b8ebbf6ae8c39a894794"
-    sha256 cellar: :any,                 ventura:       "18c98cb5ab6524378509b2a858ef455be406c536777f15b6727bb67b3dae24bb"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f6cb836857e8ad1ebb9fe04bd8ade14e5627625081a2b582dd96f80aa9994a37"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "924c9db74a7c3048521f3b5da0f2c932a571acfed049d1530b110e70672ea5c5"
+    sha256 cellar: :any,                 arm64_tahoe:   "d50c5de41c6df81a8e4a0a9dc3885f2c13f69fa1652753e43d24ea0b90776f15"
+    sha256 cellar: :any,                 arm64_sequoia: "d7cfcc49f9ae330fa3b3b160018503f9d115843f5502b3a19184e8db0e486460"
+    sha256 cellar: :any,                 arm64_sonoma:  "99fefee4068b522aa2c67a235dfb867e6a64b865b769315e764ff5d6961e9773"
+    sha256 cellar: :any,                 sonoma:        "9261d9df59e96ac0eb5c5c2214aa7a9332eb62998d0dd1b0cbb0293cd8a19109"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "43fac09e8bc7110ea1a5f43079ed1eb7081e9078ebc2bf17916a2a5a73ebc0ca"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8dc5af9082ad3cd2e0d778026b02838c2f65677d1fc8d1cbcf09df5f809182ca"
   end
 
   depends_on "isa-l"

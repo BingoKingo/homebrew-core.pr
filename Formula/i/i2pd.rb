@@ -1,25 +1,26 @@
 class I2pd < Formula
   desc "Full-featured C++ implementation of I2P client"
   homepage "https://i2pd.website/"
-  url "https://github.com/PurpleI2P/i2pd/archive/refs/tags/2.57.0.tar.gz"
-  sha256 "e2327f816d92a369eaaf9fd1661bc8b350495199e2f2cb4bfd4680107cd1d4b4"
+  url "https://github.com/PurpleI2P/i2pd/archive/refs/tags/2.59.0.tar.gz"
+  sha256 "0ebeb05e4f36ab3809449561a095dc767ad821ac6a61c95623ab49be4ffd398b"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "17d7aec839b3a8641b2c40e084d459a787368d3090438ef57603038555504d0c"
-    sha256 cellar: :any,                 arm64_sonoma:  "c609b3a58bcde479df1eb5d34c2dd6753812d5fb9a4e014a39f51a9cc2b8adf3"
-    sha256 cellar: :any,                 arm64_ventura: "0d2ee21f5fa22ec7f632bf58cfbbe8799ad44d0bcb7797a6aa577f7e772a0751"
-    sha256 cellar: :any,                 sonoma:        "4bc1ede8c8c592f58fd622f6dd1e230e1c134d787c0b94bf116d6f75d9e846f8"
-    sha256 cellar: :any,                 ventura:       "415d938ffca8249d8ad6e32c1a07b35862277e42017ad7dade8fd8d0d554b19f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "773fde1a3a3f651d5fa7a1f14e3975f98b10abeec2a38c7f4f8f38fce9a39162"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8dd3123a2ddbb8e77da092236ed4152535742b9b49e57989d55b25bd50f4945c"
+    sha256 cellar: :any,                 arm64_tahoe:   "b1bce7c4d87cff3a5381fa39b080f6056c59ec0fb4ef7981cd70f4a5d23fba83"
+    sha256 cellar: :any,                 arm64_sequoia: "2b051ea8a4290bdbe093b9f7d1a9bfa8c1503adaf11b57afe0ddecb8e68e980f"
+    sha256 cellar: :any,                 arm64_sonoma:  "c51bec09bd9dee15dd8bc26d4d40030635c89a0cbb2d555201d7471edc030433"
+    sha256 cellar: :any,                 sonoma:        "ceee3280032116573f4f4c96b15d132bee87d78c5a09cfdf5eb7a250c7b31ad0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6bb7c13319b1c425952067ab4eed17953f3825c3ca1c3243718de466a440a283"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2b794277fc76a16aa1cb5789d988a15aaf4f1801f28aed8815f396945aa834f4"
   end
 
   depends_on "boost"
   depends_on "miniupnpc"
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = %W[

@@ -1,18 +1,17 @@
 class Repomix < Formula
   desc "Pack repository contents into a single AI-friendly file"
   homepage "https://github.com/yamadashy/repomix"
-  url "https://registry.npmjs.org/repomix/-/repomix-0.3.8.tgz"
-  sha256 "641984012fb7074125666a1f295049345108b1658fd04c494299303bfc07bfb2"
+  url "https://registry.npmjs.org/repomix/-/repomix-1.12.0.tgz"
+  sha256 "a7a9fec646dc94117d1642ed79a623bd1a84d77b12282a431332624e351e120f"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "38936461c20551512c9276384d6be45639dd9a28dda7475f8fed35f34eb74ae4"
-    sha256 cellar: :any,                 arm64_sonoma:  "38936461c20551512c9276384d6be45639dd9a28dda7475f8fed35f34eb74ae4"
-    sha256 cellar: :any,                 arm64_ventura: "38936461c20551512c9276384d6be45639dd9a28dda7475f8fed35f34eb74ae4"
-    sha256 cellar: :any,                 sonoma:        "b643fffeb292e68f3a2c037d768fe90326307325c7a13e0eb88b7881d9e3695c"
-    sha256 cellar: :any,                 ventura:       "b643fffeb292e68f3a2c037d768fe90326307325c7a13e0eb88b7881d9e3695c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3c4e884de18c0c45bfc674c96118dc271c26e50e6678bd0bcae87fc2a5eb9380"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2306fe2914394be276217d523cda5554e59eb4dc0279b1ad796115f220224d2d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "aa5c2a1a810bc65bdf2f73e0a7aaceb70584a791bd8201738d78b6134660a959"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "aa5c2a1a810bc65bdf2f73e0a7aaceb70584a791bd8201738d78b6134660a959"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "aa5c2a1a810bc65bdf2f73e0a7aaceb70584a791bd8201738d78b6134660a959"
+    sha256 cellar: :any_skip_relocation, sonoma:        "aa5c2a1a810bc65bdf2f73e0a7aaceb70584a791bd8201738d78b6134660a959"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "dd844a3e2e5db205f5897e9d007bf50cbb4cb1c20a30f64f3885b841daf8fde1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dd844a3e2e5db205f5897e9d007bf50cbb4cb1c20a30f64f3885b841daf8fde1"
   end
 
   depends_on "node"
@@ -23,7 +22,7 @@ class Repomix < Formula
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
 
     clipboardy_fallbacks_dir = libexec/"lib/node_modules/#{name}/node_modules/clipboardy/fallbacks"
     rm_r(clipboardy_fallbacks_dir) # remove pre-built binaries

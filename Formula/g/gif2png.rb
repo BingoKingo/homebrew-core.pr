@@ -1,21 +1,13 @@
 class Gif2png < Formula
   desc "Convert GIFs to PNGs"
   homepage "http://www.catb.org/~esr/gif2png/"
-
-  # Use canonical URL http://www.catb.org/~esr/gif2png/gif2png-<version>.tar.gz instead
-  # once it starts to include go.mod/go.sum
-  # See https://gitlab.com/esr/gif2png/-/issues/14#note_1373069233.
   url "https://gitlab.com/esr/gif2png/-/archive/3.0.3/gif2png-3.0.3.tar.bz2"
   sha256 "5d2770dce994e08ef54871ea4b0774e0ec0476aad5b3e47e21b4af59fdc8158b"
   license "BSD-2-Clause"
   head "https://gitlab.com/esr/gif2png.git", branch: "master"
 
-  livecheck do
-    url :homepage
-    regex(/href=.*?gif2png[._-]v?(\d+(?:\.\d+)+)\.t/i)
-  end
-
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:    "9ffa76192c9c581c3fd4aa8d8f56da708f1799dc9122379b34d1ad9240d937ba"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:  "7ba18868f7931d35e5ea59235cd76fdda07273197bd933f070b5f569691cbad2"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:   "c6e8176b235912541139f6cc30de30486df4685e4cda1510a13ccd46e5de1467"
     sha256 cellar: :any_skip_relocation, arm64_ventura:  "ad9c25896465c88ac69a9842d32a4bfe0c27610231cccb44edec51849c626bbd"

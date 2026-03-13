@@ -1,19 +1,10 @@
 class Podman < Formula
   desc "Tool for managing OCI containers and pods"
   homepage "https://podman.io/"
+  url "https://github.com/containers/podman/archive/refs/tags/v5.8.1.tar.gz"
+  sha256 "b9540ecb19cfcbcfc40e1b81d39930f688c537d8fd6f11ae56be41f2bf9e97a4"
   license all_of: ["Apache-2.0", "GPL-3.0-or-later"]
   head "https://github.com/containers/podman.git", branch: "main"
-
-  stable do
-    url "https://github.com/containers/podman/archive/refs/tags/v5.5.0.tar.gz"
-    sha256 "a4abfc72ef9a59ba80d081ea604ad2976ff967ae526e50e234edc1d2481bd9d1"
-
-    # build patch for go1.24.3, upstream pr ref, https://github.com/containers/podman/pull/26137
-    patch do
-      url "https://github.com/containers/podman/commit/db65baaa215b68d73996ca17dd8c596901ab8bdb.patch?full_index=1"
-      sha256 "b9e8ca69b6c9d4bf99307f0afca96c4c9c6d39674628d88358e5df56b1cac839"
-    end
-  end
 
   # There can be a notable gap between when a version is tagged and a
   # corresponding release is created and upstream uses GitHub releases to
@@ -26,12 +17,12 @@ class Podman < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8326e41b43e41f71fa6cf9c32197bd6326249edb1abe5d56f182c5a4ae5491ea"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fe77f82f04ef18c3a3ad6457340e8bbc1451467c0babc7a27ebed477ab3a7efd"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "184ef91d1d9262339e77cbf68af5230b2d4e3fa2c02919eea92ece9e69429fc2"
-    sha256 cellar: :any_skip_relocation, sonoma:        "56c83d6ce5ee4811cb81388fb1d98b561a7384a72d4fef58180d1ba5ba0101ec"
-    sha256 cellar: :any_skip_relocation, ventura:       "c03c4bda67fda6af378728aa48cfc5b54627a8462b79c6a0ec917f0f708a3702"
-    sha256                               x86_64_linux:  "41451408fa6ba525f18d8389aef3a4f174a6cddd9c1891ed3e20a065374d0db7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "66b952f3f826df78e5fd02a7e3d3114a4827499b7a64d1d7ff683d040794ab83"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2a49f5e58d026cd47b2eb97c5d90fbebdc120bcd9f50490a2bd9662649f3f298"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8e2f2dd421217c22db4176862635876fa81158c662655244ea8df0af6a874681"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2f114ab84f2fd5f06b74d737d6cedff0c8b3cd4ccac68b9e258380e9de1ccc7b"
+    sha256                               arm64_linux:   "4bac4526d67455fedcf9672490d60af1ff36c8b764f35e116bca817673af32ff"
+    sha256                               x86_64_linux:  "55350c1a5d171f402e47ec903c3ea6f1b79b2b62bf199050bdefa5cdd410213d"
   end
 
   depends_on "go" => :build
@@ -57,6 +48,7 @@ class Podman < Formula
     depends_on "libseccomp"
     depends_on "passt"
     depends_on "slirp4netns"
+    depends_on "sqlite"
     depends_on "systemd"
   end
 
@@ -66,15 +58,15 @@ class Podman < Formula
   # More context: https://github.com/Homebrew/homebrew-core/pull/205303
   resource "gvproxy" do
     on_macos do
-      url "https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.6.tar.gz"
-      sha256 "eb08309d452823ca7e309da2f58c031bb42bb1b1f2f0bf09ca98b299e326b215"
+      url "https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.8.tar.gz"
+      sha256 "4f7c4885225d71b21f6b547b94d92fc6da4a4fef9d382fdd19c8ea67f67be839"
     end
   end
 
   resource "vfkit" do
     on_macos do
-      url "https://github.com/crc-org/vfkit/archive/refs/tags/v0.6.1.tar.gz"
-      sha256 "e35b44338e43d465f76dddbd3def25cbb31e56d822db365df9a79b13fc22698c"
+      url "https://github.com/crc-org/vfkit/archive/refs/tags/v0.6.3.tar.gz"
+      sha256 "bb2a7f9d1bf41d2f823412ca20912bade606ae30b41afcd1366d32e3d100a09e"
     end
   end
 
@@ -87,15 +79,15 @@ class Podman < Formula
 
   resource "netavark" do
     on_linux do
-      url "https://github.com/containers/netavark/archive/refs/tags/v1.15.0.tar.gz"
-      sha256 "efda776e538ce33050b1f6ce58c5070efeb45653d48fe4d17a47524c8fc17cf1"
+      url "https://github.com/containers/netavark/archive/refs/tags/v1.17.2.tar.gz"
+      sha256 "284faa7cc525b869cbac4053e0a4127ac743ca7da1457c49fffb35558ea9c78d"
     end
   end
 
   resource "aardvark-dns" do
     on_linux do
-      url "https://github.com/containers/aardvark-dns/archive/refs/tags/v1.15.0.tar.gz"
-      sha256 "4ecc3996eeb8c579fbfe50901a2d73662441730ca4101e88983751a96b9fc010"
+      url "https://github.com/containers/aardvark-dns/archive/refs/tags/v1.17.0.tar.gz"
+      sha256 "42556bf547c435a8f0ccb586b4f5000da3106a58c26f82e22d9db81ee5bd7eb2"
     end
   end
 
@@ -141,6 +133,13 @@ class Podman < Formula
       ENV["PREFIX"] = prefix
       ENV["HELPER_BINARIES_DIR"] = opt_libexec/"podman"
       ENV["BUILD_ORIGIN"] = "brew"
+
+      # Workaround to avoid patchelf corruption when cgo is required
+      if Hardware::CPU.arch == :arm64
+        ENV["CGO_ENABLED"] = "1"
+        ENV["GO_EXTLINK_ENABLED"] = "1"
+        ENV.append "GOFLAGS", "-buildmode=pie -trimpath"
+      end
 
       system "make"
       system "make", "install", "install.completions"

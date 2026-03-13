@@ -1,9 +1,10 @@
 class Libgit2 < Formula
   desc "C library of Git core methods that is re-entrant and linkable"
   homepage "https://libgit2.org/"
-  url "https://github.com/libgit2/libgit2/archive/refs/tags/v1.9.0.tar.gz"
-  sha256 "75b27d4d6df44bd34e2f70663cfd998f5ec41e680e1e593238bbe517a84c7ed2"
+  url "https://github.com/libgit2/libgit2/archive/refs/tags/v1.9.2.tar.gz"
+  sha256 "6f097c82fc06ece4f40539fb17e9d41baf1a5a2fc26b1b8562d21b89bc355fe6"
   license "GPL-2.0-only" => { with: "GCC-exception-2.0" }
+  revision 1
   head "https://github.com/libgit2/libgit2.git", branch: "main"
 
   livecheck do
@@ -12,22 +13,21 @@ class Libgit2 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "f0ee705c27e87553582c58556a2a20a766af1e1ffbef0f1c676b0244e89398b9"
-    sha256 cellar: :any,                 arm64_sonoma:  "74a27239cf67c5e87b45b9cf3db547a41ace91b9fab9dbd44608bf1dc3faf3df"
-    sha256 cellar: :any,                 arm64_ventura: "ff62b8ec0e1a2b212eff271c39bbd801c45b4bba3595b3f361b7d90f5b3d11b3"
-    sha256 cellar: :any,                 sonoma:        "fb233893f22e55ca0cd7856f5ec319d077530ad1a5341c3c067d53ce2135627d"
-    sha256 cellar: :any,                 ventura:       "f5eb731a1908b229c0f7da31345af99a176c51f813069401884aada234c1247c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "79a4e1ecc35d78bf1f3dde86c43b13b16db902e74ad97d06f2d4f8f2fe2c5d88"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "be9b0548c38c23f5ef5cecb22db883a65324ef385610f944e4506af6cf077aad"
+    sha256 cellar: :any,                 arm64_tahoe:   "97ff2e84ab73e8cb56e5884cf26c27ea4e4bb21987549c0706816b0bc45532a9"
+    sha256 cellar: :any,                 arm64_sequoia: "c2694695e86b097811b664c9e0382f217c4b4300cf32cc0c62f28fe172ed3536"
+    sha256 cellar: :any,                 arm64_sonoma:  "8ae9df99ad28aff8e5aee4400c2ff2124d2ec01f6480a730a71767b46cac6a3b"
+    sha256 cellar: :any,                 sonoma:        "af08d60e1020689f58c37f7d9a2e465353fdca50c0b33ee353e1512a0f2827dc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "42e7be69909a93ad884898883441819318fd6cbb0df1b58a683ee97c69b4b900"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3a8609a42095a81ca3061e76d9605bd160e395d66a588a5757f676e2bc8417a6"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "libssh2"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "openssl@3" # Uses SecureTransport on macOS
+    depends_on "zlib-ng-compat"
   end
 
   def install

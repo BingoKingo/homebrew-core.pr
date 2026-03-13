@@ -1,19 +1,18 @@
 class Edbrowse < Formula
   desc "Command-line editor and web browser"
   homepage "https://edbrowse.org"
-  url "https://github.com/CMB/edbrowse/archive/refs/tags/v3.8.12.tar.gz"
-  sha256 "b5125c7d13c2ed4491dc0d5a31116b244db62ae1c417ba5d29910311d1194632"
+  url "https://github.com/edbrowse/edbrowse/archive/refs/tags/v3.8.16.tar.gz"
+  sha256 "7593e7ebd4ab0cff05c8d1a6cfb72c667a62aaffa2d84e0d4d29b8ab68459d0e"
   license "GPL-2.0-or-later"
-  head "https://github.com/cmb/edbrowse.git", branch: "master"
+  head "https://github.com/edbrowse/edbrowse.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1059c249fdc4473bb94aecdb88165610ce77bb5ac7ef3b0f305de0547b9f95e2"
-    sha256 cellar: :any,                 arm64_sonoma:  "61776b8d57d723fa908d7adbd7e4809ddb74cf6d79dcb328bca7d968f53efdcc"
-    sha256 cellar: :any,                 arm64_ventura: "b2f567f1855a2f083486a0071ed7ee99c722262baa9da61490b5dc7d2a2f2343"
-    sha256 cellar: :any,                 sonoma:        "fa304945f90088cd4376c092d1c37757e50849b8d3c23f773311f0ae10dd31d3"
-    sha256 cellar: :any,                 ventura:       "65f9a2871c07b22ec5a62bd1b1ad344c3fe83758b5f54607cf9df0dd657ebd34"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "19e13259385a839bc97d2a8c915b071c7bcd52ccd197ad0f8612564db33ae57d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e1b5862d17d78723f9685cf613663b788c0430e86ee8accb80f5182ed800fa16"
+    sha256 cellar: :any,                 arm64_tahoe:   "8d82e9caa53a4306edf1ed0e546117cf2179fdfa681502ae2b2a32f0e3307cd9"
+    sha256 cellar: :any,                 arm64_sequoia: "09f7024c882858624755ed25225a0325a4c3aea8026fc473031830c10d759c41"
+    sha256 cellar: :any,                 arm64_sonoma:  "5abb19a1db5e992ffb4ade30a1c0dd6e0badf248c8df67ff345a3566c2a68226"
+    sha256 cellar: :any,                 sonoma:        "fa1a0e8cf537963ab2d68728962453403b50f762be723cdf2320d90340cd8255"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d2875b7495df6a8bdc65c7fec1c1f1788be6b5aa04583703f62358d421dbc8da"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "58489129de776b9a31a00852fa8e939e29685c2ae857cea281d8c7329044a380"
   end
 
   depends_on "pkgconf" => :build
@@ -24,11 +23,25 @@ class Edbrowse < Formula
   depends_on "readline"
   depends_on "unixodbc"
 
+  # guard JS_GetVersion for Q_NG builds, upstream pr ref, https://github.com/edbrowse/edbrowse/pull/121
+  patch do
+    url "https://github.com/edbrowse/edbrowse/commit/fd684cc8bc25376b97ee5ea688ca733ab5ac3564.patch?full_index=1"
+    sha256 "3fde047573230d924ca6271c89bed6a1aca3071900bbd53e76e5c8df69aeaded"
+  end
+  # make install portability fix, upstream pr ref, https://github.com/edbrowse/edbrowse/pull/122
+  patch do
+    url "https://github.com/edbrowse/edbrowse/commit/e6389a12504d386f97493b91c5f920fafa00c627.patch?full_index=1"
+    sha256 "cc30cfe785f138fcc741c3184cbae17a44a7be564442c28ea6821f34687c41fc"
+  end
+
   def install
+    ENV.append_to_cflags "-DQ_NG=0"
+
     cd "src" do
       make_args = [
         "QUICKJS_INCLUDE=#{Formula["quickjs"].opt_include}/quickjs",
         "QUICKJS_LIB=#{Formula["quickjs"].opt_lib}/quickjs",
+        "QUICKJS_LIB_NAME=quickjs",
       ]
 
       system "make", *make_args

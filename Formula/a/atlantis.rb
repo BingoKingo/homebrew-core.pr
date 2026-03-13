@@ -1,8 +1,8 @@
 class Atlantis < Formula
   desc "Terraform Pull Request Automation tool"
   homepage "https://www.runatlantis.io/"
-  url "https://github.com/runatlantis/atlantis/archive/refs/tags/v0.34.0.tar.gz"
-  sha256 "b5985c7d8fb6b42b5995175ab1b761f23e8879f95ddc0acc44a5af4c706c528f"
+  url "https://github.com/runatlantis/atlantis/archive/refs/tags/v0.40.0.tar.gz"
+  sha256 "4d88574c79422aa6a362063d5ef3d46a6290c33d2e7918981cf2860a54f2c988"
   license "Apache-2.0"
   head "https://github.com/runatlantis/atlantis.git", branch: "main"
 
@@ -12,19 +12,19 @@ class Atlantis < Formula
   end
 
   bottle do
-    rebuild 2
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d8ca407cd145a50b557c01c069fb0616f17df02a06a3a5729dfff34c54e98246"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d8ca407cd145a50b557c01c069fb0616f17df02a06a3a5729dfff34c54e98246"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d8ca407cd145a50b557c01c069fb0616f17df02a06a3a5729dfff34c54e98246"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ff96e80c18e57f55e6be966d4ef62c8b0d0565b209dec0485bd51e805a172582"
-    sha256 cellar: :any_skip_relocation, ventura:       "ff96e80c18e57f55e6be966d4ef62c8b0d0565b209dec0485bd51e805a172582"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d60c3d551d569050ac1ea9d7ac02a86aa22e22936381feeb4342cfed293527bb"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f229c1f97447dbdaae6512ab07a084c82ecd86285f5aa2106cf8d1649bf0a6c7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f229c1f97447dbdaae6512ab07a084c82ecd86285f5aa2106cf8d1649bf0a6c7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f229c1f97447dbdaae6512ab07a084c82ecd86285f5aa2106cf8d1649bf0a6c7"
+    sha256 cellar: :any_skip_relocation, sonoma:        "746bca9edf042bd509611b44e26cc35c193e42ecc52e8ae0de872cb185ae5e37"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a8e005e16ebebd41f7b8184d4da05b2ee8d692c6a63d439f078de799dd6722d5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a409858aa9c51b8b237fa5a97ced7aeabe89b4c72b0a82f07a2a4ff910ee138b"
   end
 
   depends_on "go" => :build
   depends_on "opentofu" => :test
 
   def install
+    # The commit variable only displays 7 characters, so we can't use #{tap.user} or "Homebrew".
     ldflags = %W[
       -s -w
       -X main.version=#{version}
@@ -32,6 +32,8 @@ class Atlantis < Formula
       -X main.date=#{time.iso8601}
     ]
     system "go", "build", *std_go_args(ldflags:)
+
+    generate_completions_from_executable(bin/"atlantis", shell_parameter_format: :cobra)
   end
 
   test do

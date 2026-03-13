@@ -1,30 +1,51 @@
 class Appium < Formula
   desc "Automation for Apps"
   homepage "https://appium.io/"
-  url "https://registry.npmjs.org/appium/-/appium-2.19.0.tgz"
-  sha256 "ab8ab9723dd44d3a0adfa14e4320d9578a9127576f7fb862048d2335c9376f14"
+  url "https://registry.npmjs.org/appium/-/appium-3.2.2.tgz"
+  sha256 "6e2d758c1d91e22f0aab9925e9d20725f43f33d988abcce7db330ec7fd275155"
   license "Apache-2.0"
   head "https://github.com/appium/appium.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1aa5c5c8334cf4c5b056d2aa930aa8b98de4cef3b2e827eee49a5200f727d093"
-    sha256 cellar: :any,                 arm64_sonoma:  "1aa5c5c8334cf4c5b056d2aa930aa8b98de4cef3b2e827eee49a5200f727d093"
-    sha256 cellar: :any,                 arm64_ventura: "1aa5c5c8334cf4c5b056d2aa930aa8b98de4cef3b2e827eee49a5200f727d093"
-    sha256                               sonoma:        "8909d3b6daacd319dd44e4e3cf78ca3ad9db35ff0b6ac2cbe82139008413934e"
-    sha256                               ventura:       "8909d3b6daacd319dd44e4e3cf78ca3ad9db35ff0b6ac2cbe82139008413934e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3dd10a0552bef4be2a6ed07562df92fc68a3d5763c0358b1248a802bb30f450f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "67aa078cebb2641bc508bb80435c9f90b87c10fd079ba546f560b4cdfb99c7b3"
+    sha256                               arm64_tahoe:   "a2732cc7a0b94710eea7ac0ccd0fbdddfd8f63fa3c07464a91e48b518f531840"
+    sha256                               arm64_sequoia: "9164df4aadb6b74deeec37919aa6581f1d8734bda3303942d491b4a7631d95a9"
+    sha256                               arm64_sonoma:  "db66acca426b760e17e7be07fa10125c640e687b37434795f81433fd5f778d57"
+    sha256                               sonoma:        "2116ba2d51d6a08ec5166c6ee9a71b2735c44371a3f1fb986552e20f15a0c8d9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f37a9088358f12806d8e2000ce537b06ed7f1e7d2fdf31b188f90cc79539023b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e58a1212964adf3a66d968ed07cf4254b0d9ebfb1be507904c66cdc1c6c68f90"
   end
 
+  depends_on "pkgconf" => :build
+  depends_on "glib"
   depends_on "node"
+  depends_on "vips"
 
-  on_linux do
-    depends_on "vips"
+  on_macos do
+    depends_on "gettext"
+  end
+
+  # Resources needed to build sharp from source to avoid bundled vips
+  # https://sharp.pixelplumbing.com/install/#building-from-source
+  resource "node-addon-api" do
+    url "https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.6.0.tgz"
+    sha256 "e3029e9581015874cc794771ec9b970be83b12c456ded15cfba9371bddc42569"
+  end
+
+  resource "node-gyp" do
+    url "https://registry.npmjs.org/node-gyp/-/node-gyp-12.2.0.tgz"
+    sha256 "8689bbeb45a3219dfeb5b05a08d000d3b2492e12db02d46c81af0bee5c085fec"
   end
 
   def install
-    system "npm", "install", *std_npm_args, "--chromedriver-skip-install"
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    ENV["APPIUM_SKIP_CHROMEDRIVER_INSTALL"] = "1"
+    ENV["SHARP_FORCE_GLOBAL_LIBVIPS"] = "1"
+
+    system "npm", "install", *std_npm_args(ignore_scripts: false), *resources.map(&:cached_download)
+    bin.install_symlink libexec.glob("bin/*")
+
+    # Remove prebuilts which still get installed as optional dependencies
+    rm_r(libexec.glob("lib/node_modules/appium/node_modules/@img/sharp-*"))
+    rm_r(libexec.glob("lib/node_modules/appium/node_modules/bare-{fs,os,url}/prebuilds/*"))
   end
 
   service do
@@ -47,5 +68,11 @@ class Appium < Formula
     assert_match "images", output
 
     assert_match version.to_s, shell_output("#{bin}/appium --version")
+
+    require "utils/linkage"
+    sharp = libexec.glob("lib/node_modules/appium/node_modules/sharp/src/build/Release/sharp-*.node").first
+    libvips = Formula["vips"].opt_lib/shared_library("libvips")
+    assert sharp && Utils.binary_linked_to_library?(sharp, libvips),
+           "No linkage with #{libvips.basename}! Sharp is likely using a prebuilt version."
   end
 end

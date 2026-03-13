@@ -7,6 +7,7 @@ class OpenapiTui < Formula
   head "https://github.com/zaghaghi/openapi-tui.git", branch: "main"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "729ecb681e443c4997743c99d139df413b01406076440c6911ce1514c678257d"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "f7b112fae0439ef77af1a9e09c8a410f01e8c1252b844bc2f7d6b60ab9d07d75"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d599c38c9300b99b49333535053f1b6fc53818c44ee849ff1757a40f58d236d6"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "63b3e891441decfa79e4b67e540c621bd5612ffba84afa88f39331a51288a571"
@@ -30,14 +31,17 @@ class OpenapiTui < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/openapi-tui --version")
 
-    # Fails in Linux CI with `No such device or address (os error 6)`
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     openapi_url = "https://raw.githubusercontent.com/Tufin/oasdiff/8fdb99634d0f7f827810ee1ba7b23aa4ada8b124/data/openapi-test1.yaml"
 
     begin
       output_log = testpath/"output.log"
-      pid = spawn bin/"openapi-tui", "--input", openapi_url, [:out, :err] => output_log.to_s
+      if OS.mac?
+        pid = spawn bin/"openapi-tui", "--input", openapi_url, [:out, :err] => output_log.to_s
+      else
+        require "pty"
+        r, _w, pid = PTY.spawn bin/"openapi-tui", "--input", openapi_url, [:out, :err] => output_log.to_s
+        r.winsize = [80, 43]
+      end
       sleep 1
       assert_match "APIs", output_log.read
     ensure

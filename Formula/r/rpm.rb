@@ -5,6 +5,7 @@ class Rpm < Formula
     "GPL-2.0-only",
     "LGPL-2.0-or-later", # rpm-sequoia
   ]
+  revision 1
   version_scheme 1
   head "https://github.com/rpm-software-management/rpm.git", branch: "master"
 
@@ -19,26 +20,25 @@ class Rpm < Formula
     end
   end
 
-  # Upstream uses a 90+ patch to indicate prerelease versions (e.g., the
-  # tarball for "RPM 4.19 ALPHA" is `rpm-4.18.90.tar.bz2`).
   livecheck do
-    url "https://rpm.org/download.html"
-    regex(/href=.*?rpm[._-]v?(\d+\.\d+(?:\.(?:\d|[1-8]\d+)(?:\.\d+)*))\.t/i)
+    url "https://rpm.org/releases/"
+    regex(/RPM\s+v?(\d+(?:\.\d+)+)/i)
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
-    sha256 arm64_sequoia: "b68a3e9add758b36a2547372709f655d29948680c2403d8819a46445a9211a50"
-    sha256 arm64_sonoma:  "7319baf421ef56e8cdf5e937f0624a5ff14521d0d045d27446611faede12a0f8"
-    sha256 arm64_ventura: "5070355f11041aedf2f1559a4b04af7e87c596576e80c54db3e2674b6d40bd69"
-    sha256 sonoma:        "bc5c3289f2afaf8d6c12b1f530284be837ad9ab1c7376b1da93feb4b8588f2b1"
-    sha256 ventura:       "b47ab72d2f0b6d82eb7cc20e3b69655e92367ea9b5700834330bd76eb2c7eddb"
-    sha256 arm64_linux:   "25fc73da026efc9660a4373b10837df0c99f773ad000ddda3a3d07dcab1a459a"
-    sha256 x86_64_linux:  "529d59e759920b457292f5a378ccb796bf6d98587e6bb1d2b51ac2a17f1bb678"
+    sha256 arm64_tahoe:   "9c214ce074bddb955970b60106ebc155f0783a04e2af65080268ccecf7bd499b"
+    sha256 arm64_sequoia: "ec075b7ef916195ac245a831715ca4305641d607f5c82e9f81b437aa20d5ab8e"
+    sha256 arm64_sonoma:  "cc9845e73233b057da077d3504d8f5a19fcedffdac8a38965246b6c162030b49"
+    sha256 sonoma:        "862e0efee8b4876888c728c3921168cc1cb8ae74d4a787ef81278cd96d873e71"
+    sha256 arm64_linux:   "c8a0598905a3f1eb1c6ca3ea74e9e1313434a6055b9a45ff7c2500facfed373b"
+    sha256 x86_64_linux:  "936bb8258a1b95397a71270123f6298891fab5b9829c80447721693aa7e45a56"
   end
 
   depends_on "cmake" => :build
   depends_on "gettext" => :build
-  depends_on "python@3.13" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
   depends_on "rust" => :build # for rpm-sequoia
 
   depends_on "gmp"
@@ -55,9 +55,7 @@ class Rpm < Formula
   depends_on "xz"
   depends_on "zstd"
 
-  uses_from_macos "llvm" => :build
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
@@ -65,7 +63,9 @@ class Rpm < Formula
   end
 
   on_linux do
+    depends_on "llvm@21" => :build # LLVM 22 fails for nettle-sys
     depends_on "elfutils"
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with "rpm2cpio", because: "both install `rpm2cpio` binaries"
@@ -85,7 +85,7 @@ class Rpm < Formula
   end
 
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install
@@ -187,7 +187,7 @@ class Rpm < Formula
     assert_path_exists testpath/"rpmbuild/SRPMS/test-1.0-1.src.rpm"
     assert_path_exists testpath/"rpmbuild/RPMS/noarch/test-1.0-1.noarch.rpm"
 
-    info = shell_output(bin/"rpm --query --package -i #{testpath}/rpmbuild/RPMS/noarch/test-1.0-1.noarch.rpm")
+    info = shell_output("#{bin}/rpm --query --package -i #{testpath}/rpmbuild/RPMS/noarch/test-1.0-1.noarch.rpm")
     assert_match "Name        : test", info
     assert_match "Version     : 1.0", info
     assert_match "Release     : 1", info
@@ -197,7 +197,7 @@ class Rpm < Formula
     assert_match "Source RPM  : test-1.0-1.src.rpm", info
     assert_match "Trivial test package", info
 
-    files = shell_output(bin/"rpm --query --list --package #{testpath}/rpmbuild/RPMS/noarch/test-1.0-1.noarch.rpm")
+    files = shell_output("#{bin}/rpm --query --list --package #{testpath}/rpmbuild/RPMS/noarch/test-1.0-1.noarch.rpm")
     assert_match (HOMEBREW_PREFIX/"share/doc/test").to_s, files
 
     system python3, "-c", "import rpm"

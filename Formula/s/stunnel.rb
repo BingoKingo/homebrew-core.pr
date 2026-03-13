@@ -1,8 +1,8 @@
 class Stunnel < Formula
   desc "SSL tunneling program"
   homepage "https://www.stunnel.org/"
-  url "https://www.stunnel.org/downloads/stunnel-5.75.tar.gz"
-  sha256 "0c1ef0ed85240974dccb94fe74fb92d6383474c7c0d10e8796d1f781a3ba5683"
+  url "https://www.stunnel.org/downloads/stunnel-5.77.tar.gz"
+  sha256 "ec026f4fae4e0d25b940cc7a9451d925e359e7fd59e9edad20baea66ce45f263"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -11,13 +11,12 @@ class Stunnel < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "2a17023a0390c52c62815c836798580f22c21165dedad0399f1523a03fd4f211"
-    sha256 cellar: :any,                 arm64_sonoma:  "b52fe8808e516c6bc8fd521949770a79f98fea641d378384ca4658c35a0c3ff6"
-    sha256 cellar: :any,                 arm64_ventura: "9d56d29e77ff1815a00aeed94563c0ad74083444bfc12509a7e1bb577e54c011"
-    sha256 cellar: :any,                 sonoma:        "e5be8df8fbacccc56d65dd5b7fe6737208f80403f5fe497672393097e369e7b8"
-    sha256 cellar: :any,                 ventura:       "5d1c9cceac9515413bbfb32ce8e99b7375915c17af020f850969be0c9cf2f0c7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "af223c620740de6c81733ce26bcb3d025b58a23a3b52b0d19cc1c810e1cf7700"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a66a3d40d99cf4bc99eb9c070446687da88f41fb2f8569212a180030ab58c47e"
+    sha256 cellar: :any,                 arm64_tahoe:   "ac74092907babf1f1a5f40745d61cc2c8ea2df2ede28ca17ed922342bcaba2c3"
+    sha256 cellar: :any,                 arm64_sequoia: "2f9afc595da6206042e9562ee2bdd619df7cd674a924a06451893090094ee066"
+    sha256 cellar: :any,                 arm64_sonoma:  "ac4c9155cbdef0590034c2a4489e887392f653a7a31a223617b6f0cfa36e9f75"
+    sha256 cellar: :any,                 sonoma:        "4316263bd80f6627cb4a92de46eac2eed50dd039b3079043cb7f00abfba96445"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "cdda7e79c931dad1a231b0329227f0f4946f9aceaed127bdc7041bfe641a83d8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bf84a75ce8992b9842965c10e2f3a82e52c52576f853e01e81f89d2d46fff99c"
   end
 
   depends_on "openssl@3"

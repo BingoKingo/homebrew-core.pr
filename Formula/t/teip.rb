@@ -7,6 +7,7 @@ class Teip < Formula
   head "https://github.com/greymd/teip.git", branch: "main"
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:    "d5cf074867fb73e8e9d8553194cf8672c935c5921b969051b321021050ee841d"
     sha256 cellar: :any,                 arm64_sequoia:  "dc593ddc6816e59c32a3c28434566875dd30036937ed24fb6fbaf0b11c813f21"
     sha256 cellar: :any,                 arm64_sonoma:   "4df0b07d8bd0edaf62e6daac722039dc3dfb1f1e8340439e41c2631cb3eeec4c"
     sha256 cellar: :any,                 arm64_ventura:  "939622ea9607368b299e1eb0a3c19c01320a0399f8c01fa8502d14794fc1e983"
@@ -27,7 +28,9 @@ class Teip < Formula
   def install
     ENV["RUSTONIG_DYNAMIC_LIBONIG"] = "1"
     ENV["RUSTONIG_SYSTEM_LIBONIG"] = "1"
-    system "cargo", "install", "--features", "oniguruma", *std_cargo_args
+
+    system "cargo", "install", *std_cargo_args(features: "oniguruma")
+
     man1.install "man/teip.1"
     zsh_completion.install "completion/zsh/_teip"
     fish_completion.install "completion/fish/teip.fish"

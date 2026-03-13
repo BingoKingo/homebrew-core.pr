@@ -1,9 +1,9 @@
 class Riscv64ElfGcc < Formula
   desc "GNU compiler collection for riscv64-elf"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  sha256 "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea"
+  url "https://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  sha256 "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
   livecheck do
@@ -11,13 +11,13 @@ class Riscv64ElfGcc < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "faa3952d432ab4c0325ed6e4669d7a011fad1cf7456ad6fe601b529f4a9ac7ef"
-    sha256 arm64_sonoma:  "b5f6ffd04e5be4cd62bec37fa2d24a7e7e3e3a9b41eda9d110db859b0c2bafe1"
-    sha256 arm64_ventura: "307f3d4dc7a9463a65c413347bfcaa0c27bb54adc719607ff9e0877fbfe8aad2"
-    sha256 sonoma:        "1936a59631f8b412803bf7638e7618059bff6cd497a897fe688c64c883542579"
-    sha256 ventura:       "2d2bb31be008b9d808ec00d9ef7fec9012a433d6e52c5edac0e0de5501f999ce"
-    sha256 arm64_linux:   "42d83c9e9e34493d095782edaa22aa9e88270a02bf085952d4dd2f79990304a2"
-    sha256 x86_64_linux:  "fdf58cac64006b3e62bb182b82fb440c9b623311928818375c50f326f188fe76"
+    rebuild 1
+    sha256 arm64_tahoe:   "6a6b9c6a1a1ab30d64f79c4c9b12a1b7f89bf343443c93acea3f44cb0e3fd024"
+    sha256 arm64_sequoia: "eda840ed9aaacfdde29945a1325d50059be192215fd503f7ad753fe6a725a2e0"
+    sha256 arm64_sonoma:  "45056ecd7ba6c56903bba4818af026245cbd835f35103ba855c3b3d4135f520e"
+    sha256 sonoma:        "14b7e6f6aa5b7ba859c8e1fcae88569f7e3394d33623935ac3383c97c964e4f1"
+    sha256 arm64_linux:   "76017c17d960c82448240e53d2da221ba33ceffc88a280da36da5de17847a0c4"
+    sha256 x86_64_linux:  "58d842ae0c40efa2fc02e673a634723797ac19b422dc816b3e8854c4568a80da"
   end
 
   depends_on "gmp"
@@ -26,7 +26,9 @@ class Riscv64ElfGcc < Formula
   depends_on "riscv64-elf-binutils"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     target = "riscv64-elf"

@@ -1,25 +1,24 @@
 class Tfel < Formula
   desc "Code generation tool dedicated to material knowledge for numerical mechanics"
   homepage "https://thelfer.github.io/tfel/web/index.html"
-  url "https://github.com/thelfer/tfel/archive/refs/tags/TFEL-5.0.1.tar.gz"
-  sha256 "820b2f9d54e237b2c2d9d6f06aaf7d4a1d3f34fb373e6549bee4fd8b55ecfad1"
+  url "https://github.com/thelfer/tfel/archive/refs/tags/TFEL-5.1.0.tar.gz"
+  sha256 "1afd98200de332e97e86d109ce0e1aaa8f18cc6c6c81daec3218809509cdfad7"
   license "GPL-1.0-or-later"
   head "https://github.com/thelfer/tfel.git", branch: "master"
 
   bottle do
-    sha256 arm64_sequoia: "5a32fde49de7f2ecb7019ceb8893ae34ecca6347c71b1598bc056199594d2014"
-    sha256 arm64_sonoma:  "36ec43fdca67231f63225ca920b6f62e0e5489510de6c2b8796bc7238e6b42a4"
-    sha256 arm64_ventura: "67632853027c9909241d22a4745db0c68ec235339713a51d0b626a443808578e"
-    sha256 sonoma:        "ace78851845633b3f55a10cc49f7e365962b4acf5cee5c5a0e19ac35b5131226"
-    sha256 ventura:       "b0a0492cfb359a04d65d9e7b0a4b41db3817ae492e002a5d58e712b682dce87c"
-    sha256 arm64_linux:   "27e25c31a2fd4b106d35c072a359ccd78c478f42b52298d960d06a82ee877fc2"
-    sha256 x86_64_linux:  "51420bbf165e34f3abdf34af61c445eadba23e9ca0ce8d1c092b0e0247a9cd16"
+    sha256 arm64_tahoe:   "6c176029b0f9a9a97eba1a77309303a6e21d06f9b732dd36b21a6a906c0af94e"
+    sha256 arm64_sequoia: "c6df35305057ba120a952044049c3b11ec4036453ed0bfe6034ba3ee998b0677"
+    sha256 arm64_sonoma:  "2af5946f1175cfd3ee7e78b27ecca53257c45128b71782bc08692a6c6280965e"
+    sha256 sonoma:        "24947bbb4aa4789ba475114643e7e27301d1c5848963dc79f3cf2c6f827cb2d0"
+    sha256 arm64_linux:   "b0a9c7bbfe1fde48bd5bc46a8504dd1b1337063ab86e215779b3367f9f634607"
+    sha256 x86_64_linux:  "bb7e42bbd5f89718c0be51a12c9ab0af0236dd1bdbdc4eb6a7e48a633d144949"
   end
 
   depends_on "cmake" => :build
   depends_on "gcc" => :build # for gfortran
-  depends_on "boost-python3"
-  depends_on "python@3.13"
+  depends_on "pybind11" => :build
+  depends_on "python@3.14"
 
   def install
     args = [
@@ -28,7 +27,8 @@ class Tfel < Formula
       "-Denable-website=OFF",
       "-Dlocal-castem-header=ON",
       "-Denable-python=ON",
-      "-Denable-python-bindings=ON", # requires boost-python
+      "-Denable-python-bindings=ON",
+      "-Denable-pybind11=ON", # requires pybind11
       "-Denable-numpy-support=OFF",
       "-Denable-fortran=ON",
       "-Denable-cyrano=ON",
@@ -43,11 +43,6 @@ class Tfel < Formula
       "-Denable-testing=OFF",
       "-Dpython-static-interpreter-workaround=ON",
     ]
-
-    # Avoid linkage to boost container and graph modules
-    # Issue ref: https://github.com/boostorg/boost/issues/985
-    args << "-DCMAKE_MODULE_LINKER_FLAGS=-Wl,-dead_strip_dylibs" if OS.mac?
-
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"

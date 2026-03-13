@@ -1,21 +1,22 @@
 class Nanobind < Formula
   desc "Tiny and efficient C++/Python bindings"
   homepage "https://github.com/wjakob/nanobind"
-  url "https://github.com/wjakob/nanobind/archive/refs/tags/v2.7.0.tar.gz"
-  sha256 "6c8c6bf0435b9d8da9312801686affcf34b6dbba142db60feec8d8e220830499"
+  url "https://github.com/wjakob/nanobind/archive/refs/tags/v2.12.0.tar.gz"
+  sha256 "01f1f0cd0398743c18f33d07ae36ad410bd7f4a1e90683b508504de897d6e629"
   license "BSD-3-Clause"
   head "https://github.com/wjakob/nanobind.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "27262487a8a0bb8435e7652f543f2058057b1c7f5d3d71f36fd3c2cf1f34bcba"
+    sha256 cellar: :any_skip_relocation, all: "270cb01e67b63e579a811df5db9981c0b045e194d675687e0fb9c0e7ea29a41f"
   end
 
   depends_on "cmake" => [:build, :test]
-  depends_on "python@3.13" => [:build, :test]
-  depends_on "robin-map" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
+  depends_on "robin-map" => :no_linkage
 
   def install
     system "cmake", "-S", ".", "-B", "build",
+                    "-DNB_TEST=OFF",
                     "-DNB_USE_SUBMODULE_DEPS=OFF",
                     "-DNB_CREATE_INSTALL_RULES=ON",
                     "-DNB_INSTALL_DATADIR=#{pkgshare}",
@@ -33,7 +34,7 @@ class Nanobind < Formula
   end
 
   test do
-    python = "python3.13"
+    python = "python3.14"
 
     (testpath/"my_ext.cpp").write <<~CPP
       #include <nanobind/nanobind.h>
@@ -52,7 +53,7 @@ class Nanobind < Formula
       cmake_minimum_required(VERSION 3.27)
       project(test_nanobind)
 
-      find_package(Python #{python_version} COMPONENTS Interpreter Development.Module REQUIRED)
+      find_package(Python #{python_version} EXACT COMPONENTS Interpreter Development.Module REQUIRED)
 
       if(FIND_NANOBIND_USING_PYTHON)
         execute_process(

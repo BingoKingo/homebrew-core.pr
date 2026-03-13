@@ -1,8 +1,8 @@
 class SbomTool < Formula
   desc "Scalable and enterprise ready tool to create SBOMs for any variety of artifacts"
   homepage "https://github.com/microsoft/sbom-tool"
-  url "https://github.com/microsoft/sbom-tool/archive/refs/tags/v4.0.3.tar.gz"
-  sha256 "5395100f4516eb7c02a7833fcb3683a2d14282ac4eaa4d04b59482d8717a82b8"
+  url "https://github.com/microsoft/sbom-tool/archive/refs/tags/v4.1.5.tar.gz"
+  sha256 "512d884ce8689026f45b54a1c2a242e66f7d570e7d9a1a590d88733cc3e1a108"
   license "MIT"
   head "https://github.com/microsoft/sbom-tool.git", branch: "main"
 
@@ -15,17 +15,19 @@ class SbomTool < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "091a534b4ace588d7398271aa41dada17d506a72171978000890b2a8ed195019"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e4040221ef75fde3146d997bb4d83f3b809ae5b4aa55edd490e74e7329f7ca30"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f12c0fc73af505c4b63b02f53e95ad916aa88e9983762866fdc018640d987ab4"
-    sha256 cellar: :any_skip_relocation, ventura:       "6a3f293f560fdf2d611c34675ae4b723c711174509a46f0912fea345f56dbeb0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "cb0265f4fae02ca7955842636cb893d224c4fed84002866c4dd8a83ea1c5cde7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "645ef4079653a651249ed7be05ba7fc7c3946ac41245c98c0badbfbf35693dca"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "06b6f4918958ec0e7e70ccbb235644379bd18ff47afe57caf7d8c1c8cbedef67"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ab14eebe6248adcbb8a0bf171222131c57c0841ead2d19872d67d58e4191aa5a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "083d6b8c50c9c6999d8ccdaf0facf81e25b58287d8a047c372e6a517d8ad1bca"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c6613476c7a9046af605b796661736ce125b23ac0a01cf400920d99d095d9796"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3ee862f5f6b5c288e44ae1be6f39976b76e7a52a3c5c1cbcae09a076822d4ff5"
   end
 
   depends_on "dotnet@8"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     ENV["DOTNET_CLI_TELEMETRY_OPTOUT"] = "true"

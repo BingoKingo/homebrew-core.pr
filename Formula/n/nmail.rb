@@ -1,19 +1,18 @@
 class Nmail < Formula
   desc "Terminal-based email client for Linux and macOS"
   homepage "https://github.com/d99kris/nmail"
-  url "https://github.com/d99kris/nmail/archive/refs/tags/v5.4.7.tar.gz"
-  sha256 "f2f42812795ee73983e82c199694728576409b02fefae478a97f4a0665806685"
+  url "https://github.com/d99kris/nmail/archive/refs/tags/v5.10.3.tar.gz"
+  sha256 "a667b410a865eef7fb08ca9afceebf6a9a85c61850df875005255a88960c5158"
   license "MIT"
   head "https://github.com/d99kris/nmail.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "e3898855e88a64cf84418efcb37f2c7fff1ca49aef3aef9ce0b3bb7ff53c6ce7"
-    sha256 cellar: :any,                 arm64_sonoma:  "f07d78595eb1dbf6effb7f8db9d7d1ee1b28f5cd63997f9516fdbc6336643c26"
-    sha256 cellar: :any,                 arm64_ventura: "e1128cfbf515da5300f202b85d1cbf617cb7d6a5e79655c322338501cb5b9d3a"
-    sha256 cellar: :any,                 sonoma:        "8ac1fd11747938010445d3d751bc238a752d9d6d00a0173630c628cf4bf82225"
-    sha256 cellar: :any,                 ventura:       "0bc32bd0e5d20c341abd0f058320640eac72e7a8bfe4ea1520e057d418b812c6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b88f4c966cad83dd7afbfc3e6024057f8d9bee964a048efd4875458dd0402133"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "48a47df2c6511c56a2713c084c1351b76b4937cd782b93211d4f9892e8430fec"
+    sha256 cellar: :any,                 arm64_tahoe:   "2e9d07e160b98ddd1f0bbc113de3b91460ed9515754ed07d80777bf46592507d"
+    sha256 cellar: :any,                 arm64_sequoia: "e182f0e1323992af8ddc83fd5dac87565d29d454de9200a3b36f584eab7ade07"
+    sha256 cellar: :any,                 arm64_sonoma:  "4636c97fafd045eef26b33f72a3a22406f4fd53c5f32b72148d6c8f4d6dfdb2d"
+    sha256 cellar: :any,                 sonoma:        "1923bcc5a6e28f585f4c23f158415865e9b49ce970423fd16a4104d734d7dc96"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "edc6b2f46d42887d69bd9566b022ccf4548d664cb932844ac354d53b3aad0fce"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "20a755e09c43cc399166abfcc3993840c0fb064244d2444c53c2b5605e3a227d"
   end
 
   depends_on "cmake" => :build
@@ -26,10 +25,10 @@ class Nmail < Formula
   uses_from_macos "cyrus-sasl"
   uses_from_macos "expat"
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "util-linux" # for libuuid
+    depends_on "zlib-ng-compat"
   end
 
   def install

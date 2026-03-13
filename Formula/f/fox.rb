@@ -1,7 +1,8 @@
 class Fox < Formula
   desc "Toolkit for developing Graphical User Interfaces easily"
   homepage "http://fox-toolkit.org/"
-  url "http://fox-toolkit.org/ftp/fox-1.6.59.tar.gz"
+  url "https://distfiles.macports.org/fox/fox-1.6.59.tar.gz"
+  mirror "http://fox-toolkit.org/ftp/fox-1.6.59.tar.gz"
   sha256 "48f33d2dd5371c2d48f6518297f0ef5bbf3fcd37719e99f815dc6fc6e0f928ae"
   license "LGPL-2.1-or-later"
 
@@ -15,13 +16,13 @@ class Fox < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "9c2013438ee383a44ff0b074698e0525e723eaea322745da017f9a18e254c55d"
-    sha256 cellar: :any,                 arm64_sonoma:  "680d4ca9e11e09ae8022d3e66d38df4ca5c7aa3c9178d9768d7968e89c8afa8b"
-    sha256 cellar: :any,                 arm64_ventura: "913fd94fc1d4051b12d88df4659942892cf9c3e05fd4ad582c2a2fc38efe0def"
-    sha256 cellar: :any,                 sonoma:        "6e12aa948749cb6bb0618a376ced17b39a3c6d043b97598b91e31ac1c2d09306"
-    sha256 cellar: :any,                 ventura:       "365ecefc5bf0fa8070f7b13604b4706cdf13e0510ede27f0531d905664d1672e"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "afeeb42bdca4ebed1fe9e1b177cd23eccc01aa296c5395722392e59e84ac8e2c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "192f9a030ddd8f3613d2bc213b843f9ca0b667f08a67e3a5dbd43e84ff3b8ea5"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "91240fb02b90a3c3efdaa73e6deca2662ec50404014dd405762adcaf17db7ec9"
+    sha256 cellar: :any,                 arm64_sequoia: "36e79082d471128dac96dc31fcff7fff98a4b8a0656872cd130c0fb24e8b2597"
+    sha256 cellar: :any,                 arm64_sonoma:  "036570ec8faf4ace5e79bf8b14e87c7b937555326802fa13277a91ee1680c232"
+    sha256 cellar: :any,                 sonoma:        "1d251b692e7f74a95c853d492dd1a54714372ee61c4ee8bd94fc5b23feb49d5a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d411539e13366056c6597b528c53bec28e3fdaecfef3fbdb4e410c2f2a500ba6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4f7c54833495b786ec99c5cd9b5e40794471d9caf3e531173c63b2d4fc2f28bc"
   end
 
   depends_on "fontconfig"
@@ -38,7 +39,6 @@ class Fox < Formula
   depends_on "mesa-glu"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "libxfixes"
@@ -46,9 +46,13 @@ class Fox < Formula
     depends_on "libxrender"
   end
 
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
   # Fix -flat_namespace being used on Big Sur and later.
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-big_sur.diff"
     sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
   end
 

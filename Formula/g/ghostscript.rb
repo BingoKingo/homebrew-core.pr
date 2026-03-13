@@ -1,9 +1,10 @@
 class Ghostscript < Formula
   desc "Interpreter for PostScript and PDF"
   homepage "https://www.ghostscript.com/"
-  url "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10051/ghostpdl-10.05.1.tar.xz"
-  sha256 "320d97f46f2f1f0e770a97d2a9ed8699c8770e46987e3a3de127855856696eb9"
+  url "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10060/ghostpdl-10.06.0.tar.xz"
+  sha256 "3602056368cf649026231e2d65250b5860c023f3d4a0d9c35e6605e28e543ec1"
   license "AGPL-3.0-or-later"
+  revision 1
 
   # The GitHub tags omit delimiters (e.g. `gs9533` for version 9.53.3). The
   # `head` repository tags are formatted fine (e.g. `ghostpdl-9.53.3`) but a
@@ -16,14 +17,15 @@ class Ghostscript < Formula
     end
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
-    sha256 arm64_sequoia: "29a6c1c81a8c04ccc3a1a918b7bb75843318e13c4123cd196bae785466dc572a"
-    sha256 arm64_sonoma:  "f27ecbe17374b336ed1c402eb9b85afde9ab8584e472616595d66f820c38ef15"
-    sha256 arm64_ventura: "186b6ef887ecf25c6391596e5512666f5b0ec9b597ab69dc23079f06a7cddac3"
-    sha256 sonoma:        "d3d6fa441d393c477f19e9ba76603eb1ac087ec981c8d580608dc374fd57e2b5"
-    sha256 ventura:       "af5e17cda31fd12b3060df288a2a81d6887f4f4f338c2c191528b992902eac56"
-    sha256 arm64_linux:   "78257507e8c15192dd279a2332d006bdf2afbd906ea294700b3e2fdc9f7c55ae"
-    sha256 x86_64_linux:  "549c239558aabcb90990f44a9c48cb13899a6d1605c62f20918ed2e5a8481bc0"
+    sha256 arm64_tahoe:   "36245de09fc9100dff794142e7ca847b465d24109c3b4e66fcda28e8818850c1"
+    sha256 arm64_sequoia: "1aeb2dae71bdcd521ef298e114b49ba4fce87b47865aa86cac97a449d2870d63"
+    sha256 arm64_sonoma:  "2c4c3bd4bdded514714ffc1ed0f554f7399eda311d3df64af1a45e5219b41d20"
+    sha256 sonoma:        "1849aec43a04e46e21b370fdeff7efd1cfcac63d017c9fc44dc235e6f2fa47af"
+    sha256 arm64_linux:   "c81897d05d33d36448bb7e9d4da9ea0d30dd16ababdd5265662e8ebec296d3ef"
+    sha256 x86_64_linux:  "0c0ab563da757f637d27ac01d11013738701e3fdeef696e89ed878de66c5cdca"
   end
 
   head do
@@ -49,9 +51,13 @@ class Ghostscript < Formula
   depends_on "tesseract"
 
   uses_from_macos "expat"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "gambit-scheme", because: "both install `gsc` binary"
+  conflicts_with "gerbil-scheme", because: "both install `gsc` binary"
   conflicts_with "git-spice", because: "both install `gs` binary"
 
   # https://sourceforge.net/projects/gs-fonts/
@@ -76,6 +82,10 @@ class Ghostscript < Formula
 
     # Set the correct library install names so that `brew` doesn't need to fix them up later.
     ENV["DARWIN_LDFLAGS_SO_PREFIX"] = "#{opt_lib}/"
+    ENV.append_to_cflags "-fPIC" if OS.linux?
+    ENV["XCFLAGS"] = ENV.cflags
+    ENV["XCXXFLAGS"] = ENV.cxxflags
+
     system configure, *args, *std_configure_args
 
     # Install binaries and libraries

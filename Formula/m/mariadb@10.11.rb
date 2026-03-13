@@ -1,8 +1,8 @@
 class MariadbAT1011 < Formula
   desc "Drop-in replacement for MySQL"
   homepage "https://mariadb.org/"
-  url "https://archive.mariadb.org/mariadb-10.11.13/source/mariadb-10.11.13.tar.gz"
-  sha256 "f8b734749fbd652ea4e255be8cc7880f98d07b6a7feb4e1ea8c736cb480d23e4"
+  url "https://archive.mariadb.org/mariadb-10.11.16/source/mariadb-10.11.16.tar.gz"
+  sha256 "e4f9f2035d38345464ae8abaeaf68380d1ceadbafb4e84744ed2ed5b7aab64e7"
   license "GPL-2.0-only"
 
   livecheck do
@@ -18,13 +18,13 @@ class MariadbAT1011 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "335c1587b1801a0e5ebaac10b117615a04c77a2bb3c3f393b613c5fab1aad4f6"
-    sha256 arm64_sonoma:  "0d5c03f85c57764352d5de411a309374b445182ef76b690183438cb825d24a30"
-    sha256 arm64_ventura: "10de648a6949abc958282a4950ef745be2866d6290433f5cdd9ff3df2eb7a255"
-    sha256 sonoma:        "a6c4d5d0e10d74f60bdccd0b6b52d6a46b9889bdc96805b5ca097105f2e8b9de"
-    sha256 ventura:       "f284582fb89afed68dbd603b17ff0ce1e448a352a2bd0583279ee29e48573db9"
-    sha256 arm64_linux:   "99af3696a7e786541522afa5889f0c2b68ef31c7a54f9ee3ec978c27b8ac4997"
-    sha256 x86_64_linux:  "7444d6318b109b42d0fb9652407ba648ccd5cc2012362ea881a8e7000017d405"
+    rebuild 1
+    sha256 arm64_tahoe:   "56514623ce42b6c09dfe376443ee5e13f1190c36560f6f1d8e512e8e32cad780"
+    sha256 arm64_sequoia: "04786a359724c47ebc0c7ffd04ea98f496d7a7267754f64afde235b3c4c88386"
+    sha256 arm64_sonoma:  "6d6c31bc118d10c08a155fc2d352ac46462d4aa6d0fa51a311fe1820e8036c03"
+    sha256 sonoma:        "ef13f089920228ae931c3cf1718e59768eaa3d2f016879ece266de8d67c6920e"
+    sha256 arm64_linux:   "1c316c1e7a400972e3c65362a66141591c03059710db2f4b81add552fa3e3b05"
+    sha256 x86_64_linux:  "549869067344719d58eeae7b5110d229d6405f73ef27212c16528013298ddba0"
   end
 
   keg_only :versioned_formula
@@ -53,11 +53,10 @@ class MariadbAT1011 < Formula
   uses_from_macos "libxcrypt"
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "linux-pam"
-    depends_on "readline" # uses libedit on macOS
+    depends_on "zlib-ng-compat"
   end
 
   def install

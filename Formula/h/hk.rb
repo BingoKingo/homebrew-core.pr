@@ -1,19 +1,25 @@
 class Hk < Formula
   desc "Git hook and pre-commit lint manager"
   homepage "https://hk.jdx.dev"
-  url "https://github.com/jdx/hk/archive/refs/tags/v1.1.2.tar.gz"
-  sha256 "e533b9664673333bfc1abf837d052d435aa88ca76a8fa2b61332701118110368"
+  # pull from git tag to get submodules
+  url "https://github.com/jdx/hk.git",
+      tag:      "v1.38.0",
+      revision: "79723d03eaf2da70433c19b2425aaf3197cbcfc2"
   license "MIT"
   head "https://github.com/jdx/hk.git", branch: "main"
 
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "3acee0a2b3e1e159e6e20615791307eddfdeb8af490ee692ac5f1f62217b4a82"
-    sha256 cellar: :any,                 arm64_sonoma:  "56be2c05ce36e4ccd21dc72bcf25d93356e2b15cc4448f7334b85e8dedb76144"
-    sha256 cellar: :any,                 arm64_ventura: "1ce0b36dd0f4c1e9c47634bb7ccba343972c97f5b3d1e0cf488527002d887f66"
-    sha256 cellar: :any,                 sonoma:        "d4ca424a99a8f178932660e8e6f80d6d058eb8110a1da22f472b798a6ee560c0"
-    sha256 cellar: :any,                 ventura:       "7801eb1359ca2b3e59f854d54ec7bb8aa3a84634e93cc22417bf0ba414f3c1be"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "da6ff17c34633e62aa54cf7a1234670a85043be2469befa78113f765b0a7938e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31d172b4de7ffbf0ea8f2a066ce0743703e6678d1574209f8f30a6315549cdc5"
+    sha256 cellar: :any,                 arm64_tahoe:   "b55a6dc6d8abfdc893798930aff0d43971d693ad860f5969ae2887465019f0be"
+    sha256 cellar: :any,                 arm64_sequoia: "67054f78db96676bdf42a2337fe3b223a1511fcf376f8bd7841ab83294a85169"
+    sha256 cellar: :any,                 arm64_sonoma:  "0e47fb870f557771ec3caa1e6ca00a33bb2f613d6d88ca948e02bebad4d0d7c4"
+    sha256 cellar: :any,                 sonoma:        "798bede591a9846f9c30693279348146d7423540428e1d13e45b0e36fdec8e49"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "80be20a7d43c7ed47f4ecefa5f4c80abc68f91e4fe3abfcfa6c2df6a4692720c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1b8f5dce2e44fb60d3e3a2b6a4cc4ea43d9bd71a6482c1dbfb7078bf18d712ba"
   end
 
   depends_on "rust" => [:build, :test]
@@ -22,7 +28,11 @@ class Hk < Formula
   depends_on "pkl"
   depends_on "usage"
 
-  uses_from_macos "zlib"
+  uses_from_macos "python" => :build
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # Ensure the correct `openssl` will be picked up.
@@ -33,6 +43,8 @@ class Hk < Formula
 
     generate_completions_from_executable(bin/"hk", "completion")
 
+    # `mise run pkl:gen` - https://github.com/jdx/hk/blob/main/mise-tasks/pkl/gen
+    system "python3", "scripts/gen_builtins.py"
     pkgshare.install "pkl"
   end
 
@@ -51,6 +63,10 @@ class Hk < Formula
     PKL
 
     system "cargo", "init", "--name=brew"
+
+    system "git", "config", "user.name", "BrewTestBot"
+    system "git", "config", "user.email", "BrewTestBot@test.com"
+
     system "git", "add", "--all"
     system "git", "commit", "-m", "Initial commit"
 

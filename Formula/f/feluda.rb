@@ -1,8 +1,8 @@
 class Feluda < Formula
   desc "Detect license usage restrictions in your project"
   homepage "https://github.com/anistark/feluda"
-  url "https://github.com/anistark/feluda/archive/refs/tags/1.7.0.tar.gz"
-  sha256 "6f0fadf5133ddd0d7090d5cca85fbee742335942798a5d836e47f81cb41aa34a"
+  url "https://github.com/anistark/feluda/archive/refs/tags/v1.11.1.tar.gz"
+  sha256 "2a869288fec7f6edad343aca29571215c94e7b47eba93e93dfb9f3ada8ede2e3"
   license "MIT"
   head "https://github.com/anistark/feluda.git", branch: "main"
 
@@ -15,20 +15,21 @@ class Feluda < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "993b270638508c78a6ba5ec743c412d54732a6d138f02702aa9c389aad846c03"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "06b82c986266201e1e4e1b9523cc48e9614ffc4c94b926788ba5f3ad56d7f28e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ec4b90283a9ab6f42d981d58313b7349a64a0d1747da6db711f88942423f1d9a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5f16a7a9eafc9cab27629c67a52006019fe2f5889ab067ef94bf057145b73b02"
-    sha256 cellar: :any_skip_relocation, ventura:       "4ad15cfb4d122c11d7702c092cbbd73cd3529505880001060f899f690d2069f4"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4dd79e99b0e2be326a6f473cae8cf9f507b5dbf37d91d575d12062c0accf52fe"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "26d6c8c23cf54febb03d27e7e32613c91d39e2dcc87abfb2b5c9a9f5d4042c76"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "f8bda65949c192b41fc8018a393bff44fce7312681b70a72dff419f3fa32d8f7"
+    sha256 cellar: :any,                 arm64_sequoia: "146ba34a18edf47a4eeb090dfaa09a17c175fdd5e2f04fa110c4257b8d61d1ed"
+    sha256 cellar: :any,                 arm64_sonoma:  "e0ec1d5948f74eb60ed7830f214bb61f71a7b1dde2a8f4bd0212cb1b0055585a"
+    sha256 cellar: :any,                 sonoma:        "90fca6ae9d8936959af23b3598763d510ecc285326a0606be0f72256cf7c0e02"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5e28cd22412bd283c1b295950c417579d210d2e6026556de84093d5a37cf809b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4307b81c8979bb3699aa88ca68c6dcfbd1d9f91e14eea2ca0a49534346dcf51e"
   end
 
   depends_on "pkgconf" => :build
   depends_on "rust" => :build
+  depends_on "openssl@3"
 
   on_linux do
-    depends_on "openssl@3"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -39,6 +40,6 @@ class Feluda < Formula
     assert_match version.to_s, shell_output("#{bin}/feluda --version")
 
     output = shell_output("#{bin}/feluda --path #{testpath}")
-    assert_match " All dependencies passed the license check!", output
+    assert_match "❌ No supported project files found.", output
   end
 end

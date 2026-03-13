@@ -3,53 +3,50 @@ class GiDocgen < Formula
 
   desc "Documentation tool for GObject-based libraries"
   homepage "https://gnome.pages.gitlab.gnome.org/gi-docgen/"
-  url "https://files.pythonhosted.org/packages/55/e1/c32a1ee817fc7d11462b4ed8722b049c70dd61ce0b236f74e7cf4262412e/gi_docgen-2025.3.tar.gz"
-  sha256 "2fdb4f0f6b61184ab862fcfb41dafe1a795636de9fd8d21a8ca4feea3b6bf858"
+  url "https://files.pythonhosted.org/packages/43/23/386dad008d1f1dc3c7188db63ea5bf82ceb41a5914fb050e6e09a14a457a/gi_docgen-2026.1.tar.gz"
+  sha256 "65ac3c4f2b4255d1c616fb8eae55139b6ca10071545ca2272759ffd2ccf2c7b5"
   license any_of: ["Apache-2.0", "GPL-3.0-or-later"]
   head "https://gitlab.gnome.org/GNOME/gi-docgen.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0aa97f57971062c123e025311cee713886f9864cc8310fd53befe7bb77412ac0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "395b6e9efcb926d26d6840163dbabcbeb22e37d3d33b48015a78c8d2cb97865e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ca42b418a8fb2213a20293b9d898f1d35c2353f3a4e2639107497b2fc907aee9"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d5f8321066724c5ec51be489d5712b919c2475086dfae82903b53e251ddec68f"
-    sha256 cellar: :any_skip_relocation, ventura:       "fdf24279284551a55f263c562b7b6be74e444916efae31682925aea82710cfc1"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0b20fa69a410bf970bd2c1c50be1b538ff0a091db5e8ac7a9187991484d9223a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "36f3a153cac22ae02776de17e6714abb9215f25116878a3fa12fd5be8391abf6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "437d7007c46fd57532a7874eea65f28d4298f577d7d2778c8af9f3d99de77f63"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0ab6bb32f39ccd48d9ba16d254e80c64b05738aa3697b0b2429f8aee325c2b36"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "947b19456bbce7b18f3c44c4440085ad3f2e57b5df80c5c967398c4f3cd954e5"
+    sha256 cellar: :any_skip_relocation, sonoma:        "913a83c34733ed2eaf31500bb9b703b3c6de0c6f641a1bfb0dbd9dbf81cd5e8c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3fda9036b867fcec2266cfce287d1215c086248a0525f074386e33d9b05d906a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "73871760139cd48602616cc8adc3d6664b7cec8ef3909639e1b2fca0aa7892bf"
   end
 
-  depends_on "python@3.13"
-
-  # Source for latest version is not available on PyPI, so using GitHub tarball instead.
-  # Issue ref: https://github.com/leohemsted/smartypants.py/issues/8
-  resource "smartypants" do
-    url "https://github.com/leohemsted/smartypants.py/archive/refs/tags/v2.0.1.tar.gz"
-    sha256 "b98191911ff3b4144ef8ad53e776a2d0ad24bd508a905c6ce523597c40022773"
-  end
+  depends_on "python@3.14"
 
   resource "jinja2" do
-    url "https://files.pythonhosted.org/packages/af/92/b3130cbbf5591acf9ade8708c365f3238046ac7cb8ccba6e81abccb0ccff/jinja2-3.1.5.tar.gz"
-    sha256 "8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb"
+    url "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c72f3e33cef02e048281fec7ecec5f032d4aac52226b/jinja2-3.1.6.tar.gz"
+    sha256 "0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d"
   end
 
   resource "markdown" do
-    url "https://files.pythonhosted.org/packages/54/28/3af612670f82f4c056911fbbbb42760255801b3068c48de792d354ff4472/markdown-3.7.tar.gz"
-    sha256 "2ae2471477cfd02dbbf038d5d9bc226d40def84b4fe2986e49b59b6b472bbed2"
+    url "https://files.pythonhosted.org/packages/b7/b1/af95bcae8549f1f3fd70faacb29075826a0d689a27f232e8cee315efa053/markdown-3.10.1.tar.gz"
+    sha256 "1c19c10bd5c14ac948c53d0d762a04e2fa35a6d58a6b7b1e6bfcbe6fefc0001a"
   end
 
   resource "markupsafe" do
-    url "https://files.pythonhosted.org/packages/b2/97/5d42485e71dfc078108a86d6de8fa46db44a1a9295e89c5d6d4a06e23a62/markupsafe-3.0.2.tar.gz"
-    sha256 "ee55d3edf80167e48ea11a923c7386f4669df67d7994554387f84e7d8b0a2bf0"
+    url "https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz"
+    sha256 "722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698"
   end
 
   resource "packaging" do
-    url "https://files.pythonhosted.org/packages/d0/63/68dbb6eb2de9cb10ee4c9c14a0148804425e13c4fb20d61cce69f53106da/packaging-24.2.tar.gz"
-    sha256 "c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f"
+    url "https://files.pythonhosted.org/packages/65/ee/299d360cdc32edc7d2cf530f3accf79c4fca01e96ffc950d8a52213bd8e4/packaging-26.0.tar.gz"
+    sha256 "00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4"
   end
 
   resource "pygments" do
-    url "https://files.pythonhosted.org/packages/7c/2d/c3338d48ea6cc0feb8446d8e6937e1408088a72a39937982cc6111d17f84/pygments-2.19.1.tar.gz"
-    sha256 "61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f"
+    url "https://files.pythonhosted.org/packages/b0/77/a5b8c569bf593b0140bde72ea885a803b82086995367bf2037de0159d924/pygments-2.19.2.tar.gz"
+    sha256 "636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887"
+  end
+
+  resource "smartypants" do
+    url "https://files.pythonhosted.org/packages/6c/8f/a033f78196d9467b402d100ec40b95166d43fa2642693f23f771473d8195/smartypants-2.0.2.tar.gz"
+    sha256 "39d64ce1d7cc6964b698297bdf391bc12c3251b7f608e6e55d857cd7c5f800c6"
   end
 
   resource "typogrify" do
@@ -59,6 +56,7 @@ class GiDocgen < Formula
 
   def install
     virtualenv_install_with_resources
+    (share/"pkgconfig").install_symlink libexec/"share/pkgconfig/gi-docgen.pc"
   end
 
   test do

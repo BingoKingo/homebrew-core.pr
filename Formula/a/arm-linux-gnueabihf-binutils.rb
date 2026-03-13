@@ -1,9 +1,9 @@
 class ArmLinuxGnueabihfBinutils < Formula
   desc "FSF/GNU binutils for cross-compiling to arm-linux"
   homepage "https://www.gnu.org/software/binutils/binutils.html"
-  url "https://ftp.gnu.org/gnu/binutils/binutils-2.44.tar.bz2"
-  mirror "https://ftpmirror.gnu.org/binutils/binutils-2.44.tar.bz2"
-  sha256 "f66390a661faa117d00fab2e79cf2dc9d097b42cc296bf3f8677d1e7b452dc3a"
+  url "https://ftpmirror.gnu.org/gnu/binutils/binutils-2.46.0.tar.bz2"
+  mirror "https://ftp.gnu.org/gnu/binutils/binutils-2.46.0.tar.bz2"
+  sha256 "0f3152632a2a9ce066f20963e9bb40af7cf85b9b6c409ed892fd0676e84ecd12"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -11,13 +11,12 @@ class ArmLinuxGnueabihfBinutils < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "efa4af7fe2a1f1af0532a7eba01be51b606d532428364e57abefa1e0c5251b05"
-    sha256 arm64_sonoma:  "f8c07d9d101a620317cf2b25f6544a9faa9e59756645dd1a252dd4f3b404e492"
-    sha256 arm64_ventura: "85c571a268fffa11b63163d14d3531e226c30a012e9dfeaf05cd0f0702528617"
-    sha256 sonoma:        "a5122cdafdf344088a2a34974e209a9c87a54c99f17bee9ae84119b0a6e31a82"
-    sha256 ventura:       "b5d1a4cacf725353dd20a829c3f79a41803b1d680d58b7db77c3ae526a0ed7e0"
-    sha256 arm64_linux:   "4ae1d9653da02773fb59e33fea7fefc3071fcc35bae702b4c906ef8031d49362"
-    sha256 x86_64_linux:  "3af94c9946af90084949b00786c4273721977bc466bc69a24c515b4b18d15d50"
+    sha256 arm64_tahoe:   "0cfc6f6aa9caa4d26566113476e9e6363a26728d4f23cfe7735f21f7ffb5383c"
+    sha256 arm64_sequoia: "38948864d8d2bd66854fa4b9c7c912e62685add57394bb51f9ccaf876f4ecc39"
+    sha256 arm64_sonoma:  "e74ca2c3523c847f358a4d98eec72c7b3bb4fbea7c3508ac78e3c25a5006099c"
+    sha256 sonoma:        "bb8d99caaa6729636d012cf68a3819e7f8d86d0ba5d41be45e43481db9ba0a16"
+    sha256 arm64_linux:   "9c8d7f64dedef7ee36b69aaaf0c0ece9d4a19e0a48a04ded9811d751c9e665c0"
+    sha256 x86_64_linux:  "8a1e75510838008f58ce0dccbd0090a52c15a0afaec2f6534f557294a4aeada5"
   end
 
   depends_on "pkgconf" => :build
@@ -26,10 +25,12 @@ class ArmLinuxGnueabihfBinutils < Formula
   depends_on macos: :ventura
   depends_on "zstd"
 
-  uses_from_macos "zlib"
-
   on_system :linux, macos: :ventura_or_newer do
     depends_on "texinfo" => :build
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install

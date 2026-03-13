@@ -13,11 +13,11 @@ class InstallPeerdeps < Formula
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do
     system bin/"install-peerdeps", "eslint-config-airbnb@19.0.4"
-    assert_path_exists testpath/"node_modules"/"eslint" # eslint is a peerdep
+    assert_path_exists testpath/"node_modules/eslint" # eslint is a peerdep
   end
 end

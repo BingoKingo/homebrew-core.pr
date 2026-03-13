@@ -1,8 +1,8 @@
 class Libp11 < Formula
   desc "PKCS#11 wrapper library in C"
   homepage "https://github.com/OpenSC/libp11/wiki"
-  url "https://github.com/OpenSC/libp11/releases/download/libp11-0.4.13/libp11-0.4.13.tar.gz"
-  sha256 "d25dd9cff1b623e12d51b6d2c100e26063582d25c9a6f57c99d41f2da9567086"
+  url "https://github.com/OpenSC/libp11/releases/download/libp11-0.4.18/libp11-0.4.18.tar.gz"
+  sha256 "9292de67ca73aba1deacf577c9086b595765f36ef47712cfeb49fa31f6e772fb"
   license "LGPL-2.1-or-later"
 
   livecheck do
@@ -11,13 +11,12 @@ class Libp11 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "977ad78d2a417ee9375ce0964571619850c0341359ec1cf8ccd29e5fa739e974"
-    sha256 cellar: :any,                 arm64_sonoma:  "904fc18f308574764d577787969935815cb4859063772537ab8d933dfb07bfe2"
-    sha256 cellar: :any,                 arm64_ventura: "621c22fec9d9f4a3f17b370bd92e97ca1ece49e7a813e863d64db4ed845105cc"
-    sha256 cellar: :any,                 sonoma:        "e010e9fbaf03cc911d790fdbcd555f59f96babeb9cb6726e3df72f4f5cf08f2e"
-    sha256 cellar: :any,                 ventura:       "f2fdf3fe55448304d0699d293f5ae42670d3a66d78007d2178d147455a95a1df"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d1ff1243ca21e160c7e34a254deef46a741561b45d9cbf356ec110cd535b97fe"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4b5c9f823614a8048d5d01badef22552f87348814f0286a76119481f72acf940"
+    sha256 cellar: :any,                 arm64_tahoe:   "a94d83844bc1f18b84f86706ebf2c352aca06d25600caf40607abf84a6143754"
+    sha256 cellar: :any,                 arm64_sequoia: "d2bd6f345624a39294440cecbfc059e545a5dc39a7bab8c8e739755721ac5c31"
+    sha256 cellar: :any,                 arm64_sonoma:  "b3cf34f7f345d962fc543d2dba6b9a81a36a8644936dfab1dcc1349b612ebcb8"
+    sha256 cellar: :any,                 sonoma:        "74bc484a52d1b9385a0c63d0adc420f34376286b34a5652c53dc6454ec9f2205"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "230793e71d2b7f3b024ed4ebd9644848c5718fde2002ce92b89635ac5cc1a318"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31470d470591cdffac76a296ace50dbc0df4a6cbf5210afd2dc40b0e4a0e5f19"
   end
 
   head do
@@ -36,9 +35,13 @@ class Libp11 < Formula
     enginesdir = Utils.safe_popen_read("pkgconf", "--variable=enginesdir", "libcrypto").chomp
     enginesdir.sub!(openssl.prefix.realpath, prefix)
 
+    modulesdir = Utils.safe_popen_read("pkgconf", "--variable=modulesdir", "libcrypto").chomp
+    modulesdir.sub!(openssl.prefix.realpath, prefix)
+
     system "./bootstrap" if build.head?
     system "./configure", "--disable-silent-rules",
                           "--with-enginesdir=#{enginesdir}",
+                          "--with-modulesdir=#{modulesdir}",
                           *std_configure_args
     system "make", "install"
     pkgshare.install "examples/auth.c"

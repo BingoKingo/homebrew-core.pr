@@ -6,24 +6,25 @@ class Seal < Formula
   license "MIT"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "d722e8423730c3ec9aee70ed7c8655f674d11214b3f223be032b1c1eaa75059e"
-    sha256 cellar: :any,                 arm64_sonoma:  "ebfbfe9d6480f7f9d2ed977467595aec941ba25a97755507340710020adc4425"
-    sha256 cellar: :any,                 arm64_ventura: "86478b9f5e642a9c5a151053a4f1eb6b85a760e7e9e627cc4bbc2fb9f4b25e58"
-    sha256 cellar: :any,                 sonoma:        "e38a08c1096eb328fbc578e337330e437f73284fe02b46eb794bcbbd14f5e6d9"
-    sha256 cellar: :any,                 ventura:       "f7bb995a9e3436465ae5147f8348bc72781829765f37c6eeba3666f2b37b6181"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "906f743d9dc3cdb936bffcbcc29a34cd758d9ebf419a3d261f3af0f1141bc324"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d36a437367854b03cfa9802ee07ca8c22377be28ea20de45b8e23f70d6906ea7"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "c2b43ab3584c6568ba43786b9ab734c78c86a569efff42025a07b34584d880bc"
+    sha256 cellar: :any,                 arm64_sequoia: "39ed846791c3055f424593bdeaf451b6d1623f69128827591c5cf91932d3b26b"
+    sha256 cellar: :any,                 arm64_sonoma:  "2d44b452c5332cfdf95cbd883e1247fc86b644712c85a38cf8c1a2bb68607090"
+    sha256 cellar: :any,                 sonoma:        "755f905a1b01a50e5e6e7743f4cee17ebec09936f15cc069b804b72baaf031b8"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c7d87708dcfef3a3c12c3d2341defb5bee81ee1a4d5eb9a51a76990bb9ac784c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "039ccc740daf1ddc76cef431eac86b73bcf385a78699eb7e247ef1bea16e4178"
   end
 
   depends_on "cmake" => [:build, :test]
   depends_on "cpp-gsl"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   resource "hexl" do
-    url "https://github.com/intel/hexl/archive/refs/tags/v1.2.5.tar.gz"
+    url "https://github.com/IntelLabs/hexl/archive/refs/tags/v1.2.5.tar.gz"
     sha256 "3692e6e6183dbc49253e51e86c3e52e7affcac925f57db0949dbb4d34b558a9a"
   end
 
@@ -40,6 +41,7 @@ class Seal < Formula
           -DHEXL_BENCHMARK=OFF
           -DHEXL_TESTING=OFF
           -DHEXL_EXPORT=ON
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
         ]
         system "cmake", "-S", ".", "-B", "build", *hexl_args, *std_cmake_args
         system "cmake", "--build", "build"
@@ -51,10 +53,11 @@ class Seal < Formula
     args = %W[
       -DBUILD_SHARED_LIBS=ON
       -DSEAL_BUILD_DEPS=OFF
-      -DSEAL_USE_ALIGNED_ALLOC=#{(OS.mac? && MacOS.version > :mojave) ? "ON" : "OFF"}
+      -DSEAL_USE_ALIGNED_ALLOC=#{OS.mac? ? "ON" : "OFF"}
       -DSEAL_USE_INTEL_HEXL=#{Hardware::CPU.intel? ? "ON" : "OFF"}
       -DHEXL_DIR=#{lib}/cmake
       -DCMAKE_CXX_FLAGS=-I#{include}
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     ]
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args

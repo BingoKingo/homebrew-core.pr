@@ -8,6 +8,7 @@ class Glfw < Formula
 
   bottle do
     rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "b6f994a80eff1c192e58bde265e72440f065899224dba202d1c2775baf6f46b9"
     sha256 cellar: :any,                 arm64_sequoia: "c81ce0e7ad94a9b1fc06e9e6bb1cb1c03338f093cc2b2d51bf5ee05f704d1dd5"
     sha256 cellar: :any,                 arm64_sonoma:  "e8b219d638bcba7ca5d518cad42cefa577de1a648b583fa59838354554ecf709"
     sha256 cellar: :any,                 arm64_ventura: "3d2030cdf6ab73f5de30be6fc0ce2ef0c4ea4b1757574b1afb4498c5bf50131f"
@@ -21,6 +22,7 @@ class Glfw < Formula
   depends_on "pkgconf" => :build
 
   on_linux do
+    depends_on "xorg-server" => :test
     depends_on "freeglut"
     depends_on "libxcursor"
     depends_on "libxkbcommon"
@@ -51,11 +53,11 @@ class Glfw < Formula
       }
     C
 
-    system ENV.cc, "test.c", "-o", "test",
-                   "-I#{include}", "-L#{lib}", "-lglfw"
-
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
-    system "./test"
+    system ENV.cc, "test.c", "-o", "test", "-I#{include}", "-L#{lib}", "-lglfw"
+    if OS.linux? && ENV.exclude?("DISPLAY")
+      system Formula["xorg-server"].bin/"xvfb-run", "./test"
+    else
+      system "./test"
+    end
   end
 end

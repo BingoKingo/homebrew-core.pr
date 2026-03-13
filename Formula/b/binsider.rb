@@ -1,19 +1,18 @@
 class Binsider < Formula
   desc "Analyzes ELF binaries"
   homepage "https://binsider.dev/"
-  url "https://github.com/orhun/binsider/archive/refs/tags/v0.2.1.tar.gz"
-  sha256 "a3bc10379677b19656436924f478798f205b371bc703feab938c1b2512f39500"
+  url "https://github.com/orhun/binsider/archive/refs/tags/v0.3.2.tar.gz"
+  sha256 "78d8ccb0497fd32bdd3c46d1ca6557725154af179021b30a00150e96e4ead8f8"
   license any_of: ["Apache-2.0", "MIT"]
   head "https://github.com/orhun/binsider.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2c11ab382fd297958dded8d9685f67fe756a24d97f528330dfae16a42d7a73dd"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "60f9f1ceef1fdc6d373fec4c8b36997e5914f1ff8e0679293fcef4cc5a2be2c2"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "761e347994471b3ce157f8b2ab46a4e3e143b529d6578b4585e1c3b593adf1f2"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b2902341e9a85d24a8a33a19f1da3d9f2512e20400b3b68eabba48fe2cce994e"
-    sha256 cellar: :any_skip_relocation, ventura:       "a0be7f487c12b713227182a95cfd71fa74c8861c845f51af597402fdb2c85aad"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "510fed2e6a9eeac3beaeb9ddd8e8446b5fe7188993bbd907746c864be9c33721"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "805569e73c84fb8455ce5125dcc9e188404c48ca88538917c82b5e4994c1258d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "fb174c262fef03b7bdb8764bdba5aa421b00f888843296e1c6950e2e96d43c14"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "71939a232ef4e8f7e6791060b0fc12085b33e48ae7e28e78ba9336185d2fb017"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9b264bb2603ad5dfc863a45f841dceaf74d8ed018915b6574f30caae0eb8438d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "8dd432e82e9de9c566f17eff18f24cd896ee33110a420dc4625d24594f0e389c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6d554a2e39ef7d49cbca53cac30b77d156f91eb0e67ffea8c8469464b4fefc05"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "eb237cba89a8c27b6b02cc27839349b37b393c420bcd2f6f1d88589e00751f25"
   end
 
   depends_on "rust" => :build
@@ -30,10 +29,16 @@ class Binsider < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/binsider -V")
 
-    # IO error: `No such device or address (os error 6)`
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
+    assert_match "Invalid Magic Bytes", shell_output("#{bin}/binsider #{test_fixtures("mach/a.out")} 2>&1", 1)
 
-    assert_match "Invalid Magic Bytes",
-      shell_output(bin/"binsider 2>&1", 1)
+    require "pty"
+    PTY.spawn("#{bin}/binsider #{test_fixtures("elf/hello")} | tee #{testpath}/out.log") do |r, w, pid|
+      r.winsize = [80, 43]
+      sleep 5
+      w.write "q"
+      r.read if OS.mac?
+      Process.wait(pid)
+    end
+    assert_match "/lib64/ld-linux-x86-64.so.2", File.read("out.log")
   end
 end

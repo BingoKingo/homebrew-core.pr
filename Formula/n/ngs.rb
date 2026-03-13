@@ -7,6 +7,7 @@ class Ngs < Formula
   head "https://github.com/ngs-lang/ngs.git", branch: "master"
 
   bottle do
+    sha256 arm64_tahoe:   "feba0ec17eac5b598935a376ed97b160837728ea1dce7368ab984e48134ac80b"
     sha256 arm64_sequoia: "e7f8a694f90c7451ed9abda3ca69e35d1dbab001ede6afcc97b37f8042524c69"
     sha256 arm64_sonoma:  "d173769e2e4ee2b4882e64afd3ba3496ab82a17fd8d127b4ebbcf86b54e8d535"
     sha256 arm64_ventura: "871cc1ebb9efa92af51e3287dd5ba4bc421f27992cc10c5a948462d272996857"
@@ -15,6 +16,10 @@ class Ngs < Formula
     sha256 arm64_linux:   "a8dd83896bb983f2a5885e3fe873bbf65a5bfc4d18c6ecf0ba07e5ae736c06b5"
     sha256 x86_64_linux:  "9c4e5283fc854c1e1489d98ef5d234163222567da81348d751084d2ba138ac11"
   end
+
+  # Analytics on deprecation date: "install: 3 (30 days), 8 (90 days), 83 (365 days)"
+  deprecate! date: "2026-01-12", because: "needs EOL `pcre`"
+  disable! date: "2027-01-12", because: "needs EOL `pcre`"
 
   depends_on "cmake" => :build
   depends_on "pandoc" => :build

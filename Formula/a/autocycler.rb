@@ -1,19 +1,18 @@
 class Autocycler < Formula
   desc "Tool for generating consensus long-read assemblies for bacterial genomes"
   homepage "https://github.com/rrwick/Autocycler"
-  url "https://github.com/rrwick/Autocycler/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 "028586ba433ddb6a21e4159c5e9075423c2ac4b0c60fbaa4744358cdfebf7d57"
+  url "https://github.com/rrwick/Autocycler/archive/refs/tags/v0.6.1.tar.gz"
+  sha256 "564018115c5c1da970e92059817f30e44370f621c18ec9ef3c8dba41605661cc"
   license "GPL-3.0-or-later"
   head "https://github.com/rrwick/Autocycler.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "85ccc0eb7168ad90a9a199d5ce858b53967ee484cbf02ef6f67deca592a37835"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0969f41334ef0e8de7f958b7ab09143ec334c5a3edac84c211ad7abfd5fd3486"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "007926a3b46baa917a944c0d61964820bd8ab3779198f5c648f2a38bb5f211a8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "2afedeb613f52e319f265b5ebfc2f1ff7d58b7edccd49e9943a1a1bd1d6e25c6"
-    sha256 cellar: :any_skip_relocation, ventura:       "fc87ea4795c07d2622573c26c4e0afff33ee7dfd3ee737b37cec90304cbf66bb"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f14428d82870689581a4be308fdbeb12a87155c2e4402f1e3da68aeeda764ec5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8aeab2771d3d4f19e0db987892f0f07c31ec06482c4ff0be352915f76fa2c1be"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "2338ee10ff9888accef44fefe72b7175f36002567e661e81b1cb9e44e80409a1"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f1acd7539d9fbc1473df082659ec95bbd15e718f2031ed16e0590aebc45399af"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e3ad9748d80c719497536fee36284bbbfdc0e14d4ba70f57d0b92222760cadea"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ed7a8490f01216bec1f3f9da51310ff1641c3c99d4fed44660e43761ba0c6acd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7fe40dd292f0e1ee5d75353d1c56efb0d4fce184d731a00dd59a80b370e97653"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "db5849ffa59c7c215e7027ec794ca1f15aa812a31e0ff1e9c2fed5a3def2bfe6"
   end
 
   depends_on "rust" => :build

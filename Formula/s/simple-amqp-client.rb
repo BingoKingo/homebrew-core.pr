@@ -4,23 +4,28 @@ class SimpleAmqpClient < Formula
   url "https://github.com/alanxz/SimpleAmqpClient/archive/refs/tags/v2.5.1.tar.gz"
   sha256 "057c56b29390ec7659de1527f9ccbadb602e3e73048de79594521b3141ab586d"
   license "MIT"
-  revision 11
+  revision 13
   head "https://github.com/alanxz/SimpleAmqpClient.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "87ae8527d44ded5a0dd914f42d21527a951a01b9e99861413d73bc5113dbe74f"
-    sha256 cellar: :any,                 arm64_sonoma:  "842d4ae9462815803fc55eb6ab9bd046edd63814df21bdd450e570e61fa14dcd"
-    sha256 cellar: :any,                 arm64_ventura: "766942e45c1c85f8d93727b399a7caced4796226d67ee085b6bcf0c37a9a86b0"
-    sha256 cellar: :any,                 sonoma:        "3692e9563b2f7eb144aa01de033003dacdfaefd9ae88a0bd5719c5519c430093"
-    sha256 cellar: :any,                 ventura:       "386c44669e5e91bf2e33b954fe7d5abaf05e65c4f9329a36e1e5445f3d2bf106"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "724aaaf2f46fb7bbcf4d949fc115328e0e9108ee895048b1baef8f8453f4877a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d7f97c240551cdd21573e0a00f66fd23b6275b21247e718a93c05ff4185e56ad"
+    sha256 cellar: :any,                 arm64_tahoe:   "d412b6de7b7131e3940c3cb6c6de590851da8475fc52214d7e5a7bc4e23630b7"
+    sha256 cellar: :any,                 arm64_sequoia: "34336c39998749444352e2928d0737d6de1e1130ec584592edb8ad89cfd468bc"
+    sha256 cellar: :any,                 arm64_sonoma:  "6cf87592a1de61ad79ef81efec558a08bb229c68cd0b090d24e92bc49ca6edfe"
+    sha256 cellar: :any,                 sonoma:        "9b14b52e4aba5528038d4afcfafaa8dbc45244efdaf2e6615664db56d510d6c0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9361f043d1ae8d104f0e27504b7fbaf262501bcdcdc189b0dde6d7dcfd278f06"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "816871d1c73e83de194d29a0c89f41e62b8beb6e873c7a30736b878e93ee6273"
   end
 
   depends_on "cmake" => :build
   depends_on "doxygen" => :build
   depends_on "boost"
   depends_on "rabbitmq-c"
+
+  # Fix build with Boost 1.89.0, pr ref: https://github.com/alanxz/SimpleAmqpClient/pull/356
+  patch do
+    url "https://github.com/alanxz/SimpleAmqpClient/commit/3d3c669608b0dc3ae54e9caae6244bdcc38ca054.patch?full_index=1"
+    sha256 "652aad326ace036498e2f990f6fecaa9d2472e04885f581d773fb1fbf3809e9c"
+  end
 
   def install
     # Remove hard-coded CMAKE_CXX_STANDARD

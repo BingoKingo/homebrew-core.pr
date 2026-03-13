@@ -1,8 +1,8 @@
 class Fossil < Formula
   desc "Distributed software configuration management"
   homepage "https://www.fossil-scm.org/home/"
-  url "https://fossil-scm.org/home/tarball/version-2.26/fossil-src-2.26.tar.gz"
-  sha256 "a9be104c8055ada40985a158392d73f3c84829accb5b5d404e361fea360774c2"
+  url "https://fossil-scm.org/home/tarball/version-2.28/fossil-src-2.28.tar.gz"
+  sha256 "84c18824ca227e7602d2408b663c3747f754ad306ed5c73ddab959d6589538a6"
   license "BSD-2-Clause"
   head "https://www.fossil-scm.org/", using: :fossil
 
@@ -12,17 +12,19 @@ class Fossil < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "cd0afa8139ae0456e601ad865e25f0d3165469c8ccc0b5fddfa2c21636d90a1d"
-    sha256                               arm64_sonoma:  "5506de25e925a7a39d02a3f9876928345ec5b2f585f75838a6c103d321179027"
-    sha256                               arm64_ventura: "cbe71ce1e8b2c5cb0b27eca0521484516c4ae9636e0c8faa8f298ffeabd4fa4a"
-    sha256 cellar: :any,                 sonoma:        "825f9d44387eb478bf92676dfdb41a7b69c9fb18ba500bee6ce959780de3cdb7"
-    sha256 cellar: :any,                 ventura:       "3753125d37530b20b83ce56f640ac28ce2137861d41d9e68afd3c8bae3b0ced6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d58255ab2f19eb5bd97f3c06102be0b4be57f814ae22ddccf7de5fafad0a6202"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0d7b9343231a9fc18fd03128b5e5d1af97104af6a8f839d247760117c34e7cd9"
+    sha256                               arm64_tahoe:   "4b4e87850124a9ac1e744a1666dcb130559b2a42211c88fd6638bf4aaf94bedd"
+    sha256                               arm64_sequoia: "374946eaa9167456cb3a8afdfbfd682f6b3d1fec6f824e8f5675fbb39b6affaa"
+    sha256                               arm64_sonoma:  "5257caee28e4c79d291c042d068d6d6224516349af37bbbb44364502a19d12ba"
+    sha256 cellar: :any,                 sonoma:        "a0b0f4dd1d52c16dfc8c86eef57c54931c3f6a63b8ea823d57a81250f823579d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "527bcb7891799919f0b6219d088421a044f5af220ae06c2d1305444014a12701"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bbd65f925258794188c892a90210dd3c84d48feef1c435c7d432a2f7cfec8f7b"
   end
 
   depends_on "openssl@3"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = [

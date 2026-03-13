@@ -1,25 +1,24 @@
 class Nuspell < Formula
   desc "Fast and safe spellchecking C++ library"
   homepage "https://nuspell.github.io/"
-  url "https://github.com/nuspell/nuspell/archive/refs/tags/v5.1.6.tar.gz"
-  sha256 "5d4baa1daf833a18dc06ae0af0571d9574cc849d47daff6b9ce11dac0a5ded6a"
+  url "https://github.com/nuspell/nuspell/archive/refs/tags/v5.1.7.tar.gz"
+  sha256 "9aee944e86924ce44434741cb950fee8f9a6ff9c4f002803ab5f04698c8e4c68"
   license "LGPL-3.0-or-later"
-  revision 3
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "14ba0bb0f17a8fc5967e48e18fde6cab3bb3b8b001bc9bc35faef3aa59c5ced8"
-    sha256 cellar: :any,                 arm64_sonoma:  "f4bd583376d69180bec744cdcd0c8d2ab7a9bb0b4677460d6ffc7e824c59ff3f"
-    sha256 cellar: :any,                 arm64_ventura: "02756d92662cd21767555be0978764212c94bf7be5a9194fa6635e49239f1de5"
-    sha256 cellar: :any,                 sonoma:        "23775d359fef306735dc2afd3042a386f22ec7de882bea316685d1822942e3a5"
-    sha256 cellar: :any,                 ventura:       "90574b2385853fd7d0894a9c06e10385f371a63e56c5299eacf0f96783547ed0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ff039a8596d1432cda8a748094dfa39d7952e31164a4ad62b3f0b442daff43eb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "108063c1f0d81a9da12e8f82a98b942a80245bba5458415d76e6cd2f760ac678"
+    sha256 cellar: :any,                 arm64_tahoe:   "6863e34c58596b85e558b7184ac455bf449ff65cd5b9ac2f3d3f4c509ca155a6"
+    sha256 cellar: :any,                 arm64_sequoia: "d28b1a84a1ec0cfd557fcf6febd53a6c0cf1fd10fb4363ddb7566518b5cd7ea6"
+    sha256 cellar: :any,                 arm64_sonoma:  "5462266d572558109b691dd064870f1bbeb1a7e6b7d455c8c6a7cd7cabf319e4"
+    sha256 cellar: :any,                 sonoma:        "38a0d023c75e8bb42cf442000fcf1e652517dbac3ad292d744a0f405e77e30ff"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d32911d3302e34fc0d672550c67d524070c0313b29f2f8177154644eff4402c1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4f038716f553adbecc58cf191544f5cca27c9bdcdc0e79f8c380e66a13f1a34e"
   end
 
   depends_on "cmake" => :build
+  depends_on "doxygen" => :build
   depends_on "pandoc" => :build
   depends_on "pkgconf" => :test
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
 
   def install
     system "cmake", "-S", ".", "-B", "build", "-DCMAKE_INSTALL_RPATH=#{rpath}", *std_cmake_args

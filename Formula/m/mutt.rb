@@ -10,39 +10,36 @@
 class Mutt < Formula
   desc "Mongrel of mail user agents (part elm, pine, mush, mh, etc.)"
   homepage "http://www.mutt.org/"
-  url "https://bitbucket.org/mutt/mutt/downloads/mutt-2.2.14.tar.gz"
-  sha256 "d162fb6d491e3af43d6f62f949b7e687bb0c7c2584da52c99a99354a25de14ef"
+  url "https://ftp.osuosl.org/pub/mutt/mutt-2.3.0.tar.gz"
+  mirror "http://ftp.mutt.org/pub/mutt/mutt-2.3.0.tar.gz"
+  sha256 "5d5ebc40843f7156d5ede30e50016798ac7336467f7ad347e716510516cc2130"
   license "GPL-2.0-or-later"
 
-  # Livecheck uses GitLab tags to determine current version.
-  # They all have `-rel` suffix which needs to be omitted.
-  #
-  # BitBucket strategy doesn't work for some reason.
   livecheck do
-    url "https://gitlab.com/muttmua/mutt.git"
-    regex(/^mutt[._-]v?(\d+(?:-\d+)+)-rel$/i)
+    url "http://www.mutt.org/download.html"
+    regex(/href=.*?mutt[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 arm64_sequoia: "e11bd2be69fee9b5c24190699cf2318559ca0cda04520ae1845a5512e0fcd843"
-    sha256 arm64_sonoma:  "b5ef0c774e2c1926a13345f73f2f6370aa28d54bd4dfff553f945fb7f9ab7858"
-    sha256 arm64_ventura: "da5fc14cf6e06faab09da46efbea32504378573518a19f58645809f80d2e7781"
-    sha256 sonoma:        "a2b125aa772f366ed34ee8da0d71565e88334f0dadc37c10513f358fc0c4d106"
-    sha256 ventura:       "a17770bc4c28b5f01f213145fc6f78967616b8dd4b4b95839935981d9f00b058"
-    sha256 arm64_linux:   "9ba607d24fa2463909af8d212233024e9c3c7fde6868bc8a2ea3c901d68d9e18"
-    sha256 x86_64_linux:  "17374083e28fb5d5bad686eb2c301a0f37bf49e46c8bcd30c5a04cc90c8c79ee"
+    rebuild 1
+    sha256 arm64_tahoe:   "f5aa59e57c93ebe4dbf834ea06623182f72c0192e2161be9398acfacd63d971c"
+    sha256 arm64_sequoia: "59ba570bdf75696b15b8fed0ff15e7b47038dfd850ea9b60e26d5c277e5a6d88"
+    sha256 arm64_sonoma:  "39f710476e12dd8e3616df36ac1be4451f6064754accde6750f3545e945790ff"
+    sha256 sonoma:        "6998d2b147a5c30ea2ecfd5e7e11da8e83f1a48ad0c6f85047438a5bd1a78b95"
+    sha256 arm64_linux:   "0b09516917e4253a40d189133cca26904fb17c9552c2e7716abb8a0d9a6c7514"
+    sha256 x86_64_linux:  "e08eb40aa35b734d0e8f9a43ad02bda74b703bcf236e4e4e53800f5a90f5ce58"
   end
 
   head do
     url "https://gitlab.com/muttmua/mutt.git", branch: "master"
 
+    depends_on "autoconf" => :build
+    depends_on "automake" => :build
+
     resource "html" do
       url "https://muttmua.gitlab.io/mutt/manual-dev.html"
     end
   end
-
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
 
   depends_on "gpgme"
   depends_on "libgpg-error"
@@ -54,11 +51,14 @@ class Mutt < Formula
   uses_from_macos "bzip2"
   uses_from_macos "cyrus-sasl"
   uses_from_macos "krb5"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
     depends_on "libunistring"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with "tin", because: "both install mmdf.5 and mbox.5 man pages"
@@ -82,7 +82,8 @@ class Mutt < Formula
       --with-tokyocabinet
     ]
 
-    system "./prepare", *args, *std_configure_args
+    configure = build.head? ? "./prepare" : "./configure"
+    system configure, *args, *std_configure_args
     system "make"
 
     # This permits the `mutt_dotlock` file to be installed under a group

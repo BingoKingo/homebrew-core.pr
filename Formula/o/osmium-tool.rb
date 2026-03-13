@@ -1,34 +1,37 @@
 class OsmiumTool < Formula
   desc "Libosmium-based command-line tool for processing OpenStreetMap data"
   homepage "https://osmcode.org/osmium-tool/"
-  url "https://github.com/osmcode/osmium-tool/archive/refs/tags/v1.18.0.tar.gz"
-  sha256 "5438f57043c9df05137ca4bd1b1e4a5fb1c9c8c49cb4bec43a5f1ef30ed68fb5"
+  url "https://github.com/osmcode/osmium-tool/archive/refs/tags/v1.19.0.tar.gz"
+  sha256 "192713eef894735cf2d0dbeed3f8def67c067198e553de01d4a1f14417a64019"
   license "GPL-3.0-or-later"
-  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "0cab1102b6f99a0d5556f3f928b3ce66c47168a3af0a2c9f68515688b66cb725"
-    sha256 cellar: :any,                 arm64_sonoma:  "40315fb6f5f58d47790c6157cf87b558f77cb69c2b58b26bf1d614b059304a68"
-    sha256 cellar: :any,                 arm64_ventura: "0a22fe26b6c72c6e121016d76297cf9d27554bca154d89615bb7b6c810c4b396"
-    sha256 cellar: :any,                 sonoma:        "367ed9eedac294312bfd850de02a3b473756c5087a29bc9aa419cd866aad6667"
-    sha256 cellar: :any,                 ventura:       "34d3160c4d7488c5a7bde951b81de589cd93477d7d75ba69ba6209424fa7e2a5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "68645a5288ae2d775939bdd3d860712854ad59d7595ce3bfd167a093f6f2e9be"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d4b896b74aeb6e8c6104bfec7cf7c29f6e0b79d97830c518e8a8331800695edf"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "56aa31ece77621faa6d77d4ca2c477ccfc79c27cc1a7e7103b2a0eb94e0e5e94"
+    sha256 cellar: :any,                 arm64_sequoia: "9d870ea12d0d8c312be211d39af65b76e3c8f98c9ae4fce5757be66a105df725"
+    sha256 cellar: :any,                 arm64_sonoma:  "6e87840c8c5123626e4e35e70338208033bbe1f3b18a9666581d5c8fae2a0c9a"
+    sha256 cellar: :any,                 sonoma:        "ec7db1d7bff5552e5915f0800b6704569e974c0319fd402324ef462e642c2ecb"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d3510e3c24b08f1e086981e75f4f77116fdb0ca621dcbc46169c1dd35d61b1d2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "62e18c5d574d7ba904a6527b942f5ab00db567e93faf4105c56f8dd7802d4141"
   end
 
   depends_on "cmake" => :build
   depends_on "libosmium" => :build
   depends_on "nlohmann-json" => :build
   depends_on "pandoc" => :build
+  depends_on "protozero" => :build
   depends_on "boost"
   depends_on "lz4"
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
-    protozero = Formula["libosmium"].opt_libexec/"include"
+    protozero = Formula["protozero"].opt_include
 
     system "cmake", "-S", ".", "-B", "build", "-DPROTOZERO_INCLUDE_DIR=#{protozero}", *std_cmake_args
     system "cmake", "--build", "build"

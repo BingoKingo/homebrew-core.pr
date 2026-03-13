@@ -4,21 +4,17 @@ class Mikutter < Formula
   url "https://mikutter.hachune.net/bin/mikutter-5.1.1.tar.gz"
   sha256 "ddff538aae249bd636604128bac1ccb526a4ed5c32f00b45d3c3c1dbcdb655de"
   license "MIT"
-  head "git://mikutter.hachune.net/mikutter.git", branch: "develop"
-
-  livecheck do
-    url "https://mikutter.hachune.net/download"
-    regex(/href=.*?mikutter.?v?(\d+(?:\.\d+)+)\.t/i)
-  end
+  revision 1
+  head "git://mikutter.hachune.net/mikutter.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "ee481445aa3a12c60060f4f31d43d8d0378c8189e55c81c7400090b668f48abb"
-    sha256 cellar: :any,                 arm64_sonoma:  "b66c8480c121a81c26ec2b37e653fbb324c68c362c18e398ddc40129c3f9c9a4"
-    sha256 cellar: :any,                 arm64_ventura: "a4fc84de589aa90a7a78dc4c1d143bf4731f9ae7e251ac360bafffbdaa485db4"
-    sha256 cellar: :any,                 sonoma:        "ab93541b1f60859a5d8e524db4e29d532aff212bd97b5e039884bafb3c174861"
-    sha256 cellar: :any,                 ventura:       "b778e25fda7cb17ec806e6fb66166de3832d00af03f72f4b19bafb6319d246db"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ef6f1ad4d02a73c31297fbf70f6c5a4c62f670f4ca3301ccbb1d3f14705d2deb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f6009cbdabcfa5a3d06991b1b73bcf84412423289174569e276e3beddd419e3a"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "e322500fe59264b6d359eb84689553329d2bd6eb256fe2a50299bf820a8a6e5b"
+    sha256 cellar: :any,                 arm64_sequoia: "531a0e55be090c3f16209bf6d9dd5c699d24f624e979f470606d97bd530e07de"
+    sha256 cellar: :any,                 arm64_sonoma:  "906ecd678693e181a4117c962ce0f9bb36bd00cdbab3b59041a463e7dacb789d"
+    sha256 cellar: :any,                 sonoma:        "3e85adaf09e0ee1c33ebdf2865b96a0f1763ebfcdca90cc3138e5596c0c404d7"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2707a48772a913e137c39e9e4927b718685bcaec5e13033f26caad85901d7c83"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2b74497a2473777e1c3ad642e346afe6117e41cb1a3695987b48051085968f17"
   end
 
   depends_on "at-spi2-core"
@@ -36,11 +32,14 @@ class Mikutter < Formula
   uses_from_macos "libffi"
   uses_from_macos "libxml2" # for nokogiri
   uses_from_macos "libxslt" # for nokogiri
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
     depends_on "terminal-notifier"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   # check `plugin/gtk3/Gemfile` for `gtk3` gem version

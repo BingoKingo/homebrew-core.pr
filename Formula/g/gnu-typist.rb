@@ -1,13 +1,14 @@
 class GnuTypist < Formula
   desc "GNU typing tutor"
   homepage "https://www.gnu.org/software/gtypist/"
-  url "https://ftp.gnu.org/gnu/gtypist/gtypist-2.10.1.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gtypist/gtypist-2.10.1.tar.xz"
+  url "https://ftpmirror.gnu.org/gnu/gtypist/gtypist-2.10.1.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gtypist/gtypist-2.10.1.tar.xz"
   sha256 "ca618054e91f1ed5ef043fcc43500bbad701c959c31844d4688ff22849ac252d"
   license "GPL-3.0-or-later"
 
   bottle do
     rebuild 1
+    sha256 arm64_tahoe:   "f47594d59df3c42dcaeee9f73264471981464416b412786124b0c4a7b3a70df1"
     sha256 arm64_sequoia: "15ba375ec67355fe2043282cd1de4a229fd8d29b4857f73e22b05c8d702fe9e2"
     sha256 arm64_sonoma:  "df74aca9130820bcdbc021116652a23122835e14016003aac9ef0f0d8bdab972"
     sha256 arm64_ventura: "790643311a056fa38bc014e51107bf0984f25d77506f86e60f3843ac8ee5b3cc"
@@ -17,14 +18,16 @@ class GnuTypist < Formula
     sha256 x86_64_linux:  "15b3985018e2cb520b709f0cf8c0b41307c49caf6756255638a1ddc9f37f3ac6"
   end
 
-  depends_on "gettext"
-
   uses_from_macos "ncurses"
+
+  on_macos do
+    depends_on "gettext"
+  end
 
   # Use Apple's ncurses instead of ncursesw.
   # TODO: use an IFDEF for apple and submit upstream
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/b5593da4ce6302d9ccaef9fde52bf60a6d4a669b/gnu-typist/2.10.patch"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/gnu-typist/2.10.patch"
     sha256 "26e0576906f42b76db8f7592f1b49fabd268b2af49c212a48a4aeb2be41551b3"
   end
 
@@ -32,18 +35,15 @@ class GnuTypist < Formula
     # libiconv is not linked properly without this
     ENV.append "LDFLAGS", "-liconv" if OS.mac?
 
-    system "./configure", "--disable-dependency-tracking",
-                          "--prefix=#{prefix}",
-                          "--with-lispdir=#{elisp}"
+    system "./configure", "--with-lispdir=#{elisp}", *std_configure_args
     system "make"
     system "make", "install"
   end
 
   test do
-    session = fork do
-      exec bin/"gtypist", "-t", "-q", "-l", "DEMO_0", share/"gtypist/demo.typ"
-    end
+    session = spawn bin/"gtypist", "-t", "-q", "-l", "DEMO_0", share/"gtypist/demo.typ"
     sleep 2
     Process.kill("TERM", session)
+    Process.wait(session)
   end
 end

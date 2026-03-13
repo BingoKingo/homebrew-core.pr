@@ -1,9 +1,10 @@
 class EasyrpgPlayer < Formula
   desc "RPG Maker 2000/2003 games interpreter"
   homepage "https://easyrpg.org/"
-  url "https://easyrpg.org/downloads/player/0.8.1/easyrpg-player-0.8.1.tar.xz"
-  sha256 "51249fbc8da4e3ac2e8371b0d6f9f32ff260096f5478b3b95020e27b031dbd0d"
+  url "https://easyrpg.org/downloads/player/0.8.1.1/easyrpg-player-0.8.1.1.tar.xz"
+  sha256 "52ab46efdc5253a5ef08d3eee49c84d5c5cbb770929f28a08681fe01e5279bb2"
   license "GPL-3.0-or-later"
+  revision 2
 
   livecheck do
     url "https://easyrpg.org/player/downloads/"
@@ -12,13 +13,12 @@ class EasyrpgPlayer < Formula
 
   bottle do
     rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "bfcc503e8f0ee35e4b4cd08fc3b813a444608597916333df7b1ad7bcf0a659bc"
-    sha256 cellar: :any,                 arm64_sonoma:  "ee4520c62cda9ea8653fa2f12266c8f2bb0f6455ad0ba92160e9aacdf1c43a2a"
-    sha256 cellar: :any,                 arm64_ventura: "e1a67c73ebb2639e3ff2cbddd0d0860b7c0115fae59927e35ace0a1e2ce7a7ca"
-    sha256 cellar: :any,                 sonoma:        "2139aa0e7aa904cad6ff617cc8aa8e9434ecb18dac1dc3d4d9b988c1946afc14"
-    sha256 cellar: :any,                 ventura:       "365b0a8d9c51bb87fbff8e9db4ed61c160009dddfb10582a2c23986487de9449"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "94349948b5767d07e9aaf715bb2caa41c8568a19bb0ca17c2c579f72d0e58a33"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2e5888b347c6ccd8a305ffdc8c076d6f6798348d1e81af7743d87f6bda1d76d3"
+    sha256 cellar: :any,                 arm64_tahoe:   "d68b064595c8cbdd5c098f14d6d44c825fb98a6cd75436d3024177edce4d79cb"
+    sha256 cellar: :any,                 arm64_sequoia: "77efe336e1733908004d1fb26f927a9cfa961e8e22adb44258a26e13410e274c"
+    sha256 cellar: :any,                 arm64_sonoma:  "af5a6d2c7c2f817dc3bf91f340b5c421cf112e1474ecb177d5911d9205b26cf1"
+    sha256 cellar: :any,                 sonoma:        "5f10d972d19d0185dae65942651b83b4b60aed838a45df89efb9691763635d9a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "54fc30c523fb4e5cb8e059cce4f70608fbf5ff562175ec42dc0ac7cc58addd8c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a6bb2d6be07d2f602df98c6e4da8377fbaf186ce2f295845304aa1520aec3ff6"
   end
 
   depends_on "cmake" => :build
@@ -27,7 +27,7 @@ class EasyrpgPlayer < Formula
   depends_on "fmt"
   depends_on "freetype"
   depends_on "harfbuzz"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "liblcf"
   depends_on "libpng"
   depends_on "libsndfile"
@@ -39,7 +39,6 @@ class EasyrpgPlayer < Formula
   depends_on "speexdsp"
 
   uses_from_macos "expat"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "inih"
@@ -48,6 +47,7 @@ class EasyrpgPlayer < Formula
 
   on_linux do
     depends_on "alsa-lib"
+    depends_on "zlib-ng-compat"
   end
 
   def install

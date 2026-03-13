@@ -1,18 +1,17 @@
 class Erlfmt < Formula
   desc "Automated code formatter for Erlang"
   homepage "https://github.com/WhatsApp/erlfmt"
-  url "https://github.com/WhatsApp/erlfmt/archive/refs/tags/v1.6.2.tar.gz"
-  sha256 "e3643d8833c3a9170d695fd6c44914342240bd8bd10cfacaeac2633ee0561709"
+  url "https://github.com/WhatsApp/erlfmt/archive/refs/tags/v1.8.0.tar.gz"
+  sha256 "c7205f3a28dac589c623f21546d63d5b04cc669545d03485cb88552de0117f43"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "721b5216c77bfdcd0e63cf7e4eb40b335d1cbf7840b0ff94505c5ca232cac095"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "342d7aa1b364d7803738bafd0fa57360a2e582376641da3668e72e4154cdc9e9"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9e6ce55ff99b8e30e2d5ff43daf266957ef188871bc489bc29f5055201cb1dc9"
-    sha256 cellar: :any_skip_relocation, sonoma:        "918cb5a1f2944d9ac4ca7e26a9b33533116ec2b625fbbe6eeca9528abc022025"
-    sha256 cellar: :any_skip_relocation, ventura:       "3a712002a3d0ce448cd6616ef1f2461ea83a1ddd5d4548b238897750cca6155a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c3cc28f10592fc02db316bda0e1f3eab14a007c5e54e5327a94b537a7c8cda1f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "261f24c2bb060e63028aea10b440069b2c914de89bef3af7e2f65394790f89d4"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7c4afe0a977c263dbf3a3092122de3ddc8b6a78f04a483eac966efa7da3ab04a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6e46dcbc2b217c649af757a08c6412491ecbbfef7281b98def97be8f2153da1a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "99f6e918c0ca3428813215a8b3e3a44f32980d220169e954b9dccb1d9ed8851b"
+    sha256 cellar: :any_skip_relocation, sonoma:        "a7405e9ff053f412bfb1b04ef79f34cd714e0f385849dd3c4352272ee65a6845"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c423008872616122b6436941c0d2f8fdf8954afa573d313f19a14b5525852a19"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0ace846773bbc50b1ad7e69fad8bcb55976484c6628eb87986cfc968e02f94ad"
   end
 
   depends_on "rebar3" => :build

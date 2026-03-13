@@ -1,8 +1,8 @@
 class Kamel < Formula
   desc "Apache Camel K CLI"
   homepage "https://camel.apache.org/"
-  url "https://github.com/apache/camel-k/archive/refs/tags/v2.6.0.tar.gz"
-  sha256 "64cbac848a8dc789062718ec8bc55e51fc95d176587c0c11719560d4d6d22304"
+  url "https://github.com/apache/camel-k/archive/refs/tags/v2.9.1.tar.gz"
+  sha256 "35688ec92762fe699496eeda78abb7be5a8f6a1b15f3c1e0e55dfebf039be3f3"
   license "Apache-2.0"
   head "https://github.com/apache/camel-k.git", branch: "main"
 
@@ -12,21 +12,19 @@ class Kamel < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b0cb6f257d777d5a16c296a1d2f99b072f797930884a08984baf2f6174420329"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b0cb6f257d777d5a16c296a1d2f99b072f797930884a08984baf2f6174420329"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b0cb6f257d777d5a16c296a1d2f99b072f797930884a08984baf2f6174420329"
-    sha256 cellar: :any_skip_relocation, sonoma:        "6f7272988866ceefaa6f9877bdd6cabdbdcc7b35a163c2deb4235fefd8cd3988"
-    sha256 cellar: :any_skip_relocation, ventura:       "6f7272988866ceefaa6f9877bdd6cabdbdcc7b35a163c2deb4235fefd8cd3988"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "93d45b6b754b21fdd7ad23ed720227b918d5fd74d2897323c800e7e7417c26f6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "fb627b95421f4e70f8b9755294e6f6df367a8d603c7996a54f91d2bf6a9cf97b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "12ea3f22e4d4c30025aa2c1414cf9b1dc71bf816845adc8556b64dabf03b6e74"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ef5cea32fdaa428e004e43460a998889711896236595c6297f7afe63b21a7e0e"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e58377c1d306ddc59295de4ebc0638e7983341b2db1aab041acde48f4c75e650"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "141e178c3efa3e97a11e1a9a0966416823a56a1d40a725c761ca95a6a37c38d8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6ac5312075039bbd2e9972d719a3fb4918660b734cddd168aca20bfdf383a7c5"
   end
 
   depends_on "go" => :build
 
   def install
-    ldflags = "-s -w -X github.com/apache/camel-k/v2/pkg/util/defaults.GitCommit=#{tap.user}-#{version}"
+    ldflags = "-s -w -X github.com/apache/camel-k/v#{version.major}/pkg/util/defaults.GitCommit=#{tap.user}-#{version}"
     system "go", "build", *std_go_args(ldflags:), "./cmd/kamel"
-
-    generate_completions_from_executable(bin/"kamel", "completion", shells: [:bash, :zsh])
   end
 
   test do

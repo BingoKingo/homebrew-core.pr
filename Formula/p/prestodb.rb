@@ -3,8 +3,8 @@ class Prestodb < Formula
 
   desc "Distributed SQL query engine for big data"
   homepage "https://prestodb.io"
-  url "https://search.maven.org/remotecontent?filepath=com/facebook/presto/presto-server/0.292/presto-server-0.292.tar.gz", using: :nounzip
-  sha256 "4063126a908867f143e9c16b6cd3afeb49f6ad1de298dfc9810c4045f1c78693"
+  url "https://search.maven.org/remotecontent?filepath=com/facebook/presto/presto-server/0.296/presto-server-0.296.tar.gz"
+  sha256 "3c009ed344c4d903df169893fffcc03d6b2f813894c6e94aa9179a4ddd250821"
   license "Apache-2.0"
 
   # Upstream has said that we should check Maven for Presto version information
@@ -16,16 +16,15 @@ class Prestodb < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, all: "4eddb6530bd68a0cdcbfc9ffa891dcbef3a359110881db51d89af58fce4629bb"
+    sha256 cellar: :any_skip_relocation, all: "0ae2af90aaa35ecc6d4f69d21467d2f2fed9f904343a8b00df1219e4b357132b"
   end
 
   depends_on "openjdk@17"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   resource "presto-cli" do
-    url "https://search.maven.org/remotecontent?filepath=com/facebook/presto/presto-cli/0.292/presto-cli-0.292-executable.jar"
-    sha256 "874fb6c5adea4544e1dc297e20362d24a2bf5ef280900ab967ff735cc2c9abdb"
+    url "https://github.com/prestodb/presto/releases/download/0.296/presto-cli-0.296-executable.jar"
+    sha256 "5c7a6e1fd6f3e41035038348bb93a84b25e1662c2499f94cb6c5f7ac85a50056"
 
     livecheck do
       formula :parent
@@ -36,14 +35,12 @@ class Prestodb < Formula
     java_version = "17"
     odie "presto-cli resource needs to be updated" if version != resource("presto-cli").version
 
-    # Manually extract tarball to avoid multiple copies/moves of over 2GB of files
-    libexec.mkpath
-    system "tar", "-C", libexec.to_s, "--strip-components", "1", "-xzf", "presto-server-#{version}.tar.gz"
+    libexec.install Dir["*"]
 
     (libexec/"etc/node.properties").write <<~EOS
       node.environment=production
       node.id=ffffffff-ffff-ffff-ffff-ffffffffffff
-      node.data-dir=#{var}/presto/data
+      node.data-dir=#{var}/prestodb/data
     EOS
 
     (libexec/"etc/jvm.config").write <<~EOS
@@ -87,9 +84,7 @@ class Prestodb < Formula
     libprocname_dirs.reject! { |dir| dir.basename.to_s == "Linux-x86_64" }
     libprocname_dirs.reject! { |dir| dir.basename.to_s == "#{OS.kernel_name}-#{Hardware::CPU.arch}" }
     rm_r libprocname_dirs
-  end
 
-  def post_install
     (var/"presto/data").mkpath
   end
 
@@ -106,19 +101,15 @@ class Prestodb < Formula
   end
 
   test do
-    port = free_port
-    cp libexec/"etc/config.properties", testpath/"config.properties"
-    inreplace testpath/"config.properties", "8080", port.to_s
-    server = fork do
-      exec bin/"presto-server", "run", "--verbose",
-                                       "--data-dir", testpath,
-                                       "--config", testpath/"config.properties"
-    end
-    sleep 60
-
+    config = testpath/"config.properties"
     query = "SELECT state FROM system.runtime.nodes"
-    output = shell_output(bin/"presto --debug --server localhost:#{port} --execute '#{query}'")
-    assert_match "\"active\"", output
+    port = free_port
+
+    cp libexec/"etc/config.properties", config
+    inreplace config, "8080", port.to_s
+    server = spawn bin/"presto-server", "run", "--verbose", "--data-dir", testpath, "--config", config
+    sleep 60
+    assert_match "\"active\"", shell_output("#{bin}/presto --debug --server localhost:#{port} --execute '#{query}'")
   ensure
     Process.kill("TERM", server)
     Process.wait server

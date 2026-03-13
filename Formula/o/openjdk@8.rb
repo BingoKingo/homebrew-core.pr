@@ -1,10 +1,10 @@
 class OpenjdkAT8 < Formula
   desc "Development kit for the Java programming language"
-  homepage "https://openjdk.java.net/"
-  url "https://github.com/openjdk/jdk8u/archive/refs/tags/jdk8u452-ga.tar.gz"
-  version "1.8.0-452"
-  BUILD_NUMBER = "b09".freeze # Please update when a new GA release is available: https://wiki.openjdk.org/display/jdk8u.
-  sha256 "cf1009e18b6332ef2b4a54257a6087611970bcdab5368907ac67ada1e9709676"
+  homepage "https://openjdk.org/"
+  url "https://github.com/openjdk/jdk8u/archive/refs/tags/jdk8u482-ga.tar.gz"
+  version "1.8.0-482"
+  BUILD_NUMBER = "b08".freeze # Please update when a new GA release is available: https://wiki.openjdk.org/spaces/jdk8u/overview.
+  sha256 "5f39085895a59d77dbe256427289558ae100013a547bcc7417492eea8b22b224"
   license "GPL-2.0-only"
 
   livecheck do
@@ -16,10 +16,9 @@ class OpenjdkAT8 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 sonoma:       "79dbf7dcfd23168817af9383b5a17a8fd908be0f106d0ec920327438625dc588"
-    sha256 cellar: :any,                 ventura:      "f60a98b1d90f1480b60fff0c121857e470a680115cead8892af69419b48db5be"
-    sha256 cellar: :any_skip_relocation, arm64_linux:  "586959a85569b0cca59fde64c8fcf8dbc38a68a088e0c2beea1f89b17f10abd6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "95ad19e02cfa50d6bb0c737445d3b5b2106e910e1ebd3b58d1066ce6b826a53b"
+    sha256 cellar: :any,                 sonoma:       "00a07d38b70286d9aa1fd41bf437b5fac36ef59d47d0717dc8270dfe226739b9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:  "6fbda949244ca72f7be006dc37f27ea7cab2dac0310a297c7cab697db9149486"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "9322d6b0d39dc54126928b937573645d0444b2f2d0ccd20b1087261d8d1fe650"
   end
 
   keg_only :versioned_formula
@@ -72,7 +71,7 @@ class OpenjdkAT8 < Formula
     end
   end
 
-  # NOTE: Since macOS Sonoma or newer don’t include the required headers for JNF (JavaNativeFoundation.framework),
+  # NOTE: Since macOS Sonoma or newer don't include the required headers for JNF (JavaNativeFoundation.framework),
   # we will use the headers provided at https://github.com/apple/openjdk.
   resource "JavaNativeFoundation" do
     on_sonoma :or_newer do
@@ -111,7 +110,7 @@ class OpenjdkAT8 < Formula
       # but this Makefile was written in the era of 4 digit numbers.
       inreplace "hotspot/make/bsd/makefiles/gcc.make" do |s|
         s.gsub! "$(subst .,,$(MACOSX_VERSION_MIN))", ENV["HOMEBREW_MACOS_VERSION_NUMERIC"]
-        s.gsub! "MACOSX_VERSION_MIN=10.7.0", "MACOSX_VERSION_MIN=#{MacOS.version}"
+        s.gsub! "MACOSX_VERSION_MIN=11.00.00", "MACOSX_VERSION_MIN=#{MacOS.version}"
       end
     else
       # Fix linker errors on brewed GCC.

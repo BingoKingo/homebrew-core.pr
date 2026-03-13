@@ -1,8 +1,8 @@
 class Kapp < Formula
   desc "CLI tool for Kubernetes users to group and manage bulk resources"
   homepage "https://carvel.dev/kapp/"
-  url "https://github.com/carvel-dev/kapp/archive/refs/tags/v0.64.2.tar.gz"
-  sha256 "80e170ee87e68096a3349670f2f4d7c44047f4159711950f5759a0a71469736a"
+  url "https://github.com/carvel-dev/kapp/archive/refs/tags/v0.65.1.tar.gz"
+  sha256 "b3052206113574e32a4f2f84985139ca2ece1ce81ab714b5b8f802ae902659d0"
   license "Apache-2.0"
   head "https://github.com/carvel-dev/kapp.git", branch: "develop"
 
@@ -12,12 +12,12 @@ class Kapp < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "39315cc4aabafb1645c0f153e0614c9d04d93cd2849fe7f33a2f379e403e9067"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "39315cc4aabafb1645c0f153e0614c9d04d93cd2849fe7f33a2f379e403e9067"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "39315cc4aabafb1645c0f153e0614c9d04d93cd2849fe7f33a2f379e403e9067"
-    sha256 cellar: :any_skip_relocation, sonoma:        "172deffd5a5522297778b6d98ddedeb93af490cb8e8bd95321cbdbee0116b922"
-    sha256 cellar: :any_skip_relocation, ventura:       "172deffd5a5522297778b6d98ddedeb93af490cb8e8bd95321cbdbee0116b922"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "aca74f296372166c00f43e97ac99f2610adb8d07ca6aefc119e310fb57843aa5"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "fe73d8448578e9c25d2d8d4796f8324ebc7128f92c19f676a897badebaf37009"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fe73d8448578e9c25d2d8d4796f8324ebc7128f92c19f676a897badebaf37009"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fe73d8448578e9c25d2d8d4796f8324ebc7128f92c19f676a897badebaf37009"
+    sha256 cellar: :any_skip_relocation, sonoma:        "18ccb02f72f8fde9f6f795da1d7761f3ce93f80fad9c9f49e8d0296dea9ac52c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7c006f6de59bcb6d47d1ae1cbf1beeb15bdd7798fe7573f220fbbdafd5fd5931"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fd605a305a77e35c7bf97f2afb2f3a982181167a23be08dee14528e850b9374f"
   end
 
   depends_on "go" => :build
@@ -26,7 +26,7 @@ class Kapp < Formula
     ldflags = "-s -w -X carvel.dev/kapp/pkg/kapp/version.Version=#{version}"
     system "go", "build", *std_go_args(ldflags:), "./cmd/kapp"
 
-    generate_completions_from_executable(bin/"kapp", "completion")
+    generate_completions_from_executable(bin/"kapp", shell_parameter_format: :cobra)
   end
 
   test do

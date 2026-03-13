@@ -1,29 +1,33 @@
 class Haiti < Formula
   desc "Hash type identifier"
   homepage "https://noraj.github.io/haiti/#/"
-  url "https://github.com/noraj/haiti/archive/refs/tags/v3.0.0.tar.gz"
-  sha256 "f6b8bf21104cedda21d1cdfa9931b5f7a6049231aedba984a0e92e49123a3791"
+  url "https://github.com/noraj/haiti/archive/refs/tags/v4.0.0.tar.gz"
+  sha256 "505ae91562ad8c21e31874b77c0000fc8bf649aaf031a05b15aaa92124f2ddf2"
   license "MIT"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "437a900ef99a2a9ce151f54852b5ceba54b04b0ae4f7dbdfca33ac96262db51c"
-    sha256 cellar: :any,                 arm64_sonoma:  "d256b2ab7188e82c043c22fc4ca8e5df092d581e4d0c7db6a1feda3110a3054e"
-    sha256 cellar: :any,                 arm64_ventura: "cd3f25be3ff7e82d716d0c04b6703687a104014703d0fca01ef6b743014a1112"
-    sha256 cellar: :any,                 sonoma:        "03b15c6432552b2f1bf9b501292dec5d9981c1b31e48b371c5368248bd3c9498"
-    sha256 cellar: :any,                 ventura:       "eacc0e910d7028495d5ac2dd6fc488fef97f660bd586ab4f4638d90ca9830345"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a7ba6681ea727c139e302ef47608117ceba1ec44781fd0f37ba9eb646cfa3acd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bf1cab0eaadd053425ec6af959b808b9b8c60f12e531791ec6215cf009529e33"
+    sha256 cellar: :any,                 arm64_tahoe:   "ef09a5e3923e7e0ba00693183a5668851a36f8e47e768f13a5180132800568c9"
+    sha256 cellar: :any,                 arm64_sequoia: "c09ce65d5cd612629fe4ff0b7649fc42a72c0ac3d3b1e4a2941581a068d04551"
+    sha256 cellar: :any,                 arm64_sonoma:  "fae6b77a4120e87608d8f8b348b911909f6add74b33de49c5f0588e65579597d"
+    sha256 cellar: :any,                 sonoma:        "2da2d09fcb8c96f0c3d84a39a8fc828203e78f7481ae0d5b13ef6092fa90ffba"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "067e1f33aede4a03ec15b5eed62e99079e842deca55926c36671efd0286c11fc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ca7559ce9ec6e944ce9516dfc68d0c9b19d01ad85b10604df164080ab280ba9a"
   end
 
+  depends_on "rust" => :build # for commonmarker
   depends_on "ruby"
 
-  def install
-    ENV["BUNDLE_VERSION"] = "system" # Avoid installing Bundler into the keg
-    ENV["GEM_HOME"] = libexec
+  uses_from_macos "llvm" # for libclang
 
-    system "bundle", "config", "set", "without", "development", "test"
-    system "bundle", "install"
+  def install
+    ENV["BUNDLE_FORCE_RUBY_PLATFORM"] = "1"
+    ENV["BUNDLE_VERSION"] = "system" # Avoid installing Bundler into the keg
+    ENV["BUNDLE_WITHOUT"] = "development test"
+    ENV["GEM_HOME"] = libexec
+    ENV["RB_SYS_FORCE_INSTALL_RUST_TOOLCHAIN"] = "false" # Avoid installing rustup
+
+    # commonmarker fails to build with parallel jobs
+    ENV.deparallelize { system "bundle", "install" }
     system "gem", "build", "#{name}.gemspec"
     system "gem", "install", "#{name}-hash-#{version}.gem"
 

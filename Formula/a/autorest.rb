@@ -1,25 +1,19 @@
 class Autorest < Formula
   desc "Swagger (OpenAPI) Specification code generator"
   homepage "https://github.com/Azure/autorest"
-  url "https://registry.npmjs.org/autorest/-/autorest-3.7.2.tgz"
-  sha256 "4bd274127b60c276832127fe738f0f7f25ee56b190395dc4d594ca507659ccd2"
+  url "https://registry.npmjs.org/autorest/-/autorest-3.8.0.tgz"
+  sha256 "0d1739956d385d7f0951d4622078c73d9dada27340ca39cfaaa8ba7f8ab5bae1"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6840e5f417fa145ce6576a18e7c82e45f866ea344555b58c06a35ac88fa47b66"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6840e5f417fa145ce6576a18e7c82e45f866ea344555b58c06a35ac88fa47b66"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "6840e5f417fa145ce6576a18e7c82e45f866ea344555b58c06a35ac88fa47b66"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c1c3cc8270cdd3353fb2ee10ba5c5023351c6ae8eb7d291f97a3685c116576a6"
-    sha256 cellar: :any_skip_relocation, ventura:       "c1c3cc8270cdd3353fb2ee10ba5c5023351c6ae8eb7d291f97a3685c116576a6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "6840e5f417fa145ce6576a18e7c82e45f866ea344555b58c06a35ac88fa47b66"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6840e5f417fa145ce6576a18e7c82e45f866ea344555b58c06a35ac88fa47b66"
+    sha256 cellar: :any_skip_relocation, all: "b9e9e79e98255f252a645acc787169370311c4822e30d35639cc491e8d67910f"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

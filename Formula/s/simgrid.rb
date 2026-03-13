@@ -3,8 +3,8 @@ class Simgrid < Formula
 
   desc "Studies behavior of large-scale distributed systems"
   homepage "https://simgrid.org/"
-  url "https://gitlab.inria.fr/simgrid/simgrid/-/archive/v4.0/simgrid-v4.0.tar.bz2"
-  sha256 "37387a6b4ab230e37fb062d03af3d6bdb9cd0c76b2c3407ae1a344facc814a8f"
+  url "https://gitlab.inria.fr/simgrid/simgrid/-/archive/v4.1/simgrid-v4.1.tar.bz2"
+  sha256 "a3d02f52cfb9c2e341c380cd8e3b43da4b4885161d8e96f4b033e0d3cc8af611"
   license "LGPL-2.1-only"
   revision 1
 
@@ -14,13 +14,12 @@ class Simgrid < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "7729746a85f9411766323b3e08f526ac0b2a320dc1b43f2f1a047affd33b1834"
-    sha256 arm64_sonoma:  "e774550064c55be057b8a02be6c97fb4755bcc96ed518f48e86a2a06f110de6a"
-    sha256 arm64_ventura: "c1106a2364c23a426f092e8dba68de4ed5c49ffa9f79221098d6daf5131f167d"
-    sha256 sonoma:        "6113c9ce3f7b955d6fb7768a0fdd6550787547bd18cf625bdb70515229193b0a"
-    sha256 ventura:       "fd493ba61db4d913bed0de8db44da341e6744ae78f20d3458c2d27094971940a"
-    sha256 arm64_linux:   "759f64a8dbd6286b41e49af154aba2c9f4acd1b9ebff34dfddcf34e022b2356f"
-    sha256 x86_64_linux:  "ae6cc2a41a6adf416328e3208b6f15f41ff4f3b50e8cf5cd282abe4336604305"
+    sha256 arm64_tahoe:   "034c76ebb8ad1d5afe856a54ff4cdd3fdeb60dba91ba0273d6008a20b360ca2b"
+    sha256 arm64_sequoia: "375e79079d89dc581c9530f1588564ba5ce0db257be5b79985c99aa08a4100da"
+    sha256 arm64_sonoma:  "c0ffdf86b7c64b721333f7580ba02c9c794056e0e12e69962b10bc6cd21fe0ee"
+    sha256 sonoma:        "13c3d84855a6e9788c77ba476525669d4873291eca0b5b8cd93866782879dee3"
+    sha256 arm64_linux:   "dcea28cc28e8c118a7f2ae3c49ffa92a82df38b0feebbd4b9176d2915f6ebe5b"
+    sha256 x86_64_linux:  "20872441e0def64e91fe941260e2a627af91e1ac4e8808bb6ebd50a59a852093"
   end
 
   depends_on "cmake" => :build
@@ -28,7 +27,7 @@ class Simgrid < Formula
   depends_on "boost"
   depends_on "graphviz"
 
-  uses_from_macos "python", since: :catalina
+  uses_from_macos "python"
 
   def install
     # Avoid superenv shim references

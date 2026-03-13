@@ -1,10 +1,9 @@
 class Pianod < Formula
   desc "Pandora client with multiple control interfaces"
   homepage "https://deviousfish.com/pianod/"
-  url "https://deviousfish.com/Downloads/pianod2/pianod2-410.tar.gz"
-  sha256 "28c1b28b320acff3fe46c79748c55370ba4333544e0c27e90a3520d42a9914cf"
+  url "https://deviousfish.com/Downloads/pianod2/pianod2-420.tar.gz"
+  sha256 "9fa739cf28d5f554d982acecb94857b9fe0d0fd839d238dfca90f143c9fab216"
   license "MIT"
-  revision 1
 
   livecheck do
     url "https://deviousfish.com/Downloads/pianod2/"
@@ -12,13 +11,13 @@ class Pianod < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "65b0b7edda8a3ebe8dba97e532141dd9b985ec7ec2cc799b00b1086337a35c85"
-    sha256 arm64_sonoma:  "92a0bf60d6c4f5a5b57cbe70d6cb357373420514b401bd1a463ced3a1fa3fd0e"
-    sha256 arm64_ventura: "8fa61c25c901c6c762ca574b5c398281b579a92e940c2adcdc9cbf452cbf86b3"
-    sha256 sonoma:        "16275adaae7a5388bbda493535d734b6a5a9b84dfa3c566d600adb42751633e5"
-    sha256 ventura:       "327ae74f956db17289622864bb4e272fe0184ee0c54f1b542c9601160a0e3765"
-    sha256 arm64_linux:   "5317f74dd5f53f1e824b2659883704b34bca67fd86256ad573f517de9ab66e19"
-    sha256 x86_64_linux:  "03553138132bc05944d3eaa1e23ebbbae75831148c38eed4b4567fd36d2b4314"
+    rebuild 1
+    sha256 arm64_tahoe:   "96b6f94cbac97ca8cc30bcd74c8a258f3462e233d36a0719212f0b9306d2a7ed"
+    sha256 arm64_sequoia: "32984610d0f720d52e8ae7877c6188b42c7f28bea9cb6a85bcd28361e3671598"
+    sha256 arm64_sonoma:  "1e827e43ee4113c58864be40d072ad77634da3ddd23efd105f8f88065db7b342"
+    sha256 sonoma:        "d9624ad29a3278961d986127e7ea31f5c922245ffe94ac3bd8d830889d40a5d7"
+    sha256 arm64_linux:   "c889fe50b5079a029381e2a9f988979319dae868b83cce4ecfa1ab970f8a344c"
+    sha256 x86_64_linux:  "4a6695250063db235d71d0881b644a52a650e378ec3d26ae6c75bab60e664279"
   end
 
   depends_on "pkgconf" => :build
@@ -29,7 +28,6 @@ class Pianod < Formula
 
   uses_from_macos "curl"
   uses_from_macos "libxcrypt"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
@@ -37,6 +35,7 @@ class Pianod < Formula
 
   on_linux do
     depends_on "libbsd"
+    depends_on "zlib-ng-compat"
   end
 
   def install

@@ -1,19 +1,18 @@
 class Pioneer < Formula
   desc "Game of lonely space adventure"
   homepage "https://pioneerspacesim.net/"
-  url "https://github.com/pioneerspacesim/pioneer/archive/refs/tags/20250501.tar.gz"
-  sha256 "959902d98a79536bd44f25bd7b29e48da94aeac597228776b0f91635877f362e"
+  url "https://github.com/pioneerspacesim/pioneer/archive/refs/tags/20260203.tar.gz"
+  sha256 "861341d317fc0ca506e3a2e8ff00858983652a5656289f8fe9ad1525df1a95da"
   license "GPL-3.0-only"
   head "https://github.com/pioneerspacesim/pioneer.git", branch: "master"
 
   bottle do
-    sha256                               arm64_sequoia: "3f0963e3b117f8b462cd62d28d0d4d6508d3a3cb72a71f23049f938ce5df6a2c"
-    sha256                               arm64_sonoma:  "9b016db2cf4b55cf30719eebdada5c22714e2cff5e0af527f22396a189127ce1"
-    sha256                               arm64_ventura: "6395cbe506ea3c1ce1df39cbde8bdd182e8283611befd8ee8669ee6c9c4cbc82"
-    sha256                               sonoma:        "b8db4414b2f2075a425ad8db7d8fbe1e2bcb62ad053c4b8bd28b02a43f0f784c"
-    sha256                               ventura:       "2ba87a5173d1a17393017efa27b5c7c3b28f9ab3d5e7c493ce25e45507c88395"
-    sha256                               arm64_linux:   "5392c601ef313258e8c2d24fe0cec56462216610a32993f951982e5b6e9700d4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ab19f4af575a7c78812be7530e593d02a1bd931db8f320153de1ecb94ed51f56"
+    sha256                               arm64_tahoe:   "7ae2eb5796a4910a15bd829f3fddf5ca9cd053f5728c3efbc2685642ed13b5b6"
+    sha256                               arm64_sequoia: "2f97087249fb0ccdcc983976fb150d993c7294d4f9b8f2e671c3cfa60c6d8f5c"
+    sha256                               arm64_sonoma:  "eed62b8b5d57fade0b62887098331c09e8d04a2b37ada2ea6dfef6c499acbac4"
+    sha256                               sonoma:        "7f1425f262ba4e222d0e28249b560a910011bb6ee3c2ae0c4ccb799dd063328f"
+    sha256                               arm64_linux:   "23bf36101661131d354b456e8258be52a359a53c3d4ca80941d7719bb2e00102"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "70ae3174bf568ea87f9a65dfb766b246e66ff09529bc30724d79c34760c91ee1"
   end
 
   depends_on "cmake" => :build
@@ -30,6 +29,14 @@ class Pioneer < Formula
 
   on_linux do
     depends_on "mesa"
+  end
+
+  # patch to fix ambiguous `to_string` overloads
+  patch do
+    on_macos do
+      url "https://github.com/pioneerspacesim/pioneer/commit/24023dfa75b1bd9de15b45692aeedab26da1b1b7.patch?full_index=1"
+      sha256 "9279afa54507c971ea517f508c1796b0ce9dc435d976778d13bfea7813056908"
+    end
   end
 
   # patch to fix `pi_lua_generic_push` call, upstream pr ref, https://github.com/pioneerspacesim/pioneer/pull/6000

@@ -1,9 +1,9 @@
 class Gpa < Formula
   desc "Graphical user interface for the GnuPG"
   homepage "https://www.gnupg.org/related_software/gpa/"
-  url "https://gnupg.org/ftp/gcrypt/gpa/gpa-0.11.0.tar.bz2"
-  mirror "https://deb.debian.org/debian/pool/main/g/gpa/gpa_0.11.0.orig.tar.bz2"
-  sha256 "26a8fa5bf70541cb741f0c71b7cfe291b1ea56eab68eeb07aa962cef5cdf33cc"
+  url "https://gnupg.org/ftp/gcrypt/gpa/gpa-0.11.1.tar.bz2"
+  mirror "https://deb.debian.org/debian/pool/main/g/gpa/gpa_0.11.1.orig.tar.bz2"
+  sha256 "0bc5b2cd3e0641d07a2d8af372a09659decd918bee22fdfbefd2133d7c4d5d0b"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -12,13 +12,12 @@ class Gpa < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "c0c60b01b9d98ed8aab7c7527587a47d3da59296f9bc1fd4fd42de59ca7ddbb8"
-    sha256 arm64_sonoma:  "df87078cf6cf9f08a8929ee7b17f8c02c59e861dc2b95dde4219ad1bb618ffa5"
-    sha256 arm64_ventura: "aef02be2a1ff1789b39b13a9aeb992f205dad05cc86bb5b49c56bfcb8c574602"
-    sha256 sonoma:        "3aebae31685d4eed01681ce32eb85166e4eabb1aa653b113295d9d22539b2f32"
-    sha256 ventura:       "ba20f9563e8f329507ebae4de2101385737dc2853134c35b555b1a150e17f101"
-    sha256 arm64_linux:   "9393bde60e35d9ed3b29536c4025744e2d4051c24287d0617b4aa861a5e8cc10"
-    sha256 x86_64_linux:  "07d492d6e76e1bfab56580d855828fc133ea535bb83ef7ffa07cbeb31ad8269c"
+    sha256 arm64_tahoe:   "3a82b91a089610dccf3f303827932bc3392cd4024d0ff62efec8392f5930aeab"
+    sha256 arm64_sequoia: "2a4266a3cbad43f2f54cadb15eb3ddb790b2d2db2780604df6b42b94bf9b1afa"
+    sha256 arm64_sonoma:  "8af83db187a7f1f5e3754451774d829fa3d6e42ccc7c2e5e5a81f3188dd9fab1"
+    sha256 sonoma:        "47b09b31877384921bc68ed46e530ab9ac5bab39be5ede50f74094033bd0ecb1"
+    sha256 arm64_linux:   "2c38b595e2e3aa802f989d8b45feb610d783c0009433f8bdc28855fd3ed4765f"
+    sha256 x86_64_linux:  "d92aa141bfd3900387f1862202f6f7e7bc8d958001b5db3c68251033a572140a"
   end
 
   head do
@@ -38,14 +37,16 @@ class Gpa < Formula
   depends_on "libassuan"
   depends_on "libgpg-error"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "at-spi2-core"
     depends_on "cairo"
     depends_on "gettext"
     depends_on "harfbuzz"
     depends_on "pango"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install

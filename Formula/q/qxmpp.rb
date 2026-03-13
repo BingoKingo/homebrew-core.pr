@@ -1,24 +1,30 @@
 class Qxmpp < Formula
   desc "Cross-platform C++ XMPP client and server library"
   homepage "https://invent.kde.org/libraries/qxmpp"
-  url "https://invent.kde.org/libraries/qxmpp/-/archive/v1.10.4/qxmpp-v1.10.4.tar.bz2"
-  sha256 "92d7e491be736598b2ef20250b5a5e387df584f4a61e0b5d34a3536fa99b3e72"
+  url "https://invent.kde.org/libraries/qxmpp/-/archive/v1.14.3/qxmpp-v1.14.3.tar.bz2"
+  sha256 "827988d60ff601735879b8bf02cfbd26b185e196191b0e366a46b21be3a0f74d"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "927f6f32f2f6748c6db4bdcf726f503e4be2626a772babf37d2e8be17fc9fc64"
-    sha256 cellar: :any,                 arm64_ventura: "599abd8cea19f8951f3518bb649fbdd1cf7f35a3c85e414231a85aed0438060e"
-    sha256 cellar: :any,                 sonoma:        "2b4215786c74e012e8e6a22eda45ddb14e22493a260c57da48d2ff88c955ce7d"
-    sha256 cellar: :any,                 ventura:       "da033a9b7a6211fe8b598863765ca3feadf6deb390939e6fcb29f5e19817db4d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31c2d1dbdec20af0800b293d32e01a8b009961a69d61538e3f6eea021269d187"
+    sha256 cellar: :any,                 arm64_tahoe:   "829287475fef2861a8de57d12eb5c5ba2dac5bf1393411ebbe7941a5b9893324"
+    sha256 cellar: :any,                 arm64_sequoia: "076be3b3ebef09527ea61b4c897c4d3a51422ddaf0b366569b43a56f17f7f4c9"
+    sha256 cellar: :any,                 arm64_sonoma:  "06bdbd998574c532afaa76951a414e9ee8d9dbee94e75a90f40be73f11a7607e"
+    sha256 cellar: :any,                 sonoma:        "a259dfae356d1425b61b6a9a5feda2e45a857a4f903c13276ebe741afb328c30"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "64dcfe7f1633a2302fed2e16099501e08c50a1a7b5257c24ce179145dc5604b6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a02d91a8a28aa70ef456402074a34389801f62106c7b6c8354a3bdb54500da80"
   end
 
   depends_on "cmake" => :build
+  depends_on "pkgconf" => :build
   depends_on xcode: :build
-  depends_on "qt"
+  depends_on "qtbase"
 
   on_macos do
     depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1400
+  end
+
+  on_linux do
+    depends_on "llvm" => :build if DevelopmentTools.gcc_version < 13
   end
 
   fails_with :clang do
@@ -27,12 +33,12 @@ class Qxmpp < Formula
   end
 
   fails_with :gcc do
-    version "9"
+    version "12"
     cause "Requires C++20"
   end
 
   def install
-    ENV.llvm_clang if OS.mac? && DevelopmentTools.clang_build_version <= 1400
+    ENV.llvm_clang if OS.linux? && deps.map(&:name).any?("llvm")
 
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
@@ -41,7 +47,7 @@ class Qxmpp < Formula
 
   test do
     ENV.delete "CPATH"
-    (testpath/"test.pro").write <<~EOS
+    (testpath/"test.pro").write <<~QMAKE
       TEMPLATE     = app
       CONFIG      += console
       CONFIG      -= app_bundle
@@ -52,7 +58,7 @@ class Qxmpp < Formula
       LIBPATH     += #{lib}
       LIBS        += -lQXmppQt6
       QMAKE_RPATHDIR += #{lib}
-    EOS
+    QMAKE
 
     (testpath/"test.cpp").write <<~CPP
       #include <QXmppQt6/QXmppClient.h>
@@ -62,7 +68,7 @@ class Qxmpp < Formula
       }
     CPP
 
-    system "#{Formula["qt"].bin}/qmake", "test.pro"
+    system Formula["qtbase"].bin/"qmake", "test.pro"
     system "make"
     assert_path_exists testpath/"test", "test output file does not exist!"
     system "./test"

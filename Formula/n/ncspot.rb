@@ -1,18 +1,17 @@
 class Ncspot < Formula
   desc "Cross-platform ncurses Spotify client written in Rust"
   homepage "https://github.com/hrkfdn/ncspot"
-  url "https://github.com/hrkfdn/ncspot/archive/refs/tags/v1.2.2.tar.gz"
-  sha256 "11555a61be381afa6196b0603d12ea34ee0c6e1660d7c586d13927f3e5ba802c"
+  url "https://github.com/hrkfdn/ncspot/archive/refs/tags/v1.3.3.tar.gz"
+  sha256 "26edf6f1861828452355d614349c0a2af49113b392d7cd52290ea7f180f6bfe5"
   license "BSD-2-Clause"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "550dd0374f89b19ec42d30d166eead73d38681c7317fece9af40757b36ec413c"
-    sha256 cellar: :any,                 arm64_sonoma:  "fdc0d374b07983da672dabd0c0dd1a7fdfca47b69f4c346d53f408b16224058c"
-    sha256 cellar: :any,                 arm64_ventura: "30da4cb1e0c494bb35a115792ae58efed2e14075f6da9aa87db399d0445e1557"
-    sha256 cellar: :any,                 sonoma:        "b9cb4a5b28d90399618594b3f6cf0d7e3032f56962c42b8a1a8ddb0ec2e847fc"
-    sha256 cellar: :any,                 ventura:       "2ffab85ac8029a9406c7d3604f91b1ec56c27d377d09ab46cfb98fa7a1bdf614"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "beece05f5b43cf0f7df06edfd81a0ba07904ba1be052b4a7fbfb756f823096eb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dc62314bdc978974ec4f7f75a925189066309ad2ef83543efca8efc47ea5eb1f"
+    sha256 cellar: :any,                 arm64_tahoe:   "776c4c58d07000bb93cdce6aaaf28a6fc630376633f37b74e02d910272cfc066"
+    sha256 cellar: :any,                 arm64_sequoia: "ab7e954ab6379a59d2f5bf78894916181a88e6e212474b2a815401e17b10d2af"
+    sha256 cellar: :any,                 arm64_sonoma:  "2be213e238f4a8bc284ddc4431889b16e1060744945717edf0814f17d84e83f2"
+    sha256 cellar: :any,                 sonoma:        "d95fee3c6dd6a833b19e69f07504b70632c8b67210217a0b09505bd1e92b9508"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b97eb8a7e13415b3933d3309d886fa13db7252822803a9888a64b674abb4c8b0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3b10d3c534c0c533ddbb48ba9a746da1befcc71b4444ea941641b23176d0738e"
   end
 
   depends_on "pkgconf" => :build
@@ -31,9 +30,9 @@ class Ncspot < Formula
 
   def install
     ENV["COREAUDIO_SDK_PATH"] = MacOS.sdk_path_if_needed if OS.mac?
-    system "cargo", "install", "--no-default-features",
-                               "--features", "portaudio_backend,cursive/pancurses-backend,share_clipboard",
-                               *std_cargo_args
+
+    features = %w[portaudio_backend cursive/pancurses-backend share_clipboard]
+    system "cargo", "install", "--no-default-features", *std_cargo_args(features:)
   end
 
   test do

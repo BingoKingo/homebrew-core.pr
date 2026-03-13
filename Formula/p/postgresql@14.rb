@@ -1,8 +1,8 @@
 class PostgresqlAT14 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v14.18/postgresql-14.18.tar.bz2"
-  sha256 "83ab29d6bfc3dc58b2ed3c664114fdfbeb6a0450c4b8d7fa69aee91e3ca14f8e"
+  url "https://ftp.postgresql.org/pub/source/v14.22/postgresql-14.22.tar.bz2"
+  sha256 "f57938ad30067077720277f6d7db05aafc07d1545efd2ed82f199ba828a7ad34"
   license "PostgreSQL"
 
   livecheck do
@@ -11,20 +11,21 @@ class PostgresqlAT14 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "9cdd37849beb706374d3ab14ebbbe24faae4d1a5d522e003b1404c705b7e0ffd"
-    sha256 arm64_sonoma:  "40b6d7576b8833748a3664fb43d67d8c0bffe68f21a5cdbb219109b20e111115"
-    sha256 arm64_ventura: "34aba0f06f3d43762f477927a514d372459f88c2175a7c0e740b3e1baf621247"
-    sha256 sonoma:        "fae9107044e20a44a7169eedf090cc6482cb01f262aee7cd574ce4ee62039fc9"
-    sha256 ventura:       "3422679db5af8c0495cc7ac5e4378f62190b7531d48962d7b9708210fda41889"
-    sha256 arm64_linux:   "3ae3bef2cf0f72b4e8b46bc59515df03a322a746cd067d69a745b3aee8589cc3"
-    sha256 x86_64_linux:  "9e83804e685fafcacecb289b580985ead1996e08db17bb7c6838cf9176bb8cdb"
+    sha256 arm64_tahoe:   "92415995f6cb35663ee8eccac3148a1d28c95207a562de27028dc88e765ad713"
+    sha256 arm64_sequoia: "c92a8ff55fbd355fda14f7efa109a0edaae3409f0cd4239f2e4aa4600c374e3e"
+    sha256 arm64_sonoma:  "486160fb87052cf176fcbf36d0d54b9856def02d873f1f2e4c80ef5ab1808ee5"
+    sha256 sonoma:        "35273720a8be9f8f94c882e37525578c05118c6493f8fb8918611a108b6604fd"
+    sha256 arm64_linux:   "f62f0a4da1d5d8b2cb5ec9852854b441115d634ff0096a203e00b75b363dad79"
+    sha256 x86_64_linux:  "f90ec5eb493cd3475eb9e9ea33200adf0ee8b698cdf67a1b4067c704ab0d34a2"
   end
 
-  # https://www.postgresql.org/support/versioning/
-  deprecate! date: "2026-11-12", because: :unsupported
+  # deprecating one year before the last release,
+  # see: https://www.postgresql.org/support/versioning/
+  deprecate! date: "2025-11-12", because: :unsupported
+  disable! date: "2026-11-12", because: :unsupported
 
   depends_on "pkgconf" => :build
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
 
   # GSSAPI provided by Kerberos.framework crashes when forked.
   # See https://github.com/Homebrew/homebrew-core/issues/47494.
@@ -38,11 +39,11 @@ class PostgresqlAT14 < Formula
   uses_from_macos "libxslt"
   uses_from_macos "openldap"
   uses_from_macos "perl"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "linux-pam"
     depends_on "util-linux"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -73,7 +74,7 @@ class PostgresqlAT14 < Formula
 
     # PostgreSQL by default uses xcodebuild internally to determine this,
     # which does not work on CLT-only installs.
-    args << "PG_SYSROOT=#{MacOS.sdk_path}" if OS.mac? && MacOS.sdk_root_needed?
+    args << "PG_SYSROOT=#{MacOS.sdk_path}" if OS.mac?
 
     system "./configure", *args
     system "make"
@@ -111,7 +112,7 @@ class PostgresqlAT14 < Formula
     # Don't initialize database, it clashes when testing other PostgreSQL versions.
     return if ENV["HOMEBREW_GITHUB_ACTIONS"]
 
-    system bin/"initdb", "--locale=C", "-E", "UTF-8", postgresql_datadir unless pg_version_exists?
+    system bin/"initdb", "--locale=en_US.UTF-8", "-E", "UTF-8", postgresql_datadir unless pg_version_exists?
   end
 
   def postgresql_datadir
@@ -129,7 +130,7 @@ class PostgresqlAT14 < Formula
   def caveats
     <<~EOS
       This formula has created a default database cluster with:
-        initdb --locale=C -E UTF-8 #{postgresql_datadir}
+        initdb --locale=en_US.UTF-8 -E UTF-8 #{postgresql_datadir}
     EOS
   end
 
@@ -142,7 +143,7 @@ class PostgresqlAT14 < Formula
   end
 
   test do
-    system bin/"initdb", testpath/"test" unless ENV["HOMEBREW_GITHUB_ACTIONS"]
+    system bin/"initdb", "--locale=en_US.UTF-8", "-E UTF-8", testpath/"test" unless ENV["HOMEBREW_GITHUB_ACTIONS"]
     assert_equal "#{HOMEBREW_PREFIX}/share/#{name}", shell_output("#{bin}/pg_config --sharedir").chomp
     assert_equal "#{HOMEBREW_PREFIX}/lib/#{name}", shell_output("#{bin}/pg_config --libdir").chomp
     assert_equal "#{HOMEBREW_PREFIX}/lib/#{name}", shell_output("#{bin}/pg_config --pkglibdir").chomp

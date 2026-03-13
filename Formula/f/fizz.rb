@@ -1,41 +1,46 @@
 class Fizz < Formula
   desc "C++14 implementation of the TLS-1.3 standard"
   homepage "https://github.com/facebookincubator/fizz"
-  url "https://github.com/facebookincubator/fizz/releases/download/v2025.05.26.00/fizz-v2025.05.26.00.tar.gz"
-  sha256 "87b4aa97635c14c8d072d8e49025b2daa0e44261073a04d35cd6804c9b4b2270"
+  url "https://github.com/facebookincubator/fizz/archive/refs/tags/v2026.03.09.00.tar.gz"
+  sha256 "1859e710fa26e3ea9fb190f3f7c770c13614378e19bafaa22776958749f7b02f"
   license "BSD-3-Clause"
   head "https://github.com/facebookincubator/fizz.git", branch: "main"
 
   bottle do
-    sha256                               arm64_sequoia: "eb150241572d6b8989242e95778b2d10894515b896bb82d6d7e89e9118260f65"
-    sha256                               arm64_sonoma:  "137d0fc5b83cfd4b7e4fc0c36e32f0e1cb094e763d2ee9b35ffde113138fe5c3"
-    sha256                               arm64_ventura: "b5c34a11184f171a4a6c2cbc3c1d229b31bca99da66ac4228a071f61f24abec6"
-    sha256 cellar: :any,                 sonoma:        "08a175b25454dbb3b7648a8e20ae21811822688b3eed02f61e8063bf7ad78393"
-    sha256 cellar: :any,                 ventura:       "fe4f0eef2b5b07ad31c1a37f35ac3fd8ab77ccfc60a7e61172740e38d4af0503"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "385c1f6659e57c5a320445c5064fa8f7bb390496e9b70f280d28afec956ecca8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e024f7eb24b396d54e711e73edf7445b78f51015779d3b3ee285579216429dcb"
+    sha256 cellar: :any,                 arm64_tahoe:   "1e0063094ee5d30aed1b0189e62e814d6853374639f2b50ea59d48691d48335f"
+    sha256 cellar: :any,                 arm64_sequoia: "6358308ce32cbabca563eeafae86f6d61a27b80b6fe582f177905cf43b87e33c"
+    sha256 cellar: :any,                 arm64_sonoma:  "9306bbc0e2e377ac7ccb3ca3e05fb9225945cf7f4f9ec3988b5218ca1c1ebb3f"
+    sha256 cellar: :any,                 sonoma:        "bb0f7349b24be34333efdc29434cc12f276a4b4363a9ed41cd7b3ade36dc35aa"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a1143829f215d9ae0ab9cd53ef0a06fdd9b5ab34f996730a50018bcb3e35878a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "715dcfa9aa6c251cb1375ccd956b0735bd37d15c051c4b29c37d87f94d3b77f2"
   end
 
   depends_on "cmake" => [:build, :test]
+  depends_on "gflags" => :build
   depends_on "libevent" => :build
-  depends_on "double-conversion"
   depends_on "fmt"
   depends_on "folly"
-  depends_on "gflags"
   depends_on "glog"
   depends_on "libsodium"
   depends_on "openssl@3"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
-    args = ["-DBUILD_TESTS=OFF", "-DBUILD_SHARED_LIBS=ON", "-DCMAKE_INSTALL_RPATH=#{rpath}"]
+    args = %W[
+      -DBUILD_EXAMPLES=OFF
+      -DBUILD_TESTS=OFF
+      -DBUILD_SHARED_LIBS=ON
+      -DCMAKE_INSTALL_RPATH=#{rpath}
+    ]
     if OS.mac?
       # Prevent indirect linkage with boost and snappy.
-      args += [
-        "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-dead_strip_dylibs",
-        "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-dead_strip_dylibs",
+      args += %w[
+        -DCMAKE_EXE_LINKER_FLAGS=-Wl,-dead_strip_dylibs
+        -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-dead_strip_dylibs
       ]
     end
     system "cmake", "-S", "fizz", "-B", "build", *args, *std_cmake_args

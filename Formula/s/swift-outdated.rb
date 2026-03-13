@@ -1,27 +1,25 @@
 class SwiftOutdated < Formula
   desc "Check for outdated Swift package manager dependencies"
   homepage "https://github.com/kiliankoe/swift-outdated"
-  url "https://github.com/kiliankoe/swift-outdated/archive/refs/tags/0.9.0.tar.gz"
-  sha256 "b6ee31edc45711c6425d047fe1b4f177da2498201dab5d94dbe86d8bd483419c"
+  url "https://github.com/kiliankoe/swift-outdated/archive/refs/tags/0.11.0.tar.gz"
+  sha256 "60a82a00446151359962754d34ab0d1dc41cbfa71ac6e41ef9e38f45bad66ccb"
   license "MIT"
-  revision 1
   head "https://github.com/kiliankoe/swift-outdated.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "56a726e5f73cfc65075dfb810e92cd9b75721bacc4a5c4ac824b7725345baf56"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cba510240616bdc16f3c756002a8bbb5368753b2a58d1edfb86b95876d5ac0e3"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "02ed4a34e55f8078b31d691593855fae0e42b8e3605050c6ff0e3ee2ffd21f73"
-    sha256 cellar: :any_skip_relocation, sonoma:        "632eac750a169e76150a4f5c304cb2a0fbb71ffd29780fcfa9eb397766af775f"
-    sha256 cellar: :any_skip_relocation, ventura:       "c7831671b39aee111e79ac7c31f40f68c58c5d02286ff4d52e9ab5112a4d2f02"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "fd55e79daf1746c15dd34741f33021135c77138d0a72cb58ce10338ee1a10d43"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c59bab3634d884340765c698e24977dbe5edc9f405dbcbcb97c017014ba05db0"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "e4f66dca24aa12662cb6a24db12b9230e422f3c5cf4b9f7b2f1e6d869967f08d"
+    sha256 cellar: :any,                 arm64_sequoia: "6f20c6942bee2884c5000eca4bca3565443489f45e857bc7d54001cbe7fda382"
+    sha256 cellar: :any,                 arm64_sonoma:  "fe3611cd4601f9766824f6fe9d1f76baa6ca4d70cbd5d6b8e0df077944376105"
+    sha256 cellar: :any,                 sonoma:        "483e5440044df796bd31cbf9d860ff580dd621494fb724525cce4fef5c72a9fd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3729f576e3636160c37316d7aa7788cbdde8dc2c999651654c0a16439af019d4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a1ecfe9c2f5011cb9317a1ecf20b52ce93dd4dc25786b39d6acc7a7d60497b12"
   end
 
-  depends_on xcode: ["13.3", :build]
-
-  uses_from_macos "swift" => :build
+  uses_from_macos "swift" => :build, since: :tahoe # swift 6.2+
 
   def install
+    inreplace "Sources/SwiftOutdated/SwiftOutdated.swift", "dev", version.to_s
+
     args = if OS.mac?
       ["--disable-sandbox"]
     else
@@ -29,6 +27,7 @@ class SwiftOutdated < Formula
     end
     system "swift", "build", *args, "-c", "release"
     bin.install ".build/release/swift-outdated"
+    generate_completions_from_executable(bin/"swift-outdated", "--generate-completion-script")
   end
 
   test do

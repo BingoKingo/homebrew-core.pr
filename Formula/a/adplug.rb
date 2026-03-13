@@ -6,6 +6,7 @@ class Adplug < Formula
   license "LGPL-2.1-or-later"
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:   "892435c5c1e839118883ea1ccb12ba98ca1e5ad200523547d63bebabaf1b2b64"
     sha256 cellar: :any,                 arm64_sequoia: "367afb14f5af6fc67209b806c5d6b48bc5b39b45d6981914357f50cfb99e9a88"
     sha256 cellar: :any,                 arm64_sonoma:  "d4cc6d03f6820bab04347eed81792a56670a7b15aacc2cab57bf752e5685d55c"
     sha256 cellar: :any,                 arm64_ventura: "cf6008d2cedfe92a81e66895841c5c0fa47c0807849c4f970a184012e5101d32"
@@ -41,7 +42,7 @@ class Adplug < Formula
 
   test do
     resource "ksms" do
-      url "http://advsys.net/ken/ksmsongs.zip"
+      url "https://advsys.net/ken/ksmsongs.zip"
       sha256 "2af9bfc390f545bc7f51b834e46eb0b989833b11058e812200d485a5591c5877"
     end
 

@@ -1,25 +1,28 @@
 class Envio < Formula
   desc "Modern And Secure CLI Tool For Managing Environment Variables"
-  homepage "https://envio-cli.github.io/home"
-  url "https://github.com/envio-cli/envio/archive/refs/tags/v0.6.1.tar.gz"
-  sha256 "24cd7c485226be7f7921a95ae4edaf3cb510c90a339c51e51423c3eb4deee6dc"
+  homepage "https://github.com/envio-cli/envio"
+  url "https://github.com/envio-cli/envio/archive/refs/tags/v0.7.0.tar.gz"
+  sha256 "729a02ac8a5e129fa5129de6ee62f7e2c408502dafc25924d65d02558caa5a08"
   license any_of: ["Apache-2.0", "MIT"]
   head "https://github.com/envio-cli/envio.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "f0d968440fe2fcddd6c39d2541817b3cd51267e520d06ecd2cb1e80f03ffd4a5"
-    sha256 cellar: :any,                 arm64_sonoma:  "1a0588163752bdb12f4b0d8e91646345b8c798006cf240328703d1e0a508ebce"
-    sha256 cellar: :any,                 arm64_ventura: "4f5305056a8165baf2b45d71b2a94f9800792923949c44a30c030d8b0072ef49"
-    sha256 cellar: :any,                 sonoma:        "6812bb1eca12a3c74c542d967d2930bbeb2a0a77ab4b0d3f04eba9df5196063c"
-    sha256 cellar: :any,                 ventura:       "777f696105129c6c3c49944c45854d9cc3f5f63cd2e5913d6692e2337c684f88"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8c7c6e0a4e87038b3088fc5fca823ca57878ab6bb156c7367c4f046debbcb426"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "61427474955a6e35804f605178403e2ac41bda326841faf024ba873b88824c0d"
+    sha256 cellar: :any,                 arm64_tahoe:   "b18308e8847f096e91c31c563e0e4ca6b0a87a260ac6f3ef680ea8ab477dd9dc"
+    sha256 cellar: :any,                 arm64_sequoia: "a3e048b909779bf06ff1fafb0da2f95b9463173957346bcf5e7023ff041f5a37"
+    sha256 cellar: :any,                 arm64_sonoma:  "3cefe805698e54c6b61187c0d038ce4c4c78d3819055109d93177f82691b215c"
+    sha256 cellar: :any,                 sonoma:        "19125731457442ee02d534d4cabb9f7a31cafcd7aa75fbebd87af772396b052a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "669a6d3805a14be62a553178f9cf31571a7db0717bbd90e5d5668046ff32e35b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0ff6c6cebba244c79d927a9203ff657318d0af4290f95941888deb1dec58fc34"
   end
 
   depends_on "pkgconf" => :build
   depends_on "rust" => :build
   depends_on "gpgme"
   depends_on "libgpg-error"
+
+  on_linux do
+    depends_on "dbus"
+  end
 
   def install
     system "cargo", "install", *std_cargo_args
@@ -28,6 +31,7 @@ class Envio < Formula
   test do
     # Setup envio config path
     mkdir testpath/".envio"
+    mkdir testpath/".envio/profiles"
     touch testpath/".envio/setenv.sh"
 
     (testpath/"batch.gpg").write <<~EOS
@@ -43,14 +47,21 @@ class Envio < Formula
     EOS
 
     system Formula["gnupg"].opt_bin/"gpg", "--batch", "--gen-key", "batch.gpg"
+    gpg = Formula["gnupg"].opt_bin/"gpg"
+    fingerprint_output = shell_output("#{gpg} --with-colons --list-secret-keys --fingerprint")
+    fingerprint_line = fingerprint_output.lines.find { |line| line.start_with?("fpr:") }.to_s
+    fingerprint = fingerprint_line.split(":").fetch(9, "").strip
+    assert_match(/\A\h{40}\z/, fingerprint)
 
     begin
-      output = shell_output("#{bin}/envio create brewtest -g #{testpath}/.gnupg/trustdb.gpg", 1)
-      assert_match "Profiles directory does not exist creating it now..", output
-      assert_path_exists testpath/".envio/profiles/brewtest.env"
+      with_env(ENVIO_KEY: fingerprint) do
+        output = shell_output("#{bin}/envio create brewtest --cipher-kind gpg")
+        assert_match "Profile created", output
+      end
+      assert_path_exists testpath/".envio/profiles/brewtest.envio"
 
       output = shell_output("#{bin}/envio list")
-      assert_empty output
+      assert_match "brewtest", output
 
       assert_match version.to_s, shell_output("#{bin}/envio version")
     ensure

@@ -10,11 +10,11 @@ class Tofuenv < Formula
     sha256 cellar: :any_skip_relocation, all: "3febcab9a632034fdedf2d4ae0105d4425bcdb12ac73e58b586a1ddf6db36487"
   end
 
+  uses_from_macos "jq", since: :sequoia
   uses_from_macos "unzip"
 
   on_macos do
     depends_on "grep"
-    depends_on "jq"
   end
 
   conflicts_with "opentofu", "tenv", because: "both install tofu binary"
@@ -24,9 +24,9 @@ class Tofuenv < Formula
   end
 
   test do
-    assert_match "1.8.7", shell_output("#{bin}/tofuenv list-remote")
-    with_env(TOFUENV_TOFU_VERSION: "1.8.7", TF_AUTO_INSTALL: "false") do
-      assert_equal "1.8.7", shell_output("#{bin}/tofuenv version-name").strip
+    tf_version = shell_output("#{bin}/tofuenv list-remote").lines.first.chomp
+    with_env(TOFUENV_TOFU_VERSION: tf_version, TF_AUTO_INSTALL: "false") do
+      assert_equal tf_version, shell_output("#{bin}/tofuenv version-name").strip
     end
   end
 end

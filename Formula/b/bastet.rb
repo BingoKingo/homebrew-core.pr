@@ -4,16 +4,15 @@ class Bastet < Formula
   url "https://github.com/fph/bastet/archive/refs/tags/0.43.2.tar.gz"
   sha256 "f219510afc1d83e4651fbffd5921b1e0b926d5311da4f8fa7df103dc7f2c403f"
   license "GPL-3.0-or-later"
-  revision 11
+  revision 13
 
   bottle do
-    sha256 arm64_sequoia: "4f2a75e89523a611c43e835885e8a88ce1969c829d53285815338ee3b6870274"
-    sha256 arm64_sonoma:  "36d7d9ed8c1661e91989775501e2fb37f93e7293adaed83b10d816ab85a8d6dd"
-    sha256 arm64_ventura: "f35791ce54bddbda1f3812bff67957693fe791ca4c9c023f8afeb868bb74c73e"
-    sha256 sonoma:        "36f49100437319373f0c97a0f2e6a04f314e5a6e7fe70e19f4a10a92157399a7"
-    sha256 ventura:       "bf1b93563715abc343a11e63a351ad9a3c9f8d5348a4f4742636a116ceb4b72f"
-    sha256 arm64_linux:   "a8785e6b7bf3304eb37a4550cd19ba6715a9d8b77babbf5e1308bbe81cc0de72"
-    sha256 x86_64_linux:  "a07a23ef63af7763e40f927c8deb51effc415fe71ee3c7baadebc716fab9dd58"
+    sha256               arm64_tahoe:   "4a36aae44f8d7241586755bf287e97d22d9c25a7063a829a4c27acf0f334e6ab"
+    sha256               arm64_sequoia: "f1ccdafb2925637af27c5823319c1e35b328d1376e78f10352b51c7dc14c80b8"
+    sha256               arm64_sonoma:  "c5f9832aa81c9273df5cd6e9ed889e232ba4b2b404959159b83d65d70b8749d7"
+    sha256 cellar: :any, sonoma:        "a3b4dd087d6c1a9ebc3bd49d738bba4934e67120aae88c9ca48a78b92145e9f9"
+    sha256               arm64_linux:   "78ece6016f523525d749e367e4bbef4de709ac426add7c8ff7fb6db45480aedb"
+    sha256               x86_64_linux:  "27a2d5d98345001280889ceaf575f39c65519dacd8a6f45b197c0d24714ac1fc"
   end
 
   depends_on "boost"
@@ -41,11 +40,8 @@ class Bastet < Formula
   end
 
   test do
-    pid = fork do
-      exec bin/"bastet"
-    end
+    pid = spawn bin/"bastet"
     sleep 3
-
     assert_path_exists bin/"bastet"
     assert_predicate bin/"bastet", :executable?
   ensure

@@ -1,8 +1,8 @@
 class Gsoap < Formula
   desc "SOAP stub and skeleton compiler for C and C++"
   homepage "https://www.genivia.com/products.html"
-  url "https://downloads.sourceforge.net/project/gsoap2/gsoap_2.8.138.zip"
-  sha256 "5ddd63eebd6a08e1838e93400a843975c65ae77e09a95276f9adf166d3ca6f74"
+  url "https://downloads.sourceforge.net/project/gsoap2/gsoap_2.8.140.zip"
+  sha256 "46a2a91f1d9fd756fd6e6e3b82deb673e3f7cc574d234c91132cfaf90449d3ab"
   # Parts of the software are alternatively licensed under gSOAP-1.3b, but this
   # license is considered non-free by Debian and Fedora due to section 3.2:
   #
@@ -19,13 +19,13 @@ class Gsoap < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "dd050b688db6f6dc0afb179015be76a256a2d91fbee487bf7ad06756e9838752"
-    sha256 arm64_sonoma:  "5181ef3b7f16cec46e7a951898d42cfe01a1d424ca742752aeb7a9832ed80485"
-    sha256 arm64_ventura: "0c002ce067077f15d7aa1571866ca07dc4cd1c183019364bc87bfdc203440a29"
-    sha256 sonoma:        "ec9100abcefd7e4de6675a1f142db49da2a5f558c8dfb48a588a32add9e762eb"
-    sha256 ventura:       "6d51669692bf617de0ae562d380c1d1b545bc99609db68bffbf004b1e1fbccba"
-    sha256 arm64_linux:   "d85ffb3b69c1b3256cf621553c02b2230e2d93500d4965c887f65bd1198f93a3"
-    sha256 x86_64_linux:  "d4ace7c9b06feba5c0780ca342cf53daf8efb0eac45017ee02f8bdb469dac04a"
+    rebuild 1
+    sha256 arm64_tahoe:   "cf4c97610f77f2c9b5f06255f96e650e2e57d74213b02d4b385e55cf4824fe66"
+    sha256 arm64_sequoia: "df7e2eb67ed893096372b8e6dfc5b7d9e771277a11f1f7b5e680010301cd7854"
+    sha256 arm64_sonoma:  "dd104c0b5759a1c115877f2af1cdcf83c3714cd61b82038dc5fc50e38ed2c2fb"
+    sha256 sonoma:        "2be8de110f88781e1d8081810afdfc548332b1df79589c1b437790726003f178"
+    sha256 arm64_linux:   "62c8b487153acfcf3cbec5f45e48f0df8b83a5b26881a75aa001e52cfc06683d"
+    sha256 x86_64_linux:  "7edb24c0af61112ae66a364bffb97af20aed42e7da427ee7372de99d7819d193"
   end
 
   depends_on "autoconf" => :build
@@ -33,10 +33,13 @@ class Gsoap < Formula
 
   uses_from_macos "bison" => :build
   uses_from_macos "flex" => :build
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
-    system "./configure", *std_configure_args, "--disable-silent-rules"
+    system "./configure", "--disable-silent-rules", *std_configure_args
     system "make"
     system "make", "install"
   end

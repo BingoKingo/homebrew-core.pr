@@ -4,16 +4,16 @@ class RubyAT31 < Formula
   url "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.7.tar.gz"
   sha256 "0556acd69f141ddace03fa5dd8d76e7ea0d8f5232edf012429579bcdaab30e7b"
   license "Ruby"
+  revision 1
 
   bottle do
     rebuild 1
-    sha256 arm64_sequoia: "0b2c994b56cc016e46c5897105ec0c68ce7a84dc755e2ffab9fbcbca55997998"
-    sha256 arm64_sonoma:  "3198d30fb1e0727f1a68f20378d7a91be4de039fb2f0ef6fe818e0be1122e36f"
-    sha256 arm64_ventura: "ccb66ea8882437d80774ca761207d8207d061958615fc5869f8a4e717950d45a"
-    sha256 sonoma:        "6fbb3535f124ecccb1a8d717d724c64d623e8622aac47c19861db79cee5119f6"
-    sha256 ventura:       "4eae88a8a7d9606e90a79a05e9dd26f95f0f3e66741361b43c6f5b09ebe87345"
-    sha256 arm64_linux:   "3ea209c0300bd00dd41982809bcdfae936e4b0dea615be35fbfbadebdeb1fa64"
-    sha256 x86_64_linux:  "09a389c668f653f5d2fbc5de2c94e5bb13591a3161731828561033c8b994db4f"
+    sha256 arm64_tahoe:   "599b781fb1c4c6efb4b391ae920a91d681fb7de8b4797a4d7972bb4a13103775"
+    sha256 arm64_sequoia: "40428a63bf4793b3cc0ba899ea3e8fd64c9fca1e786b77f8c5654772e3acd0d7"
+    sha256 arm64_sonoma:  "1685cef921b0e3b6fbc61b910f40decf7709e858d057b12730aeda7f1ba741f2"
+    sha256 sonoma:        "46f36ad68e85c489f34a1c2833afd34e95b2d8dcb5dd83f1febbec479b95a0ce"
+    sha256 arm64_linux:   "f63534986a1584661658d8426703011e66b6094827758717ade41850cc26deb7"
+    sha256 x86_64_linux:  "228ce2398e2abab192f28e456c2e1c2a9e8cc65933b775eda58b3084efab79c0"
   end
 
   keg_only :versioned_formula
@@ -28,7 +28,11 @@ class RubyAT31 < Formula
 
   uses_from_macos "libffi"
   uses_from_macos "libxcrypt"
-  uses_from_macos "zlib"
+  uses_from_macos "ncurses"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # Should be updated only when Ruby is updated (if an update is available).
   # The exception is Rubygem security fixes, which mandate updating this
@@ -36,6 +40,13 @@ class RubyAT31 < Formula
   resource "rubygems" do
     url "https://rubygems.org/rubygems/rubygems-3.5.11.tgz"
     sha256 "4521b52f843620a9fc5ca7414526b7463b0989564c3ae80b26b68fbd1304c818"
+  end
+
+  # Update the bundled openssl gem for compatibility with OpenSSL 3.6+
+  # Using 3.1.x series to minimize chances of breakage from upgrading bundled 3.0.x
+  resource "openssl" do
+    url "https://github.com/ruby/openssl/archive/refs/tags/v3.1.2.tar.gz"
+    sha256 "0abb96cdeaef1c0a2bfc8e0a4557467d7f2e93cabdd00d0d387afb1d0e1569a9"
   end
 
   def api_version
@@ -47,6 +58,13 @@ class RubyAT31 < Formula
   end
 
   def install
+    rm_r(%w[ext/openssl test/openssl])
+    resource("openssl").stage do
+      (buildpath/"ext").install "ext/openssl"
+      (buildpath/"ext/openssl").install "lib", "History.md", "openssl.gemspec"
+      (buildpath/"test").install "test/openssl"
+    end
+
     # otherwise `gem` command breaks
     ENV.delete("SDKROOT")
 

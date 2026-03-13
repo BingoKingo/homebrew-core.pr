@@ -1,26 +1,28 @@
 class Hcxtools < Formula
   desc "Utils for conversion of cap/pcap/pcapng WiFi dump files"
   homepage "https://github.com/ZerBea/hcxtools"
-  url "https://github.com/ZerBea/hcxtools/archive/refs/tags/6.3.5.tar.gz"
-  sha256 "17c9724bc8368a0878706d27a231aa699a8bf78ad804ca97413081bce69eb74c"
+  url "https://github.com/ZerBea/hcxtools/archive/refs/tags/7.1.2.tar.gz"
+  sha256 "c726b93df32efd3298874b324f820d93cb08a4dae03d9144b0d5062c003fd77f"
   license "MIT"
   head "https://github.com/ZerBea/hcxtools.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "fbee732a7304ed828f71ebe2ee5847637e54e2291bf498a899516090800066af"
-    sha256 cellar: :any,                 arm64_sonoma:  "a0b4c4fd4c407a664e5ef6b9e4bd8debd5f6239aa5ceac40754bb7dacbbcffe2"
-    sha256 cellar: :any,                 arm64_ventura: "a5c6154b7c474f89e552279acb816eb2f16fe580cf2b551476c48bed97d52a27"
-    sha256 cellar: :any,                 sonoma:        "2814039645270a0de28354efc71e9e640e79113c4893edac270a3596e82cb74a"
-    sha256 cellar: :any,                 ventura:       "53ca3c7313e167c4f82b00e9fc0f35bae6ebb80b15e3762f59668e4a34c44aaf"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4fbec0db0c78b0ce779195131d1e70118b6642dc6a66469f3bea2be7e0fdb35f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cfa435ef982fe30b6e3ea26c1d736882a4799c0ee035bccb5cf20bdca00740dd"
+    sha256 cellar: :any,                 arm64_tahoe:   "b786532da808f3d2df2a0196664c412cbcb7b9e8075ff4986be97516c7dda34c"
+    sha256 cellar: :any,                 arm64_sequoia: "b6ed19ef3e202ff7fccd37d1cb507a15ae9d27a0642b9adaed3f681d0898c167"
+    sha256 cellar: :any,                 arm64_sonoma:  "1651738e247aacea8e5370cd6864c7c74ea469326838eceb9a26fe0545c20bf3"
+    sha256 cellar: :any,                 sonoma:        "f780ee105f6fad885e76c94ca9dc0d0f262c45bcdbee5ab91f9db46c6006d6b9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a5dd620ba49c62840721470976e8c9fc315ccf53073a970e2fb773fab2b514a8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8168c9e6a68a1707ec3c18c7f4c141664f1f9609f3432b761e2e076c0a3f71a7"
   end
 
   depends_on "pkgconf" => :build
   depends_on "openssl@3"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     bin.mkpath

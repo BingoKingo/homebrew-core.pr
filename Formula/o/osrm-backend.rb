@@ -1,10 +1,26 @@
 class OsrmBackend < Formula
   desc "High performance routing engine"
   homepage "https://project-osrm.org/"
-  url "https://github.com/Project-OSRM/osrm-backend/archive/refs/tags/v6.0.0.tar.gz"
-  sha256 "369192672c0041600740c623ce961ef856e618878b7d28ae5e80c9f6c2643031"
   license "BSD-2-Clause"
+  revision 3
   head "https://github.com/Project-OSRM/osrm-backend.git", branch: "master"
+
+  stable do
+    url "https://github.com/Project-OSRM/osrm-backend/archive/refs/tags/v6.0.0.tar.gz"
+    sha256 "369192672c0041600740c623ce961ef856e618878b7d28ae5e80c9f6c2643031"
+
+    # Backport support for Boost 1.89.0
+    patch do
+      url "https://github.com/Project-OSRM/osrm-backend/commit/a2e159d0d4f6b3922ee0cb058a800230cf90642e.patch?full_index=1"
+      sha256 "296e924268436847b941e287f8c46d0b98e829e723b310d96ff587b51940b653"
+    end
+
+    # Backport support for Lua 5.5
+    patch do
+      url "https://github.com/Project-OSRM/osrm-backend/commit/314c566cd63da80b2a9ced6a71bbb36610113fb9.patch?full_index=1"
+      sha256 "5e259e4ff3ab48cff4ce1a947fde14de8bf5f0d99d79ac407804af4637e871ad"
+    end
+  end
 
   livecheck do
     url :stable
@@ -12,54 +28,40 @@ class OsrmBackend < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "d99d43985b7eb9874b9a854559a8dd7ba095653a0bc7991f540a9f691098f381"
-    sha256 cellar: :any,                 arm64_sonoma:  "1238dc214ee091861d48367a2c78b5458ccdfdd6737404fd8184f4dd815e6d34"
-    sha256 cellar: :any,                 arm64_ventura: "af0a8f5ceb7d82b9aece2b378d98d9d2aefbd830a9cfbaba79d5433160540528"
-    sha256 cellar: :any,                 sonoma:        "fb84337d531fe6c48eee4a7dd0abf33cc4ad0af6742abf9466880847e1470ba1"
-    sha256 cellar: :any,                 ventura:       "2eeecffa84cf777cb0e381b6e6e61ce41fc32ca7aa7b5a8c0244410d585c7c8d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9aa04dc44e906b36396551a0acc0482eaad60ebb811243bafa85f2c39d2903c1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dc54945839a76c5d681129b99814b936674ef7caf365a7d9d45919d79710f160"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "e74008d49cd71d3efd5b7006a2809848ca73f15c923be180ef4f6de6edc79f59"
+    sha256 cellar: :any,                 arm64_sequoia: "ea5588b2c7e83b37fa376b43b2ce3f9b62b614ebdb55bc826dce885cad7c7797"
+    sha256 cellar: :any,                 arm64_sonoma:  "0a82e6177cf9cd25b69d0e1eb9e5ba8c1468af67e7595e91bc2d7a6d5e7f13a1"
+    sha256 cellar: :any,                 sonoma:        "91283bc8dd2b37363db095c04c025354b0f7869a2e316eb8f7e49ea5b56145be"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6b1cd90a2989c42e0f000e10480d15ff2d4dd86ac1ecf790722dd63064891b62"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ef5a80bc12c171d942fc5a74153b0d7a0a4c47f2b1eb5ba33374ab2bc2f1bc94"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
 
   depends_on "boost"
-  depends_on "libstxxl"
-  depends_on "libxml2"
-  depends_on "libzip"
   depends_on "lua"
   depends_on "tbb"
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
-  uses_from_macos "zlib"
 
   on_linux do
-    depends_on "gcc@12" if DevelopmentTools.gcc_version("gcc") < 12
-
-    fails_with :gcc do
-      version "11"
-      cause <<~CAUSE
-        /usr/include/c++/11/type_traits:987:52: error: static assertion failed: template argument must be a complete class or an unbounded array
-          static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
-      CAUSE
-    end
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with "flatbuffers", because: "both install flatbuffers headers"
-  conflicts_with "mapnik", because: "both install Mapbox Variant headers"
+
+  fails_with :gcc do
+    version "11"
+    cause <<~CAUSE
+      /usr/include/c++/11/type_traits:987:52: error: static assertion failed: template argument must be a complete class or an unbounded array
+        static_assert(std::__is_complete_or_unbounded(__type_identity<_Tp>{}),
+    CAUSE
+  end
 
   def install
-    # Work around build failure: duplicate symbol 'boost::phoenix::placeholders::uarg9'
-    # Issue ref: https://github.com/boostorg/phoenix/issues/111
-    ENV.append_to_cflags "-DBOOST_PHOENIX_STL_TUPLE_H_"
-    # Work around build failure on Linux:
-    # /tmp/osrm-backend-20221105-7617-1itecwd/osrm-backend-5.27.1/src/osrm/osrm.cpp:83:1:
-    # /usr/include/c++/11/ext/new_allocator.h:145:26: error: 'void operator delete(void*, std::size_t)'
-    # called on unallocated object 'result' [-Werror=free-nonheap-object]
-    ENV.append_to_cflags "-Wno-free-nonheap-object" if OS.linux?
-
     lua = Formula["lua"]
     luaversion = lua.version.major_minor
 

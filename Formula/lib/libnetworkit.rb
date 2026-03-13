@@ -1,8 +1,8 @@
 class Libnetworkit < Formula
   desc "NetworKit is an OS-toolkit for large-scale network analysis"
   homepage "https://networkit.github.io"
-  url "https://github.com/networkit/networkit/archive/refs/tags/11.1.tar.gz"
-  sha256 "c8db0430f6d7503eaf1e59fbf181374dc9eaa70f572c56d2efa75dd19a3548a9"
+  url "https://github.com/networkit/networkit/archive/refs/tags/11.2.1.tar.gz"
+  sha256 "969718847465937086728a884b5f143d7f36cfd3f6cdc04ef9ae4f64ba61b60c"
   license "MIT"
 
   livecheck do
@@ -10,13 +10,12 @@ class Libnetworkit < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5d0045a902e874098c38bf7c3eba789e8d1d36343f1a58b874c5ae002e771216"
-    sha256 cellar: :any,                 arm64_sonoma:  "9bc6b2bb82c01385f9270daaf103455cc879931b6565ff813501763885d74e9b"
-    sha256 cellar: :any,                 arm64_ventura: "98b8837808c1cc14fd94b86840a9f68ef5ee4859949de8fa4e4b2ce2cb4f5609"
-    sha256 cellar: :any,                 sonoma:        "1b26f3f2939058fff6be5f098275d150ff192ea5d8dd667677979a542df76883"
-    sha256 cellar: :any,                 ventura:       "92e49a66eaa9eba680dd1f1bc37b94ae9af79b273a1dae4ddedae6a883745301"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "fd31d28f3fcb0bba6ad090cfd9c6a6cb2a24ec55b1c05f4a1eb3ad2feb02dc50"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "32564d543c7c121b193cb9c2d2c769e7f7770165e131037e49cdfc33449a8ace"
+    sha256 cellar: :any,                 arm64_tahoe:   "77c3f853f13a533978f790671a938a0341ae8d77d02698d9d1d89efd51d8c45e"
+    sha256 cellar: :any,                 arm64_sequoia: "51c9d11342d2e0cd45b9ef5e2c7ff6834b6582398dec59ce37cafe91e1ccee27"
+    sha256 cellar: :any,                 arm64_sonoma:  "f50f9503044e1021d1d61169ecd04fe907148de0745b93e7cdb095c7d0308d3c"
+    sha256 cellar: :any,                 sonoma:        "a47488310d81eff3eac5596af4099e3585896d2828f1bdf51524b3d5bc8be76a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7369fce424d18d4e14a1125462f5bd8543fe2bbb1112b1699256f04f54f375d0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "47b4cb78951b041733d9d8f352e5fb4b7d48ab6747ad41ad05c31e9d25ffa150"
   end
 
   depends_on "cmake" => :build

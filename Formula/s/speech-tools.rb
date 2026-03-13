@@ -6,7 +6,8 @@ class SpeechTools < Formula
   head "https://github.com/festvox/speech_tools.git", branch: "master"
 
   stable do
-    url "http://festvox.org/packed/festival/2.5/speech_tools-2.5.0-release.tar.gz"
+    url "https://deb.debian.org/debian/pool/main/s/speech-tools/speech-tools_2.5.0.orig.tar.gz"
+    mirror "http://festvox.org/packed/festival/2.5/speech_tools-2.5.0-release.tar.gz"
     sha256 "e4fd97ed78f14464358d09f36dfe91bc1721b7c0fa6503e04364fb5847805dcc"
 
     # Fix build on Apple Silicon. Remove in the next release.
@@ -28,6 +29,7 @@ class SpeechTools < Formula
   end
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:    "676603f0e048211c64eef17bb9b6992b7fec2825469d4dae53a0a265e5b84dc4"
     sha256 cellar: :any,                 arm64_sequoia:  "711ab1173ba030660d1d8ee4e33da992aedcea17abf46073d9cc61600393cf7a"
     sha256 cellar: :any,                 arm64_sonoma:   "661e6c51d679c86f3f8a3e0bf98f11d2bf70e94dfffa01b15ae8cfce3a25a32b"
     sha256 cellar: :any,                 arm64_ventura:  "904d6e001b1e6ba3dc80e9ff46f45e858e1551e4194779ecf29babdee3925d29"

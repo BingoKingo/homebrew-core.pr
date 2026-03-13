@@ -1,26 +1,25 @@
 class Newsboat < Formula
   desc "RSS/Atom feed reader for text terminals"
   homepage "https://newsboat.org/"
-  url "https://newsboat.org/releases/2.39/newsboat-2.39.tar.xz"
-  sha256 "62551a7d574d7fb3af7a87f9dbd0795e4d9420ca7136abc2265b4b06663be503"
+  url "https://newsboat.org/releases/2.42/newsboat-2.42.tar.xz"
+  sha256 "7fe56497f5368d7d5f9ab76e755e768c0e26605cc32d56b94d3133ee81d88e9b"
   license "MIT"
   head "https://github.com/newsboat/newsboat.git", branch: "master"
 
   bottle do
-    sha256 arm64_sequoia: "784097ba80326b979eb1911e3069703e74931f098b4b4b09e6860d55625436a9"
-    sha256 arm64_sonoma:  "cb4fb9c1e39faebed2936c9024596c5aae56a04d5383d114b2764fa231314e79"
-    sha256 arm64_ventura: "0f259c3cfdc92b561aba4dab533c737000591552ee2741f2e18dd8b575ca1df4"
-    sha256 sonoma:        "118530c4024a841179a291c9cb8cc510def37e0dadc51204423cc55d1d5ef12d"
-    sha256 ventura:       "64d63a00c216d589829b44c64d8cc1ff6c833d8fb0eff4bd8f699be39aca7998"
-    sha256 arm64_linux:   "c5fc2f3b3031c7959cd6aca3038143adc52f77525e92d9d2b043717f9985ac1a"
-    sha256 x86_64_linux:  "9594e4b2d0db3616517b295e687cc0832b149a68546dcdce2ab9309a622ea32d"
+    sha256 arm64_tahoe:   "b610948d104b7556fc62a95d0f9bf842e13ea0c6aeac3939af71a32e5a3dd22d"
+    sha256 arm64_sequoia: "7b1d62e63c130de7db559543124c5fc97dbffb4cda7091061374ea25c49238d8"
+    sha256 arm64_sonoma:  "9b62381e36cdc45c85b1bd4d490047c9bc3a5393b33cde0a44fe8b5a6b258cc6"
+    sha256 sonoma:        "b37943a296488d563127aea5a6d715f23b66164765cfbc0429c96cee6723109b"
+    sha256 arm64_linux:   "fa2284f76d28afb1a331ad5b65e98ea5048ae22ccd448ad67e1e350093fe0ae5"
+    sha256 x86_64_linux:  "ca54d697581473d3d2788b59cedda849e9c6f61f6d3f5d6a6cdf32706a2fdfdd"
   end
 
   depends_on "asciidoctor" => :build
+  depends_on "gettext" => :build
   depends_on "pkgconf" => :build
   depends_on "rust" => :build
   depends_on "xz" => :build
-  depends_on "gettext"
   depends_on "json-c"
 
   uses_from_macos "curl"
@@ -31,6 +30,16 @@ class Newsboat < Formula
 
   on_macos do
     depends_on "make" => :build
+    depends_on "gettext"
+  end
+
+  on_tahoe do
+    depends_on "llvm" => :build if DevelopmentTools.clang_build_version == 1700
+
+    fails_with :clang do
+      build 1700
+      cause "https://github.com/llvm/llvm-project/issues/142118"
+    end
   end
 
   # Newsboat have their own libstfl fork. Upstream libsftl is gone:
@@ -102,7 +111,7 @@ class Newsboat < Formula
   end
 
   test do
-    (testpath/"urls.txt").write "https://github.com/blog/subscribe"
+    (testpath/"urls.txt").write "https://github.blog/subscribe/"
     assert_match "Newsboat - Exported Feeds", shell_output("LC_ALL=C #{bin}/newsboat -e -u urls.txt")
   end
 end

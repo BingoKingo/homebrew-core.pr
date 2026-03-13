@@ -1,30 +1,24 @@
 class Tofrodos < Formula
   desc "Converts DOS <-> UNIX text files, alias tofromdos"
-  homepage "https://www.thefreecountry.com/tofrodos/"
-  url "https://www.thefreecountry.com/tofrodos/tofrodos-1.8.3.zip"
-  sha256 "44d76fb024164982aa5e166c1a3c29fa7555c9e0ee8e196cc52595c57a4b55dc"
+  homepage "https://github.com/ChristopherHeng/tofrodos"
+  url "https://github.com/ChristopherHeng/tofrodos/archive/refs/tags/1.9.0.tar.gz"
+  sha256 "f4e16646a1eca631cb0ba62440b47cb8651ce1e6bd2982e8426d3a98ad8083ec"
   license "GPL-2.0-only"
 
-  livecheck do
-    url :homepage
-    regex(/href=.*?tofrodos[._-]v?(\d+(?:\.\d+)+)\.(?:t|zip)/i)
-  end
-
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4f5b16d880a34a9f8f8bcf3c3a5520affe8356fcf24854fd23e09b07ee1b2de8"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "55ad657b7068a6106e846311ca92abbbf94ed236d7c48b263a25eabc95acc434"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ef7cc693cfb4c53110c3771bfd4c3843a314ad610417c4e47cf3af5ec4ef6d09"
-    sha256 cellar: :any_skip_relocation, sonoma:        "fbbecca042307e05f058ab8f8d95a97340cc7111114041581059f6815129f15b"
-    sha256 cellar: :any_skip_relocation, ventura:       "e4ea589dde1039b1732d7ada4b8f817b30d90aea37a3ece09c520316505688c3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "97e7b249efc5aea737734daf57e21300701accc3f70419030be49ff039ceb50a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6883c12d2a042937a3e93beacc2350d65dcdc5c99230b8325ef022488552a14b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "07b62a45db3e96d8c124a399d4423631d0eb8161a1c60e90720049bc7b432b7c"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cf5149e273342d3b3bf5fe9c23e13232c44242720373c1149329c89f8eb2e18c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fd90aabaafa310b004b5b21bb0cb0f4b25b2d276aad5a3495661112a6765c258"
+    sha256 cellar: :any_skip_relocation, sonoma:        "41949c0a585cd9cc996d4397f9373f616e36a60d1f17f4b5605482b2aa02788a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e00859f93c7110703d8bb47a72f3a833ee22a85d1440d89230396caeef0faa6e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b7fcfcc80b11daa6dbe5d4658ffd01534fc61c8705bd78411c9405c945954626"
   end
 
   def install
     mkdir_p [bin, man1]
 
-    system "make", "-C", "src", "all"
-    system "make", "-C", "src", "BINDIR=#{bin}", "MANDIR=#{man1}", "install"
+    system "make", "-f", "makefile.gcc", "all"
+    system "make", "-f", "makefile.gcc", "BINDIR=#{bin}", "MANDIR=#{man1}", "install"
   end
 
   test do

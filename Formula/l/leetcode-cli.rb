@@ -1,19 +1,18 @@
 class LeetcodeCli < Formula
   desc "May the code be with you"
   homepage "https://github.com/clearloop/leetcode-cli"
-  url "https://github.com/clearloop/leetcode-cli/archive/refs/tags/v0.4.6.tar.gz"
-  sha256 "0b7af5782947a2ae5fab7233c8ca6dd59441287033e9116e332673ee6613a9e3"
+  url "https://github.com/clearloop/leetcode-cli/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "3ee61769f40fd374461dfe9a7cccd113b38564e828bcccabf1875d9482b9ced9"
   license "MIT"
-  head "https://github.com/clearloop/leetcode-cli.git", branch: "master"
+  head "https://github.com/clearloop/leetcode-cli.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "74e049034f26697cbb450932850add1cbfd9d9dccb52d61d2109184f04987f6d"
-    sha256 cellar: :any,                 arm64_sonoma:  "02fb5ce2daa5f0c662fc4b69b4dd82f6f7ac7ce12f4f1507e449fb91107d20e8"
-    sha256 cellar: :any,                 arm64_ventura: "56de48e4618446f7e796e118826eab3da85760eddbd170c360ec85cf0d12b85c"
-    sha256 cellar: :any,                 sonoma:        "54a05fea76f766c5f43250de16f9e54ed10f1866f00e9108d356e81a2aa3d42e"
-    sha256 cellar: :any,                 ventura:       "c945df73ce1df6261bd90a466813d1c70403e073ced3122d8c7c06e1b4c6b281"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "35d29d17bc0a58d8de02b0e86d492c9d298c66060b44ecfda2b65d5d65c6b984"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "24708a20685911223a7b8b32575473081a36fe6bc0135f415d27b5343cdb96a6"
+    sha256 cellar: :any,                 arm64_tahoe:   "2714994b45df5976c2f02d57e02a860397738ef3c1b33bae6edb32955636b241"
+    sha256 cellar: :any,                 arm64_sequoia: "5c17215533eadbc515621812fdbce284b89ce60e365dba38672d79a197d40302"
+    sha256 cellar: :any,                 arm64_sonoma:  "391a1860fad787cfcbef1fa1c0dc04335913621944da57999e89957955c67cf6"
+    sha256 cellar: :any,                 sonoma:        "655b0ad5fb1c9a7b7cdc9b09c42193fa11a10dda1008913ccb748bd6d24edf08"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a6da7b9dd64506d8a577505d4b2716ce342bd0fdfd2b843d92996f35c7299b54"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "af6826c657dda9c1c44bcfe1f3c8b029168867e994a149cc4353e1fb849aec58"
   end
 
   depends_on "pkgconf" => :build

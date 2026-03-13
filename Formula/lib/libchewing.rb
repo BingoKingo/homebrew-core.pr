@@ -1,18 +1,17 @@
 class Libchewing < Formula
   desc "Intelligent phonetic input method library"
   homepage "https://chewing.im/"
-  url "https://github.com/chewing/libchewing/releases/download/v0.9.1/libchewing-0.9.1.tar.zst"
-  sha256 "e98b76c306552148b7d85f0e596860751d9eef4bc8f2dfc053177b14f421c31f"
+  url "https://github.com/chewing/libchewing/releases/download/v0.11.0/libchewing-0.11.0.tar.zst"
+  sha256 "b2dc134f994db524d735c014c7ff41285ab439c3f7a437bb5f0e446a63b7220d"
   license "LGPL-2.1-only"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "32135dee630c01d5a8d9a4e9bbaaa2d162d1487b422a71b7c9df375c95d54f5f"
-    sha256 cellar: :any,                 arm64_sonoma:  "dda2fc0363058909c7de62a6cfdd59db89f30c6b6a6bf291da227d8beb045b7d"
-    sha256 cellar: :any,                 arm64_ventura: "2698f929ef06c474f8f08f5729a6a923c89aef36b572163f353360158188f51d"
-    sha256 cellar: :any,                 sonoma:        "a8bb15dfebb22f402c3bd8182b90324c273f363474c9d7ebc170e1c672e800a8"
-    sha256 cellar: :any,                 ventura:       "99d2a65e3971de39db1e15f8c63c8b2b944cc25f762c903a6f161fae2d15c33f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "608ffd3001265904a295d4b66d02764cbf5b63be4b8fb3e5eaa477f3ae8bfa87"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d104abaa34a16aeb177b1c644b01bf8480b372405c3ca4d02ff90b9aad661196"
+    sha256 cellar: :any,                 arm64_tahoe:   "ed3ecdbd9b626a1416b759d92545511acd3134f1d70ccbc0e8881a11868ad2d3"
+    sha256 cellar: :any,                 arm64_sequoia: "7988b3043cd55bb94ea1b044371ed2f320006df97406e6ef261f32c1150afe10"
+    sha256 cellar: :any,                 arm64_sonoma:  "8214dd0b162970d155823832199d6c61d61c02b70ffaf3f0cd006f27d62c2088"
+    sha256 cellar: :any,                 sonoma:        "e9662123cbf849b97198608b564ea106cc8cf52c30daec61f47a7fa5d23ce76e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "94021f295b0bc602de4c7735af212f7ab5dea609b786dfd2a3de88aa068c746f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c8961ede2ccf15b8dc15692704a4679367b9ce2f34af505019d1f03ce59d3fc7"
   end
 
   depends_on "cmake" => :build

@@ -4,20 +4,26 @@ class Homeworlds < Formula
   url "https://github.com/Quuxplusone/Homeworlds/archive/refs/tags/v1.1.0.tar.gz"
   sha256 "3ffbad58943127850047ef144a572f6cc84fd1ec2d29dad1f118db75419bf600"
   license "BSD-2-Clause"
-  revision 1
+  revision 3
   version_scheme 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "fc648ea7d7196a2067c452be9e0e4ba83500b687518bf6c120cccc9147e77201"
-    sha256 cellar: :any,                 arm64_sonoma:  "7f0bfeb7524e5ca6ec187759fac9ca02b2a4f24ece3cfe8506d9d325530d8ba6"
-    sha256 cellar: :any,                 arm64_ventura: "9b02997109618a53e50a2dd9dba793b98abe87ec60b2acd3efbf0ebc30ceeff1"
-    sha256 cellar: :any,                 sonoma:        "12a6e003b2201f391a32e4e7329d56606fc61677cfe7c30ddf3003dc5d5eed47"
-    sha256 cellar: :any,                 ventura:       "c1ef4ed10f9d30d5ac69572ce0ef0a9677924cecdcbdbdb3f520415675b983cd"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "bcd8d56b7c77a7a3817dac2aa1c006d8590d5e18fe67fefcdf47cb348c2b19f1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c3390b52f4c1be6153a244f3b396d54fec26315d710626c2fa9df90330e8199c"
+    sha256 cellar: :any,                 arm64_tahoe:   "45a30b6daf394079ea156c6708a4831b7d3e752e56f5dd7e72c9e0986c56ff5d"
+    sha256 cellar: :any,                 arm64_sequoia: "2dbdfe54a18e00ecdb5829d0bbef94016a8da5997badafe96b9520319885a18d"
+    sha256 cellar: :any,                 arm64_sonoma:  "879e973ac4ce6c0e1db885f6c7cb9901cd5765ff9c418b2e71847ca0edfa17ae"
+    sha256 cellar: :any,                 sonoma:        "e7711669fb6570ea72d2678ab9d6f424efeb17162f65417f86bcfcec336fe410"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1028e2b8dbb347b5a05fb84b47f80ef8c74efb4df461deb24f1e6a868e2fbe1a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "029d312f8762b3accec75527e02af6d9d29260aef2b888b2d7190d1ca823794b"
   end
 
   depends_on "wxwidgets"
+
+  # Fix missing `#include`.
+  # https://github.com/Quuxplusone/Homeworlds/pull/6
+  patch do
+    url "https://github.com/Quuxplusone/Homeworlds/commit/bb1a5d2395df4e097122b311c0009801107f4d3a.patch?full_index=1"
+    sha256 "a133fb4bdeb4a5d2759a7257989089402e0ad84edbaed86780c26d47e58b8d55"
+  end
 
   def install
     system "make", "homeworlds-cli", "homeworlds-wx"

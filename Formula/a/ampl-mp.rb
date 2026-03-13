@@ -1,8 +1,8 @@
 class AmplMp < Formula
   desc "Open-source library for mathematical programming"
   homepage "https://ampl.com/"
-  url "https://github.com/ampl/mp/archive/refs/tags/v4.0.3.tar.gz"
-  sha256 "229c2e82110a8a1c1a845b14e5faa960785c07e2df673bd366f755aca431c1a9"
+  url "https://github.com/ampl/mp/archive/refs/tags/v4.1.0.tar.gz"
+  sha256 "c75274fe2ef8b61f67826267e3c2cb339021c62d724659ab89a5b63c3959067d"
   license "MIT"
 
   livecheck do
@@ -11,13 +11,12 @@ class AmplMp < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "72d3f332e77de2e5b258bf56fdaec683156df0ea50bd69183472ecd3406b2f8e"
-    sha256 cellar: :any,                 arm64_sonoma:  "2a002c99e2dd2fc455f9f020441173b578c990a6c2ed1cddb5ad6ba66e06c9aa"
-    sha256 cellar: :any,                 arm64_ventura: "ba31187ed3d38c63fa5ce3147a1585da4dfba58c3ffc963e96b9b62bec3a51eb"
-    sha256 cellar: :any,                 sonoma:        "688d982bcba62f0093d30a4a13a687bb82d2af614be4c13a38e9c5b30b9e01bd"
-    sha256 cellar: :any,                 ventura:       "d3b8e2cb8821b8c3d707b873397ebdc414113380feb8d0f3c96009234a8c9234"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "93c41c2792707a2fcc66dda70e71dfab73c2e719360b44b54dc2fe5930b4b8b2"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1589822e026ea8029f3b8d187c37979188a056aef87dde9c30f0414a0738e436"
+    sha256 cellar: :any,                 arm64_tahoe:   "30101ed35bf353b25c5224e894becb501685e269097aa0877a9a4c286a6bd921"
+    sha256 cellar: :any,                 arm64_sequoia: "46d3b4c4c29281c043ee2206f12e45d5ee5dba76ca6408f30c94a6263ff02bd5"
+    sha256 cellar: :any,                 arm64_sonoma:  "000e6da1549a75a543cff02b98e31f777151bd9edca3d6908e06c7c11e2b3fbe"
+    sha256 cellar: :any,                 sonoma:        "fe02fb7f4695515aabb254a421a0f6033e859593769792ba37900eb2c43810d0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "cb19ab7bf83a1e77ff0c031e42ae25e2ec352d323e458eba67d3d96dd77eb06a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fd14cb46a1706778ca2fe9d203ff74a90fb9c7d88dd8dd4eb3b3bb9dd53ced4a"
   end
 
   depends_on "cmake" => :build

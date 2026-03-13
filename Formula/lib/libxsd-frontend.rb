@@ -5,7 +5,28 @@ class LibxsdFrontend < Formula
   sha256 "98321b9c2307d7c4e1eba49da6a522ffa81bdf61f7e3605e469aa85bfcab90b1"
   license "GPL-2.0-only"
 
+  # Versions of libxsd-frontend beyond 2.0.0 (from 2014) are provided as XSD
+  # dependencies, so we have to check within XSD releases.
+  livecheck do
+    url "https://www.codesynthesis.com/products/xsd/download.xhtml"
+    regex(/href=.*?libxsd-frontend[._-]v?(\d+(?:\.\d+)+)\.t/i)
+    strategy :page_match do |page, regex|
+      # Identify the "XSD dependencies" URL on the XSD download page
+      xsd_url = page[%r{href=["']?(["' >]*?/download/xsd/v?\d+(?:\.\d+)+)/?["' >]}i, 1]
+      next unless xsd_url
+
+      # Fetch the directory listing page for the XSD version
+      xsd_page = Homebrew::Livecheck::Strategy.page_content(
+        URI.join(@url, xsd_url).to_s,
+      )[:content]
+      next unless xsd_page
+
+      xsd_page.scan(regex).map(&:first)
+    end
+  end
+
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:   "d0932306261002d469d9a0a9a5071134841b5820b9e2880883e3f9c06f5b4e82"
     sha256 cellar: :any,                 arm64_sequoia: "3631cb5e92f7b2d727f1fe7039482a1a5cd1d81e317674fa418795e4691d60fe"
     sha256 cellar: :any,                 arm64_sonoma:  "cc7523a561914a469ed374865f6135e9756d7c08b8d3fd16a79d405523c5e338"
     sha256 cellar: :any,                 arm64_ventura: "2c8b2a9f341d970929e266b1c63ec298ec46029c7164ce41d554f24cb9ab84f4"

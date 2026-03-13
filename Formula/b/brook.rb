@@ -1,18 +1,18 @@
 class Brook < Formula
   desc "Cross-platform strong encryption and not detectable proxy. Zero-Configuration"
   homepage "https://brook.app/"
-  url "https://github.com/txthinking/brook/archive/refs/tags/v20250202.tar.gz"
-  sha256 "2ee6bf43345b2cbf883eeaa8350da161352610e4fee82c29b0d3411a3e761f1f"
+  url "https://github.com/txthinking/brook/archive/refs/tags/v20260101.tar.gz"
+  sha256 "70e8310f31cef3b80e1696f364f12b2ab2aa0f1fb9fde00f25bda7620c21f096"
   license "GPL-3.0-only"
   head "https://github.com/txthinking/brook.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "04547e268b88935b2c6101b9324126819adb599e795cabaa740e5fb04325c17f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "04547e268b88935b2c6101b9324126819adb599e795cabaa740e5fb04325c17f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "04547e268b88935b2c6101b9324126819adb599e795cabaa740e5fb04325c17f"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0a05d9d3eada57f63ca111712d411068bb691fd17ac588cf7444b26f386fa58d"
-    sha256 cellar: :any_skip_relocation, ventura:       "0a05d9d3eada57f63ca111712d411068bb691fd17ac588cf7444b26f386fa58d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3686e17eb912d009421511ea22337970205595adc821891ffdee034d8d97642e"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "4fc892393fb319b3573da8caf28e1a2083c052653375c1148af3cc40b482e30e"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4fc892393fb319b3573da8caf28e1a2083c052653375c1148af3cc40b482e30e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4fc892393fb319b3573da8caf28e1a2083c052653375c1148af3cc40b482e30e"
+    sha256 cellar: :any_skip_relocation, sonoma:        "dfeb21863c273b142f342a69ee50ed785bc6e738623dcc8a8d5ebba8edcce716"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8a9ed2618dc37deddbd6030631cf0130859fe4c496b683377643bddd926af182"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3d8008603eeef8439794732a85541831c398010f9794f2224fb4f8159629e9c9"
   end
 
   depends_on "go" => :build

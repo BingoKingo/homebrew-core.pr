@@ -1,24 +1,25 @@
 class CloudSqlProxy < Formula
   desc "Utility for connecting securely to your Cloud SQL instances"
   homepage "https://github.com/GoogleCloudPlatform/cloud-sql-proxy"
-  url "https://github.com/GoogleCloudPlatform/cloud-sql-proxy/archive/refs/tags/v2.16.0.tar.gz"
-  sha256 "d8ea9e4d34d63b589b894902ed9f6300a5f08dcab113194e74990d3ca3b35787"
+  url "https://github.com/GoogleCloudPlatform/cloud-sql-proxy/archive/refs/tags/v2.21.1.tar.gz"
+  sha256 "e5b710d80b176bee58be78d122f61bc1c504826f74932c1cd6e792652aa38d54"
   license "Apache-2.0"
   head "https://github.com/GoogleCloudPlatform/cloud-sql-proxy.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4cf4dd85cde657b9c8b741beb23040f5d72b1854108bac81cc0589b7eaf3fac0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4cf4dd85cde657b9c8b741beb23040f5d72b1854108bac81cc0589b7eaf3fac0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "4cf4dd85cde657b9c8b741beb23040f5d72b1854108bac81cc0589b7eaf3fac0"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b59d50515260afe491e2411389db1b09c2bfce6d69c01e400f4a2010c0da594e"
-    sha256 cellar: :any_skip_relocation, ventura:       "b59d50515260afe491e2411389db1b09c2bfce6d69c01e400f4a2010c0da594e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1edb81fec6116582918247d3b04a11f093af99a25e6202fb088a259b970a9213"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "2c8b63a8a61963c1541ed5fc5b0a303e1efa5a8ac5fa4c2f6ff9a03c2c536733"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2c8b63a8a61963c1541ed5fc5b0a303e1efa5a8ac5fa4c2f6ff9a03c2c536733"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2c8b63a8a61963c1541ed5fc5b0a303e1efa5a8ac5fa4c2f6ff9a03c2c536733"
+    sha256 cellar: :any_skip_relocation, sonoma:        "68ba83dd7f95ae76f0f6752d6e109b95cab0b8098c5ee090c0246fe0f670ecb2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ddf2095a959096686b626c7e86e9df861205ea258e0d3f73a99c6e92946f61ac"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ab17f20903f1aeae843b0161deaae45d54cb45284b8d9e59fbca3e443735f83a"
   end
 
   depends_on "go" => :build
 
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w")
+    generate_completions_from_executable(bin/"cloud-sql-proxy", shell_parameter_format: :cobra)
   end
 
   test do

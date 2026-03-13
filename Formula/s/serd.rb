@@ -1,8 +1,8 @@
 class Serd < Formula
   desc "C library for RDF syntax"
   homepage "https://drobilla.net/software/serd.html"
-  url "https://download.drobilla.net/serd-0.32.4.tar.xz"
-  sha256 "cbefb569e8db686be8c69cb3866a9538c7cb055e8f24217dd6a4471effa7d349"
+  url "https://download.drobilla.net/serd-0.32.8.tar.xz"
+  sha256 "f47259bc38ba553b0deb8b6dab6b5b73d3630469a7c9439ccdca80e06d7c1ece"
   license "ISC"
 
   livecheck do
@@ -11,13 +11,12 @@ class Serd < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "cb7d131a4e36b9af03afd71b9a52977b7f8c03855cf59fe2c1425a82d266efa9"
-    sha256 cellar: :any,                 arm64_sonoma:  "bd0c2273b21fd4823f8ae84a0b927af0e9d20d93f221e8eba269ac2a5f19490d"
-    sha256 cellar: :any,                 arm64_ventura: "42b9a161e5f2b1b4a28183d16ecd0bff483519b292aeb982792f74201c2ff41f"
-    sha256 cellar: :any,                 sonoma:        "a645922619955963c2d58856a30d91cbb0a74e63afd97027127a6c1ec684d7ed"
-    sha256 cellar: :any,                 ventura:       "1206b5fd96a17388d8fa194ba4a1a5c9c59b9e2cefbf9bffa674bf8f71fd874f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7a9563320d822db1023d6054f54cfc18c3a4a89266d4bb5a283c75159f05b3ec"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "52f9da3eed3f941a1c97f3a35764afcc8a5974b19a6ebf0952c28c8b239c6d3e"
+    sha256 cellar: :any,                 arm64_tahoe:   "f371b9f3301f85f75822da77e75eea6524db3c0305bf943720050cffd1b5ee30"
+    sha256 cellar: :any,                 arm64_sequoia: "7008c0d17aac090e639f7367a85d900f9830fe3dcb88dc7e84065c0ee1e13abd"
+    sha256 cellar: :any,                 arm64_sonoma:  "e1ccb5898f2e0a5810d248f628c7e314aaab82f5f0b1f1f1c97cb58ecef04eba"
+    sha256 cellar: :any,                 sonoma:        "fd4e6896bf64f85e2242168edabb9c31de0c96bd5d3c12183365cbd0a4e056ab"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b47e7496192f30328f66c33d63e45bf640ad381cda5eb19a413ee5569db15bf9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cc7fc642d67f803be7a658dfecc7fa23b1c067b0e2ccec339de9933348bd5580"
   end
 
   depends_on "meson" => :build

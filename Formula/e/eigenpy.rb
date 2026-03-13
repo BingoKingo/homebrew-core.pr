@@ -1,19 +1,36 @@
 class Eigenpy < Formula
   desc "Python bindings of Eigen library with Numpy support"
   homepage "https://github.com/stack-of-tasks/eigenpy"
-  url "https://github.com/stack-of-tasks/eigenpy/releases/download/v3.11.0/eigenpy-3.11.0.tar.gz"
-  sha256 "5c618843194cc372e1ba4e0430240f310985edd9fd7d99a7c24794d1b62e1b3d"
   license "BSD-2-Clause"
-  head "https://github.com/stack-of-tasks/eigenpy.git", branch: "master"
+  revision 4
+  head "https://github.com/stack-of-tasks/eigenpy.git", branch: "devel"
+
+  stable do
+    url "https://github.com/stack-of-tasks/eigenpy/releases/download/v3.12.0/eigenpy-3.12.0.tar.gz"
+    sha256 "e6b7f17e1b7fb61e52447ceee8f47c3fc2c8f9cc4d19317e0467dc71babdb350"
+
+    # Backport support for eigen 5.0.0
+    patch do
+      url "https://github.com/stack-of-tasks/eigenpy/commit/0bb71c7da9c297a334f2de419df13ba2c7a67312.patch?full_index=1"
+      sha256 "812274fc7fa68e3af3ede5324590aa2e7ae06f264ac1927989dfe6e324374791"
+    end
+    patch do
+      url "https://github.com/stack-of-tasks/eigenpy/commit/a64334c3ddbdd9ffd9f3b65a0b9c1e0d1d2b8c96.patch?full_index=1"
+      sha256 "2110114b6467e5e2889ea55b9e3b2ef5f8cc965a914bfd62d2335e526551d421"
+    end
+    patch do
+      url "https://github.com/stack-of-tasks/eigenpy/commit/2a4adb8af92eebd1dac321010db040797100b91d.patch?full_index=1"
+      sha256 "ef47a99123a391c6d3a7be683d5667b3d2f94562d1b4a6c8284c8acc1928b4c2"
+    end
+  end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "eb4740eff258d271fa4b407aefd4b033b88d3f2a055d29b70c575c3d48ace7c7"
-    sha256 cellar: :any,                 arm64_sonoma:  "fd2f68cff27af16c9b389841c70dc6649463ec95ca5bb8f208f512d61df03cff"
-    sha256 cellar: :any,                 arm64_ventura: "dd713bb435a65899d6d2f738b6bac42e8b6f2d709dd28aa8c078a105d67deddc"
-    sha256 cellar: :any,                 sonoma:        "8bec63d7e77382cf72a9476ab2d5d124423c2da2bdfed52374f6df66ec1bc823"
-    sha256 cellar: :any,                 ventura:       "14b04868e217c005d03bf7666363b167e32f01fe15f6c4e3d59be4c047f17b42"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5d619ee61fae0f6b2301b715593320edf822856cdc77709df7a5e67bdf166486"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "60b0f89902efccf9e266d8b915dcce2318ceee015bbe9e86671258bfc4aa8eba"
+    sha256 cellar: :any,                 arm64_tahoe:   "dbf30d75e91d68fe9d424aeef98f1f0a2cf77369b3ee1402c9ea3e3f0be96cc7"
+    sha256 cellar: :any,                 arm64_sequoia: "6d6fbed231bf5729899ca1938712f80be53b82ed6db109601602347586cf7348"
+    sha256 cellar: :any,                 arm64_sonoma:  "3141e4e2f7be8a9dd99aea1662e22fe7c7f441b859c9de8b6953c816822bafb0"
+    sha256 cellar: :any,                 sonoma:        "b7146ccacf5e01b1317fef259dbff644e622ef5b855b9f9012234fb755dec420"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "548952eaae7925a876664c039586a4f915cb05daadc958ea959ee9f1043fce58"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c539fb28ab1b1a98001186451376435b43cd5b2f101b1d72ddc32cc2ecab08a0"
   end
 
   depends_on "boost" => :build
@@ -23,11 +40,11 @@ class Eigenpy < Formula
   depends_on "boost-python3"
   depends_on "eigen"
   depends_on "numpy"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
   depends_on "scipy"
 
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install

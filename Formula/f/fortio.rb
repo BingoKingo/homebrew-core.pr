@@ -2,8 +2,8 @@ class Fortio < Formula
   desc "HTTP and gRPC load testing and visualization tool and server"
   homepage "https://fortio.org/"
   url "https://github.com/fortio/fortio.git",
-      tag:      "v1.69.5",
-      revision: "929fca73f8f87c0b67a5b633b0d381738fc320fb"
+      tag:      "v1.75.0",
+      revision: "f935cb6d2d87d954f18ba692144e8f731e891cf8"
   license "Apache-2.0"
   head "https://github.com/fortio/fortio.git", branch: "master"
 
@@ -16,13 +16,12 @@ class Fortio < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b500c7a7a496dc226094ca320d8a99a04bc3aa273e8af7e37fdff6ff44933197"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "64340701c0c1c7cc539f0e3b4da18500262ea1a98f52ad4faf0cc9998c94c530"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d262fcfa2522516246389f6ded4bed17cf7337a43f8901d4969540b230a81cb7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "931406624524c3894d56ef06785f8fce2cda073bb44cba7b904421b93af3a8be"
-    sha256 cellar: :any_skip_relocation, ventura:       "75e1e9deaaf1cce6d415e666d8e5411203a6f5b6cdcee79c699bf03bab931439"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8af177536582d310844f2f4b0e92292d1924bd7d66c945b340bead18bbd0dd4a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6c492f6c3a37632f66ed4b86911df00e83b88409feaf480a8cd4978273e1bd7b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ac3178279e4fd5fa406bc4382fde16b136d1880410c07ab002d473a7ee9c6047"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ac3178279e4fd5fa406bc4382fde16b136d1880410c07ab002d473a7ee9c6047"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ac3178279e4fd5fa406bc4382fde16b136d1880410c07ab002d473a7ee9c6047"
+    sha256 cellar: :any_skip_relocation, sonoma:        "a1c8c2d24180bff857df056d94d1f7c24438ccad3f6c127e2fa3183ebc6520e9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d1a33f9749fec2e3d3e2f25886fcbe92ed60e8e3010c46a396861baa9db1213c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1c971f274734f9c8e78809277b2bc28564083771f555b6f2ef66424daf368131"
   end
 
   depends_on "go" => :build
@@ -36,15 +35,14 @@ class Fortio < Formula
     assert_match version.to_s, shell_output("#{bin}/fortio version")
 
     port = free_port
+    pid = spawn bin/"fortio", "server", "-http-port", port.to_s
     begin
-      pid = fork do
-        exec bin/"fortio", "server", "-http-port", port.to_s
-      end
       sleep 2
       output = shell_output("#{bin}/fortio load http://localhost:#{port}/ 2>&1")
       assert_match(/^All\sdone/, output.lines.last)
     ensure
-      Process.kill("SIGTERM", pid)
+      Process.kill("TERM", pid)
+      Process.wait(pid)
     end
   end
 end

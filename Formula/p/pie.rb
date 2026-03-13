@@ -1,18 +1,17 @@
 class Pie < Formula
   desc "PHP Installer for Extensions"
   homepage "https://github.com/php/pie"
-  url "https://github.com/php/pie/releases/download/0.12.0/pie.phar"
-  sha256 "6dc2e231640eac61d722d3752e4cc983490d7f24885eea1bbac24be58e042df9"
+  url "https://github.com/php/pie/releases/download/1.3.9/pie.phar"
+  sha256 "b36a28d67e78a0ae3f9ae3329d0dacacd19f1b4bbaf31f057d45446329833e57"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "924e81ed22bf6031807fff34bb58ae2d6f85b105dcd5d9f2c2d0c285009f0582"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "924e81ed22bf6031807fff34bb58ae2d6f85b105dcd5d9f2c2d0c285009f0582"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "924e81ed22bf6031807fff34bb58ae2d6f85b105dcd5d9f2c2d0c285009f0582"
-    sha256 cellar: :any_skip_relocation, sonoma:        "967cf150edcd369fb961412df340fbbcccff93a8b3495d094aee5688c3d73a30"
-    sha256 cellar: :any_skip_relocation, ventura:       "967cf150edcd369fb961412df340fbbcccff93a8b3495d094aee5688c3d73a30"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "34b866e5613091e039a57b839a5a92a7e96f8acc9985e8941fd8ead85021ea61"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "34b866e5613091e039a57b839a5a92a7e96f8acc9985e8941fd8ead85021ea61"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "74a3ca0b28cf951f4963c8aaf4a7cc7c84614313f5da62628c34e17c62d13bfc"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "74a3ca0b28cf951f4963c8aaf4a7cc7c84614313f5da62628c34e17c62d13bfc"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "74a3ca0b28cf951f4963c8aaf4a7cc7c84614313f5da62628c34e17c62d13bfc"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2b74bc0022eb7b26a1c9227d098cc1dff2eb4dc70c7ee5f4965610e770854903"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2b74bc0022eb7b26a1c9227d098cc1dff2eb4dc70c7ee5f4965610e770854903"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2b74bc0022eb7b26a1c9227d098cc1dff2eb4dc70c7ee5f4965610e770854903"
   end
 
   depends_on "php"

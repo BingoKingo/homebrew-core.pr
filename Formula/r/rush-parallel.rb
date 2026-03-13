@@ -1,17 +1,17 @@
 class RushParallel < Formula
   desc "Cross-platform command-line tool for executing jobs in parallel"
   homepage "https://github.com/shenwei356/rush"
-  url "https://github.com/shenwei356/rush/archive/refs/tags/v0.6.1.tar.gz"
-  sha256 "48a6560f32bd5445eb7d19ce594c640875045edac965cb963fd929285ba87f6d"
+  url "https://github.com/shenwei356/rush/archive/refs/tags/v0.8.0.tar.gz"
+  sha256 "d8d04a4fd506a2f369ec8753b339364cd7e58749f794d60cf2cbbb2a5833c8ec"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7ffcdb2c860323b189e6a902b8a15ebcca4e54516159ad3c1799401cda340b6e"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cee046ffd999162c6935d400162ba77f890919d00c1b7e011e1396b7c39dcd2a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ed200d11088e84ad20850ce2368a47188104f427d860189a4a9f268f62d1d418"
-    sha256 cellar: :any_skip_relocation, sonoma:        "26067667700bb3b6dc7bee73a980cd2ad762fbe0232c3a4b7d0a7c9f4233f1ac"
-    sha256 cellar: :any_skip_relocation, ventura:       "7820ae2b68c5b49115adeef678fd44f8c61fbdefd2f7592bad4aa5159363702d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "15984a832e5cebfbd1d3b138159254acb61e51728b0ead3291f37a39b13e108d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3a95b45daad014523cc5d24557039ae9e76878624b9ca1db39d0397f1c22f588"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "11c38081a63b62ca8b58dd0f46c6e60700f8800aef74845acf226a2ee10e1b08"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0b29095d93173c2b8236cb62f5b5ac83505de9a7c1d11afc817c5b32927eb5d5"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6b194b7f20e7a5cf8e967490e9ee619611f4d2a56cf281c54bd6c3430e505e62"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "307400fb0aaf2b833959f4dbff23ff0b4927da8d638bcc1bf7a8e6c329627561"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7f6e1ab80fc6a811226669df1b36e299d92c3482c042f816f33286227d1642d2"
   end
 
   depends_on "go" => :build

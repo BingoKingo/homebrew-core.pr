@@ -5,22 +5,27 @@ class Qcli < Formula
       tag:      "v1.4",
       revision: "982619270ff49987328343909ea2179d1af52004"
   license "GPL-3.0-or-later"
-  head "https://github.com/bavc/qctools.git", branch: "master"
+  head "https://github.com/bavc/qctools.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "01381abc80e93b31c44d6f50a65f6e4feebb5d82380b4331b9b1fe58f37b9aaa"
-    sha256 cellar: :any,                 arm64_ventura: "5f7e15ca1e3057ef5d2d2c7acc65528922efe573a12affe00f7be4ed37309fba"
-    sha256 cellar: :any,                 sonoma:        "d92539860c22d368cc5a208b3c04053f5d6f047d25647b3f0dbc8a4c8a55c70c"
-    sha256 cellar: :any,                 ventura:       "9fb489755752aa7decd8ec2f38dded60cdb7dcbde86377153d8b6953e511ac6f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f87bd6039d932ef08d8b6b42d4adc44f497e54eb4ba9b153a44e439646b30209"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "e05bc0c79aae6f0fe1a9d888e36e9d046550df0885eb4f16a0f3e9d39b6db1fc"
+    sha256 cellar: :any,                 arm64_sequoia: "589146936f71fffb6c0ef28b9f7a5e49041f2b6aa66a31029974ebf601876a2d"
+    sha256 cellar: :any,                 arm64_sonoma:  "1d9eb1a313c8d47a08709838a13d3d376ee484e65bb5835982d857ec232aca86"
+    sha256 cellar: :any,                 sonoma:        "51ec32892dfaf29f0ba4870f9fb1871f7f9053d6226002b79d76bdc9d0276097"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "266ba78a5f9da200e9ce2a3f1d857f6267e3cecbca8c5dc34b72a26b89128484"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "470749fbaafaa552f2398c6937d878609142c5c701ba1b3fa37bde12f98b8432"
   end
 
   depends_on "pkgconf" => :build
+  depends_on "qtmultimedia" => :build
+  depends_on "qwt" => :build
   depends_on "ffmpeg@6" # Issue ref: https://github.com/bavc/qctools/issues/552
-  depends_on "qt"
-  depends_on "qwt"
+  depends_on "qtbase"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     ENV["USE_BREW"] = "true"

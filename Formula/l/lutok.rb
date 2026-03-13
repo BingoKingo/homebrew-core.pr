@@ -1,26 +1,24 @@
 class Lutok < Formula
   desc "Lightweight C++ API for Lua"
   homepage "https://github.com/freebsd/lutok"
-  url "https://github.com/freebsd/lutok/releases/download/lutok-0.6.1/lutok-0.6.1.tar.gz"
-  sha256 "509c43c240ba47b8c452b45f3423a416fa91bdfc0341bfb806e0b78f65ce452d"
+  url "https://github.com/freebsd/lutok/releases/download/lutok-0.6.2/lutok-0.6.2.tar.gz"
+  sha256 "1ef51f3741d28e27b09dfaee61ab432966cff56f50940eca1cbacffc11baa2ad"
   license "BSD-3-Clause"
+  revision 1
+  head "https://github.com/freebsd/lutok.git", branch: "master"
 
-  # Upstream creates releases that use a stable tag (e.g., `v1.2.3`) but are
-  # labeled as "pre-release" on GitHub before the version is released, so it's
-  # necessary to use the `GithubLatest` strategy.
   livecheck do
     url :stable
     strategy :github_latest
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "622214005100c49c8927563ebc9643a45ca09e6c2a046a3423f90536bf5c4fd8"
-    sha256 cellar: :any,                 arm64_sonoma:  "512239a68c9a297b3058e6218407cc08e3b893255afa64e1e6227ad7d7c54bf5"
-    sha256 cellar: :any,                 arm64_ventura: "4c01cfb8ed37128e7ff3319734958694600672c2885a9145f0199ba80f15c418"
-    sha256 cellar: :any,                 sonoma:        "5c6514ff4cddd77e9a5899ee67d7639ed0df16fcd40799f4b5a864996fc22be5"
-    sha256 cellar: :any,                 ventura:       "6cad6e4dd588227c1cba484e7b3eee3deb60350a50fa7a536359f95a9c804c53"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e5bd35200c2438896dac87fd370af4be0a5f2fee03c23c6659f427523128f048"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "398180c13b8203f6004840922d92ef7d7d1893f7d3f5874580132089083cf5f3"
+    sha256 cellar: :any,                 arm64_tahoe:   "5375d9b2d49d55cda41f53ba11c44a47b6c9fe76e52a5b3592bf48afda9b9871"
+    sha256 cellar: :any,                 arm64_sequoia: "cf023d7cb40f5d1a0fbb65a3c937a1bca17828e2e2356960af0a119bfeca6e81"
+    sha256 cellar: :any,                 arm64_sonoma:  "02acd0a9b44150ba2297dddee6eb3ca10f244ca63a093e5a655e2cf8eec1fad6"
+    sha256 cellar: :any,                 sonoma:        "0f73bf9da21d6a0a923303f03d2ae52373a1885e39eb050ed291e35d33a1934a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6d750bc1a48d2b4b621462e267437c33c32b0305ad4acb72c51900759068f5a5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e216fa951f1f38a59d2a4962c6d58e61ec90ac9d7f27403940cbd9a79c06c4ad"
   end
 
   depends_on "autoconf" => :build
@@ -28,19 +26,16 @@ class Lutok < Formula
   depends_on "libtool" => :build
   depends_on "pkgconf" => [:build, :test]
 
-  depends_on "atf"
   depends_on "lua"
 
   def install
     system "glibtoolize", "--force", "--install"
     system "autoreconf", "--force", "--install", "--verbose"
 
-    system "./configure", "--disable-silent-rules", "--enable-atf", *std_configure_args
+    system "./configure", "--disable-silent-rules", *std_configure_args
     system "make"
     ENV.deparallelize
-    system "make", "check"
     system "make", "install"
-    system "make", "installcheck"
   end
 
   test do

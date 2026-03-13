@@ -1,13 +1,13 @@
 class Fcft < Formula
   desc "Simple library for font loading and glyph rasterization"
   homepage "https://codeberg.org/dnkl/fcft"
-  url "https://codeberg.org/dnkl/fcft/archive/3.3.1.tar.gz"
-  sha256 "f18bf79562e06d41741690cd1e07a02eb2600ae39eb5752eef8a698f603a482c"
+  url "https://codeberg.org/dnkl/fcft/archive/3.3.3.tar.gz"
+  sha256 "c0d8d485b45b1af829f73101d6588f404a32bf3c7543236b1a4707d44be81b60"
   license "MIT"
 
   bottle do
-    sha256 arm64_linux:  "97a0e6e9910f16cf36220973b5ff3f710024aeb0342e9f72b3946f80953c0df7"
-    sha256 x86_64_linux: "25df5af63145cf3ccdda4f57c5f24ba0adae0535fa6fc2a0cb8307e28ed9451a"
+    sha256 arm64_linux:  "8ef71deb92a2a8cb91442305deb292eb073827c2e542743bea13e1ae6d449470"
+    sha256 x86_64_linux: "367f60b769275608d9e532ffcec0a4cdb212035d113bafab4fff2d31558a3f0e"
   end
 
   depends_on "meson" => :build

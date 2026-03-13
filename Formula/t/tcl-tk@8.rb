@@ -1,8 +1,8 @@
 class TclTkAT8 < Formula
   desc "Tool Command Language"
   homepage "https://www.tcl-lang.org"
-  url "https://downloads.sourceforge.net/project/tcl/Tcl/8.6.16/tcl8.6.16-src.tar.gz"
-  sha256 "91cb8fa61771c63c262efb553059b7c7ad6757afa5857af6265e4b0bdc2a14a5"
+  url "https://downloads.sourceforge.net/project/tcl/Tcl/8.6.17/tcl8.6.17-src.tar.gz"
+  sha256 "a3903371efcce8a405c5c245d029e9f6850258a60fa3761c4d58995610949b31"
   license "TCL"
 
   livecheck do
@@ -11,26 +11,25 @@ class TclTkAT8 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "f2bc0545e0e48b4029c35281527224d2dd12deead360a6a982c77e82986c9bfd"
-    sha256 arm64_sonoma:  "f3f32a9ace4e639678829daae9c7d8ced421144db16d944438ff5a2285d99e7f"
-    sha256 arm64_ventura: "72de6c290a2095906aea8dc034af2b81f88c5efc162adf642c90486c74ef0ab5"
-    sha256 sonoma:        "2d568cf0322e7bd4151c7bc1fd714c017a8c037fb238ea0d2f9aed7ac8cb22dd"
-    sha256 ventura:       "5cd357c52827c17fc0c648f7134f4cf0bb11f3621a65f2b2a58f2ddd86db2c62"
-    sha256 arm64_linux:   "c7af04cbdb5930ea4c7cfdc132f007f1d50e321f11e755226ce72cda01e0cb71"
-    sha256 x86_64_linux:  "1208ceb8fe4df5fde9596567c11a8f2e956dacec3af26f6148eee9f6a93d7294"
+    rebuild 1
+    sha256 arm64_tahoe:   "c3cef13113dc7af58e7636256289cea7e3f362347f06f96e9417895f5c84494d"
+    sha256 arm64_sequoia: "a5dc8687fecd89ea1ce437a409f3e8938161f8f9fd728679d7ba98aaf9a4a121"
+    sha256 arm64_sonoma:  "5d0e9ae8eebb1e442cb2c27d491b90ac1fdb4b97f0403eaf4de208c1ef2a499c"
+    sha256 sonoma:        "06138d4241d0aa4b4b552dde04215678194643cb5435067b43cf0e8be2b5551e"
+    sha256 arm64_linux:   "baea2f270066d9f00cdb3fc43d4657e1c566d21965b6602cefa310c6bbf586ab"
+    sha256 x86_64_linux:  "dd71d9dee7ad8ff7ac1306e5696471b106ed15081dbf3ff227173a1bccc78fdc"
   end
 
   keg_only :versioned_formula
 
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "freetype" => :build
     depends_on "pkgconf" => :build
     depends_on "libx11"
     depends_on "libxext"
+    depends_on "zlib-ng-compat"
   end
 
   resource "critcl" do
@@ -49,8 +48,8 @@ class TclTkAT8 < Formula
   end
 
   resource "tk" do
-    url "https://downloads.sourceforge.net/project/tcl/Tcl/8.6.16/tk8.6.16-src.tar.gz"
-    sha256 "be9f94d3575d4b3099d84bc3c10de8994df2d7aa405208173c709cc404a7e5fe"
+    url "https://downloads.sourceforge.net/project/tcl/Tcl/8.6.17/tk8.6.17-src.tar.gz"
+    sha256 "e4982df6f969c08bf9dd858a6891059b4a3f50dc6c87c10abadbbe2fc4838946"
 
     livecheck do
       formula :parent

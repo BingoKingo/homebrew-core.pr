@@ -1,26 +1,10 @@
 class Ldc < Formula
   desc "Portable D programming language compiler"
   homepage "https://wiki.dlang.org/LDC"
+  url "https://github.com/ldc-developers/ldc/releases/download/v1.42.0/ldc-1.42.0-src.tar.gz"
+  sha256 "9bb0f628f869f7fc7b53c381a79742d29c17552c6f1a56b0a02aa289e65a0e3b"
   license "BSD-3-Clause"
-  revision 1
   head "https://github.com/ldc-developers/ldc.git", branch: "master"
-
-  stable do
-    url "https://github.com/ldc-developers/ldc/releases/download/v1.40.1/ldc-1.40.1-src.tar.gz"
-    sha256 "b643bee2ee6f9819084ef7468cf739257974a99f3980364d20201bc806a4a454"
-
-    # Backport fix for CMake 4
-    patch do
-      url "https://github.com/ldc-developers/ldc/commit/06b2e42a1b8436faae2b7976a1d41a635df116d5.patch?full_index=1"
-      sha256 "80fd42d77217b16866e262008f283406bb597fee16cb6ade250d6d27f870ce5c"
-    end
-
-    # Backport fix for segmentation fault on macOS 15.4
-    patch do
-      url "https://github.com/ldc-developers/ldc/commit/60079c3b596053b1a70f9f2e0cf38a287089df56.patch?full_index=1"
-      sha256 "44d281573a42e82ecdd48a6381fec4dde7aa6196f314e9eee7b1111ae6c54844"
-    end
-  end
 
   livecheck do
     url :stable
@@ -28,46 +12,38 @@ class Ldc < Formula
   end
 
   bottle do
-    rebuild 2
-    sha256                               arm64_sequoia: "9384ccb16954cc0bd4cdc10cbff3b88f7c4198376adca1180d96f7f7ebd2ba43"
-    sha256                               arm64_sonoma:  "97f6afa4dab17754196e9b29885721d61ce6244cdc2c627ac2d2e4a2ab9f62bc"
-    sha256                               arm64_ventura: "284c606878e28375d5a6bd4dcba1ab090be8022d5fee5e974942c29a383a8e2b"
-    sha256                               sonoma:        "46bb2adaf6f60942728c169eb3ab1c3951133ecdd6816c5ac3ba4aa32b7c7f02"
-    sha256                               ventura:       "212beef9d9dd8f73794f2ca9a6c1786a1920d4f5c21f5800d2b17b09297e8417"
-    sha256                               arm64_linux:   "eccf24bbebc2f4960b38f37612e16316b5cc1941d97930d27418eda01ae38240"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e9d640a656f11e1f2e421a1d093a7d8bb183e0052aeca6101176b7b7c14adbed"
+    sha256                               arm64_tahoe:   "d991984a75a3d4e16e768ac1696cc01c65893a07f226b70160900ef280e5f2ae"
+    sha256                               arm64_sequoia: "b16cde9d20ef2b46b10a7469e87ef397ce0cd6182510671ef530d692233900b9"
+    sha256                               arm64_sonoma:  "81c19ed1da2c4bc40d5b97143bbcdcb8d54dfb082ff3cd67851573cc4323035c"
+    sha256                               sonoma:        "e89dbaa17a1734c3de7d83c21c9e830db35a2a65316f19dec04f14258359d598"
+    sha256                               arm64_linux:   "fcd364ba774b8952ca6e37217a458079a381cf2f3e585eefb73c20afc59e808b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "64399cdbbf80a94468e00ab0ea0377b835776da4513307b8e2b3d9f6afaa5a7d"
   end
 
   depends_on "cmake" => :build
-  depends_on "libconfig" => :build
   depends_on "pkgconf" => :build
-  depends_on "lld@19" => :test
-  depends_on "llvm@19" # LLVM 20 PR: https://github.com/ldc-developers/ldc/pull/4843
-  depends_on "zstd"
-
-  uses_from_macos "libxml2" => :build
+  depends_on "lld@21" => :test
+  depends_on "llvm@21"
 
   resource "ldc-bootstrap" do
     on_macos do
-      # Do not use 1.29 - 1.40 to bootstrap as it segfaults on macOS 15.4.
-      # Ref: https://github.com/dlang/dmd/issues/21126#issuecomment-2775948553
       on_arm do
-        url "https://github.com/ldc-developers/ldc/releases/download/v1.28.1/ldc2-1.28.1-osx-arm64.tar.xz"
-        sha256 "9bddeb1b2c277019cf116b2572b5ee1819d9f99fe63602c869ebe42ffb813aed"
+        url "https://github.com/ldc-developers/ldc/releases/download/v1.41.0/ldc2-1.41.0-osx-arm64.tar.xz"
+        sha256 "157267042f10b047210619314aa719b4f0bf887601e93b1c634aa1ecb3c546e4"
       end
       on_intel do
-        url "https://github.com/ldc-developers/ldc/releases/download/v1.28.1/ldc2-1.28.1-osx-x86_64.tar.xz"
-        sha256 "9aa43e84d94378f3865f69b08041331c688e031dd2c5f340eb1f3e30bdea626c"
+        url "https://github.com/ldc-developers/ldc/releases/download/v1.41.0/ldc2-1.41.0-osx-x86_64.tar.xz"
+        sha256 "5bcff48b63c56a45dbaacdb0c5bddc8ea6be86d4a0c7b2c7c8318e047f721181"
       end
     end
     on_linux do
       on_arm do
-        url "https://github.com/ldc-developers/ldc/releases/download/v1.40.0/ldc2-1.40.0-linux-aarch64.tar.xz"
-        sha256 "28d183a99ab9f0790f5597c5c125f41338390f8bed5ed3164138958c18479c82"
+        url "https://github.com/ldc-developers/ldc/releases/download/v1.41.0/ldc2-1.41.0-linux-aarch64.tar.xz"
+        sha256 "1c4b950a13d53379ed4f564366c27ec56d6261e21686880d70c7486b3e8c7ba8"
       end
       on_intel do
-        url "https://github.com/ldc-developers/ldc/releases/download/v1.40.0/ldc2-1.40.0-linux-x86_64.tar.xz"
-        sha256 "0da61ed2ea96583aa0ccbeb00f8d78983b23d1e87b84a6f2098eb12059475b27"
+        url "https://github.com/ldc-developers/ldc/releases/download/v1.41.0/ldc2-1.41.0-linux-x86_64.tar.xz"
+        sha256 "4a439457f0fe59e69d02fd6b57549fc3c87ad0f55ad9fb9e42507b6f8e327c8f"
       end
     end
   end
@@ -79,20 +55,13 @@ class Ldc < Formula
   end
 
   def install
-    ENV.cxx11
-    # Fix ldc-bootstrap/bin/ldmd2: error while loading shared libraries: libxml2.so.2
-    ENV.prepend_path "LD_LIBRARY_PATH", Formula["libxml2"].opt_lib if OS.linux?
-    # Work around LLVM 16+ build failure due to missing -lzstd when linking lldELF
-    # Issue ref: https://github.com/ldc-developers/ldc/issues/4478
-    inreplace "CMakeLists.txt", " -llldELF ", " -llldELF -lzstd "
-
     (buildpath/"ldc-bootstrap").install resource("ldc-bootstrap")
 
     args = %W[
-      -DLLVM_ROOT_DIR=#{llvm.opt_prefix}
-      -DINCLUDE_INSTALL_DIR=#{include}/dlang/ldc
-      -DD_COMPILER=#{buildpath}/ldc-bootstrap/bin/ldmd2
       -DCMAKE_INSTALL_RPATH=#{rpath}
+      -DD_COMPILER=#{buildpath}/ldc-bootstrap/bin/ldmd2
+      -DINCLUDE_INSTALL_DIR=#{include}/dlang/ldc
+      -DLLVM_ROOT_DIR=#{llvm.opt_prefix}
     ]
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
@@ -101,10 +70,6 @@ class Ldc < Formula
   end
 
   test do
-    # Don't set CC=llvm_clang since that won't be in PATH,
-    # nor should it be used for the test.
-    ENV.method(DevelopmentTools.default_compiler).call
-
     (testpath/"test.d").write <<~D
       import std.stdio;
       void main() {

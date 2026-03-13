@@ -6,13 +6,13 @@ class Isync < Formula
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "679faf8c8def86ce0224c4f1edbff742549d5a7f7ec1389f30c5b9d050844fce"
-    sha256 cellar: :any,                 arm64_sonoma:  "4e4510861b03a2ccec9b01b0136ddb6ed903db1d53e8691ebf7606f225d5eb40"
-    sha256 cellar: :any,                 arm64_ventura: "130456630d195bea122ac91aded7cfa8b4375bb954325f4b0806b73322125978"
-    sha256 cellar: :any,                 sonoma:        "51ee82083ce5aae9883f444fe52aaa26c43d0856e587ee7755b2a4d132dfabe9"
-    sha256 cellar: :any,                 ventura:       "cc88915ef3a70a61e83952548559a3d6879561063b0826566851e0c1b3ae0a5d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a485ffab93aec68e2643810d101ededa1de3ce47f1fba32b69a525f72ba52691"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1b7f6e94602fe5a7812e8c8731ddb620827c950199116ecd10b22f24040cf6d0"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "112d7d4dd67530267fd137c2a4dc088128cfb86645df9baacdf347657f638779"
+    sha256 cellar: :any,                 arm64_sequoia: "0f5182fcd8741c7a5206d2dbe599e4ae4d69af77e9cfd6fce910fb73da81790b"
+    sha256 cellar: :any,                 arm64_sonoma:  "27e9a03df42264de7db35d52232a1752051caee2ab0eeead25e16d81c026cf9a"
+    sha256 cellar: :any,                 sonoma:        "a0ced90c4006994b8a962ff402b1580aa27f821193aaec168562f08eee713c13"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "bb02c3cdc9fdae85acc97a271031a4fc62b23241926f3cd905f2d201a21f1e0c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "328a896bb3825d07bf63b0650f0031fc1a0ff7c44a785952cf3c29f88f53a881"
   end
 
   head do
@@ -24,11 +24,15 @@ class Isync < Formula
   depends_on "berkeley-db@5"
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
+  uses_from_macos "cyrus-sasl"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./autogen.sh" if build.head?
-    system "./configure", *std_configure_args, "--disable-silent-rules"
+    system "./configure", "--disable-silent-rules", *std_configure_args
     system "make", "install"
   end
 

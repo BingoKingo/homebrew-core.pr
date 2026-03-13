@@ -1,18 +1,17 @@
 class CloudflareWrangler < Formula
   desc "CLI tool for Cloudflare Workers"
   homepage "https://github.com/cloudflare/workers-sdk"
-  url "https://registry.npmjs.org/wrangler/-/wrangler-4.19.0.tgz"
-  sha256 "f99b4621f2ca6bd16a15f3fc394a6bfe61e279edfd0a75d99d6dd26c64088931"
+  url "https://registry.npmjs.org/wrangler/-/wrangler-4.73.0.tgz"
+  sha256 "e52de9137205aa76cc2462d55c5e033c9e7eb0ee869a4f61d240327e679fb02e"
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "25e84bc15a917c6b796c9acb2fd2bb8bf59dc6507cbe147d54ca4ba98d9cb497"
-    sha256 cellar: :any,                 arm64_sonoma:  "25e84bc15a917c6b796c9acb2fd2bb8bf59dc6507cbe147d54ca4ba98d9cb497"
-    sha256 cellar: :any,                 arm64_ventura: "25e84bc15a917c6b796c9acb2fd2bb8bf59dc6507cbe147d54ca4ba98d9cb497"
-    sha256                               sonoma:        "bb8ba54588954046816d232a455933dd4396f3f438e162601f349b48d2ca6725"
-    sha256                               ventura:       "bb8ba54588954046816d232a455933dd4396f3f438e162601f349b48d2ca6725"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0e09a1b809348d066b14551e957d417bce4ced1f6d5a727f1857eba43b6ea2d1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "575767037c1ff5eee2bad4c034df77a858240c9a3d04ee5b11e5e983019efbe8"
+    sha256 cellar: :any,                 arm64_tahoe:   "a24a5ed5853931ed98576610c592ebbd9250597e4013b5eea3463e87e50f75d9"
+    sha256 cellar: :any,                 arm64_sequoia: "897ccff5c06894d8767647c4580fe3cb7cb0d833a5a42e0ac3c1177ac82e62cf"
+    sha256 cellar: :any,                 arm64_sonoma:  "897ccff5c06894d8767647c4580fe3cb7cb0d833a5a42e0ac3c1177ac82e62cf"
+    sha256 cellar: :any,                 sonoma:        "fccefaac95cf33014af3b68d3ea599ca7efd787a0855e8f7632f3d73179e4821"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "829cb492f1b937a45e89332d40a02332d069ebc29069105ae7d653b812a53d6f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ed9e79e7683a16c139fc850b473ec257801fd53f7b0a2d1261402208c768f4f4"
   end
 
   depends_on "node"
@@ -20,6 +19,9 @@ class CloudflareWrangler < Formula
   def install
     system "npm", "install", *std_npm_args
     bin.install_symlink Dir["#{libexec}/bin/wrangler*"]
+
+    node_modules = libexec/"lib/node_modules/wrangler/node_modules"
+    deuniversalize_machos node_modules/"fsevents/fsevents.node" if OS.mac?
   end
 
   test do

@@ -1,28 +1,18 @@
 class P11Kit < Formula
   desc "Library to load and enumerate PKCS#11 modules"
-  homepage "https://p11-glue.freedesktop.org"
-  url "https://github.com/p11-glue/p11-kit/releases/download/0.25.5/p11-kit-0.25.5.tar.xz"
-  sha256 "04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5"
+  homepage "https://p11-glue.github.io/p11-glue/p11-kit.html"
+  url "https://github.com/p11-glue/p11-kit/releases/download/0.26.2/p11-kit-0.26.2.tar.xz"
+  sha256 "09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828"
   license "BSD-3-Clause"
+  head "https://github.com/p11-glue/p11-kit.git", branch: "master"
 
   bottle do
-    rebuild 2
-    sha256 arm64_sequoia: "396f31b164e77e386922d5a8ceeeb2860d2a8e27b5ffc43e2444e49842d47055"
-    sha256 arm64_sonoma:  "71c1869311d18d9ecca257c474c6b33eaee4a8980f10eb6987486234112f9f46"
-    sha256 arm64_ventura: "e3bc89565cdd9876efd50024e24b5ba4c3ef5aa62b99f69b65d92fd47d24c0d9"
-    sha256 sonoma:        "25ad80618527fcce7e347062f9670c3b47df5682b9b9c0b29fb16a67566a68bc"
-    sha256 ventura:       "5b2ac57b324eca4c1d700ecdc079f5add6f8d0175590e9f45fe8e222fade0689"
-    sha256 arm64_linux:   "2b1c5ab7f1203d42bf9f9fda701cd49b709cd4fddbfe4cee4b87bcac0f6ad336"
-    sha256 x86_64_linux:  "2edb52c3990c1552a5fe19d8e25e6e89300b1f07d5e6164d3ff2a2591e83894d"
-  end
-
-  head do
-    url "https://github.com/p11-glue/p11-kit.git", branch: "master"
-
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "gettext" => :build
-    depends_on "libtool" => :build
+    sha256 arm64_tahoe:   "c814d01363bc8e35892432f19074e507d16b1bce3f88635478969050250079ba"
+    sha256 arm64_sequoia: "62a02e67a42d05aceb5653bd5d4be971172484fa9def96f066963a6fb4ca3f11"
+    sha256 arm64_sonoma:  "bee65fbab57c03c46620379593e7bc4865cce0bf2db794cf22bdfcc1eb564979"
+    sha256 sonoma:        "e1e808da48ab0eb63ff145b55a3407d0265501e09b4e627f8ba02ecc654c3663"
+    sha256 arm64_linux:   "1924836b8e56a59363d2e294f1c2ee40b62e1b4ffd6600e7c0de78d11b90fbbb"
+    sha256 x86_64_linux:  "52d46084406325d13f58712ee3afbec2f78eb7cab0b57acda36597b607800d85"
   end
 
   depends_on "meson" => :build
@@ -31,7 +21,7 @@ class P11Kit < Formula
   depends_on "ca-certificates"
   depends_on "libtasn1"
 
-  uses_from_macos "libffi", since: :catalina
+  uses_from_macos "libffi"
 
   def install
     # https://bugs.freedesktop.org/show_bug.cgi?id=91602#c1

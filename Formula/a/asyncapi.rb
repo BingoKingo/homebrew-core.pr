@@ -1,25 +1,28 @@
 class Asyncapi < Formula
   desc "All in one CLI for all AsyncAPI tools"
   homepage "https://github.com/asyncapi/cli"
-  url "https://registry.npmjs.org/@asyncapi/cli/-/cli-3.1.1.tgz"
-  sha256 "7156fdd3ab24df4aaf513fa7fec736e3b7297417d5156db8a4dfce7edb1789c9"
+  url "https://registry.npmjs.org/@asyncapi/cli/-/cli-6.0.0.tgz"
+  sha256 "c5939aca4cb9c64cacb404f78bc1ae242d95a6c07151db1698505ae3ed607327"
   license "Apache-2.0"
+  version_scheme 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "198a12f3799fb1d2e8477b8b48898eb42a8048a7c71a800eac8b3c97810f2fe8"
-    sha256 cellar: :any,                 arm64_sonoma:  "198a12f3799fb1d2e8477b8b48898eb42a8048a7c71a800eac8b3c97810f2fe8"
-    sha256 cellar: :any,                 arm64_ventura: "198a12f3799fb1d2e8477b8b48898eb42a8048a7c71a800eac8b3c97810f2fe8"
-    sha256 cellar: :any,                 sonoma:        "47ee08e3f36f98384a161d34f3d8eea341269da2016a07a1b214a8c76e857c67"
-    sha256 cellar: :any,                 ventura:       "47ee08e3f36f98384a161d34f3d8eea341269da2016a07a1b214a8c76e857c67"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "100636a8514bb785ac9359a45fcc4168f10e4c7c4e42bd9354afe5b78d6da078"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "34ffbb83acc1bdf4b85a990e9dc74945d4d1574aa4026be94e7b18e4a1748a48"
+    sha256 cellar: :any,                 arm64_tahoe:   "966ff0b86f86e32a7e397003765c796806e0a0998e9e473a377f3d46a8d7593c"
+    sha256 cellar: :any,                 arm64_sequoia: "1cf61ab278ae0707914ac18f70ab9ace15bc6d2c279cdcb000d9f0d6a575f84c"
+    sha256 cellar: :any,                 arm64_sonoma:  "1cf61ab278ae0707914ac18f70ab9ace15bc6d2c279cdcb000d9f0d6a575f84c"
+    sha256 cellar: :any,                 sonoma:        "0eb19ea51d5b2bb701dc566186b33b8e6b83aa2bd7226a8b3facb960e5694350"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3dfa4934db0c269c77235d553a71580a431feb2689bf02c4557f5c981a279b1c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1c2714c128d47db98239819bcbac0d3fe738ef170a0eecd2590f95feb4781295"
   end
 
   depends_on "node"
 
   def install
-    system "npm", "install", "--ignore-scripts", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    # Set the log directory to var/log/asyncapi
+    inreplace "lib/utils/logger.js", /const logDir = .*;/, "const logDir = '#{var}/log/asyncapi';"
+
+    system "npm", "install", *std_npm_args
+    bin.install_symlink libexec.glob("bin/*")
 
     # Cleanup .pnpm folder
     node_modules = libexec/"lib/node_modules/@asyncapi/cli/node_modules"
@@ -27,6 +30,8 @@ class Asyncapi < Formula
 
     # Replace universal binaries with their native slices
     deuniversalize_machos node_modules/"fsevents/fsevents.node"
+
+    (var/"log/asyncapi").mkpath
   end
 
   test do

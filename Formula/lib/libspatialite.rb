@@ -2,7 +2,7 @@ class Libspatialite < Formula
   desc "Adds spatial SQL capabilities to SQLite"
   homepage "https://www.gaia-gis.it/fossil/libspatialite/index"
   license any_of: ["MPL-1.1", "GPL-2.0-or-later", "LGPL-2.1-or-later"]
-  revision 1
+  revision 4
 
   stable do
     url "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-5.1.0.tar.gz"
@@ -12,7 +12,7 @@ class Libspatialite < Formula
 
     # Fix -flat_namespace being used on Big Sur and later.
     patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+      url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-big_sur.diff"
       sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
     end
   end
@@ -23,15 +23,12 @@ class Libspatialite < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia:  "cd162e7a36e33bc982374bc2e8efced6d1669810852c6bef404967dc7507eefa"
-    sha256 cellar: :any,                 arm64_sonoma:   "efd80614ae13d20ae2af905b7b6a673455d5d281e14e75e6511d1d4a1fdeda8d"
-    sha256 cellar: :any,                 arm64_ventura:  "1a05eb0afc04b80535b62c3f6c602ed5ef6f7eaed37cf7bc940bf4539dab1753"
-    sha256 cellar: :any,                 arm64_monterey: "2222ce79b7ac80c9d858390e201da7a3bae3fb432e363b358c943171cfe0294b"
-    sha256 cellar: :any,                 sonoma:         "1f29fd1ce9216f960a3e22279b67cd0411ca3694160f6c5c0c769524dfa57567"
-    sha256 cellar: :any,                 ventura:        "a45dd6acc0e93aa02176b73e0ff7ed57ac6c020e6a72538d16cbdd67c19a4012"
-    sha256 cellar: :any,                 monterey:       "1bff63a0b2139edfa2d2df74870f98d6dba930d840973b6b523c1405e33c0279"
-    sha256 cellar: :any_skip_relocation, arm64_linux:    "d86a5e1a777cceebc9eb059098c75d53d2fc0597c6b0e09799c9a66fc9ff4f74"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "a5fbfff96039dfc137d483a59d19c45d97c57c461570073f7005c602edf8f356"
+    sha256 cellar: :any,                 arm64_tahoe:   "ec3bff2150de386d746181a90e8a9a706a5cd0abba9fff83b982f31cec916a93"
+    sha256 cellar: :any,                 arm64_sequoia: "587bf2902aaa3908a1dcc76dda6fe5ab38ead02dad6e6bd8f4521c28c0174686"
+    sha256 cellar: :any,                 arm64_sonoma:  "d726dbbc340c60fa4aeb0e64f7d84869af74e3ca7a3d0d536b4af8eb53760a51"
+    sha256 cellar: :any,                 sonoma:        "ea4844a4718e87cf6dab3f3216fd17f2b227c0f848a91fac80f35ce01c311a64"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "03d04b1c9c2e9383f2149bbd1fbc9c6374cdabd8b72887f0d02e17819e06ffdf"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9080a06cdd748903d3da061c4b50adf0435bf41fd316daf4e86ba145ac9fe47a"
   end
 
   head do
@@ -49,7 +46,18 @@ class Libspatialite < Formula
   depends_on "minizip"
   depends_on "proj"
   depends_on "sqlite"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  # Apply Debian patch to allow disabling the usage of removed libxml2 HTTP API.
+  # Ref: https://groups.google.com/g/spatialite-users/c/nyT4iAJbttY
+  # Ref: https://www.gaia-gis.it/fossil/libspatialite/tktview/ac85f0fca35de00b9aaadb5078061791fc799d9c
+  patch do
+    url "https://salsa.debian.org/debian-gis-team/spatialite/-/raw/38481157178415322d78a3a45dab18f0c1d45daa/debian/patches/libxml2-nanohttp.patch"
+    sha256 "477188c95b635e0abb97bc659ce9ba8883814f9c7d2466352491eabbe7f6a3f9"
+  end
 
   def install
     system "autoreconf", "--force", "--install", "--verbose" if build.head?

@@ -1,7 +1,8 @@
 class Hmmer < Formula
   desc "Build profile HMMs and scan against sequence databases"
   homepage "http://hmmer.org/"
-  url "http://eddylab.org/software/hmmer/hmmer-3.4.tar.gz"
+  url "https://distfiles.macports.org/hmmer/hmmer-3.4.tar.gz"
+  mirror "http://eddylab.org/software/hmmer/hmmer-3.4.tar.gz"
   sha256 "ca70d94fd0cf271bd7063423aabb116d42de533117343a9b27a65c17ff06fbf3"
   license "BSD-3-Clause"
 
@@ -11,6 +12,7 @@ class Hmmer < Formula
   end
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:    "1f42eea650a3ca55ba74920ce46d7e9cc019f203881097a0ee7978516c867f44"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:  "3342dd2de2909df5053dea525398b3e3902b07a1d58dab35a940bb7bf77b877b"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:   "f0b23b02bb7bf3113ad01b32f5410ad7e1aade6186e5b54f788bc4c5345ea7d4"
     sha256 cellar: :any_skip_relocation, arm64_ventura:  "6285afc40e6975a1c8c0def48bc621e91801995481683954e580529fe4a5ae2a"

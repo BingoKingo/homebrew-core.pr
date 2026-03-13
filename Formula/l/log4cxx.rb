@@ -1,19 +1,18 @@
 class Log4cxx < Formula
   desc "Library of C++ classes for flexible logging"
   homepage "https://logging.apache.org/log4cxx/index.html"
-  url "https://www.apache.org/dyn/closer.lua?path=logging/log4cxx/1.4.0/apache-log4cxx-1.4.0.tar.gz"
-  mirror "https://archive.apache.org/dist/logging/log4cxx/1.4.0/apache-log4cxx-1.4.0.tar.gz"
-  sha256 "3d2d1f356a546c14562763aaf15fcc3fd59d4ffeb5a2f68fcb0bbd7571ed6f96"
+  url "https://www.apache.org/dyn/closer.lua?path=logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz"
+  mirror "https://archive.apache.org/dist/logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz"
+  sha256 "187c85836f5b2f27fb1e8d77c7f1f2939725f1f6498b742b0dd569ba30965fd2"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "6b6a997c8d90c6512afae918d7b44b86bb7d01f76d23b74ff2e78f85b37fe874"
-    sha256 cellar: :any,                 arm64_sonoma:  "485bed48c83644ecb085b6484dfe3649ed67fbad384c8eb9218f1bf434743887"
-    sha256 cellar: :any,                 arm64_ventura: "317df9001cb2c399dff56f52a27c5a5bc97e1b6c94916f5adae651270980b36c"
-    sha256 cellar: :any,                 sonoma:        "daaa2bc0fd4e9a91892c625d9f41f6e87237d54811eb5b4afec1bd35d84a482c"
-    sha256 cellar: :any,                 ventura:       "da0e6890b5b2188e034584dbeea0327f475dfa305e1e482d457c93d5708bbc12"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "47823f5f2c6cb811c3c8b853b5989dba6277d0344adae7adde4d34dffd49b4c3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1b594119142a0c99175b561b2048a7272e93091a039ea3f1d45671eddec0a625"
+    sha256 cellar: :any,                 arm64_tahoe:   "2e7d305b96aefd5a83ce663a838bef388b85a9cc3a60bee69dd7b53661c2088b"
+    sha256 cellar: :any,                 arm64_sequoia: "b5b9d5ecac30748a893f94b00ffb870f3a1b273fa6dc4c20a0e36bd47dde146e"
+    sha256 cellar: :any,                 arm64_sonoma:  "1a2b8966bbbc569fa3dbb27f4bbf0ccd7fb30be111d03a88f60a2679a6177dfb"
+    sha256 cellar: :any,                 sonoma:        "ee2229f704625ee23db06ca15a2946250470c20e99091a924f00088a62a4c309"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9870e1e954d13a41db98603291cfdc101303fbe79e343b08d3019c4663b7cd44"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f226f5049d3c0b2dd1ae642bc2ac7c1e39cd89583f4124b5922619c6efabd440"
   end
 
   depends_on "cmake" => :build

@@ -1,26 +1,25 @@
 class Victorialogs < Formula
   desc "Open source user-friendly database for logs from VictoriaMetrics"
   homepage "https://docs.victoriametrics.com/victorialogs/"
-  url "https://github.com/VictoriaMetrics/VictoriaMetrics/archive/refs/tags/v1.23.3-victorialogs.tar.gz"
-  sha256 "04a369496941462f7a56b9c4cea0ed5768fbd65ddd74009120e82079960ced49"
+  url "https://github.com/VictoriaMetrics/VictoriaLogs/archive/refs/tags/v1.48.0.tar.gz"
+  sha256 "9b8c3250a1dd4c336753392baa9884301b741b3c37cab536cc4639b6117ad207"
   license "Apache-2.0"
 
-  # There are tags like `pmm-6401-v1.89.1` in the upstream repo. They don't
-  # actually represent releases, despite referring to one in the tag name.
-  # Make sure we only match the ones using the common format.
+  # The Git tags are interspersed with higher versions like 1.118.0, so we check
+  # the "latest" release instead of the Git tags.
   livecheck do
     url :stable
-    regex(/^v?(\d+(?:\.\d+)+)[._-]victorialogs$/i)
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+    strategy :github_latest
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5fa4c6cab362eec0aad858f14382b99f23599448aff2fdf48303d25da9972710"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "27727ffd8141d166b2dccd6cbbbe33c763a41c2e38804387eedfdc632f24ed42"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d36fbf2a28b2732712f7304d48de09c1876236542fde2db62d641762e939c301"
-    sha256 cellar: :any_skip_relocation, sonoma:        "2226b9db6887b8944465ca88a3ce08f2adc698ffa0d6c851ed93167022ab16af"
-    sha256 cellar: :any_skip_relocation, ventura:       "38657a5b55d03ce19f7162ae092d9917fa8de83c2264c8543c7a2a5fcb39c145"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "87499c9599f57e5e1f0bfa703c7a1094e81a03c46b884eb1b0b508709a97d054"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ac234cadd1d628e5f6cfb65ae43784d051a1c214ca3e3cef01c5141092fcc4be"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "03037721773835862851604eaeb89f8ed2179086e6e8cef91faee6f553f75cc5"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d42e917dafedc3839b6792d05d65fccf763991968f1c045ca726357e8810ddf9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1b7e72ff0ebed343b23544602982bd1828c815c3219c887571bd942ff10654ce"
+    sha256 cellar: :any_skip_relocation, sonoma:        "88e6a8e686f47d3ff757895179bbef4c627e46f47978dd70d80a37b44e0fe064"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f43cc8c5e61cf27bf8e9936307fd060416e7181f6d8a8c20f201f83b8caa143e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4fb59eb2c13ad8b4380e4f4c76ce3f9c434f4a1ae8ae56f7b0fbdfd63cf5c0e4"
   end
 
   depends_on "go" => :build
@@ -44,17 +43,15 @@ class Victorialogs < Formula
   test do
     http_port = free_port
 
-    pid = fork do
-      exec bin/"victoria-logs",
-        "-httpListenAddr=127.0.0.1:#{http_port}",
-        "-storageDataPath=#{testpath}/victorialogs-data"
-    end
+    pid = spawn bin/"victoria-logs",
+                "-httpListenAddr=127.0.0.1:#{http_port}",
+                "-storageDataPath=#{testpath}/victorialogs-data"
     sleep 5
     assert_match "Single-node VictoriaLogs", shell_output("curl -s 127.0.0.1:#{http_port}")
 
     assert_match version.to_s, shell_output("#{bin}/victoria-logs --version")
   ensure
-    Process.kill(9, pid)
+    Process.kill("TERM", pid)
     Process.wait(pid)
   end
 end

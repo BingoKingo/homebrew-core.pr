@@ -1,18 +1,17 @@
 class Fwup < Formula
   desc "Configurable embedded Linux firmware update creator and runner"
   homepage "https://github.com/fwup-home/fwup"
-  url "https://github.com/fwup-home/fwup/releases/download/v1.12.0/fwup-1.12.0.tar.gz"
-  sha256 "aed865e7067a3a54fea1d604457dbaff8b07f577737aeba6b23b240d2f9f562a"
+  url "https://github.com/fwup-home/fwup/releases/download/v1.15.0/fwup-1.15.0.tar.gz"
+  sha256 "ad1b0f92dcabe2e417be7eebc5201f05c101cd18baafa43400a00bc7caddddce"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "3a6475fae09adbbd4d267481d3766d6e241524275285e614017a969da501cc09"
-    sha256 cellar: :any,                 arm64_sonoma:  "a254ebf601c9189becda7a184f537a0aa4ac4a15b0f29434f4a7d77c03208075"
-    sha256 cellar: :any,                 arm64_ventura: "d3e2a527a61fa63fb980dbf222a0f3b77e53a1a63d1b7e7c9e040f825918af5a"
-    sha256 cellar: :any,                 sonoma:        "cb5000cb6745a5a7bd9de40cef64bf331190e500a2b9be212932e30a78c8cd45"
-    sha256 cellar: :any,                 ventura:       "50c158ddc59870d967aa7a2964b37c57483427728c5d8d73ae2fa8f1e18a9354"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ec429ce368f3207b95dde1280115cc8443091782986445a60d3b972eacc6fbc8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "56e168989bccb02fee0ec1084e3518013687c07f4c839778f108d4783c6c4a61"
+    sha256 cellar: :any,                 arm64_tahoe:   "ff02e00ef76a7ef5587fd451ffd2ad55b5ea1e829b0ea5de74efa126833a03da"
+    sha256 cellar: :any,                 arm64_sequoia: "8c9eba7a9cc1aa599c52881684985a658b9d728e3fcbf00c6b96cda758a348af"
+    sha256 cellar: :any,                 arm64_sonoma:  "809366ff2778ecb69032c200e235e39669cb332b054da0891bffd9f6841eba10"
+    sha256 cellar: :any,                 sonoma:        "5e02e0d5a1d719a6dd3ad1d3b393b6920e5a1d77947e6fd166e785f6db656639"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "76f0c332bb56b3bb4421e73cb13a481213f8f062cf0ad11549bf453a0b05c7c0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a351a9a471afcaacaf1a9b911a5aca2b9b3d24cd854cb6800ed232694cd6a6c0"
   end
 
   depends_on "pkgconf" => :build

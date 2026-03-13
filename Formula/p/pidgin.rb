@@ -2,6 +2,7 @@ class Pidgin < Formula
   desc "Multi-protocol chat client"
   homepage "https://pidgin.im/"
   license "GPL-2.0-or-later"
+  revision 2
 
   stable do
     url "https://downloads.sourceforge.net/project/pidgin/Pidgin/2.14.14/pidgin-2.14.14.tar.bz2"
@@ -15,11 +16,11 @@ class Pidgin < Formula
     depends_on "libgnt"
     depends_on "libotr"
     depends_on "ncurses" # due to `libgnt`
+    depends_on "tcl-tk@8" # ignores TCL 9
 
     uses_from_macos "cyrus-sasl"
     uses_from_macos "expat"
     uses_from_macos "perl"
-    uses_from_macos "tcl-tk"
 
     on_macos do
       depends_on "harfbuzz"
@@ -49,28 +50,31 @@ class Pidgin < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:  "caa350ca46ced5772132c46319aade98a688e44e84c1b01358f5fb220255757b"
-    sha256 arm64_ventura: "20f82c9ff843f0dd90c67d8c0131819566f7890053a5e8f09650044fd63fe88e"
-    sha256 sonoma:        "b4703a7a10e3aa6d834336bd7a4bb0733060cec56f1cb3f104608efe7499b6ee"
-    sha256 ventura:       "7879c09f11287eece7b6850933b7a9846e810d040b6d17439f2be82912583b08"
-    sha256 arm64_linux:   "840058d985fa2d5fd430323c4a74147a6f421730c4126987430872e22812c12c"
-    sha256 x86_64_linux:  "fcfbc1d059e9878a6ef4e729a66d3f914996e9234c90bd3cdcd6cd6f431c9016"
+    sha256 arm64_tahoe:   "ae1289bca94151de51149aab865e414377fcd3ce385b1b771c7aec98b87c0387"
+    sha256 arm64_sequoia: "e7d8f99958474cadfa8da24b6aca429e53d961af7cd5f3e89f914c833bca21db"
+    sha256 arm64_sonoma:  "aaefbd8740d505e3a6460a7ab075954cde0a9890cc5f52b2ca753a5841fa61fd"
+    sha256 sonoma:        "72919ceb55d3dbaa92f938e4a2850681a5265933fe27a306859d7f05eecee374"
+    sha256 arm64_linux:   "90da19fee3264f2d6a568d87449405fa785219fa39085be9b0e1189d803bf5a0"
+    sha256 x86_64_linux:  "fc8acd8bda4c38df7f4bc5b55e15087196689cb5c40ef000bbbd1eb105bfbe69"
   end
 
   head do
-    url "https://keep.imfreedom.org/pidgin/pidgin/", branch: "default", using: :hg
+    url "https://keep.imfreedom.org/pidgin/pidgin/", using: :hg
 
+    depends_on "gi-docgen" => :build
     depends_on "gobject-introspection" => :build
     depends_on "gstreamer" => :build
+    depends_on "libsoup" => :build
     depends_on "mercurial" => :build
     depends_on "meson" => :build
     depends_on "ninja" => :build
 
     depends_on "gplugin"
     depends_on "gtk4"
+    depends_on "gtksourceview5"
     depends_on "json-glib"
     depends_on "libadwaita"
-    depends_on "libsoup"
+    depends_on "libspelling"
     depends_on "sqlite"
   end
 
@@ -92,7 +96,8 @@ class Pidgin < Formula
     if build.head?
       # TODO: Patch pidgin to read plugins from HOMEBREW_PREFIX similar to stable build
       ENV["DESTDIR"] = "/"
-      system "meson", "setup", "build", "--force-fallback-for=birb,hasl,ibis,xeme", *std_meson_args
+      ENV["GI_GIR_PATH"] = HOMEBREW_PREFIX/"share/gir-1.0"
+      system "meson", "setup", "build", "--force-fallback-for=birb,hasl,ibis,seagull,xeme", *std_meson_args
       system "meson", "compile", "-C", "build", "--verbose"
       system "meson", "install", "-C", "build"
       return
@@ -105,7 +110,6 @@ class Pidgin < Formula
       ENV.append "LDFLAGS", "-Wl,-rpath,#{perl_archlib}/CORE"
     end
 
-    ENV["ac_cv_func_perl_run"] = "yes" if OS.mac? && MacOS.version == :high_sierra
     if DevelopmentTools.clang_build_version >= 1600
       ENV.append_to_cflags "-Wno-incompatible-function-pointer-types -Wno-int-conversion"
     end
@@ -123,20 +127,10 @@ class Pidgin < Formula
       --enable-consoleui
       --enable-gnutls
       --with-ncurses-headers=#{Formula["ncurses"].opt_include}
+      --with-tclconfig=#{Formula["tcl-tk@8"].opt_lib}
+      --with-tkconfig=#{Formula["tcl-tk@8"].opt_lib}
     ]
-
-    args += if OS.mac?
-      %W[
-        --with-tclconfig=#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework
-        --with-tkconfig=#{MacOS.sdk_path}/System/Library/Frameworks/Tk.framework
-        --without-x
-      ]
-    else
-      %W[
-        --with-tclconfig=#{Formula["tcl-tk"].opt_lib}
-        --with-tkconfig=#{Formula["tcl-tk"].opt_lib}
-      ]
-    end
+    args << "--without-x" if OS.mac?
 
     # patch pidgin to read plugins and allow them to live in separate formulae which can
     # all install their symlinks into these directories. See:

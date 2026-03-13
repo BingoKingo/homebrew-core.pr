@@ -1,9 +1,10 @@
 class Cfitsio < Formula
   desc "C access to FITS data files with optional Fortran wrappers"
   homepage "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html"
-  url "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz"
-  sha256 "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb"
+  url "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.3.tar.gz"
+  sha256 "fad44fff274fdda5ffcc0c0fff3bc3c596362722b9292fc8944db91187813600"
   license "CFITSIO"
+  revision 1
 
   livecheck do
     url :homepage
@@ -11,18 +12,20 @@ class Cfitsio < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5211e3ed2c5d20c27a80a1a60392a0a40ba1124795fcb9a8969dbfc536bf75cc"
-    sha256 cellar: :any,                 arm64_sonoma:  "99f6c0c152eed90cfc797714394de1428abc1e5bc056699bc9f227124fe537e1"
-    sha256 cellar: :any,                 arm64_ventura: "8b92cc30cc355bb0522c74bd91481fedb21e31867812475e867fcb704b1336f6"
-    sha256 cellar: :any,                 sonoma:        "95f8da6e88ef0f411fd4f0769e0ac1651a98760d02ea70e8f3e5df97c2f645e9"
-    sha256 cellar: :any,                 ventura:       "65fb50a8957f974a68ced585b4742f42bc7684d80035499362571d425ccc6edd"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f9cfb371e8d8f3a17bbed2f50db40636c85bc22012725cd8f9a680474fba16e9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5028bfb3c616cfec720d946007f9fe30f0284ad7b348800acb7d8cb9d516cffb"
+    sha256 cellar: :any,                 arm64_tahoe:   "918983cfb5da385c576dd824d187fe8ee240a7c1516a36bff814101dadb16a3b"
+    sha256 cellar: :any,                 arm64_sequoia: "b941d8b944e1f39a29dcf96f4eb5b0c52fe6a9752f681f8c0daa5f6e4d2b150d"
+    sha256 cellar: :any,                 arm64_sonoma:  "b7d90f791bb15c90eba273f60f4b9ebf26f32f75c779ec34a3e39344dff46a5c"
+    sha256 cellar: :any,                 sonoma:        "52fcd05eb4da45db0a5f3538d731af42b5c1936d3a42a4da19e759d8db608ffc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4a8be3014dd22ae6e593c46523fb2b02ec2015cc0cb8583cc1500921b2e56758"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cb23f4fd808a941684ba54c17eee5a6e3bc5b3a07fa9691a065f4c5df419bcee"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :test
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # Incorporates upstream commits:
@@ -41,6 +44,8 @@ class Cfitsio < Formula
       -DUSE_PTHREADS=ON
       -DTESTS=OFF
     ]
+    # Workaround to build with CMake 4
+    args << "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"

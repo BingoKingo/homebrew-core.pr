@@ -1,19 +1,18 @@
 class Neocmakelsp < Formula
   desc "Another cmake lsp"
   homepage "https://neocmakelsp.github.io/"
-  url "https://github.com/neocmakelsp/neocmakelsp/archive/refs/tags/v0.8.23.tar.gz"
-  sha256 "3cbc9ce4b49a93a67137af0ebe619c7fa39998376cb5ae75baf53c38211fc6a0"
+  url "https://github.com/neocmakelsp/neocmakelsp/archive/refs/tags/v0.10.1.tar.gz"
+  sha256 "58f4338fef0012858aeec961873948f37e9bc0167d68ae4cc1b5f458e4206610"
   license "MIT"
   head "https://github.com/neocmakelsp/neocmakelsp.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "58ec76492d08394e2ac0b9e9c1218fb04ddeba0458684e439d96722976b2f268"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b6ed18336a32de0fd7c75e11c94c8879de84566cd3834affe36d36df72bbf6a5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f1fdd88692bfe1b965f947e6999c9a0df187f6647e84076839afc9e38c2cb90c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "38a5285ae6cf4bace96c7e248e9e2a1f5f31d38693921085fbf44a2a1aadc8d1"
-    sha256 cellar: :any_skip_relocation, ventura:       "c77d083af20b2592a8b4ccd230796568f43748d5a6f4a81e0da0009f6b403ec6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "da000c9f855c537e4d18cfd7fba8af0d65b2f72523f78bce8b8131ab3c66ac1c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "30294ee5444d3ed26d601323f2d0d53501f1e301078cfaa1532df5f3ed533b0e"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c544f2061827743f5a311fdd509fe9c081d38ffd8e6acbafa56e338401454083"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "731cabc9b0aae6929052f5c5b655a35ffdf0a80e1d9c75f0ec0bf843917ff988"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b146c9a71d86d30711c487af3cd23677a5cada25d6600dd3abf66a06bbb8e706"
+    sha256 cellar: :any_skip_relocation, sonoma:        "7f1dddc53e6bfeec58d003ca8c445f88a36b9c930bd60c768543ef42970a6cb2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0dba8a1267530a24c25649c9bc172fbf22bed10759b7ed9364e84bce71374fc1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5b156d995bdf417593fd9327f812130d8a353de01993023229d814f8b2b3ccef"
   end
 
   depends_on "rust" => :build

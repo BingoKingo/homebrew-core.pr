@@ -1,30 +1,36 @@
 class Helmsman < Formula
   desc "Helm Charts as Code tool"
-  homepage "https://github.com/Praqma/helmsman"
-  url "https://github.com/Praqma/helmsman/archive/refs/tags/v4.0.1.tar.gz"
-  sha256 "1fd57af9978681f0c148157e5ef7929b5154e6e79bc13c41711892340320254e"
+  homepage "https://github.com/mkubaczyk/helmsman"
+  url "https://github.com/mkubaczyk/helmsman/archive/refs/tags/v4.0.5.tar.gz"
+  sha256 "d7a49bd4322dfc4f1f8136fe0bcce5ef0bbb9aafe895945580178861fd908ac4"
   license "MIT"
-  head "https://github.com/Praqma/helmsman.git", branch: "master"
+  head "https://github.com/mkubaczyk/helmsman.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b083ce72a651f9040fcd994a3c2472ea05689e460a1837d793ddd2fae40800ed"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b083ce72a651f9040fcd994a3c2472ea05689e460a1837d793ddd2fae40800ed"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b083ce72a651f9040fcd994a3c2472ea05689e460a1837d793ddd2fae40800ed"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a3446b60d03f301e50972b2a38239cc0ffe0a0052bef78ecac9cb892aeacb9f3"
-    sha256 cellar: :any_skip_relocation, ventura:       "a3446b60d03f301e50972b2a38239cc0ffe0a0052bef78ecac9cb892aeacb9f3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d40bb6b1568328e315a28aa502c5cbf8b86cb95f493647ff4edd639878f7ba1d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c5726091c1d85cb3dc4c45599dbcc08e47af8a683371fb2f8386ac51f2580d84"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c5726091c1d85cb3dc4c45599dbcc08e47af8a683371fb2f8386ac51f2580d84"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c5726091c1d85cb3dc4c45599dbcc08e47af8a683371fb2f8386ac51f2580d84"
+    sha256 cellar: :any_skip_relocation, sonoma:        "76b5e3db809e503f3fad4d4c48b446ca06e50b1d5d09aa39282d89cc9cd083a1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b37efc52815db6e43ed2989f86f024ad752ae29195eb07902f4063972bbea4c4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5e0cd0b6fdfa5d0b2f5824f5d41434f4bc89380ccc8e1d1e4eae6c0571ae9be1"
   end
 
   depends_on "go" => :build
-  depends_on "helm"
+  depends_on "helm@3"
   depends_on "kubernetes-cli"
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}"), "./cmd/helmsman"
+    ldflags = %W[
+      -s -w
+      -X github.com/mkubaczyk/helmsman/internal/app.appVersion=#{version}
+    ]
+    system "go", "build", *std_go_args(ldflags:), "./cmd/helmsman"
     pkgshare.install "examples/example.yaml", "examples/job.yaml"
   end
 
   test do
+    ENV.prepend_path "PATH", Formula["helm@3"].opt_bin
+
     ENV["ORG_PATH"] = "brewtest"
     ENV["VALUE"] = "brewtest"
 

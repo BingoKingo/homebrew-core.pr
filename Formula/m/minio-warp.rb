@@ -1,27 +1,19 @@
 class MinioWarp < Formula
   desc "S3 benchmarking tool"
   homepage "https://github.com/minio/warp"
+  url "https://github.com/minio/warp/archive/refs/tags/v1.4.0.tar.gz"
+  sha256 "48b47eecdc9c49357065740c62411aac5c87b36cf06f0f9d5cce93e8c6c5ece6"
   license "AGPL-3.0-or-later"
   head "https://github.com/minio/warp.git", branch: "master"
 
-  stable do
-    url "https://github.com/minio/warp/archive/refs/tags/v1.1.4.tar.gz"
-    sha256 "1a8055bd4a8fc2e9bee6b93ebf3f0fa5dbbc560c8f9f53832ee885c88566fef5"
-
-    # go.sum update
-    patch do
-      url "https://github.com/minio/warp/commit/c830e94367efce6e6d70c337d490a3b6eba5e558.patch?full_index=1"
-      sha256 "69d59f334cb60fd0d8aaf6426c27a1a995cad494e49024187673baba3bf35ec6"
-    end
-  end
-
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5f96a3959319137654f59cf95f39b802f4294e903b496f1bb818f55a248fedaa"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ad0cc0c54056c3e1a65140276c1a4859222e6866a75343bbf062a0575c50332c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "34275103e3292958edc850991c4b0fa4cb575366cc4f6077b0fc20676f8224c0"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8812e75d4f70ae276dcafb3c5e5ce2cfc458b9ad8be9948bad9225ae6abe3231"
-    sha256 cellar: :any_skip_relocation, ventura:       "e51bcfc2fde33bd43e3e9293eb22cec1a3176a3e797487bb1bb654b61210225e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fd0deb74bdb394b6f27aa152a0da6eac1ebccaf345233fc5dcf2423910301b82"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "e05bb44711400871f75125f3522a29531f887b989124090bb5a1cb54a95a19d3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1b113fed2d68680b2b5a4ef44239c5892e1cc094bfc68612219e83572ddd398d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2f8ba292adced14d74d07040c6d9371f257e32affcb9ca6c466a5caa8b2b58de"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b6360cf3dd727c777a84858faa86130e8c4cd73f89f6a1bb248133d99e5f40bd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4909a5f0223942bacae3a22afd8e7d66858f23f7a0dcedc16fba6d8bb3a3dd60"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b052276431943851117dda12c7fc842328ed4a2fed059786b2a4ff00e08ea3ef"
   end
 
   depends_on "go" => :build

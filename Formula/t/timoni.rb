@@ -1,19 +1,18 @@
 class Timoni < Formula
   desc "Package manager for Kubernetes, powered by CUE and inspired by Helm"
   homepage "https://timoni.sh/"
-  url "https://github.com/stefanprodan/timoni/archive/refs/tags/v0.25.0.tar.gz"
-  sha256 "1348744688edf0ff5b74781df0b2a280f46810a13ddc458bd2ede5e2f9f72a05"
+  url "https://github.com/stefanprodan/timoni/archive/refs/tags/v0.26.0.tar.gz"
+  sha256 "247d05e48dc6457bc8383534d2d1efc9d5152bafec32794cc358a00548725d1e"
   license "Apache-2.0"
   head "https://github.com/stefanprodan/timoni.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f7ed4773ada96eee11b939418751187e1ca47e5235e59534f08a20e6498d120c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "11ada071d0ca7c0c439b30688c7a461de9dc68d0dc539b78196e4d9a0430f51c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "683a8f39929f637f48ab4313603b2379f2031fba53e4cbb94ccf3166f48069aa"
-    sha256 cellar: :any_skip_relocation, sonoma:        "20ab010a336e67dbbae88fca0f8f4cd30d08072728b6cb70f30b0943da70d18f"
-    sha256 cellar: :any_skip_relocation, ventura:       "0c53d05d331ec52364b39e61ba79bbacd5c842c41f7d0d1b08984d53c7430980"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "cd87b2828b5879989cd64ffbdee9b6e0893087c8a032694cc3a1c922966e1058"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c6eaa213231e9c5dcb9a7022e196eec2b1ba11e65a24b6a031cff89e1c5c073d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "985eb65543c6d66660b51aa07720366d96b41552b1784b87f5f2fd40d06f76da"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "acb0e994d2cdfbd6dd5e585b2023e32226c46d3c35d0356322a055db6ebd6f96"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "310f8d997f8b4d0c51ce67020c7711c0b2d4f1200ad8fbfe66f5953494dba727"
+    sha256 cellar: :any_skip_relocation, sonoma:        "881a71472b9b239c67395e56b63a4280d959ac6da38000b0175077be4027546c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "937ed7f4c671083e30e6e68a3ee3ed5915aa79a1e1830a7029375396d5c57f23"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e987529e9b46b86f2094188368fd02daac82fb00728bdabb94e665c44b15e898"
   end
 
   depends_on "go" => :build
@@ -21,7 +20,7 @@ class Timoni < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.VERSION=#{version}"), "./cmd/timoni"
 
-    generate_completions_from_executable(bin/"timoni", "completion")
+    generate_completions_from_executable(bin/"timoni", shell_parameter_format: :cobra)
   end
 
   test do

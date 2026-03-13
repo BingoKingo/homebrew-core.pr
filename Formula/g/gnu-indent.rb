@@ -1,13 +1,14 @@
 class GnuIndent < Formula
   desc "C code prettifier"
   homepage "https://www.gnu.org/software/indent/"
-  url "https://ftp.gnu.org/gnu/indent/indent-2.2.13.tar.gz"
-  mirror "https://ftpmirror.gnu.org/indent/indent-2.2.13.tar.gz"
+  url "https://ftpmirror.gnu.org/gnu/indent/indent-2.2.13.tar.gz"
+  mirror "https://ftp.gnu.org/gnu/indent/indent-2.2.13.tar.gz"
   sha256 "9e64634fc4ce6797b204bcb8897ce14fdd0ab48ca57696f78767c59cae578095"
   license "GPL-3.0-or-later"
 
   bottle do
     rebuild 1
+    sha256 arm64_tahoe:    "9734507ce86daffede4a8529ea0da48daa0993cd639900769d131d677f4d5c64"
     sha256 arm64_sequoia:  "bd0bd4400bed0df025ba9e73add09aaa2c2e4ac341dfcc59d69f1cd4c6394f6a"
     sha256 arm64_sonoma:   "cc9469378596d13d421d77264e388158e614479d88256aab58d812f0746daf8e"
     sha256 arm64_ventura:  "97de44230879e486cbbc8730922fb70228f0fc74875eabc4656fcbf04bf87ec2"
@@ -19,30 +20,26 @@ class GnuIndent < Formula
     sha256 x86_64_linux:   "ca7c98aad69c128e21dc47666737ffc57d55118fe1e5e73b4e63874dfb1f6721"
   end
 
-  depends_on "gettext"
+  on_macos do
+    depends_on "gettext"
+  end
 
   on_system :linux, macos: :ventura_or_newer do
     depends_on "texinfo" => :build
   end
 
   def install
-    ENV.append_to_cflags "-D_DARWIN_C_SOURCE" if OS.mac?
-    args = %W[
-      --disable-debug
-      --disable-dependency-tracking
-      --prefix=#{prefix}
-      --mandir=#{man}
-    ]
-
-    args << "--program-prefix=g" if OS.mac?
-    system "./configure", *args
+    if OS.mac?
+      ENV.append_to_cflags "-D_DARWIN_C_SOURCE"
+      args = ["--program-prefix=g"]
+    end
+    system "./configure", *args, *std_configure_args
     system "make", "install"
 
-    if OS.mac?
-      (libexec/"gnubin").install_symlink bin/"gindent" => "indent"
-      (libexec/"gnuman/man1").install_symlink man1/"gindent.1" => "indent.1"
-    end
+    return unless OS.mac?
 
+    (libexec/"gnubin").install_symlink bin/"gindent" => "indent"
+    (libexec/"gnuman/man1").install_symlink man1/"gindent.1" => "indent.1"
     (libexec/"gnubin").install_symlink "../gnuman" => "man"
   end
 
@@ -60,12 +57,8 @@ class GnuIndent < Formula
 
   test do
     (testpath/"test.c").write("int main(){ return 0; }")
-    binary = if OS.mac?
-      "#{bin}/gindent"
-    else
-      "#{bin}/indent"
-    end
-    system binary, "test.c"
+    indent = OS.mac? ? "gindent" : "indent"
+    system bin/indent, "test.c"
     assert_equal <<~C, File.read("test.c")
       int
       main ()

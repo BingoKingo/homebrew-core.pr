@@ -1,19 +1,19 @@
 class Gcli < Formula
   desc "Portable Git(hub|lab|tea)/Forgejo/Bugzilla CLI tool"
   homepage "https://herrhotzenplotz.de/gcli/"
-  url "https://github.com/herrhotzenplotz/gcli/archive/refs/tags/v2.8.0.tar.gz"
-  sha256 "d5024ffe77cdd482bfef8a0652285ce7a087d21c0e3ab9df821fc43565743538"
+  url "https://github.com/herrhotzenplotz/gcli/archive/refs/tags/v2.10.0.tar.gz"
+  sha256 "500da41d29fa53ab412a81864624b9e2bcd0785be61234f6cfb6b3b031b83280"
   license "BSD-2-Clause"
+  revision 1
   head "https://github.com/herrhotzenplotz/gcli.git", branch: "trunk"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "2ee08d1373d2499064b4517a6c7f45417b038760225ec08a6a7bfb808cb0a7fe"
-    sha256 cellar: :any,                 arm64_sonoma:  "4a49e6b4e096f1f3b18bca384dbe31bf2bb87dafc73b9e93e305efe5b68164b9"
-    sha256 cellar: :any,                 arm64_ventura: "9e59f53d2961339dc80707fea298b53a08c6878394c869610511c42086fa093b"
-    sha256 cellar: :any,                 sonoma:        "2d36090b72facfba829e0c6794f5ba899f219695f7a23f2c4c7fce6de611e7e9"
-    sha256 cellar: :any,                 ventura:       "49c5783f3e053707f650b2a4d1713b04d06e657517487bfcf017130a708241e7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "6138729b4d1b55d52616dc6e819c1418ffd1a58c41ec9a02be7f00e06702882a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5852a7a4dea782cf9ba7d0d9c0fe1be0b874661429cc8d81e3169861b76f057a"
+    sha256 cellar: :any,                 arm64_tahoe:   "e46d89101a0b994695bd65f448010d24f0359f634be38c003747d890424b75aa"
+    sha256 cellar: :any,                 arm64_sequoia: "cd0a602c06c4e63a3f0b5b23e8afb4c56368df7438f9d3e184f3d8faf63e5b87"
+    sha256 cellar: :any,                 arm64_sonoma:  "39c4bf37f5711537b257f287a344ce8a9e88e368dc0c61e958a5416174f14d73"
+    sha256 cellar: :any,                 sonoma:        "b587dfed644416217f2756b4bc39da40fb093557fd0923d87324987597f8a425"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ce5b5865ab2fb2a74b6201ba15df1f5dd0d92dfd755463ae3b0c86999cb80213"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "41a5d5e55df695feafeeea1f5c7b761924d6ee8b641cfc474cffdbff47fc7684"
   end
 
   depends_on "pkgconf" => :build

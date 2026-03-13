@@ -1,21 +1,29 @@
 class Alive2 < Formula
   desc "Automatic verification of LLVM optimizations"
   homepage "https://github.com/AliveToolkit/alive2"
-  url "https://github.com/AliveToolkit/alive2.git",
-      tag:      "v20.0",
-      revision: "c0f5434f402ad91714ee0952f686cd0f524920ad"
   license "MIT"
   revision 2
   head "https://github.com/AliveToolkit/alive2.git", branch: "master"
 
+  stable do
+    url "https://github.com/AliveToolkit/alive2.git",
+        tag:      "v21.0",
+        revision: "913e1556032ee70a9ebf147b5a0c7e10086b7490"
+
+    # Backport fix for LLVM 22
+    patch do
+      url "https://github.com/AliveToolkit/alive2/commit/a86aaa0ea44c5671ce3e998ec6d422feaa95b236.patch?full_index=1"
+      sha256 "6645b59d29e7a4bbe45e91f57391cf9d4e5dbc27ba99a93c89ad13b14d57a7c4"
+    end
+  end
+
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "c2e52c9df83cf4759cdc53761aec5cf533bdc24fc9812241c18f494a9e7bc836"
-    sha256 cellar: :any,                 arm64_sonoma:  "d12f24a623fe6a7ae194b546ed2076cb9b71b7f2b2ffc8abacf6f004db446720"
-    sha256 cellar: :any,                 arm64_ventura: "7226a45ac96be7b39e0e46ae592be043787bf4965438046c42f8268e54abac6a"
-    sha256 cellar: :any,                 sonoma:        "08df28b20a2c4561764372987bb7c3a6bed76ec8dc0fa73545ada659ed6c940e"
-    sha256 cellar: :any,                 ventura:       "5191a7a9eead8da3646a9f14a0fee799a34169c08f81305654f2548866a4e274"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3114b328118b8ad425d287974aba4102603651a8bbfd3fa230e053e999e9bf18"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "705c815f0a0f02d812d19373f57777172297964a2a265bbd1631d4c82fb9309f"
+    sha256 cellar: :any,                 arm64_tahoe:   "2e00cec934b19e6e0782c0cb50f5bc1e99700d05d30c303306cef3290e477cbc"
+    sha256 cellar: :any,                 arm64_sequoia: "564aceec0c207995bdf1a7c52af3c85d294520a241dc9a640fcedd7987be9cce"
+    sha256 cellar: :any,                 arm64_sonoma:  "f29e72693a3db068ad2d63c04008c12a304d03e96beded350fee908f129b9296"
+    sha256 cellar: :any,                 sonoma:        "c1bc73895f64d8c25d4c5b91e18787cc2d02ef0aafd18f0c87b60ec2ab8363fc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3c77e368b62bbd426c27ebaad1666c6aaa5d7aa75dd0ca7c75d1103c419113de"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "53d1bf9e90e54266e4d36fb5193dba3f668b826f3bbc0363e012c2f31f6e1029"
   end
 
   depends_on "cmake" => :build
@@ -24,13 +32,17 @@ class Alive2 < Formula
   depends_on "llvm"
   depends_on "z3"
   depends_on "zstd"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  fails_with :clang do
+    build 1500
+    cause "error: reference to local binding 'src_data' declared in enclosing function 'IR::State::copyUBFromBB'"
+  end
 
   def install
-    # Work around ir/state.cpp:730:40: error: reference to local binding
-    # 'src_data' declared in enclosing function 'IR::State::copyUBFromBB'
-    ENV.llvm_clang if OS.mac? && MacOS.version <= :ventura
-
     system "cmake", "-S", ".", "-B", "build", "-DBUILD_LLVM_UTILS=ON", "-DBUILD_TV=ON", *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"

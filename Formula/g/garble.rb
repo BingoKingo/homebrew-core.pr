@@ -1,26 +1,25 @@
 class Garble < Formula
   desc "Obfuscate Go builds"
   homepage "https://github.com/burrowers/garble"
-  url "https://github.com/burrowers/garble/archive/refs/tags/v0.14.2.tar.gz"
-  sha256 "aea6e0a172296b50e3671a9b753aeb2eb7080a3103575cdf5e4d1aeccfe14ede"
+  url "https://github.com/burrowers/garble/archive/refs/tags/v0.15.0.tar.gz"
+  sha256 "b429b24dafa851a25bbeca635db33eb4162b8e3109fb234a2c8e7780a837b958"
   license "BSD-3-Clause"
-  revision 1
+  revision 8
   head "https://github.com/burrowers/garble.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5ec2f692cb8fa1413dd70e4adb73a9379c177ad67d83c5edc6223022116420f7"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5ec2f692cb8fa1413dd70e4adb73a9379c177ad67d83c5edc6223022116420f7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5ec2f692cb8fa1413dd70e4adb73a9379c177ad67d83c5edc6223022116420f7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "932cad6102367a29f5092455a7859df9f69251ddc1f82c5af7ae9f37f830835f"
-    sha256 cellar: :any_skip_relocation, ventura:       "932cad6102367a29f5092455a7859df9f69251ddc1f82c5af7ae9f37f830835f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "202e90501c53fe9f6f324a7175d2087d0113e69d012219acaed1a4dcdac26498"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "fac51277b744e6c16b8cc4667c9e5d0e07f7329a46bb292bc79f967b8013b392"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fac51277b744e6c16b8cc4667c9e5d0e07f7329a46bb292bc79f967b8013b392"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fac51277b744e6c16b8cc4667c9e5d0e07f7329a46bb292bc79f967b8013b392"
+    sha256 cellar: :any_skip_relocation, sonoma:        "162c0db6b8d12680cfc17a4a0b5834d8e6d55c7bc91d0d97021699c9a597e15e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ce682fbe28be8c951bc1766cbed3564baff91fc79d0c2474efb92e8058511213"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "37842bb21aa6e908df86b1c8e8f2e8acb574eff16da04d88ad8e8321c39b634e"
   end
 
-  depends_on "go" => [:build, :test]
-  depends_on "git"
+  # unpin go when the release is supporting Go 1.26, fixing https://github.com/burrowers/garble/issues/990
+  depends_on "go@1.25" => [:build, :test]
 
   def install
-    inreplace "internal/linker/linker.go", "\"git\"", "\"#{Formula["git"].opt_bin}/git\""
     system "go", "build", *std_go_args(ldflags: "-s -w")
   end
 
@@ -34,6 +33,14 @@ class Garble < Formula
           fmt.Println("Hello World")
       }
     GO
+
+    ENV.prepend_path "PATH", Formula["go@1.25"].opt_libexec/"bin" # for keg_only go 1.25 binary
+
+    # `garble` breaks our git shim by clearing the environment.
+    # Remove once git is no longer needed. See caveats:
+    # https://github.com/burrowers/garble?tab=readme-ov-file#caveats
+    ENV.remove "PATH", "#{HOMEBREW_SHIMS_PATH}/shared:"
+
     system bin/"garble", "-literals", "-tiny", "build", testpath/"hello.go"
     assert_equal "Hello World\n", shell_output("#{testpath}/hello")
 

@@ -1,8 +1,8 @@
 class MenderCli < Formula
   desc "General-purpose CLI tool for the Mender backend"
   homepage "https://mender.io"
-  url "https://github.com/mendersoftware/mender-cli/archive/refs/tags/1.12.0.tar.gz"
-  sha256 "7b68fdeef96a99ee4560cb9dccd673658b27e2f3a9be2e3451d204c50395caa0"
+  url "https://github.com/mendersoftware/mender-cli/archive/refs/tags/2.0.0.tar.gz"
+  sha256 "1fda34045cdbe9914f04d7eaebc0933f7d14c2952dd9c149f278479cd47e37fc"
   license "Apache-2.0"
 
   livecheck do
@@ -11,22 +11,27 @@ class MenderCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "0f6684645028a62edf8e62d7dfb7845b7aedc474830345cea55e635abf7efe75"
-    sha256 cellar: :any,                 arm64_sonoma:  "fe129f50a5e78d44d178a5e802e853f5de0e164a0dd7cb8642cd1bc08423e0c9"
-    sha256 cellar: :any,                 arm64_ventura: "c76bb683aab7e297d331c780d81520a954fbcd3e331370290f0fd6ef8764738a"
-    sha256 cellar: :any,                 sonoma:        "e804a707060777c0a9ebe51378368a7321097a3ca95171b5f0f06e16dfe33be8"
-    sha256 cellar: :any,                 ventura:       "6c5da0527d144a99695189ff297fb626d8fe9c7115488dd68a0ccd65ead01fa9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "694e117ca7bade40819fb48b43080babbc1a439bcf111ae61310f710ee61fb5d"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "8f0671cfe824e3f01e2057b81f12836e55f9b0b8fbf055636189d197bcd3af41"
+    sha256 cellar: :any,                 arm64_sequoia: "5e0e61309b5cd8784776ef9edc0a2e3fd7a0c2af80e5006aa05628a1d1d512eb"
+    sha256 cellar: :any,                 arm64_sonoma:  "50ad0bf3c654112ea0c46b288cd00d4a80db67753d2dd5b854687c655e003cfa"
+    sha256 cellar: :any,                 sonoma:        "984ab3bb03029a0d1c71f7da55fdf46866e3aa2dbfacdab2bbf1f87f0311530b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ce65a9c8f2dec521cc44bd235bd32794f842f6952b17fbce95443b3d7859fca8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0b31de68de7647a35266abf1034897a691f8e097e7f36a47c3f3f6fcf02626f9"
   end
 
   depends_on "go" => :build
+  depends_on "pkgconf" => :build
+  depends_on "openssl@3"
   depends_on "xz"
 
   def install
+    ENV["CGO_ENABLED"] = "1" if OS.linux? && Hardware::CPU.arm?
+
     ldflags = "-s -w -X github.com/mendersoftware/mender-cli/cmd.Version=#{version}"
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"mender-cli", "completion")
+    generate_completions_from_executable(bin/"mender-cli", shell_parameter_format: :cobra)
   end
 
   test do

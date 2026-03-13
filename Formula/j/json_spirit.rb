@@ -19,6 +19,7 @@ class JsonSpirit < Formula
 
   bottle do
     rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "c9211705e246541e5540eab0704d64a67124566cda09695e26b7ed3966b0c61f"
     sha256 cellar: :any,                 arm64_sequoia: "260f8a8fa379f57ff36cc4a962698ff2c68028b2534f1bfb001f4308cb7e9781"
     sha256 cellar: :any,                 arm64_sonoma:  "e12a59472b1b8e24ae7d91467d5355c21df6cc09a3f833c2668de6da38179bd3"
     sha256 cellar: :any,                 arm64_ventura: "b6a402f81d1433720746b73094e02b2160f47761ef3849ef42352aa374e9b45f"
@@ -34,6 +35,7 @@ class JsonSpirit < Formula
   def install
     args = %w[
       -DCMAKE_CXX_STANDARD=14
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       -DJSON_SPIRIT_DEMOS=OFF
       -DJSON_SPIRIT_TESTS=OFF
     ]
@@ -45,5 +47,32 @@ class JsonSpirit < Formula
     system "cmake", "-S", ".", "-B", "build_shared", "-DBUILD_STATIC_LIBS=OFF", *args, *std_cmake_args
     system "cmake", "--build", "build_shared"
     system "cmake", "--install", "build_shared"
+  end
+
+  test do
+    # https://github.com/png85/json_spirit/blob/master/README.md#writing-json
+    (testpath/"test.cpp").write <<~CPP
+      #include <json_spirit.h>
+      #include <fstream>
+
+      int main(void) {
+        json_spirit::Object addr_obj;
+        addr_obj.push_back(json_spirit::Pair("house_number", 42));
+        addr_obj.push_back(json_spirit::Pair("road", "East Street"));
+        addr_obj.push_back(json_spirit::Pair("town", "Newtown"));
+
+        std::ofstream os("address.json");
+        write(addr_obj, os, json_spirit::pretty_print);
+        os.close();
+        return 0;
+      }
+    CPP
+
+    system ENV.cxx, "-std=c++17", "test.cpp", "-o", "test", "-I#{include}/json_spirit", "-L#{lib}", "-ljson_spirit"
+    system "./test"
+
+    expected = { "house_number" => 42, "road" => "East Street", "town" => "Newtown" }
+    assert_path_exists testpath/"address.json"
+    assert_equal expected, JSON.parse(File.read("address.json"))
   end
 end

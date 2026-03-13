@@ -1,19 +1,18 @@
 class CargoGenerate < Formula
   desc "Use pre-existing git repositories as templates"
   homepage "https://github.com/cargo-generate/cargo-generate"
-  url "https://github.com/cargo-generate/cargo-generate/archive/refs/tags/v0.23.3.tar.gz"
-  sha256 "c12af31c60b7ea53e138e4028a23934873e1385b311f35b46413697bdfdc4e8a"
+  url "https://github.com/cargo-generate/cargo-generate/archive/refs/tags/v0.23.7.tar.gz"
+  sha256 "7f6dceb0ede61122684d4852092331c7179a5ea236247688e5074be68c1d9e4d"
   license any_of: ["Apache-2.0", "MIT"]
   head "https://github.com/cargo-generate/cargo-generate.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "9588d9f3bd24dda034e41947200ee436c009c6b49154fe1a6a57f0926eb539ef"
-    sha256 cellar: :any,                 arm64_sonoma:  "e75aae49736fbab569feee8109226f1ec05bc546b3798676dffa1e0c513a076d"
-    sha256 cellar: :any,                 arm64_ventura: "deec2fcd437ff10b21a1062f7486dc80dace4af4b26a8a074d917d291e0d5fc2"
-    sha256 cellar: :any,                 sonoma:        "ee7ab36f1f870e3d6244e42f351b5fa9e0d4029d75597ccef016f7080c88a78e"
-    sha256 cellar: :any,                 ventura:       "78d637fd0809ac44f4741f22c63bdcfdbca7be78e47fcac3ddab1d86b31ac13a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "fecca9166bb2c1f7242c43df8dec05883eff4749e8da1edfa88b2bc710c804bf"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c0fbe1554f9bd727d311497fe00a1a5f0af0efb3422ada09ad0727bdee3ff2eb"
+    sha256 cellar: :any,                 arm64_tahoe:   "34791473078f76879f23bfa46b602f9bc861fdd9dd33bb2af4f3672ba5d0ca3f"
+    sha256 cellar: :any,                 arm64_sequoia: "7715d55f9ce8322e500573d731a09560242cc008d79fd9915037271c270bb923"
+    sha256 cellar: :any,                 arm64_sonoma:  "64aad8d85e1a3ef8d26fb88f1325cf1d795efe4a4c6db43009af4af5b289260f"
+    sha256 cellar: :any,                 sonoma:        "96eeba249472831404dd4a494e368ec236301647294a993d02ea5f51aa91e369"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3897578d246b7f1fbff2f9594a6f7f2832086dc0a26575d7dd2ef8ce7b4f5329"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bfd95c9ae28e6dd897a42f4dce961cc4589e25d78034b2363b5a21c8422b6531"
   end
 
   depends_on "pkgconf" => :build

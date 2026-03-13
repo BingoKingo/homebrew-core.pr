@@ -6,26 +6,34 @@ class PandocPlot < Formula
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "277fe6f242119166f8d77f2b07b109129425ed673547fbaaa2d6f01e68c5d7c3"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4647b4e4e30b594f08bd6c871dac82b26d7bb1fbe75d850a77d8c445a1b8774a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a576bb85965c0aaab47ea0d10b1ce99310ce7ea453361e28f90fd6142644da7c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "eb0f022f0722c571818a6d9a4786e6aa92ed6a7ce0af8e47ce43bae83dd0c193"
-    sha256 cellar: :any_skip_relocation, ventura:       "624f4ee454a269b92a633a306632b99e0365e952b0bd2de17e40bfec21443fb6"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d8054d18e5ca238e9dc229083d65ea5aba64262cac3f175fd412038dd70981b5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "177f0c90f6cb82159908834ad1ad93a3b60d4df9e282036862a9b9634f29bb2f"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "2f4b7184bb86193122734de1913d2d31056b99c8c7fa981397b3f276f62ee9aa"
+    sha256 cellar: :any,                 arm64_sequoia: "32b7df218917c6d8052e2729c493ad901d7a0a255ebf15290ddba6a65a16189b"
+    sha256 cellar: :any,                 arm64_sonoma:  "98fe64430c6d6d3074dfc8968905cd7aa61fc58adb039bcbaf25328d0590d384"
+    sha256 cellar: :any,                 sonoma:        "3ab7fd029b2f04f9f5ac7c37f659b3134cc589b7ff018e637889a869a7ea0b1e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "824d73e31ddaa745a587e66165f12aed3505a896b93db23837dd5aab07965260"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "25be6dd6c818cae1074655c956e2d1643d4a143025c3a61fbb01e0c787763cb0"
   end
 
   depends_on "cabal-install" => :build
-  depends_on "ghc@9.10" => :build
+  depends_on "ghc" => :build
   depends_on "graphviz" => :test
 
+  depends_on "gmp"
   depends_on "pandoc"
 
-  uses_from_macos "zlib"
+  uses_from_macos "libffi"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
+    # Workaround to build aeson with GHC 9.14, https://github.com/haskell/aeson/issues/1155
+    args = ["--allow-newer=base,containers,template-haskell"]
+
     system "cabal", "v2-update"
-    system "cabal", "v2-install", *std_cabal_v2_args
+    system "cabal", "v2-install", *args, *std_cabal_v2_args
   end
 
   test do

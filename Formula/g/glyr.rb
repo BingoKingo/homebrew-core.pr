@@ -7,6 +7,7 @@ class Glyr < Formula
   revision 3
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:   "b4f97cce0791e26fdb4ada285bc982bb96548886442bde705a9c5d9656bbc8e5"
     sha256 cellar: :any,                 arm64_sequoia: "9ff02541efeba578a7e20d6d3ba1cd80c71d4f80e37306a35cb9b13e1e9ef4e8"
     sha256 cellar: :any,                 arm64_sonoma:  "783ce52f8a68f8d5900429fd33baf4d728523e19fe63fec93c1de3242ab157f3"
     sha256 cellar: :any,                 arm64_ventura: "d2cf724c8cfdb04e0c94643c4fc456ca85a75148429198eb11b3746c1d23047b"
@@ -16,6 +17,10 @@ class Glyr < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux:  "299191466994be32c6b0fd7ffe958623ddbffb940428b95c25eba2fa6b5bff21"
   end
 
+  # Various lyrics providers broken, https://github.com/sahib/glyr/issues/102
+  deprecate! date: "2025-12-08", because: :unmaintained
+  disable! date: "2026-12-08", because: :unmaintained
+
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "gettext"
@@ -24,8 +29,17 @@ class Glyr < Formula
   uses_from_macos "curl"
   uses_from_macos "sqlite"
 
+  # Fix build with curl
+  patch do
+    url "https://salsa.debian.org/multimedia-team/glyr/-/raw/5425c57b7d5716b91553fdf65ec117eda45ae025/debian/patches/0003-Import-curl.h-instead-of-a-header-subset.patch"
+    sha256 "c97a4a96c30219f5c31b21501a8e37cff18817d02451634654a949a0ec8303a3"
+  end
+
   def install
-    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    args = %W[-DCMAKE_INSTALL_RPATH=#{rpath}]
+    # Workaround to build with CMake 4
+    args << "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
   end

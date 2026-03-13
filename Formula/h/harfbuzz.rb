@@ -1,32 +1,36 @@
 class Harfbuzz < Formula
   desc "OpenType text shaping engine"
   homepage "https://github.com/harfbuzz/harfbuzz"
-  url "https://github.com/harfbuzz/harfbuzz/archive/refs/tags/11.2.1.tar.gz"
-  sha256 "057d5754c3ac0c499bbf4d729d52acf134c7bb4ba8868ba22e84ae96bc272816"
+  url "https://github.com/harfbuzz/harfbuzz/releases/download/13.1.1/harfbuzz-13.1.1.tar.xz"
+  sha256 "e7f3b8bac3fdcc529985be8e84fbd65c675ac47ee58512b15a5dd620c79ffe2a"
   license "MIT"
   head "https://github.com/harfbuzz/harfbuzz.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "c2bfac8d26f33150c1fbe86293113c217b6a452c347a509428f3a7ee4752b956"
-    sha256 cellar: :any, arm64_sonoma:  "509842a43792ef0fac0bc55a0cffd4eb424ae91ea576de4bb58903c787913986"
-    sha256 cellar: :any, arm64_ventura: "f3f560cff261aaf4d8f6adb7312673d85b4bddec40a1ecad7ee9c618998aa09f"
-    sha256 cellar: :any, sonoma:        "fa2402380d3f6f5f3c9aa13ea3414c49ffba1f7f243ca78a77e761eabd6beb34"
-    sha256 cellar: :any, ventura:       "d61d888fc759b1ed1ee9e1d7b72fc0668425f55979b800823d809efaba8ca112"
-    sha256               arm64_linux:   "b531487da9f408317fcf04ec5101a12b089e52ac85b960a4e76c8800c083a3ed"
-    sha256               x86_64_linux:  "a3c3cee38367d44e713a98a09e117cd831cad5c67fb52fe67d75a81450b9d94a"
+    sha256 cellar: :any, arm64_tahoe:   "c15bf7bd546f4d370fcc8999a08bfd62cc8bf64e58994e62493a3657a909aef7"
+    sha256 cellar: :any, arm64_sequoia: "f2363f156ebba4303bb6ffeabb870dc68f5fef06aaad880c0b8f23e793ada7fe"
+    sha256 cellar: :any, arm64_sonoma:  "56bdb4020f70b7fa5bd9405e02c5787f14d95c6579130770e9b80aedf987f4d7"
+    sha256 cellar: :any, sonoma:        "c0692af139d0fc05c7187539f2a5fe55a7df412e268e66fda9b6c5e366aafb50"
+    sha256               arm64_linux:   "2280421146141f675ab61a191fecb426d2d31108d6a90c55212a670f913af95b"
+    sha256               x86_64_linux:  "eba9dc47ac385ace75320387a4ce65c830e99289e48f6a8d1c8581f3ac23e3b9"
   end
 
   depends_on "gobject-introspection" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => :build
-  depends_on "python@3.13" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
   depends_on "pygobject3" => :test
   depends_on "cairo"
   depends_on "freetype"
   depends_on "glib"
   depends_on "graphite2"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
+  depends_on "libpng"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     args = %w[
@@ -57,6 +61,6 @@ class Harfbuzz < Formula
       shape = pipe_output("#{bin}/hb-shape 270b89df543a7e48e206a2d830c0e10e5265c630.ttf", "സ്റ്റ്").chomp
       assert_equal "[glyph201=0+1183|U0D4D=0+0]", shape
     end
-    system "python3.13", "-c", "from gi.repository import HarfBuzz"
+    system "python3.14", "-c", "from gi.repository import HarfBuzz"
   end
 end

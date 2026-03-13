@@ -1,18 +1,18 @@
 class Render < Formula
   desc "Command-line interface for Render"
   homepage "https://render.com/docs/cli"
-  url "https://github.com/render-oss/cli/archive/refs/tags/v2.1.4.tar.gz"
-  sha256 "337e0c786ae796626ffe51699d67e2a875abb65e61f55489a19e2e120bd2568e"
+  url "https://github.com/render-oss/cli/archive/refs/tags/v2.13.0.tar.gz"
+  sha256 "2e7b141769559272b7d7adc2d9cc782803ef128a5861fb59eccb3de836b52a6f"
   license "Apache-2.0"
   head "https://github.com/render-oss/cli.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e8ef690c5923b9ecbd29e6162dd9f7964f7f20dfaf33e04f51772f78940952af"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e8ef690c5923b9ecbd29e6162dd9f7964f7f20dfaf33e04f51772f78940952af"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e8ef690c5923b9ecbd29e6162dd9f7964f7f20dfaf33e04f51772f78940952af"
-    sha256 cellar: :any_skip_relocation, sonoma:        "092765d8863cd87864afc40dda4994e9548428babf8a6093a2ed382c01d33458"
-    sha256 cellar: :any_skip_relocation, ventura:       "092765d8863cd87864afc40dda4994e9548428babf8a6093a2ed382c01d33458"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "12e12127c0094c0a343e5ae12254a06ba7211c2a3563e248d8c5352dcdf264a4"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "40fd6e5af8e77ccefc278f3f595b4545f5da9b98d3344765867e1d4ff750984a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "40fd6e5af8e77ccefc278f3f595b4545f5da9b98d3344765867e1d4ff750984a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "40fd6e5af8e77ccefc278f3f595b4545f5da9b98d3344765867e1d4ff750984a"
+    sha256 cellar: :any_skip_relocation, sonoma:        "4f4af4bfb3df89eadf03219ce96b33547db3d656ea4294b67c8fe7e5cf6acd0f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "34e4fed825ae876b5ded0b745374e6732f7372faef3f0bcc3840ec81c991ba68"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "427ee7c17c59dcbc9fd130feb67bd8c3c9632afdce27901cbdcb1290a7eb3e8e"
   end
 
   depends_on "go" => :build
@@ -26,7 +26,9 @@ class Render < Formula
   end
 
   test do
-    error_msg = "Error: run `render login` to authenticate"
-    assert_match error_msg, shell_output("#{bin}/render services -o json 2>&1", 1)
+    assert_match version.to_s, shell_output("#{bin}/render --version")
+
+    output = shell_output("#{bin}/render services -o json 2>&1", 1)
+    assert_match "Error: no workspace set. Use `render workspace set` to set a workspace", output
   end
 end

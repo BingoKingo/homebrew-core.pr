@@ -1,8 +1,8 @@
 class Fltk < Formula
   desc "Cross-platform C++ GUI toolkit"
   homepage "https://www.fltk.org/"
-  url "https://github.com/fltk/fltk/releases/download/release-1.4.3/fltk-1.4.3-source.tar.bz2"
-  sha256 "76ecc922b6d708f75ab29abe2810494575b66b00735e692cff6d96686ed0fc4a"
+  url "https://github.com/fltk/fltk/releases/download/release-1.4.4/fltk-1.4.4-source.tar.bz2"
+  sha256 "2b302c80b7ea937a8bdc01ed6718fd995035bf63e9a2895491c1001821725f1f"
   license "LGPL-2.0-only" => { with: "FLTK-exception" }
 
   livecheck do
@@ -11,13 +11,13 @@ class Fltk < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "938a50ae988efbb07d3975c992a47b4f696be0a28635496c565e725ecaa7fb39"
-    sha256 arm64_sonoma:  "7b9f54c0bb23c4eda241d34fd807698e20d7a9654e9d879ed2e52297a173b6b5"
-    sha256 arm64_ventura: "d0e1ecf48f53ce925ba57a1c26719de8769196e28d9ba19a8ceab5769251976f"
-    sha256 sonoma:        "604d447081fe46632730bb4a33b6758c9d87fca421662198d1756cc55de13184"
-    sha256 ventura:       "f78d210049fe429633dc6815be381af85b6c6911df8ca39eaf50bd091a7fb0fc"
-    sha256 arm64_linux:   "33c4d377b9ababaad8209c598c2db0451aed544c04dfc23715bad0f8fa269d5e"
-    sha256 x86_64_linux:  "08732bbef64880963a6ba5d27bf117c1e824f49c9df5eb1850d08f43ab3cb13d"
+    rebuild 1
+    sha256 arm64_tahoe:   "a336acc1290d177f51ff0ebeb70d0eacd45bf5b473489d2bb5af6df720fde6f4"
+    sha256 arm64_sequoia: "0dd518fec8c5774ca8b2d886befbc3a984b229ebcbe476adad4d695214b58425"
+    sha256 arm64_sonoma:  "822945c549971421e1aac934c817240d42c2b0edcf5e4113faa6901158ece222"
+    sha256 sonoma:        "870d5060045c0116ae47372a0229db2864d61ee1f765126c93650bc739963b39"
+    sha256 arm64_linux:   "1f960238c43d81c044200cb4a00950b1f764c4d150c4754e43c312243540334d"
+    sha256 x86_64_linux:  "a90426f91678df9321e01dc8dcaea265da0725dd05975aa7cf6be6da7bc7cf14"
   end
 
   head do
@@ -28,7 +28,6 @@ class Fltk < Formula
   depends_on "pkgconf" => :build
   depends_on "jpeg-turbo"
   depends_on "libpng"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "fontconfig"
@@ -40,6 +39,7 @@ class Fltk < Formula
     depends_on "libxt"
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "zlib-ng-compat"
   end
 
   def install

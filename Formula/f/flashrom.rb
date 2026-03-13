@@ -1,10 +1,10 @@
 class Flashrom < Formula
   desc "Identify, read, write, verify, and erase flash chips"
   homepage "https://flashrom.org/"
-  url "https://download.flashrom.org/releases/flashrom-v1.5.1.tar.xz"
-  sha256 "1f934b076ed49eace203655ec249fc7861a6b8e87fe4aef732e47b6e485b6293"
+  url "https://download.flashrom.org/releases/flashrom-v1.7.0.tar.xz"
+  sha256 "4328ace9833f7efe7c334bdd73482cde8286819826cc00149e83fba96bf3ab4f"
   license "GPL-2.0-or-later"
-  head "https://review.coreboot.org/flashrom.git", branch: "master"
+  head "https://review.coreboot.org/flashrom.git", branch: "main"
 
   livecheck do
     url "https://download.flashrom.org/releases/"
@@ -12,13 +12,12 @@ class Flashrom < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "ccb844bba9ff0f004d66daddc0b834fe4a91eace389ae3486cc99854795ce807"
-    sha256 cellar: :any, arm64_sonoma:  "2cada41d9ec587f23a4b6a8cdd4ff21a3c0b176c4da270c01b38a3cf4073a94c"
-    sha256 cellar: :any, arm64_ventura: "d3aa6a371dccd77654c46ad73ba10dc4bfabedebb5a920eb9fde56fd21d1b96f"
-    sha256 cellar: :any, sonoma:        "6dc12de3566c4f6078a22b979ce76e18100320bb004a9f463fffbe65ef72840b"
-    sha256 cellar: :any, ventura:       "f853dbc8d2957263f3a6c0875a51c8f5760deb2fede2c1f02edce9b6946ad04b"
-    sha256               arm64_linux:   "99930741fa83500c75daa0a4f5578a5365e3063e0151740a304c251376b9b6d3"
-    sha256               x86_64_linux:  "e7ca720f79b5b454b2ee3c4268352042d6ee6036b23f004cba7b3333565f1e14"
+    sha256 cellar: :any, arm64_tahoe:   "bddf59497d339e94335a78dcd020f39c2abeb6ab6743d2879425af065cc09cf1"
+    sha256 cellar: :any, arm64_sequoia: "7f44705e5537d6294a8b740c64f5f4ca9ea348d67ebb39e1da7f9bb1ac311568"
+    sha256 cellar: :any, arm64_sonoma:  "a675503867c985d6ff3599597a692283c47009ba672d1b0267e8ea58c7101c84"
+    sha256 cellar: :any, sonoma:        "7fff618fcbcc53469b5ccb96826f2db688098ef222a0afc55ecf2970dc5f6e8f"
+    sha256               arm64_linux:   "fa19b35b685c9ce8e2ba999ee52869440da81e6abe9271c843503548e9cfc85d"
+    sha256               x86_64_linux:  "8746313816786192056a06b6f94cb8aa0111984edca71343560e72af081669c0"
   end
 
   depends_on "meson" => :build

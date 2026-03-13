@@ -2,6 +2,7 @@ class Hashlink < Formula
   desc "Virtual machine for Haxe"
   homepage "https://hashlink.haxe.org/"
   license "MIT"
+  revision 1
   head "https://github.com/HaxeFoundation/hashlink.git", branch: "master"
 
   stable do
@@ -16,13 +17,13 @@ class Hashlink < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "88ce0382363f5995731d0fc498aa87d0e3a63e5e1df9dcb850f9aae11f47ce4f"
-    sha256 cellar: :any,                 arm64_sonoma:  "74702f549d40fa1f1ca50bab1bf403f99b2ed87e2ff6ae9db26ee6ac417b4668"
-    sha256 cellar: :any,                 arm64_ventura: "97f8de5f331d21b2d857282e6b3bed1d8b47fd02c3e77aedb789b9711088aee9"
-    sha256 cellar: :any,                 sonoma:        "99ef63e02f0bbb6a3e54b02319796fed5660f992ee0e1dbe9097239044ad4faa"
-    sha256 cellar: :any,                 ventura:       "f7e72d266dc1e415280ee163dcbcc8ef6802751e8469229da7c75653b621dca0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "032ad206b3a17a214c1c0d0cf8256b7882b1d962306dd8ab5ca7f39c4e3fdc99"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e7e70f6faae35bb958d819576c54d06d9852415cbbc5e98c8846db377a83eed8"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "63eb38d4dbc69ab9f8c71ecfd3c8b1f81673ddf015454e0141289747c0ac4269"
+    sha256 cellar: :any,                 arm64_sequoia: "f81bd39b0a2962b274cad50e95190e5c86d4f9da5cbd27b8b5a7a3c807e3af00"
+    sha256 cellar: :any,                 arm64_sonoma:  "454fec90a208dd51f0a65bb848be96e8f343c2c1b038c7f26a7805cae6c74dbb"
+    sha256 cellar: :any,                 sonoma:        "8e5ebb95cd5752506bef4698f51e476d7de12aa64ed962a0664a48ffc63d60d8"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "48372fc177336412549a92467756268d1da1ca27718ef3b68b2b4824bee10a8e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2d7d71f666e42bc1e991d8376470e7755653ec6b1629b4d080e2a5d3bb541b4d"
   end
 
   depends_on "haxe" => :test
@@ -31,16 +32,16 @@ class Hashlink < Formula
   depends_on "libpng"
   depends_on "libuv"
   depends_on "libvorbis"
-  depends_on "mbedtls"
+  depends_on "mbedtls@3"
   depends_on "openal-soft"
   depends_on "sdl2"
 
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -48,10 +49,7 @@ class Hashlink < Formula
     # These appear to be renamed shared libraries specifically used by HashLink.
     args = ["PREFIX=#{prefix}"]
 
-    if OS.mac?
-      # make file doesn't set rpath on mac yet
-      args << "EXTRA_LFLAGS=-Wl,-rpath,#{rpath}"
-    else
+    if OS.linux?
       args << "ARCH=arm64" if Hardware::CPU.arm?
       # On Linux, also set RPATH in LIBFLAGS, so that the linker will also add the RPATH to .hdll files.
       inreplace "Makefile", "LIBFLAGS =", "LIBFLAGS = -Wl,-rpath,${INSTALL_LIB_DIR}"

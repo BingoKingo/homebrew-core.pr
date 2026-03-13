@@ -7,6 +7,7 @@ class PinentryMac < Formula
   head "https://github.com/GPGTools/pinentry.git", branch: "master"
 
   bottle do
+    sha256 cellar: :any, arm64_tahoe:   "784844f7e5ccb8be3b5eeb567318c8948f492c57e70289189a296dcdaa31cb7d"
     sha256 cellar: :any, arm64_sequoia: "f0cacdc9497edf7391983fe84573ddfd826d0315680847a3f78ec020b6d145e5"
     sha256 cellar: :any, arm64_sonoma:  "6c879dba2621079072e566b95c00f96e7731a164dc6206054933058375df7014"
     sha256 cellar: :any, arm64_ventura: "9fd717f5a5b6223bd307503d72290ba678b8f0af9d185e952741bd6f73dab482"
@@ -16,6 +17,7 @@ class PinentryMac < Formula
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
+  depends_on "gettext" => :build
   depends_on "libtool" => :build
   depends_on xcode: :build # for ibtool
   depends_on "libassuan"
@@ -23,6 +25,8 @@ class PinentryMac < Formula
   depends_on :macos
 
   def install
+    ENV.append_path "ACLOCAL_PATH", Formula["gettext"].pkgshare/"m4"
+
     system "./autogen.sh"
     system "./configure", "--disable-doc",
                           "--disable-ncurses",

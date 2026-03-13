@@ -3,19 +3,19 @@
 class PerlDbdMysql < Formula
   desc "MySQL driver for the Perl5 Database Interface (DBI)"
   homepage "https://dbi.perl.org/"
-  url "https://cpan.metacpan.org/authors/id/D/DV/DVEEDEN/DBD-mysql-5.012.tar.gz"
-  sha256 "f54ad1bb7ae167e26cd557b5e1b87f7fa49c1dd126f3523eaace6e5c19dbaf46"
+  url "https://cpan.metacpan.org/authors/id/D/DV/DVEEDEN/DBD-mysql-5.013.tar.gz"
+  sha256 "aeb0a6e1c26fc28a5cf6de1161e0f056ddcbb739f87954dba7cb1c5acb4e1c33"
   license any_of: ["Artistic-1.0-Perl", "GPL-1.0-or-later"]
+  revision 1
   head "https://github.com/perl5-dbi/DBD-mysql.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "a818c34194b7033c3468ec5d901cdbf66afe40d5a4efccb7d634eecd773b0677"
-    sha256 cellar: :any,                 arm64_sonoma:  "377d85c6b652c4e94befb922f6cbe3a4736306b1e8c5846a6bf8e4d6cfa6d7b6"
-    sha256 cellar: :any,                 arm64_ventura: "51d1372055361e144df670899db7e349a6b044050ac6857ab7c02930865f3647"
-    sha256 cellar: :any,                 sonoma:        "6107ea139da53c0a82292c9df4f44b499715893afefd7fb9eab6479b87c2d3f8"
-    sha256 cellar: :any,                 ventura:       "53036da34b010da8aae2779c40af2ab50f74af7a4e4efeb49c3600d754d47ca8"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0b2557186487224db79a8dc207eed88e1f6d309f585d7056c8b40770442daa20"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "639203685dc517e9960efaa4a3bfe8004456627ba79f2328d6034c48cc1e0710"
+    sha256 cellar: :any,                 arm64_tahoe:   "46058ff8375c1910f2659d74bf7d970660caa254c904a8ce7471404dd92ea753"
+    sha256 cellar: :any,                 arm64_sequoia: "04dab546b5f1b2beea4f48e2652ee330e291d1de91be072e4551f7778fed0b70"
+    sha256 cellar: :any,                 arm64_sonoma:  "3de7bb854dd36cf5a4814534fd458ec7bcd5f321b07c820d439fbe353024641a"
+    sha256 cellar: :any,                 sonoma:        "63fc77caa080333bb8c3d556a63a118b37de0e0ed1d3d2693ee7742dd89ea238"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e5ef3810cdbdef812e17eb7853009477a2ee8d2686cf167bf508009235542b63"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7f4505f4880b300ef75af71b5c4628b3406f358bfbd35098688747292a9f2f0b"
   end
 
   keg_only <<~EOS

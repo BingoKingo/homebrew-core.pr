@@ -6,7 +6,12 @@ class BerkeleyDbAT5 < Formula
   license "Sleepycat"
   revision 1
 
+  livecheck do
+    skip "No longer developed or maintained"
+  end
+
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:    "a713c6c74511eb18a8dc92c92bbb1b7ca3f1e7c71c3325ab584634e6275ab1bd"
     sha256 cellar: :any,                 arm64_sequoia:  "ac64ff01e9897372c22dd2f9c90a2e5ffc5b66876c243d20d1e107b7c3785fba"
     sha256 cellar: :any,                 arm64_sonoma:   "7e1f6f67ce491e8636f9095fa45854e7b5720745b909e3b84cad8400b28418fd"
     sha256 cellar: :any,                 arm64_ventura:  "65a70e28dcf089e0ec6d247c32df257c8bc2532ece6f4c447200a48e7ad17a8d"
@@ -23,23 +28,9 @@ class BerkeleyDbAT5 < Formula
 
   keg_only :versioned_formula
 
-  # We use a resource to avoid potential build dependency loop in future. Right now this
-  # doesn't happen because `perl` depends on `berkeley-db`, but the dependency may change
-  # to `berkeley-db@5`. In this case, `automake -> autoconf -> perl` will create a loop.
-  # Ref: https://github.com/Homebrew/homebrew-core/issues/100796
-  resource "automake" do
-    on_linux do
-      on_arm do
-        url "https://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.xz"
-        mirror "https://ftpmirror.gnu.org/automake/automake-1.16.5.tar.xz"
-        sha256 "f01d58cd6d9d77fbdca9eb4bbd5ead1988228fdb73d6f7a201f5f8d6b118b469"
-      end
-    end
-  end
-
   # Fix build with recent clang
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/4c55b1/berkeley-db%404/clang.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/berkeley-db@4/clang.diff"
     sha256 "86111b0965762f2c2611b302e4a95ac8df46ad24925bbb95a1961542a1542e40"
     directory "src"
   end
@@ -52,7 +43,7 @@ class BerkeleyDbAT5 < Formula
 
   # Fix -flat_namespace being used on Big Sur and later.
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-pre-0.4.2.418-big_sur.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-pre-0.4.2.418-big_sur.diff"
     sha256 "83af02f2aa2b746bb7225872cab29a253264be49db0ecebb12f841562d9a2923"
     directory "dist"
   end
@@ -64,14 +55,6 @@ class BerkeleyDbAT5 < Formula
     # Fix compile with newer Clang
     ENV.append_to_cflags "-Wno-implicit-function-declaration" if DevelopmentTools.clang_build_version >= 1200
 
-    # Work around ancient config files not recognizing aarch64 linux
-    # configure: error: cannot guess build type; you must specify one
-    if OS.linux? && Hardware::CPU.arm?
-      resource("automake").stage do
-        (buildpath/"dist").install "lib/config.guess", "lib/config.sub"
-      end
-    end
-
     args = %W[
       --disable-static
       --prefix=#{prefix}
@@ -79,6 +62,7 @@ class BerkeleyDbAT5 < Formula
       --enable-cxx
       --enable-dbm
     ]
+    args << "--build=aarch64-unknown-linux-gnu" if OS.linux? && Hardware::CPU.arm64?
 
     # BerkeleyDB requires you to build everything from the build_unix subdirectory
     cd "build_unix" do
@@ -87,7 +71,7 @@ class BerkeleyDbAT5 < Formula
 
       # use the standard docs location
       doc.parent.mkpath
-      mv prefix+"docs", doc
+      mv prefix/"docs", doc
     end
   end
 

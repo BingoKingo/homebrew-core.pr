@@ -1,19 +1,19 @@
 class Httpd < Formula
   desc "Apache HTTP server"
   homepage "https://httpd.apache.org/"
-  url "https://dlcdn.apache.org/httpd/httpd-2.4.63.tar.bz2"
-  mirror "https://downloads.apache.org/httpd/httpd-2.4.63.tar.bz2"
-  sha256 "88fc236ab99b2864b248de7d49a008ec2afd7551e64dce8b95f58f32f94c46ab"
+  url "https://dlcdn.apache.org/httpd/httpd-2.4.66.tar.bz2"
+  mirror "https://downloads.apache.org/httpd/httpd-2.4.66.tar.bz2"
+  sha256 "94d7ff2b42acbb828e870ba29e4cbad48e558a79c623ad3596e4116efcfea25a"
   license "Apache-2.0"
 
   bottle do
-    sha256 arm64_sequoia: "9ca7b90378d07613eb7f25d3f254e3c988392b6aa03724e2a391fc3900200b94"
-    sha256 arm64_sonoma:  "3cac4f194862dc3e6f0676a10307810a2b623603fd8d2e7b82e867a4dccc01ab"
-    sha256 arm64_ventura: "cfc960b54bf8dbdc87fc91de6cbad9a9e8c1775d69659ee206d6bbdd0d9d8cea"
-    sha256 sonoma:        "e0854ef063e66912912753c71fd85f4e92cc59930ed824974ca2b9709ddcaaaf"
-    sha256 ventura:       "d873c7c33a633d07739c0cef9551074dc53d5480a16e82c302f0ec0e9c01359b"
-    sha256 arm64_linux:   "0d503fbd29ac1ba3f7b4ceed16358437ffabdebfae412386073dcf9986593468"
-    sha256 x86_64_linux:  "82136824ca8efeb096ba9236bf103b87d91d52e2c2de3081775fcbc9e7df55eb"
+    rebuild 1
+    sha256 arm64_tahoe:   "b956fa6f4d92ab06b6722b937c7904c4002498024f18bdd64c0fbeca4c0c9ea6"
+    sha256 arm64_sequoia: "e2caacc4e115672f495eb3899cd63d550d55a9dc1c3510881a2a85e16724a9a3"
+    sha256 arm64_sonoma:  "e2e922180c73164d1a0498d13cf358e0c18143340b5b9fb23e041f33b8533487"
+    sha256 sonoma:        "42096dc5eccd673b58e9ccffc422b30bc1d7b1f467cbf0feefa553b4b1e3c233"
+    sha256 arm64_linux:   "41c524055486b594469f54971c00486545eb7139a34000d6f521c5eeacf1c450"
+    sha256 x86_64_linux:  "21deedd9de715b969402e66662ba9a618183d491b04a55dc75839db4dca38ee0"
   end
 
   depends_on "apr"
@@ -25,7 +25,10 @@ class Httpd < Formula
 
   uses_from_macos "libxcrypt"
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # fixup prefix references in favour of opt_prefix references
@@ -49,11 +52,11 @@ class Httpd < Formula
     end
 
     if OS.mac?
-      libxml2 = "#{MacOS.sdk_path_if_needed}/usr"
-      zlib = "#{MacOS.sdk_path_if_needed}/usr"
+      libxml2 = "#{MacOS.sdk_for_formula(self).path}/usr"
+      zlib = "#{MacOS.sdk_for_formula(self).path}/usr"
     else
       libxml2 = Formula["libxml2"].opt_prefix
-      zlib = Formula["zlib"].opt_prefix
+      zlib = Formula["zlib-ng-compat"].opt_prefix
     end
 
     system "./configure", "--enable-layout=Slackware-FHS",
@@ -120,9 +123,7 @@ class Httpd < Formula
       s.gsub! "${prefix}/lib/httpd/modules", HOMEBREW_PREFIX/"lib/httpd/modules"
       s.gsub! Superenv.shims_path, HOMEBREW_PREFIX/"bin"
     end
-  end
 
-  def post_install
     (var/"cache/httpd").mkpath
     (var/"www").mkpath
   end
@@ -165,7 +166,7 @@ class Httpd < Formula
         LoadModule mpm_prefork_module #{lib}/httpd/modules/mod_mpm_prefork.so
       EOS
 
-      pid = spawn bin/"httpd", "-X", "-f", "#{testpath}/httpd.conf"
+      pid = spawn bin/"httpd", "-X", "-f", testpath/"httpd.conf"
 
       sleep 3
       sleep 2 if OS.mac? && Hardware::CPU.intel?

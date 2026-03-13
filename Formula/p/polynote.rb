@@ -3,8 +3,9 @@ class Polynote < Formula
 
   desc "Polyglot notebook with first-class Scala support"
   homepage "https://polynote.org/"
-  url "https://github.com/polynote/polynote/releases/download/0.6.1/polynote-dist.tar.gz"
-  sha256 "3d460e6929945591b6781ce11b11df8eebbfb9b6f0b3203861e70687c3eca3a1"
+  # TODO: consider switching back to dist when available: https://github.com/polynote/polynote/issues/1486
+  url "https://github.com/polynote/polynote/archive/refs/tags/0.7.2.tar.gz"
+  sha256 "6802606b38c34b7e0e3717675f6d92cae5419d5927314c51b238bbd15f1d73e4"
   license "Apache-2.0"
 
   # Upstream marks all releases as "pre-release", so we have to use
@@ -26,45 +27,63 @@ class Polynote < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "9b2efac6f87a4b3c29b2d12a93fffa42f2198d8836ef438ef1e56e40332601f2"
-    sha256 cellar: :any, arm64_sonoma:  "70cfaab129c7d151d28295af6ed37ce251b2a37b619cde49ec20b5325309226b"
-    sha256 cellar: :any, arm64_ventura: "b7d8fe06b593b1b8ee381b6b28d64a6202db69ddb988ac46fef84886bfac5725"
-    sha256 cellar: :any, sonoma:        "07716c02135db664f847fbb3c85676582729d19218ab3bbef44a0f6903debf52"
-    sha256 cellar: :any, ventura:       "3364fdd8e9136617db7a9a647e2175ff16e215cc18bfd85a67c007ce581cd2d3"
-    sha256               arm64_linux:   "ee7e85ff4e412dbad97ac25b161252099eb1a90c82863e4e4f1a87f9622cf5d8"
-    sha256               x86_64_linux:  "a62217d545dcbb8a7944defde2cade6f1dc802478f10749a688f370e19d0dc4e"
+    sha256 cellar: :any, arm64_tahoe:   "9e426d1ec0e516570fd0c40d836821823e100f7a5a9d80652ec27c4627d335b9"
+    sha256 cellar: :any, arm64_sequoia: "01156fa43ee0aa7ded51b47a59e25b6b2aaebdec065a2e6ae63b29aa13247766"
+    sha256 cellar: :any, arm64_sonoma:  "0f588261fb28e7388c9d59fe16378620daf5cfe958b7f02bafee2aff444a16b9"
+    sha256 cellar: :any, sonoma:        "ef680a88951b4c4c06d5bc61dbbbf4d755840bc82598758010b034389d9e0da8"
+    sha256               arm64_linux:   "1dbf3c452f49fa6153801b8800f2d2a5df304785a8a5d7bf7904ccdb42ac703c"
+    sha256               x86_64_linux:  "27764487ba7979d2f67f53d6828aef8d2d5a56a9aea1972c0e9c4a5e6b1fe542"
   end
 
+  depends_on "node" => :build
+  depends_on "python-setuptools" => :build # to detect numpy (and avoid building numpy when we use jep >= 4.3)
+  depends_on "sbt" => :build
   depends_on "numpy" # used by `jep` for Java primitive arrays
   depends_on "openjdk"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   resource "jep" do
-    url "https://files.pythonhosted.org/packages/0e/92/994ae1013446f26103e9ff71676f4c96a7a6c0a9d6baa8f12805884f7b5e/jep-4.2.2.tar.gz"
-    sha256 "4eb79d903133e468c239ba39c8bb5ade021ef202025bf1c9b34a210003e0eab9"
+    url "https://files.pythonhosted.org/packages/52/43/34d397902b3e7c9b667f855e4be41eb8ba5e62df999b563095f713d03cfa/jep-4.2.1.tar.gz"
+    sha256 "9ff9f9d431f11dc085220abac9b07905daacc70cfd6096451fea9b142d527c1b"
+
+    # Keep the jep version aligned with upstream's pinned requirement. Can be
+    # reconsidered if we hit a compatibility issues with newer Python or numpy.
+    livecheck do
+      url "https://raw.githubusercontent.com/polynote/polynote/refs/tags/#{LATEST_VERSION}/requirements.txt"
+      regex(/^jep==v?(\d+(?:\.\d+)+)$/i)
+    end
   end
 
   def install
-    python3 = "python3.13"
+    python3 = "python3.14"
+    pip_install_prefix = libexec/"vendor"
+    java_version = Formula["openjdk"].version.major.to_s
+    ENV["JAVA_HOME"] = java_home = Language::Java.java_home(java_version)
 
-    with_env(JAVA_HOME: Language::Java.java_home) do
-      resource("jep").stage do
-        # Help native shared library in jep resource find libjvm.so on Linux.
-        unless OS.mac?
-          ENV.append "LDFLAGS", "-L#{Formula["openjdk"].libexec}/lib/server"
-          ENV.append "LDFLAGS", "-Wl,-rpath,#{Formula["openjdk"].libexec}/lib/server"
-        end
-
-        system python3, "-m", "pip", "install", *std_pip_args(prefix: libexec/"vendor", build_isolation: true), "."
-      end
+    # https://github.com/polynote/polynote/blob/master/DEVELOPING.md#building-the-distribution
+    cd "polynote-frontend" do
+      system "npm", "install", *std_npm_args(prefix: false)
+      system "npm", "run", "dist"
     end
+    system "sbt", "dist"
 
-    libexec.install Dir["*"]
+    libexec.mkpath
+    system "tar", "-C", libexec.to_s, "--strip-components", "1", "-xf", "target/polynote-dist.tar.gz"
     rewrite_shebang detected_python_shebang, libexec/"polynote.py"
 
-    env = Language::Java.overridable_java_home_env
-    env["PYTHONPATH"] = libexec/"vendor"/Language::Python.site_packages(python3)
-    env["LD_LIBRARY_PATH"] = lib
+    resource("jep").stage do
+      # Help native shared library in jep resource find libjvm.so on Linux.
+      unless OS.mac?
+        ENV.append "LDFLAGS", "-L#{java_home}/lib/server"
+        ENV.append "LDFLAGS", "-Wl,-rpath,#{java_home}/lib/server"
+      end
+
+      system python3, "-m", "pip", "install", *std_pip_args(prefix: pip_install_prefix), "."
+    end
+
+    env = Language::Java.overridable_java_home_env(java_version)
+    env[:PYTHONPATH] = "#{pip_install_prefix/Language::Python.site_packages(python3)}:${PYTHONPATH}"
+    env[:LD_LIBRARY_PATH] = lib.to_s
     (bin/"polynote").write_env_script libexec/"polynote.py", env
   end
 
@@ -86,12 +105,9 @@ class Polynote < Formula
         dir: #{testpath}/notebooks
     YAML
 
+    pid = spawn bin/"polynote", "--config", testpath/"config.yml"
     begin
-      pid = fork do
-        exec bin/"polynote", "--config", "#{testpath}/config.yml"
-      end
       sleep 5
-
       assert_match "<title>Polynote</title>", shell_output("curl -s 127.0.0.1:#{port}")
     ensure
       Process.kill("TERM", pid)

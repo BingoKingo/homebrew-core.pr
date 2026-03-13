@@ -1,8 +1,8 @@
 class Murex < Formula
   desc "Bash-like shell designed for greater command-line productivity and safer scripts"
   homepage "https://murex.rocks"
-  url "https://github.com/lmorg/murex/archive/refs/tags/v6.4.2063.tar.gz"
-  sha256 "e980fdb8d822bf9ad8f26aa412b2771bdf154561e2dba4c30cc040db19232dd2"
+  url "https://github.com/lmorg/murex/archive/refs/tags/v7.2.1001.tar.gz"
+  sha256 "264a1b3ffca3fce8d8c1b0757e0498dc544fd5388694c405c6e4e42c6f87a82c"
   license "GPL-2.0-only"
   head "https://github.com/lmorg/murex.git", branch: "master"
 
@@ -12,12 +12,12 @@ class Murex < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ef6be22c52e53857cd33246c1c5e9232f762005db6b19583d8baef15f1a64c2b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ef6be22c52e53857cd33246c1c5e9232f762005db6b19583d8baef15f1a64c2b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ef6be22c52e53857cd33246c1c5e9232f762005db6b19583d8baef15f1a64c2b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "7e82a5cb3b5b6e410012c8c2d8d2488f96996586cdfbfc0c18e4b9c6071d5844"
-    sha256 cellar: :any_skip_relocation, ventura:       "7e82a5cb3b5b6e410012c8c2d8d2488f96996586cdfbfc0c18e4b9c6071d5844"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "839235b629a4335b65bd919e1d1e1d1b0671490bda7282bec06881f3da09bc63"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c3193c6beaeec3c1fe73f4248f0a805441fc01887da904b9c8f7c240dd1230bf"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c3193c6beaeec3c1fe73f4248f0a805441fc01887da904b9c8f7c240dd1230bf"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c3193c6beaeec3c1fe73f4248f0a805441fc01887da904b9c8f7c240dd1230bf"
+    sha256 cellar: :any_skip_relocation, sonoma:        "29d298fbd80b86cbdc2c095152d0395363c624e0a13dee033026506f2c21f108"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5f832eb214eb64fd60640fec5889c3b4458b0d68c1ef05616aa3889f315f29d2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8c08cad92194f238c4f3e5e7176a395a1cf74de294ea03aac04e2ddc29176319"
   end
 
   depends_on "go" => :build

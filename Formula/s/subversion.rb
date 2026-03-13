@@ -2,7 +2,7 @@ class Subversion < Formula
   desc "Version control system designed to be a better CVS"
   homepage "https://subversion.apache.org/"
   license "Apache-2.0"
-  revision 2
+  revision 3
 
   stable do
     url "https://www.apache.org/dyn/closer.lua?path=subversion/subversion-1.14.5.tar.bz2"
@@ -11,19 +11,19 @@ class Subversion < Formula
 
     # Fix -flat_namespace being used on Big Sur and later.
     patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+      url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-big_sur.diff"
       sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
     end
   end
 
   bottle do
-    sha256 arm64_sequoia: "dfd28a5fbb1065e271418d833393b6506c38517b8e1035271291cf32c0fbb09d"
-    sha256 arm64_sonoma:  "868351aba4efe60c49f906c85d312d845796566347983b65dd99c8181f84a77f"
-    sha256 arm64_ventura: "21091b526648e54c2925f039e602bde901534dec8bdba8492b7d7ba249b7d664"
-    sha256 sonoma:        "ab78f975d20697547a90ece32b942d1cc6f293409e03f9697125475fcd8f3369"
-    sha256 ventura:       "1769f8d068953dc7565a6258e35c1a8d04473dcb76a3d47e3ad5c9016cf13968"
-    sha256 arm64_linux:   "b72fd0fe9d755c3af711869c33ed08674c0d8c93716156cbd68c345107aab22f"
-    sha256 x86_64_linux:  "ae18ae190c2e2331dfad6c352068449cf677587692a9580ba3b9f7afa6469545"
+    rebuild 1
+    sha256 arm64_tahoe:   "ce4f041d63dc7d7d82169f6078adf8644689694185ec1cf97449aa675f28f8a8"
+    sha256 arm64_sequoia: "9af120df151d3839df30fd71222e6b2bb4a3ff5d6130a6d01d88c91c32251397"
+    sha256 arm64_sonoma:  "955bb3e745dc2953621198bb183460c405c63287a8c9e05da9a0812a5af10aa0"
+    sha256 sonoma:        "311df2025d05d11e0404c8945b086fc954074e9ca11e1cf936528c12abad69ed"
+    sha256 arm64_linux:   "9e2b9ba8f2a5ba0efaa5db767baefa2d228ab2192f7a88b3fb13e82e82038648"
+    sha256 x86_64_linux:  "c6c2674be10507ef292f4cb4385f184d74171f414efd95c1c99727e8bf100d66"
   end
 
   head do
@@ -31,38 +31,31 @@ class Subversion < Formula
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
-    depends_on "gettext" => :build
+    depends_on "libtool" => :build
   end
 
+  depends_on "gettext" => :build
   depends_on "pkgconf" => :build
   depends_on "python-setuptools" => :build
-  depends_on "python@3.13" => [:build, :test]
-  depends_on "scons" => :build # For Serf
+  depends_on "python@3.14" => [:build, :test]
   depends_on "swig" => :build
+  depends_on "apache-serf"
   depends_on "apr"
   depends_on "apr-util"
-
-  # build against Homebrew versions of
-  # gettext, lz4 and utf8proc for consistency
-  depends_on "gettext"
   depends_on "lz4"
-  depends_on "openssl@3" # For Serf
   depends_on "utf8proc"
 
+  uses_from_macos "perl" => [:build, :test]
+  uses_from_macos "ruby" => :build
   uses_from_macos "expat"
-  uses_from_macos "krb5"
-  uses_from_macos "perl"
-  uses_from_macos "ruby"
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
 
   on_macos do
-    # Prevent "-arch ppc" from being pulled in from Perl's $Config{ccflags}
-    patch :DATA
+    depends_on "gettext"
   end
 
   on_linux do
-    depends_on "libtool" => :build
+    depends_on "zlib-ng-compat"
   end
 
   resource "py3c" do
@@ -70,86 +63,26 @@ class Subversion < Formula
     sha256 "abc745079ef906148817f4472c3fb4bc41d62a9ea51a746b53e09819494ac006"
   end
 
-  resource "serf" do
-    url "https://www.apache.org/dyn/closer.lua?path=serf/serf-1.3.10.tar.bz2"
-    mirror "https://archive.apache.org/dist/serf/serf-1.3.10.tar.bz2"
-    sha256 "be81ef08baa2516ecda76a77adf7def7bc3227eeb578b9a33b45f7b41dc064e6"
-  end
-
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install
     py3c_prefix = buildpath/"py3c"
-    serf_prefix = libexec/"serf"
-
-    resource("py3c").unpack py3c_prefix
-    resource("serf").stage do
-      if OS.linux?
-        inreplace "SConstruct" do |s|
-          s.gsub! "env.Append(LIBPATH=['$OPENSSL/lib'])",
-          "\\1\nenv.Append(CPPPATH=['$ZLIB/include'])\nenv.Append(LIBPATH=['$ZLIB/lib'])"
-        end
-      end
-
-      inreplace "SConstruct" do |s|
-        s.gsub! "variables=opts,",
-        "variables=opts, RPATHPREFIX = '-Wl,-rpath,',"
-      end
-
-      # scons ignores our compiler and flags unless explicitly passed
-      krb5 = if OS.mac?
-        "/usr"
-      else
-        Formula["krb5"].opt_prefix
-      end
-
-      args = %W[
-        PREFIX=#{serf_prefix} GSSAPI=#{krb5} CC=#{ENV.cc}
-        CFLAGS=#{ENV.cflags} LINKFLAGS=#{ENV.ldflags}
-        OPENSSL=#{Formula["openssl@3"].opt_prefix}
-        APR=#{Formula["apr"].opt_prefix}
-        APU=#{Formula["apr-util"].opt_prefix}
-      ]
-
-      args << "ZLIB=#{Formula["zlib"].opt_prefix}" if OS.linux?
-
-      scons = Formula["scons"].opt_bin/"scons"
-      system scons, *args
-      system scons, "install"
-    end
+    resource("py3c").stage(py3c_prefix)
 
     # Use existing system zlib and sqlite
-    zlib = if OS.mac?
-      "#{MacOS.sdk_path_if_needed}/usr"
+    if OS.mac?
+      zlib = sqlite = MacOS.sdk_for_formula(self).path/"usr"
     else
-      Formula["zlib"].opt_prefix
-    end
-
-    sqlite = if OS.mac?
-      "#{MacOS.sdk_path_if_needed}/usr"
-    else
-      Formula["sqlite"].opt_prefix
-    end
-
-    # Use dep-provided other libraries
-    # Don't mess with Apache modules (since we're not sudo)
-    if OS.linux?
-      # svn can't find libserf-1.so.1 at runtime without this
-      ENV.append "LDFLAGS", "-Wl,-rpath=#{serf_prefix}/lib"
-      # Fix linkage when build-from-source as brew disables superenv when
-      # `scons` is a dependency. Can remove if serf is moved to a separate
-      # formula or when serf's cmake support is stable.
-      ENV.append "LDFLAGS", "-Wl,-rpath=#{HOMEBREW_PREFIX}/lib" unless build.bottle?
+      zlib = Formula["zlib"].opt_prefix
+      sqlite = Formula["sqlite"].opt_prefix
     end
 
     perl = DevelopmentTools.locate("perl")
     ruby = DevelopmentTools.locate("ruby")
 
     args = %W[
-      --prefix=#{prefix}
-      --disable-debug
       --enable-optimize
       --disable-mod-activation
       --disable-plaintext-password-storage
@@ -158,29 +91,27 @@ class Subversion < Formula
       --with-apxs=no
       --with-ruby-sitedir=#{lib}/ruby
       --with-py3c=#{py3c_prefix}
-      --with-serf=#{serf_prefix}
+      --with-serf=#{Formula["apache-serf"].opt_prefix}
       --with-sqlite=#{sqlite}
-      --with-swig=#{Formula["swig"].opt_prefix}
+      --with-swig-perl=#{perl}
+      --with-swig-python=#{which(python3)}
+      --with-swig-ruby=#{ruby}
       --with-zlib=#{zlib}
       --without-apache-libexecdir
       --without-berkeley-db
       --without-gpg-agent
       --without-jikes
-      PERL=#{perl}
-      PYTHON=#{which(python3)}
-      RUBY=#{ruby}
     ]
 
     # preserve compatibility with macOS 12.0–12.2
-    args.unshift "--enable-sqlite-compatibility-version=3.36.0" if OS.mac? && MacOS.version == :monterey
+    args << "--enable-sqlite-compatibility-version=3.36.0" if OS.mac? && MacOS.version == :monterey
 
     inreplace "Makefile.in",
               "toolsdir = @bindir@/svn-tools",
               "toolsdir = @libexecdir@/svn-tools"
 
-    # regenerate configure file as we patched `build/ac-macros/swig.m4`
     system "./autogen.sh" if build.head?
-    system "./configure", *args
+    system "./configure", *args, *std_configure_args
     system "make"
     ENV.deparallelize { system "make", "install" }
     bash_completion.install "tools/client-side/bash_completion" => "subversion"
@@ -257,24 +188,3 @@ class Subversion < Formula
     system python3, "-c", "import svn.client, svn.repos"
   end
 end
-
-__END__
-diff --git a/subversion/bindings/swig/perl/native/Makefile.PL.in b/subversion/bindings/swig/perl/native/Makefile.PL.in
-index a60430b..bd9b017 100644
---- a/subversion/bindings/swig/perl/native/Makefile.PL.in
-+++ b/subversion/bindings/swig/perl/native/Makefile.PL.in
-@@ -76,10 +76,13 @@ my $apr_ldflags = '@SVN_APR_LIBS@'
-
- chomp $apr_shlib_path_var;
-
-+my $config_ccflags = $Config{ccflags};
-+$config_ccflags =~ s/-arch\s+\S+//g;
-+
- my %config = (
-     ABSTRACT => 'Perl bindings for Subversion',
-     DEFINE => $cppflags,
--    CCFLAGS => join(' ', $cflags, $Config{ccflags}),
-+    CCFLAGS => join(' ', $cflags, $config_ccflags),
-     INC  => join(' ', $includes, $cppflags,
-                  " -I$swig_srcdir/perl/libsvn_swig_perl",
-                  " -I$svnlib_srcdir/include",

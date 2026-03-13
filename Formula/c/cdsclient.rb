@@ -1,18 +1,19 @@
 class Cdsclient < Formula
   desc "Tools for querying CDS databases for astronomical data"
-  homepage "https://cdsarc.u-strasbg.fr/doc/cdsclient.html"
-  url "https://cdsarc.u-strasbg.fr/ftp/pub/sw/cdsclient-4.07.tar.gz"
+  homepage "https://cdsarc.cds.unistra.fr/doc/cdsclient.html"
+  url "https://cdsarc.cds.unistra.fr/ftp/pub/sw/cdsclient-4.07.tar.gz"
   sha256 "4a0a02cb1dc48bc9a0873ebb3ef9b031f9288baf13a3573f885a8504f9c317c5"
   license "GPL-3.0-only"
 
   # This directory listing page also links to `python-cdsclient` tarballs, so
   # we have to use a stricter regex (instead of the usual `href=.*?`).
   livecheck do
-    url "https://cdsarc.u-strasbg.fr/ftp/pub/sw/"
+    url "https://cdsarc.cds.unistra.fr/ftp/pub/sw/"
     regex(/href=["']?cdsclient[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "47fd63a71583aeb84d0624a2d5914cb6e20c2364bc906d4da8263f583024c59a"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "0523647ffcb98339e8c9f2424d20afa561ae87caf6734eea0142439b9a655397"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a9a0d2c2f3822aa4a2c23f64d1921c3bd2c3f25d64004ad90868f9ccc303cef3"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "ce712b39898660b3b383ecbb7cea31aac7681fb14980982f99c3b59cc5d130dc"

@@ -1,9 +1,9 @@
 class Openvpn < Formula
   desc "SSL/TLS VPN implementing OSI layer 2 or 3 secure network extension"
   homepage "https://openvpn.net/community/"
-  url "https://swupdate.openvpn.org/community/releases/openvpn-2.6.14.tar.gz"
-  mirror "https://build.openvpn.net/downloads/releases/openvpn-2.6.14.tar.gz"
-  sha256 "9eb6a6618352f9e7b771a9d38ae1631b5edfeed6d40233e243e602ddf2195e7a"
+  url "https://swupdate.openvpn.org/community/releases/openvpn-2.7.0.tar.gz"
+  mirror "https://build.openvpn.net/downloads/releases/openvpn-2.7.0.tar.gz"
+  sha256 "2f0e10eb272be61e8fb25fe1cfa20875ff30ac857ef1418000c02290bd6dfa45"
   license "GPL-2.0-only" => { with: "openvpn-openssl-exception" }
 
   livecheck do
@@ -12,13 +12,12 @@ class Openvpn < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "d304c987b52e8ceab1217df11dc29d146cb7365691c204a198083b6ddac212a6"
-    sha256 arm64_sonoma:  "02b8aa3654cc4b7a849edf562c2d38f5d99117351eff12cd3bb3aed0518d394c"
-    sha256 arm64_ventura: "b842dee9d24123a0926ea9ea4a050b85b5e440597dfbf07e2e1b078f468ecf50"
-    sha256 sonoma:        "c87079ceb7eff3e98c9918243698dd4d3f1f499a52a9250fc235b5f7615d666e"
-    sha256 ventura:       "61e23b893b99b322dcbe38e006a6d2016c654099970add6357c99dac6be5e692"
-    sha256 arm64_linux:   "0c18f74edca2b997ef8b663487f796f715a7bce351a08c2c97992614c3f05102"
-    sha256 x86_64_linux:  "27fde18eb1f1bc5105c2a94812af5e270ef7eead8acec56446a620718613a00e"
+    sha256 arm64_tahoe:   "9556ad7724a36ce5c2d015d226ead32d78051f85b795f662d15b0b879a55ab59"
+    sha256 arm64_sequoia: "ebf95c77f4a8ac83d50b0a62cb2c5b913a3e594f6ea9c5237776a5f3c242628c"
+    sha256 arm64_sonoma:  "27016d74a0169d025635c8e94152f4e46b58a41078a0a6f8dcb0175b46b6a784"
+    sha256 sonoma:        "5c8a4352ed57a16917c30709681fd558c77e94760cea767179de28efc532bda5"
+    sha256 arm64_linux:   "36b3317cb6d4e11e871fc70c00de6439534c00348da2eca17c81a9b48d8a0e3d"
+    sha256 x86_64_linux:  "51ca6876b41a2f3e01b3ba9fc56ad5f464d6e9a611f26bc10fe80198cd04ee4a"
   end
 
   depends_on "pkgconf" => :build
@@ -57,9 +56,7 @@ class Openvpn < Formula
 
     # We don't use mbedtls, so this file is unnecessary & somewhat confusing.
     rm doc/"README.mbedtls"
-  end
 
-  def post_install
     (var/"run/openvpn").mkpath
   end
 

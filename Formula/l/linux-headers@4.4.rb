@@ -5,6 +5,11 @@ class LinuxHeadersAT44 < Formula
   sha256 "66271f9d9fce8596622e8154ca0ea160e46b78a5a6c967a15b55855f744d1b0b"
   license "GPL-2.0-only"
 
+  livecheck do
+    url "https://cdn.kernel.org/pub/linux/kernel/v4.x/"
+    regex(/href=.*?linux[._-]v?(4\.4(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
     rebuild 1
     sha256 cellar: :any_skip_relocation, arm64_linux:  "b809f68c023e71c860af7b6fa6f57f6e3e55130fc69b20fc42f8c4c9685b7b3e"

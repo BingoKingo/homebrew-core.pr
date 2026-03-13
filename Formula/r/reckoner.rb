@@ -1,27 +1,29 @@
 class Reckoner < Formula
   desc "Declaratively install and manage multiple Helm chart releases"
   homepage "https://github.com/FairwindsOps/reckoner"
-  url "https://github.com/FairwindsOps/reckoner/archive/refs/tags/v6.1.0.tar.gz"
-  sha256 "499d31ca10e1ab0e09a8ede5a8bf9adeab88d8d081f57ee30b1cc3f0864735b7"
+  url "https://github.com/FairwindsOps/reckoner/archive/refs/tags/v6.2.0.tar.gz"
+  sha256 "7d43511db233739f1584c2d0875333c97a9470b4689dd2d65a36d1d591096d7a"
   license "Apache-2.0"
   head "https://github.com/FairwindsOps/reckoner.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "94837511a2176e73a13857a65e796c789b0eab21426754d8964fa5f23a70d830"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "94837511a2176e73a13857a65e796c789b0eab21426754d8964fa5f23a70d830"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "94837511a2176e73a13857a65e796c789b0eab21426754d8964fa5f23a70d830"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c306a999e8b9f99767918beaf886b698646bf0df84aaf0f84f8f2ba5be257dec"
-    sha256 cellar: :any_skip_relocation, ventura:       "c306a999e8b9f99767918beaf886b698646bf0df84aaf0f84f8f2ba5be257dec"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "728e430d18ad959bd4722c12b93cc7f06462878e85de54d2ab069246e8326f63"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "52f96d24f75c2000278fe7ed91fe73d982683297d158e118e345331d24580804"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "52f96d24f75c2000278fe7ed91fe73d982683297d158e118e345331d24580804"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "52f96d24f75c2000278fe7ed91fe73d982683297d158e118e345331d24580804"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d14ba71c34740a9dd2ae9bbf97fd3f118dd1dcfd92bc267ef69d7daca27d8a8a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d20750b1c3e9b5c39f9c67970c2dd9295769a9d2fa3a581ce61a9d4a4ae546ec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d44c9b58fe4752068e76ff69d1201a31434564482c05a7242220e4bf5fe26d98"
   end
 
   depends_on "go" => :build
   depends_on "helm"
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version} -X main.commit=#{tap.user}")
+    ldflags = "-s -w -X main.version=#{version} -X main.commit=#{tap.user}"
+    system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"reckoner", "completion")
+    generate_completions_from_executable(bin/"reckoner", shell_parameter_format: :cobra)
   end
 
   test do

@@ -1,19 +1,18 @@
 class CargoUpdate < Formula
   desc "Cargo subcommand for checking and applying updates to installed executables"
   homepage "https://github.com/nabijaczleweli/cargo-update"
-  url "https://github.com/nabijaczleweli/cargo-update/archive/refs/tags/v16.3.0.tar.gz"
-  sha256 "f6a87615d72db3f1068aef2ad383813a96238c4963f6498c675c555a32e95bd3"
+  url "https://github.com/nabijaczleweli/cargo-update/archive/refs/tags/v18.1.1.tar.gz"
+  sha256 "764cb9b6657fc0eca39479cd0c25c247e18c62e3bb278edec4dfcf2eda626c7c"
   license "MIT"
   head "https://github.com/nabijaczleweli/cargo-update.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "fac5a0bbdabd219af1a3b8362a4d923258cb7ed8854fc3ee6024ea010ecdd071"
-    sha256 cellar: :any,                 arm64_sonoma:  "25c2875557d1656e2e5c99d23d0582a84de3631733c582064028e8348d7224b4"
-    sha256 cellar: :any,                 arm64_ventura: "62375ed3e54f4d5a1d9f8dfc1abaf0d5e5b9a839f4a7f5bc3223bd6d38ef714f"
-    sha256 cellar: :any,                 sonoma:        "7a2a23e55a4f684351c19f13ac8b965ac0854fc9686e6bacc13de5ab958460fa"
-    sha256 cellar: :any,                 ventura:       "f57d7c2c979d343bb5e725c50de39026f8644e55eed9f00f3126761d502f4ca4"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4c96a062dcaac5f63296612da05613264362545c7c4e7f47fd697f36a88d03f5"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e23607c021b9163f0f903a3eac5f3545379fb1ed745d65a161477aae1e27dc2a"
+    sha256 cellar: :any,                 arm64_tahoe:   "5569dfa80bbe593fe7d57ec8606318172b7ff37069763b790be9f8185e62d126"
+    sha256 cellar: :any,                 arm64_sequoia: "8c87cd2c91339697c3f3bc7bebacc3a35734ce392079abcfcdde4974b5fc4c22"
+    sha256 cellar: :any,                 arm64_sonoma:  "390978799d026193d544e3bc3414228402f92c0b17919f0a5a6bc04841c77432"
+    sha256 cellar: :any,                 sonoma:        "0d055d98a8329702942537f5fd0b9a0682e00f3b775b753f20bded9f24303f63"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7226bf6277cd6bb74da2cb0bf3051314e89e223bdebe1b8e38d3a34a50ac4a70"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a7caf715ab9ce6a3bf47e55aeca020b658aa5c29ecea0d2b32b9851d194d8c36"
   end
 
   depends_on "pkgconf" => :build
@@ -25,7 +24,10 @@ class CargoUpdate < Formula
   depends_on "openssl@3"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     ENV["LIBGIT2_NO_VENDOR"] = "1"

@@ -1,19 +1,18 @@
 class Viu < Formula
   desc "Simple terminal image viewer written in Rust"
   homepage "https://github.com/atanunq/viu"
-  url "https://github.com/atanunq/viu/archive/refs/tags/v1.5.1.tar.gz"
-  sha256 "bd1bc61367420dcbb1ab46df53a46fd7d35379960c9ab39bbccb7ace5afaeb62"
+  url "https://github.com/atanunq/viu/archive/refs/tags/v1.6.1.tar.gz"
+  sha256 "639c1fe14aee5e34b635de041ac77177e2959cf26072d8ef69c444b15c8273bd"
   license "MIT"
   head "https://github.com/atanunq/viu.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "298b762aae2f3d85767ff186854b274d75b684276c91bb9048a17142cb690e04"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f8518d30560a1d752ced697787cd009e895e13e72c2d07f59413321f487abea9"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e6bd7363df65a5b02121c0ba2ad2267983432e70a1a4396dbd5dab19a8c4c673"
-    sha256 cellar: :any_skip_relocation, sonoma:        "392053a600ae8d3a24db90f17c2e1ff88a4a00d047c15ec94c112cd193b9d70b"
-    sha256 cellar: :any_skip_relocation, ventura:       "22194f25fab54b3543e2902d2b028d9767a00788bbc69eb4bc9591ee7682aaee"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "259fa1d80abdad023497161eddfaf32f334a32a867302506884c0ae149c2a859"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "da1bdb071e5a0e473a01d3cfbbbd88546184c20c61b0fd14b9b941b449474f3f"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "2694fb155f4988be81bd67c050d325e5dd9f62e5bac209cf5d19eabfaa7fad79"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "48035c9823fcc6893b4fa87efe62cffc560067953ec9d682a479f17020cf209a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8413ae0bc937ec8ef32a51c5f54875fb0132716a8026b187da9309b69f537c37"
+    sha256 cellar: :any_skip_relocation, sonoma:        "1eaa2b1b7c7f62d56276d991a3447082dbc272483d57a1acf098a552f960f496"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "db070777cb64b7e976373584ef41b92f3ab244607ee0ca8900a4d6c5270bc44d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "664ccb5be9cf3f304250d248a85e633b9baa1804bebcf46c67672aebe5ecfcc5"
   end
 
   depends_on "rust" => :build
@@ -23,7 +22,7 @@ class Viu < Formula
   end
 
   test do
-    expected_output = "\e[0m\e[38;5;202m▀\e[0m"
+    expected_output = "\e_Gi=31,s=1,v=1,a=q,t=d,f=24;AAAA\e\\\e[c\e[0m\e[38;5;202m▀\e[0m"
     output = shell_output("#{bin}/viu #{test_fixtures("test.jpg")}").chomp
     assert_equal expected_output, output
   end

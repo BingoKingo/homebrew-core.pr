@@ -1,14 +1,14 @@
 class Xmount < Formula
   desc "Convert between multiple input & output disk image types"
   homepage "https://www.sits.lu/xmount"
-  url "https://code.sits.lu/foss/xmount/-/archive/1.2.0/xmount-1.2.0.tar.bz2"
-  sha256 "07c261e54e1e4cbcd4f7eaaf4f62efcbbbc68c76797ddca704592d99ebed3d10"
+  url "https://code.sits.lu/foss/xmount/-/archive/1.3.1/xmount-1.3.1.tar.bz2"
+  sha256 "422185f1b99ec9e1077201a3a8587fa850068138d1ce685f636305bd19b7a71a"
   license "GPL-3.0-or-later"
-  revision 1
 
   bottle do
-    sha256 arm64_linux:  "1de5d61365c208673d84f059724faff5d1930c9807579ac6b05627546717bc8f"
-    sha256 x86_64_linux: "1b6e3ef254b9fb27d176d6af4ecebda6c9b44f3b02244e543295a03d20831d97"
+    rebuild 1
+    sha256 arm64_linux:  "8d3444a83f6d79aa7b8034a4bcc93a3d2711b7209911ce0fd3b733011b94d2da"
+    sha256 x86_64_linux: "fe78cd0d0609e30fa63acce7871b03734181cb931948485158b70b687082a1c8"
   end
 
   depends_on "cmake" => :build
@@ -17,7 +17,7 @@ class Xmount < Formula
   depends_on "libewf"
   depends_on "libfuse"
   depends_on :linux # on macOS, requires closed-source macFUSE
-  depends_on "zlib"
+  depends_on "zlib-ng-compat"
 
   def install
     system "cmake", "-S", ".", "-B", "build", "-DCMAKE_POLICY_VERSION_MINIMUM=3.5", *std_cmake_args

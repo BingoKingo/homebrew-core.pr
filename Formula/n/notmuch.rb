@@ -3,8 +3,8 @@ class Notmuch < Formula
 
   desc "Thread-based email index, search, and tagging"
   homepage "https://notmuchmail.org/"
-  url "https://notmuchmail.org/releases/notmuch-0.39.tar.xz"
-  sha256 "b88bb02a76c46bad8d313fd2bb4f8e39298b51f66fcbeb304d9f80c3eef704e3"
+  url "https://notmuchmail.org/releases/notmuch-0.40.tar.xz"
+  sha256 "4b4314bbf1c2029fdf793637e6c7bb15c1b1730d22be9aa04803c98c5bbc446f"
   license "GPL-3.0-or-later"
   head "https://git.notmuchmail.org/git/notmuch", using: :git, branch: "master"
 
@@ -14,17 +14,17 @@ class Notmuch < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "d82ad567f35dc86cfe9c3238f211849ec7ebd6a64d39728d1be7979885c19a2d"
-    sha256 cellar: :any,                 arm64_sonoma:  "ff9e440133a39ffb3a01054b5762e0d5ed7ed14b7aa66db9dc3d586540fc0918"
-    sha256 cellar: :any,                 arm64_ventura: "e384a4f762886b8d5e59f6e752574085d2af177c370caab601668eda1725549f"
-    sha256 cellar: :any,                 sonoma:        "f2234ee4ad5abe3603aafdd2a79f838c409b5385b4e57cfc9e9e4a794d87d4bc"
-    sha256 cellar: :any,                 ventura:       "66dc7a1087e43c91d4a4173a1e8f1f84ec30c9ce852be303440d5f8fc735179d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8ba411d8183c7e59331dc5bb6df073d8b2b2cbf17ca94c5d61a382a9a2400816"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "66b8788cc35e7be17f259b58f807332e5a18bf444578a33e54b3e4f9162f058f"
+    sha256 cellar: :any,                 arm64_tahoe:   "cafbd5ffd9eb60479b8edf50891ec9f2b08bdd21e146f5f04eda782480db75b8"
+    sha256 cellar: :any,                 arm64_sequoia: "63cdd5c3afdff3c28ee8f2a5fa3fa413f4bf4553bace983239cbef29a01763af"
+    sha256 cellar: :any,                 arm64_sonoma:  "05cf2893b94f0e0480d2f630b47bc442d62d14141609ae5f49a5c43448bdda13"
+    sha256 cellar: :any,                 sonoma:        "d9237123ce3a5e4f3ccac403836f39f800c15e4868d17ca1ad01ba8192e16146"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "259509347674489fc0f424df7e95590b5ee9f6b878a8a8b22d74a6f239f3c18f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e1adead0a4a2502fd61aeace8890dee06054263d4c6fae6a783af826cb3cccb6"
   end
 
   depends_on "doxygen" => :build
   depends_on "emacs" => :build
+  depends_on "gnupg" => :build
   depends_on "libgpg-error" => :build
   depends_on "pkgconf" => :build
   depends_on "sphinx-doc" => :build
@@ -32,19 +32,21 @@ class Notmuch < Formula
   depends_on "cffi"
   depends_on "glib"
   depends_on "gmime"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
   depends_on "sfsexp"
   depends_on "talloc"
   depends_on "xapian"
-
-  uses_from_macos "zlib", since: :sierra
 
   on_macos do
     depends_on "gettext"
   end
 
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install
@@ -87,7 +89,7 @@ class Notmuch < Formula
       assert str(db.path) == '#{testpath}/Mail', 'Wrong db.path!'
       db.close()
     PYTHON
-    system bin/"notmuch-git", "-C", "#{testpath}/git", "init"
+    system bin/"notmuch-git", "-C", testpath/"git", "init"
     assert_path_exists testpath/"git"
   end
 end

@@ -1,18 +1,18 @@
 class Xc < Formula
   desc "Markdown defined task runner"
   homepage "https://xcfile.dev/"
-  url "https://github.com/joerdav/xc/archive/refs/tags/v0.8.5.tar.gz"
-  sha256 "374b3d4fe19355a1bc5ba63fd8bc346f027e6a1dbb04af631683ca45a24d806a"
+  url "https://github.com/joerdav/xc/archive/refs/tags/v0.9.0.tar.gz"
+  sha256 "afcb5e1fbd1be5f0b6dcb802e02c96527ac0e96ddeb47471b8ad4056f91ccc72"
   license "MIT"
   head "https://github.com/joerdav/xc.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "91d348a6a7d5cf6da756ee17c7e4711f010c16725b71fd01e10cd310e62a9b88"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "91d348a6a7d5cf6da756ee17c7e4711f010c16725b71fd01e10cd310e62a9b88"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "91d348a6a7d5cf6da756ee17c7e4711f010c16725b71fd01e10cd310e62a9b88"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3209aa028690d1b115b4c19d1b4cbe0d38289abbc3c57f68b97a6311afe34afd"
-    sha256 cellar: :any_skip_relocation, ventura:       "3209aa028690d1b115b4c19d1b4cbe0d38289abbc3c57f68b97a6311afe34afd"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d77bc7fbcefb48acfd459581bd5f354203efa3b41f96c2dae336b9c8c4953548"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "6f689507921d13ac9c5c3b31858a07034fdde3c9b2745cff3965bba02b8de3b7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6f689507921d13ac9c5c3b31858a07034fdde3c9b2745cff3965bba02b8de3b7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6f689507921d13ac9c5c3b31858a07034fdde3c9b2745cff3965bba02b8de3b7"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e56d4eef3826dcd65197d0b5f38eb49632d374163b59af75695050645018d1f4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "61c8010926e5f1fa66da4eb63c21dafe8e5f92febd5de72d3d542f309a25c3c3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "965b9b02792fdfae0f1072431a50dea31e8df09bde42521c3b2eadb9432b5c09"
   end
 
   depends_on "go" => :build

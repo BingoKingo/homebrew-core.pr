@@ -1,21 +1,20 @@
 class Flow < Formula
   desc "Static type checker for JavaScript"
   homepage "https://flow.org/"
-  url "https://github.com/facebook/flow/archive/refs/tags/v0.268.0.tar.gz"
-  sha256 "1b0398c6fca956b0b049af3e8cbac6e6f401bc467e67eff42cc2ee94b250ba7e"
+  url "https://github.com/facebook/flow/archive/refs/tags/v0.305.0.tar.gz"
+  sha256 "8aadfb6c143df03ffe342cd5e5ee4f3bfa1407f627a41acb63b5623e4fb1a0fa"
   license "MIT"
   head "https://github.com/facebook/flow.git", branch: "main"
 
   no_autobump! because: :bumped_by_upstream
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ec745d574decfa38068d8a8ff1443c9d3b7b0477a0f0c91e03e77b7c885d6456"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "83575915a7e58ed6bb2df0b87ac243ebe210872e12ee1435484b8adbcc94ce63"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "791fcc000d6f21e8ec05bf52b2155b76cca53054465afb3247beabf510a572c7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1cedd167d44532f44d1b6cb96f615a28acdcac312141249a22dbb223c5bfa0ef"
-    sha256 cellar: :any_skip_relocation, ventura:       "778d8e7ceefaf0b04e043376c0da36132d5dd0c8eb0ccedec5221c89e6decdd2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e9b1ff08eeb167f702b477c9c866c21005133a3267bfbf725b4f8838d305f685"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8ea8923b5d4b8020ecd77357f7f1901dd64a4ae1e2c0bd9ea74726532214368c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "5786c33ba881ca3d9826f8d34c14797677e178a70127f4778434a1c6e000c36d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7585e53f436287ad814691d9bda49a9ccd25e0ba6cffc7e6e6518c701328d7b4"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "10e57534ac94dbc0d26b813c69d6c17d57017bf8bbf77b1ba0d54429a9981095"
+    sha256 cellar: :any_skip_relocation, sonoma:        "fe32eb7fc05e9178aa3438cd7e587596dad53f2d3cedea2f454e899afa2bbf6d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1167265f003512b86d313aae7559acf49721ff5a8455da7a489bc0c101fe057d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "361c89dfd2106b017d61e4764d7f16b1eef0b141d43b538d4f0ed5c2a6c6856e"
   end
 
   depends_on "ocaml" => :build

@@ -12,6 +12,7 @@ class Libotr < Formula
 
   bottle do
     rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:    "3b60c300a23960e3d70ba6fb0df3326ab6dd1236aecff5417bc55984b9510942"
     sha256 cellar: :any,                 arm64_sequoia:  "5e6fdf2cd7cc293066a7875b10c684b7058b553ad85ff949e18045d0aca47b6d"
     sha256 cellar: :any,                 arm64_sonoma:   "1a9fee4f64cdd96f0c0d0594e03a8855c2f0936a0c1c1272c433e591bc82ad4d"
     sha256 cellar: :any,                 arm64_ventura:  "758ad5aecffe69404a6b32062bbdef4a7c6b89dab5d635b1f1f41b46f676e12f"
@@ -28,9 +29,13 @@ class Libotr < Formula
 
   depends_on "libgcrypt"
 
+  on_macos do
+    depends_on "libgpg-error"
+  end
+
   # Fix -flat_namespace being used on Big Sur and later.
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-pre-0.4.2.418-big_sur.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-pre-0.4.2.418-big_sur.diff"
     sha256 "83af02f2aa2b746bb7225872cab29a253264be49db0ecebb12f841562d9a2923"
   end
 

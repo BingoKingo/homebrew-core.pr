@@ -1,10 +1,11 @@
 class Aflxx < Formula
   desc "American Fuzzy Lop++"
   homepage "https://aflplus.plus/"
-  url "https://github.com/AFLplusplus/AFLplusplus/archive/refs/tags/v4.32c.tar.gz"
-  version "4.32c"
-  sha256 "dc7f59a11ce8cf67a3ed09a5ac78028c6f793b239b21fd83e5b2370cea166926"
+  url "https://github.com/AFLplusplus/AFLplusplus/archive/refs/tags/v4.35c.tar.gz"
+  version "4.35c"
+  sha256 "b6e3d90ad65c7adb5681803126454f979e15b1e74323aecf2603cab490202249"
   license "Apache-2.0"
+  revision 1
 
   livecheck do
     url :stable
@@ -12,24 +13,32 @@ class Aflxx < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "d3981003e70e3748b65bfd413bd1034d6f95a4bc962128e7555bab38db762c1f"
-    sha256 arm64_sonoma:  "ce9015f31f08176bca50eb207fa89ea7970df962a8afb887d5597c94c97bba60"
-    sha256 arm64_ventura: "ef8a3dc7bba864eece4e9ee56f4c9f15cdbe03652ff2c830e0eaca58b6125629"
-    sha256 sonoma:        "5afe8218e6fe35e02438154c46ce0dafbd97a04444e451b407974bd9da2db50c"
-    sha256 ventura:       "ccf6081f157cac6dda19f4057bc6d061f8dea6faed0259ba4be279b1228fae94"
-    sha256 arm64_linux:   "92d91deeb4540da360c8886d2b79014db02678586d50349fcfc16412d509eda7"
-    sha256 x86_64_linux:  "048eb774523b3319f185d2f89d95ab831525d8d3cf3c0bf2c530d63a9597be39"
+    sha256 arm64_tahoe:   "c2df51739b4ef3e4bbf9ada1b5ab57c8fffc848fba7b98ff6fcdd511780b8bc2"
+    sha256 arm64_sequoia: "f97a1c2a01bed341f7e6b69ff188b151e5dc834d1dd4f14aee67c53bf0b970c5"
+    sha256 arm64_sonoma:  "9a12e059552523cd95101619d18cb4badcb30d4971234aad8ed7799044e5d63c"
+    sha256 sonoma:        "297c153c14b348dd98806bd00f0307e6313f136201e5b3c82893c458143ab649"
+    sha256 arm64_linux:   "fa49c337fd021355f5caf47f14b0b48267576edb017441b033fe7562c3717fec"
+    sha256 x86_64_linux:  "59cc5f6537182866131bece8d8f9d79f7cab1f3b871fe0eaf5bfac7275b3c333"
   end
 
   depends_on "coreutils" => :build
   depends_on "llvm"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # The Makefile will insist on compiling with LLVM clang even without this.
   fails_with :clang
   fails_with :gcc
+
+  # Backport fix for LLVM 22
+  patch :DATA
+  patch do
+    url "https://github.com/AFLplusplus/AFLplusplus/commit/5e8278daa453328aeb5c599e0ff359e5057108f0.patch?full_index=1"
+    sha256 "49fc530c92b716f7762c2bf45c8e287b2d22aff907520bff6ba3a5687169d945"
+  end
 
   def install
     ENV.prepend_path "PATH", Formula["coreutils"].libexec/"gnubin"
@@ -72,3 +81,22 @@ class Aflxx < Formula
     assert_equal "Hello, world!", shell_output("./test")
   end
 end
+
+__END__
+diff --git a/docs/Changelog.md b/docs/Changelog.md
+index 29d700094e..e81124ad75 100644
+--- a/docs/Changelog.md
++++ b/docs/Changelog.md
+@@ -4,7 +4,11 @@
+   release of the tool. See README.md for the general instruction manual.
+ 
+ 
+-### Version ++4.35a (dev)
++### Version ++4.36a (dev)
++  - ...
++
++
++### Version ++4.35a (release)
+   - GUIFuzz++ merged: Unleashing Grey-box Fuzzing on Desktop Graphical User
+                       Interfacing Applications
+     https://futures.cs.utah.edu/papers/25ASE.pdf

@@ -1,19 +1,18 @@
 class Havener < Formula
   desc "Swiss army knife for Kubernetes tasks"
   homepage "https://github.com/homeport/havener"
-  url "https://github.com/homeport/havener/archive/refs/tags/v2.2.6.tar.gz"
-  sha256 "f5fe8bc809694bd8c757c3ddaac91cdcc20eb9efc988dd736838b0a8bbfdf7e8"
+  url "https://github.com/homeport/havener/archive/refs/tags/v2.2.7.tar.gz"
+  sha256 "f923cd42bb4ded5535aa089037bc285110b2bc335ae108553e50ac8bddeafff0"
   license "MIT"
   head "https://github.com/homeport/havener.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "782f87dbacbc1f10917ce27d6c55a7b056a79599d8cb278a4177f083f997df94"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f4d9fa80983fc35b46c5fdf848329e6411f7721fb682c2b7e47f245a18d1284c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "7508c64e16751ec9db51a2c3bb20723c81a63d41e1c5f764cd905f80c1f01501"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d92ca660499fd2425363e86b2a4e8705d66f6fdca8ecd9d67df608268f5957c3"
-    sha256 cellar: :any_skip_relocation, ventura:       "c0c17a5fc1a6da70aa556b4fd99705774d13d1afd2a66e0b027d76177a08b9ed"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f045d9de94acb50ebf35282493b8111f01e7b94acb8dac684df1b4cc2d2fd1fc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b26d282528a406601cfe3abb4d5ad3d5809b0403e00389d6e8736750d35ce419"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "4397c0d71d256f7b8421d9594c5ee43c4f13b36b55bd54321537a24377b92545"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5ce7e308cf1a51537d8a5a2d48ec5a024d6e7d340ca2f304e279512ba7e49bcd"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bfacaa784ba083394e92da83f9bca7ed6881e2c58393e75fd08d69323020087f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "532bac41859f345e8109fbf42e907252e63baab9898ae6254f626119b6fc8d6a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "75dba74d30e26878c3c1640d43bfd02fc403d45b5292f52d19288da461cb3ab0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "14c8e859323222fd570e03f56edd2290754bfdc6740c1f3de551683945967cf9"
   end
 
   depends_on "go" => :build
@@ -22,7 +21,7 @@ class Havener < Formula
     ldflags = "-s -w -X github.com/homeport/havener/internal/cmd.version=#{version}"
     system "go", "build", *std_go_args(ldflags:), "./cmd/havener"
 
-    generate_completions_from_executable(bin/"havener", "completion")
+    generate_completions_from_executable(bin/"havener", shell_parameter_format: :cobra)
   end
 
   test do

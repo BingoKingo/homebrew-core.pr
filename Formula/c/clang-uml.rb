@@ -1,25 +1,24 @@
 class ClangUml < Formula
   desc "Customizable automatic UML diagram generator for C++ based on Clang"
   homepage "https://github.com/bkryza/clang-uml"
-  url "https://github.com/bkryza/clang-uml/archive/refs/tags/0.6.1.tar.gz"
-  sha256 "a64c3cae87a282be207e4c5faf47534dca21b06cb6f463bb7b04de979dccf17e"
+  url "https://github.com/bkryza/clang-uml/archive/refs/tags/0.6.2.tar.gz"
+  sha256 "004540c328699f81abebceb33a4661b548ab3a5f74096da2c025b9971b2b17ff"
   license "Apache-2.0"
-  revision 1
+  revision 3
   head "https://github.com/bkryza/clang-uml.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "78792810ae5fa540819d95061fd4c16a3acce6570c191267ea7a31a5c40c4a13"
-    sha256 cellar: :any,                 arm64_sonoma:  "a145222bb207e95e0102386b1911148d7ea1be0db1051d20e4a18a7a1f1bf4dc"
-    sha256 cellar: :any,                 arm64_ventura: "3cf910c698552bcf4b322ea3588dd3b952773616e30d6feff364a6c9d1b7e42e"
-    sha256 cellar: :any,                 sonoma:        "b12708defd94eeb41e5c1af4b8e397483d7444e704b652263949bc41fc00d686"
-    sha256 cellar: :any,                 ventura:       "105421cec43a3418a3f46a83cab33805e671014b8be86c8ca83468dcc6ba1ebe"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4f92f71cc357fabc60d14b08b60cf17807c12339eea355e590c77156e070f205"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "57b66ce132290a5e67e4741d710ea35edee791b9379ae43aacb9c7f403fe3351"
+    sha256 cellar: :any,                 arm64_tahoe:   "09d6e2f4a448df8604d583726c4bc4fad23804c6cb3cb11bcdb4007ebdf2c71f"
+    sha256 cellar: :any,                 arm64_sequoia: "8596889c658b3b6695bb5cf5be228046eace2abd2677a0d42a0a7da953c18548"
+    sha256 cellar: :any,                 arm64_sonoma:  "a4966abf98faf0a18785840502690082e24e010606ed9ab26476005a858e277d"
+    sha256 cellar: :any,                 sonoma:        "1ae21e3d38f4ed9136b5ce7f36690306581114f09412127ca984ef082e027668"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ac1e9e7930ab31e993181bc157bca9c3492522181d20aa64e1a76afebe66139d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "053e3c88b09c766f03ff7ce0068399201d1e4c5893f5bf4704f343414365e266"
   end
 
   depends_on "cmake" => [:build, :test]
   depends_on "pkgconf" => :build
-  depends_on "llvm"
+  depends_on "llvm@21"
   depends_on "yaml-cpp"
 
   def llvm
@@ -93,7 +92,7 @@ class ClangUml < Formula
       @enduml
     EOS
 
-    assert_path_exists testpath/"diagrams"/"test_class.puml"
+    assert_path_exists testpath/"diagrams/test_class.puml"
 
     assert_match expected_output, (testpath/"diagrams/test_class.puml").read
   end

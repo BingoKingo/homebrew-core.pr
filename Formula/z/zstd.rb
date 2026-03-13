@@ -10,6 +10,7 @@ class Zstd < Formula
     "BSD-2-Clause", # programs/zstdgrep, lib/libzstd.pc.in
     "MIT", # lib/dictBuilder/divsufsort.c
   ]
+  revision 1
   head "https://github.com/facebook/zstd.git", branch: "dev"
 
   # The upstream repository contains old, one-off tags (5.5.5, 6.6.6) that are
@@ -20,27 +21,30 @@ class Zstd < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "b039c851ef22617804576274872c33727ebb3a0b5e0db2ab62e0d8a97ec9605a"
-    sha256 cellar: :any,                 arm64_sonoma:  "af7a39452f08144cb27f8f9c31feafd46beca7eb4dd3047c49925800e00c6e7a"
-    sha256 cellar: :any,                 arm64_ventura: "56faac95df2a57e866c23339db384c5b3fe7d58984314c1a0bba2823123e0972"
-    sha256 cellar: :any,                 sequoia:       "bcfccd14315dedf3291f77682702f80711fb8829bd14a53431d60204eb99ec32"
-    sha256 cellar: :any,                 sonoma:        "fa320bd56f0b839438336ae22fa6f404522e53f8297d72de04355f5483324499"
-    sha256 cellar: :any,                 ventura:       "a109e4645ddd9a1f091f082b525b5ef5032d3568c016c3ec657f63068c068cc4"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c37f70b21f32017d893b751f9d3d1f7b10e7b742b35a1d7c7c1d357a35e14cb0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4748929efb3666f0fd60451479cb306991c75fc6a84253e81828354185f4a23b"
+    sha256 cellar: :any,                 arm64_tahoe:   "628a4ef53428d0078e3d76d297171ce8d0294f5ec1de3f20305e08c4dd333565"
+    sha256 cellar: :any,                 arm64_sequoia: "d72adf48460a8384b256f88061cd7b9df4977df7fa2e0794051d427db754a565"
+    sha256 cellar: :any,                 arm64_sonoma:  "35b5150b27512a94ebaee7b4399aaa8adf42d247e6968319e4aeac3c05365281"
+    sha256 cellar: :any,                 tahoe:         "90c345a174a631a157f7ea056fe41205fb77778e65d4bdc91097a3fb3a62faa6"
+    sha256 cellar: :any,                 sequoia:       "8b2443dfa62b9d28cf0321e0e670bb096b2680fe72739999228291f36018311f"
+    sha256 cellar: :any,                 sonoma:        "8b8656acd6f30bcbbb9a033ae840afea299c9f0852f71b7540492b0fe7a36742"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "575617c1532fe90e212c052fb14fcd4fa295890e3bc9ac69dc52404a04a95855"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3d5ca8948526a2e3a487db0cd0acec9f4b415d5a4b08cffe27e2ea0c339c9dbe"
   end
 
   depends_on "cmake" => :build
   depends_on "lz4"
   depends_on "xz"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # Legacy support is the default after
     # https://github.com/facebook/zstd/commit/db104f6e839cbef94df4df8268b5fecb58471274
     # Set it to `ON` to be explicit about the configuration.
     system "cmake", "-S", "build/cmake", "-B", "builddir",
+                    "-DBUILD_SHARED_LIBS=ON", # set CMake libzstd target to shared
                     "-DZSTD_PROGRAMS_LINK_SHARED=ON", # link `zstd` to `libzstd`
                     "-DZSTD_BUILD_CONTRIB=ON",
                     "-DCMAKE_INSTALL_RPATH=#{rpath}",

@@ -2,15 +2,15 @@ class Audacious < Formula
   desc "Lightweight and versatile audio player"
   homepage "https://audacious-media-player.org/"
   license "BSD-2-Clause"
-  revision 2
+  revision 1
 
   stable do
-    url "https://distfiles.audacious-media-player.org/audacious-4.4.2.tar.bz2"
-    sha256 "34509504f8c93b370420d827703519f0681136672e42d56335f26f7baec95005"
+    url "https://distfiles.audacious-media-player.org/audacious-4.5.1.tar.bz2"
+    sha256 "7194743a0a41b1d8f582c071488b77f7b917be47ca5e142dd76af5d81d36f9cd"
 
     resource "plugins" do
-      url "https://distfiles.audacious-media-player.org/audacious-plugins-4.4.2.tar.bz2"
-      sha256 "50f494693b6b316380fa718c667c128aa353c01e954cd77a65c9d8aedf18d4bd"
+      url "https://distfiles.audacious-media-player.org/audacious-plugins-4.5.1.tar.bz2"
+      sha256 "f4feedc32776acfa9d24701d3b794fc97822f76da6991e91e627e70e561fdd3b"
 
       livecheck do
         formula :parent
@@ -24,11 +24,13 @@ class Audacious < Formula
   end
 
   bottle do
-    sha256 arm64_sonoma:  "cac4d1f849ee19b7bfd0de7cfb48ecee2aec4cdf0fbf782ca7caf85280570823"
-    sha256 arm64_ventura: "b791cb67d00edaec9df4af4a0155b8bd3eeb00331b07456835e9a8666eb7aa48"
-    sha256 sonoma:        "2e4cad501e1e08303255d352bd8b85fb0b70f2f8970d59a978c95c4a5e188e0a"
-    sha256 ventura:       "e2d8457f43e841fcfcf839b057c6709e5623c841cea200a4c9c760ef1599bdf1"
-    sha256 x86_64_linux:  "f4581ac86d2dde9eafb54d1a743f9bef362362d700468259c8267e5a870d40a8"
+    rebuild 1
+    sha256 arm64_tahoe:   "2a9bed2f6fa8f367145efa89c3c7e001d7269f291a136351fe13195ddc684d87"
+    sha256 arm64_sequoia: "ea3d1f63a204ff5be34a08b216c855970e5a62d7f5bfaecf33776fbc6f80dc6f"
+    sha256 arm64_sonoma:  "1ea67ce7aee67f7e0b7bb5dd5327e9eb177829e4f9a01a1047fa7cb18b6448a5"
+    sha256 sonoma:        "795d2a596cbab91cbfc18c7ed0132d94063dad3b1752e351f57d47d10b1e2469"
+    sha256 arm64_linux:   "fc1ab8c829c3c57689dd2bcbacedec1da1942ee3563a4185667b3f249f5272f1"
+    sha256 x86_64_linux:  "c8b1e35da03f33d6aaea389e5c72e2e0240dcd5621ac04c8d32efaa51b26d804"
   end
 
   head do
@@ -43,6 +45,7 @@ class Audacious < Formula
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => :build
+  depends_on "qttools" => :build
   depends_on "faad2"
   depends_on "ffmpeg"
   depends_on "flac"
@@ -64,16 +67,17 @@ class Audacious < Formula
   depends_on "mpg123"
   depends_on "neon"
   depends_on "opusfile"
-  depends_on "qt"
+  depends_on "qtbase"
+  depends_on "qtimageformats" => :no_linkage # for webp album covers
+  depends_on "qtmultimedia"
+  depends_on "qtsvg" => :no_linkage # for svg icons
   depends_on "sdl2"
   depends_on "wavpack"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
-    depends_on "opus"
   end
 
   on_linux do
@@ -82,6 +86,7 @@ class Audacious < Formula
     depends_on "libx11"
     depends_on "libxml2"
     depends_on "pulseaudio"
+    depends_on "zlib-ng-compat"
   end
 
   def install

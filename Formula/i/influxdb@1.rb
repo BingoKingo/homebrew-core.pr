@@ -1,8 +1,8 @@
 class InfluxdbAT1 < Formula
   desc "Time series, events, and metrics database"
   homepage "https://influxdata.com/time-series-platform/influxdb/"
-  url "https://github.com/influxdata/influxdb/archive/refs/tags/v1.12.0.tar.gz"
-  sha256 "386ffaae9b050c52e720153f6c52b4a832d97edbfd589ffe498a269b6fe09fbf"
+  url "https://github.com/influxdata/influxdb/archive/refs/tags/v1.12.3.tar.gz"
+  sha256 "798fff921c21e916362c00e714119df9d8f9daa97dc4e690823a785ad2b24c5a"
   # 1.x is using MIT license while 1.x and 3.x is using dual license (Apache-2.0/MIT)
   license "MIT"
 
@@ -12,12 +12,12 @@ class InfluxdbAT1 < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a54efa19a98e686d906825fc5aa9fed8c740c38a76c9bd3e2b7946d2eeda0dfa"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ccd1fbfca74c70cf224bf1c12823f480cd7b6538c1e5289adba8574afd446b05"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "19953f46f583a2f2295bb3fa8f551cbf324c8b1f8b699ac01a538f44803dad3d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1da2fcc61dc5a233920aa387e0009e2c50488b20fc5901ad2a78353a9f02d48c"
-    sha256 cellar: :any_skip_relocation, ventura:       "b02e6c03e1e7ca6a1e71985ae1adeb0ff867e47bf22d84ef5231ab0ce037459d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "79494e554b7bd0f9f1191d40a86a23bd5ef01e58ab2f8bc99ad088603023ce2d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f4d5b16c80b60982b4ac872a557dfd1d7654ef10a6fe9eec628c893f4b38cca2"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "42cc73d8114e612b07d45dc84fcab5443528264108c0f91e6b99455e06d2f7c8"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "25b002e6f3eb8ca2fd6198b4e3a4d7a2d1ecda54564868010e2829bf464538c8"
+    sha256 cellar: :any_skip_relocation, sonoma:        "de147442630ee25cb5f6db6486efa7580c8bc0ff876e06a405d0989563dfa710"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "15c0c4ab6c10ed8b62c0c3a76de6ede0bbd1dd2d98e75764a43d0dc494775c42"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fd4f2d3c450601d96912822f08ebadaa296b90aadc31464c01ca71f627ca084b"
   end
 
   keg_only :versioned_formula
@@ -35,6 +35,16 @@ class InfluxdbAT1 < Formula
   end
 
   def install
+    # Workaround for `error: hiding a lifetime that's elided elsewhere is confusing` with `rust` 1.89+
+    ENV.append_to_rustflags "--allow dead_code --allow mismatched_lifetime_syntaxes"
+
+    # Workaround to avoid patchelf corruption when cgo is required (for flux)
+    if OS.linux? && Hardware::CPU.arch == :arm64
+      ENV["CGO_ENABLED"] = "1"
+      ENV["GO_EXTLINK_ENABLED"] = "1"
+      ENV.append "GOFLAGS", "-buildmode=pie"
+    end
+
     # Set up the influxdata pkg-config wrapper
     resource("pkg-config-wrapper").stage do
       system "go", "build", *std_go_args(output: buildpath/"bootstrap/pkg-config")
@@ -70,9 +80,9 @@ class InfluxdbAT1 < Formula
   test do
     (testpath/"config.toml").write shell_output("#{bin}/influxd config")
     inreplace testpath/"config.toml" do |s|
-      s.gsub! %r{/.*/.influxdb/data}, "#{testpath}/influxdb/data"
-      s.gsub! %r{/.*/.influxdb/meta}, "#{testpath}/influxdb/meta"
-      s.gsub! %r{/.*/.influxdb/wal}, "#{testpath}/influxdb/wal"
+      s.gsub! %r{/.*/.influxdb/data}, testpath/"influxdb/data"
+      s.gsub! %r{/.*/.influxdb/meta}, testpath/"influxdb/meta"
+      s.gsub! %r{/.*/.influxdb/wal}, testpath/"influxdb/wal"
     end
 
     begin

@@ -1,25 +1,27 @@
 class Tmx < Formula
   desc "Portable C library to load tiled maps in your games"
   homepage "https://libtmx.readthedocs.io/en/latest/"
-  url "https://github.com/baylej/tmx/archive/refs/tags/tmx_1.10.0.tar.gz"
-  sha256 "8ee42d1728c567d6047a58b2624c39c8844aaf675c470f9f284c4ed17e94188f"
+  url "https://github.com/baylej/tmx/archive/refs/tags/tmx_1.10.1.tar.gz"
+  sha256 "05a141abb5e1a6464242a888041bc81a8e1a032baf0f30a00e350f441f162c08"
   license "BSD-2-Clause"
 
   bottle do
     rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia: "b90d11cd5cb3b8b5d3ed6755386f7a0c61cba35135bf113366b0fe55170c16ed"
-    sha256 cellar: :any,                 arm64_sonoma:  "338149122323df8764c414aca5f168221b3b239e988c28a10e4f2a1f08aeb10d"
-    sha256 cellar: :any,                 arm64_ventura: "824f876037e825eee41439481c88496183ceeaf3b28b2f6713b76947e000e1d5"
-    sha256 cellar: :any,                 sonoma:        "373c7ff58f085aae49d1472d061222aed7d3ed7c67675a982333c77d5bff6ad2"
-    sha256 cellar: :any,                 ventura:       "245d68a570c8b1bf021dd5d1fbf40d1b35d0ad3a3fe6839824af29548d8e05b0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "86b83ccccb9e5ab0ab728bcb5fa4c3ec20f95e2a837d28f0ef20de71cd7f8adf"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c43d5b6605675c73193fff26c3f7e8dadbeb89833e9d5dc4a8e6cdbef76526cf"
+    sha256 cellar: :any,                 arm64_tahoe:   "5f299ad5a15bd8980248c045bf1e4948b7033159bdbc7d8bd57890011f2be9fe"
+    sha256 cellar: :any,                 arm64_sequoia: "4dc24cd556641d149cc4ddd3a0a11d96d75e2a19e2dc7abfb728e5157a38f809"
+    sha256 cellar: :any,                 arm64_sonoma:  "085ced6177fc9a1390c4a401f517ea0bb4c92bc8c5e9aa00636b9442f830dc07"
+    sha256 cellar: :any,                 sonoma:        "7b7cb76c9a2a09de91b29dbe0ca5b940a1a170c432612918ec2fa3c407d79e9c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "304496df28bef1fc022139489fb5c5f428badd24aa3e4f30e8e03d618f0cec56"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "38bc73075f593d2ddc29c5eb7e7ce1728b4d3c1143d0d1160fcc06f9987d5dcc"
   end
 
   depends_on "cmake" => :build
 
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "cmake", "-S", ".", "-B", "build", "-DBUILD_SHARED_LIBS=ON", *std_cmake_args
@@ -57,7 +59,7 @@ class Tmx < Formula
         return 0;
       }
     C
-    system ENV.cc, "test.c", "#{lib}/#{shared_library("libtmx")}", "-lz", "-lxml2", "-o", "test"
+    system ENV.cc, "test.c", "#{lib}/#{shared_library("libtmx")}", "-lxml2", "-o", "test"
     system "./test"
   end
 end

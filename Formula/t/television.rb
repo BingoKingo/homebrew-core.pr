@@ -1,19 +1,18 @@
 class Television < Formula
   desc "General purpose fuzzy finder TUI"
   homepage "https://github.com/alexpasmantier/television"
-  url "https://github.com/alexpasmantier/television/archive/refs/tags/0.11.9.tar.gz"
-  sha256 "be58e6011ce1228afa1c6ba15f33023484b1bc8673c466f186ac2a130bb25bdb"
+  url "https://github.com/alexpasmantier/television/archive/refs/tags/0.15.3.tar.gz"
+  sha256 "5097343a03ed140ef643e5dfcceb48a77f9c372dbd3d043d523e25f9c4016deb"
   license "MIT"
   head "https://github.com/alexpasmantier/television.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1428b66b3f3d2c99f53e4bec1e48c00af41e16e5fe664692a48cd70e4ceb73f5"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a2f931202207d44d4d947e1545ff61939866dcfef6061e5e670590ab909b593b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "be40e9b300a7b77adaf9cee7d3197abb0559100450d0d0ffa42192284e8a9344"
-    sha256 cellar: :any_skip_relocation, sonoma:        "594b7ffcdb2d1b95aecf396dee25fa74e9dea87b19aaddf558bb1c7a6b6e1116"
-    sha256 cellar: :any_skip_relocation, ventura:       "6c377cac03136721c6df87656ecc300c5976785b7dbc185d6c0f967016ecdb21"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9e4631ba3524b8524a0ec64c70a348ee2815d971b18aee3a6a821b478c7458b4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3968192f05119be2ad9e33eb70d5b2edaa38e30453c88266f726e4dcd358c57a"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "80895153a98219c16b21316bfdd3043c33eb5e4e813e108df3cbff3c8810e558"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "754d7ae87132c0d12918c836b97f01cdac9a89f34bdc300418424316e175c6ed"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b3052deea66f32e35eafe6fa8c556f66b29b8dd4c7d3b8ce687a369b6b4eaadc"
+    sha256 cellar: :any_skip_relocation, sonoma:        "154bd67bb9dde3b8d522678096deecd954e570dd626fd936edd369e6422ce3cb"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b8832131131f697d0265f02f37ebd5c02b91588f734c4e8718eb9000baf16a75"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "23dfb05e30e4a9d9254cc67ce5e8f1b1995e35667579cebfb5eb479a715725ea"
   end
 
   depends_on "rust" => :build
@@ -23,12 +22,14 @@ class Television < Formula
   def install
     system "cargo", "install", *std_cargo_args
     man1.install "man/tv.1"
+
+    generate_completions_from_executable(bin/"tv", "init")
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/tv -V")
 
-    output = shell_output("#{bin}/tv list-channels")
-    assert_match "Builtin channels", output
+    output = shell_output("#{bin}/tv help")
+    assert_match "fuzzy finder for the terminal", output
   end
 end

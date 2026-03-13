@@ -2,8 +2,8 @@ class Solarus < Formula
   desc "Action-RPG game engine"
   homepage "https://www.solarus-games.org/"
   url "https://gitlab.com/solarus-games/solarus.git",
-      tag:      "v2.0.0",
-      revision: "1c69f3d7ec133eaff28c22d756170eba69a520b0"
+      tag:      "v2.0.3",
+      revision: "d5e170be67a0119d73a502988e91bffcf04c3e06"
   license "GPL-3.0-or-later"
 
   livecheck do
@@ -12,13 +12,12 @@ class Solarus < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "85a7c6dfc13c8c421fa74d19b342a233cd44033cbf77cbb68ad09eaedc718dad"
-    sha256                               arm64_sonoma:  "05499edb58e7a13a8967b7a6fbf809f51794cc5f53ce1495ee6bfe048a1bd2c1"
-    sha256                               arm64_ventura: "010d2aa833ddfaa4bed2f231858589d37cf667b75e85bae1dbfed9e00cba7209"
-    sha256                               sonoma:        "ef4bed02bcff7a4c5ef11bf7c2b8975a96e125b937f5326e3c45f52132563cb8"
-    sha256                               ventura:       "83234601f53be7a2a3137671d73e94000b47316e77547332f066e70770469e20"
-    sha256                               arm64_linux:   "c4bc34e892827477f7dc3c599df51d44e2b9f714bfda46c54e238e0d46e22923"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "04d4e184b09908722468e977d425e4a1e441eb8dfe576d662445de67b659f73a"
+    sha256                               arm64_tahoe:   "4fd142b272d98d79ac590c1723f8719583d14288491f7293de89bdc2f1117883"
+    sha256                               arm64_sequoia: "8d5cb7264269abe15846627ed30fdd162fb4d768b88cd92f0f56d3faa6c5ea7a"
+    sha256                               arm64_sonoma:  "d669556017aba8337727e74ba0af5846bfddcabc06ba56e011b83f4548984d2d"
+    sha256                               sonoma:        "a88bc9b75edb70e32c2eeeb8406222e7d228fa5c1cbf9c41707de427b2a88449"
+    sha256                               arm64_linux:   "eea3bd59dce92c3d7186f3657fc3f0483f2ea7710d1463faa2d46c184a20df5a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "21cb7e8faea567a0e086e689d070f2faabb7a8cc61008e9a73add92df30e09b3"
   end
 
   depends_on "cmake" => :build

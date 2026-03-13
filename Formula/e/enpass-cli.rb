@@ -1,24 +1,24 @@
 class EnpassCli < Formula
   desc "Enpass command-line client"
   homepage "https://github.com/hazcod/enpass-cli"
-  url "https://github.com/hazcod/enpass-cli/archive/refs/tags/v1.6.3.tar.gz"
-  sha256 "59f1bb98017f3e5ea13d7b82fbf7f975e9da038b97f65375e0a44164ad66be7e"
+  url "https://github.com/hazcod/enpass-cli/archive/refs/tags/v1.9.0.tar.gz"
+  sha256 "9880a54d3364aa2b6f51dffcbc54954ab5c23258d9c853cb322df0eaf1f18c09"
   license "MIT"
   head "https://github.com/hazcod/enpass-cli.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "880a2e628a2ed9f9647e85584c5d4acdf8065514989622830cced35316df2c2b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "099e34647f3ef84b53e9b4854e6d71f8490fff3d52d435f196b89deba5c0f945"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9d9709ca6f4b7eea51f811278af7844a9dd7b1153c48e5c137f1c96d439b3145"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c8e71c2c817dae86f109d86f36e22995302c5306578058f8f5ee5ac5aaaeabb0"
-    sha256 cellar: :any_skip_relocation, ventura:       "cc4b8e65919630811c6e6ae26e433d9a77cea6323e481153fac72b93ea9fd9c3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "cfd20950ddbb4fef55f430f36c6f9f2239a23aa8140e3343134775f6805b9ae0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "50f075ca060a7ab81a6d247b3a392ce91ffbcbf436145ee38e5fe5cc07781d89"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "1ce36f144f8e8a9d5a1623cb2da4249f8299fa753f05deedf435c2060631205f"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "19bcb8483cc1c6e38bb63d810655e9a1afdaf9551821e70eb2300d0539dc4dca"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a20ff3d1d80f7252e9ad0f9f792c72a761a8d0057975dfc866b60e9003c24791"
+    sha256 cellar: :any_skip_relocation, sonoma:        "638c10edcff1b0ec6198d13bd117c474f655ab3a568999069141f3b575a955e1"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "bba60eb71ac340fa99101d3bbd73c307876159d2071a8270a44ef7e167a51d47"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9f1d4c5edd81420f6148dbc1a9177bb9b79ad4c1516292a01928dc9d426781bb"
   end
 
   depends_on "go" => :build
 
   def install
+    ENV["CGO_ENABLED"] = "1"
     system "go", "build", *std_go_args(ldflags: "-s -w -X 'main.version=#{version}'"), "./cmd/enpasscli"
     pkgshare.install "test/vault.json", "test/vault.enpassdb"
   end
@@ -30,8 +30,8 @@ class EnpassCli < Formula
     mkdir "testvault"
     cp [pkgshare/"vault.json", pkgshare/"vault.enpassdb"], "testvault"
     # Master password for test vault
-    ENV["MASTERPW"]="mymasterpassword"
-    # Retrieve password for "myusername" from test vault
-    assert_match "mypassword", shell_output("#{bin}/enpass-cli -vault testvault/ pass myusername")
+    ENV["MASTERPW"] = "absolutely-No-clue"
+    # Retrieve password for "johndoe" from test vault
+    assert_match "noIdeaata11", shell_output("#{bin}/enpass-cli -vault testvault/ pass johndoe").chomp
   end
 end

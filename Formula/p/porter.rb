@@ -1,18 +1,19 @@
 class Porter < Formula
   desc "App artifacts, tools, configs, and logic packaged as distributable installer"
   homepage "https://porter.sh"
-  url "https://github.com/getporter/porter/archive/refs/tags/v1.2.1.tar.gz"
-  sha256 "927c88d7342439594b4f416f6d18d116afd2418bc48876efedeb1cc8e4716fda"
+  url "https://github.com/getporter/porter/archive/refs/tags/v1.4.0.tar.gz"
+  sha256 "1021cbe8a0aa8dc7d8ca82cb37aab8b44e24218fe03a26b3f9f6c7b10e694c51"
   license "Apache-2.0"
   head "https://github.com/getporter/porter.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1bbb8d0fec75d619cb3157967dc5673647c69e2e2abddb4f6ce311ef12bbabfc"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1bbb8d0fec75d619cb3157967dc5673647c69e2e2abddb4f6ce311ef12bbabfc"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1bbb8d0fec75d619cb3157967dc5673647c69e2e2abddb4f6ce311ef12bbabfc"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f58637b322064fd390d0832cacc06c14eaad6c6d630b352344bd44bd43067f1e"
-    sha256 cellar: :any_skip_relocation, ventura:       "f58637b322064fd390d0832cacc06c14eaad6c6d630b352344bd44bd43067f1e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "01040892418ef902c033e9d4504661445774151d63e6f91417ba2a9c0cf4897d"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "9d2e6cd91af0e966c8a821789017b81a0f22cfc0e8c9cf4a255ed92f7c852286"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3cb4bc83342ce948dba842220f49a0c6ad2ce8a968942d86a8bb3e80006e86b1"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c727323f0731e8c18a28e7af6861bce624fd58b173cc34b2acbbbeb00b75a319"
+    sha256 cellar: :any_skip_relocation, sonoma:        "a08aa9a85a9ba314cdf72d562d4a696146d10f3fa25847a4064a14feb10cdae3"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7db333f4042ce5cbd45a23cc16d9fecfbd532989d70b4b63cfcb36a68fc43226"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "69bfc2a23597a0050b2f267d0bb0f2183a599ed65e79f3a49ac89f282063f412"
   end
 
   depends_on "go" => :build
@@ -25,7 +26,7 @@ class Porter < Formula
     ]
 
     system "go", "build", *std_go_args(ldflags:), "./cmd/porter"
-    generate_completions_from_executable(bin/"porter", "completion")
+    generate_completions_from_executable(bin/"porter", shell_parameter_format: :cobra)
   end
 
   test do

@@ -3,19 +3,18 @@ class Libxmlb < Formula
 
   desc "Library for querying compressed XML metadata"
   homepage "https://github.com/hughsie/libxmlb"
-  url "https://github.com/hughsie/libxmlb/releases/download/0.3.22/libxmlb-0.3.22.tar.xz"
-  sha256 "f3c46e85588145a1a86731c77824ec343444265a457647189a43b71941b20fa0"
+  url "https://github.com/hughsie/libxmlb/releases/download/0.3.25/libxmlb-0.3.25.tar.xz"
+  sha256 "77f2768c9debd2e946173cdf9465efd987849805e7c58251c5772ea728a61d9a"
   license "LGPL-2.1-or-later"
   head "https://github.com/hughsie/libxmlb.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "e0775233be69a811c661f8720b66a4711013ef27e6e36bdd8dff476c9b4c56e7"
-    sha256 cellar: :any, arm64_sonoma:  "d3cbbf01b534d2d3c3ed6ec52be13dd2f2e1ba4ef0520f4c27d78cbadb1b3d83"
-    sha256 cellar: :any, arm64_ventura: "01a9cef7ad93b5395cc7101a67891d0bd51795408c989b3e84656dc417523930"
-    sha256 cellar: :any, sonoma:        "547b825d6d1e54d370c029e9e7b01426ae3837236a860aa73f8720f716c2d312"
-    sha256 cellar: :any, ventura:       "5a41d81df13b1f3e95b9c5b0be39638601585891df073c1bf81e76dbe671a8ca"
-    sha256               arm64_linux:   "a65b335e5ae108e31a1b65bdf4ef969785f948e46bb1a5c54da501c6608d3574"
-    sha256               x86_64_linux:  "b3442cfda49f9ed9d25055f6839fd50fd5c7eb1a8785d20ea70266894548cb05"
+    sha256 cellar: :any, arm64_tahoe:   "1c3fc7fbdec80b45203671ac8dfe9e8b767675d45e21fd96ff792d43497ee2af"
+    sha256 cellar: :any, arm64_sequoia: "9259a1b5f74c09dd8d3fcb6305fbba76c895bab54c4e5efa7e95ba7b64bc2e9e"
+    sha256 cellar: :any, arm64_sonoma:  "84645c1edbe9ef27840926efff9eeeb266e5c302cc6659e00526afa642cb7672"
+    sha256 cellar: :any, sonoma:        "620e5d76fa5b6ebdd0896e467275cad34770c3bc8d0d3cfdcc52545daf18c956"
+    sha256               arm64_linux:   "f50c8cbc1c8334b0815819532be5edcebff9b3fbc2ae4ead656b7ca4f46bacfe"
+    sha256               x86_64_linux:  "a47ada3e931a43b22247c160d0f4ea5dd6b8dfc3c0517c458949edc50b126363"
   end
 
   depends_on "gi-docgen" => :build
@@ -23,7 +22,7 @@ class Libxmlb < Formula
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => [:build, :test]
-  depends_on "python@3.13" => :build
+  depends_on "python@3.14" => :build
   depends_on "vala" => :build
   depends_on "glib"
   depends_on "xz"

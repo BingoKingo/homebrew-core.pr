@@ -1,8 +1,8 @@
 class DosboxStaging < Formula
   desc "Modernized DOSBox soft-fork"
   homepage "https://dosbox-staging.github.io/"
-  url "https://github.com/dosbox-staging/dosbox-staging/archive/refs/tags/v0.82.1.tar.gz"
-  sha256 "9d943d6610b6773cb0b27ba24904c85459757fbbfa0f34c72e76082132f77568"
+  url "https://github.com/dosbox-staging/dosbox-staging/archive/refs/tags/v0.82.2.tar.gz"
+  sha256 "387c97b373c3164ab5abbbc2b210bf94b5567057abe44ee1e8b4d4e725bd422c"
   license "GPL-2.0-or-later"
   head "https://github.com/dosbox-staging/dosbox-staging.git", branch: "main"
 
@@ -14,13 +14,13 @@ class DosboxStaging < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "f1f4a11754e2436d48f1d40742cd8fcf904f07dfd53ac72f9547e95038483c91"
-    sha256 arm64_sonoma:  "1afe5ab249e2156bbf89ae26a4e3871d9cbe19fa4de181fba3cc7d4802608b90"
-    sha256 arm64_ventura: "98e19ac0908a405094467dac092283e5192fd345c4db7d93c3d359bb9c5a9f66"
-    sha256 sonoma:        "c6e67a8dd5578cf145a91d233f7dd1ddc2f123ecb2fb809984acfcee086897ab"
-    sha256 ventura:       "417312bc7fdff60bb2ce34a73ef03f3043df6270c67377bdbcab99807feafb78"
-    sha256 arm64_linux:   "a3dd6ea049201e66f43fc13cf224acba602504ae8121c691c0c6a218bb0befb1"
-    sha256 x86_64_linux:  "7f20a8e4df3043ab401343c7178be0431a3bf8f16d4928c6f33ffd4185a9b2d3"
+    rebuild 1
+    sha256 arm64_tahoe:   "88db4c380c543140ebfbd668033e1a8ca44e528a3acb1d1c9028be36f0373b30"
+    sha256 arm64_sequoia: "c20cfde08ded1db6ade3b0bd762e63008330ef568b4633fcb66a4b6a7e27c7ef"
+    sha256 arm64_sonoma:  "b8111b741e94d0a2aacf030ec1cfecf5e47545bf38177757b1d3942f7093e01e"
+    sha256 sonoma:        "3feabb1aecd2f540708f685c837a4c4c633bf941a783b44115388d1a2fb19531"
+    sha256 arm64_linux:   "e69923a5122d7e81660e996d7222b8a6af8de0f3d3211c47048af92bc4ffa93b"
+    sha256 x86_64_linux:  "86a154ce4e2d98e228d8fae799c47ec6f5c1a19d50bb439759a27bee4e6de011"
   end
 
   depends_on "meson" => :build
@@ -38,12 +38,11 @@ class DosboxStaging < Formula
   depends_on "sdl2_net"
   depends_on "speexdsp"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "alsa-lib"
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "zlib-ng-compat"
   end
 
   def install

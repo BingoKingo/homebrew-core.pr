@@ -1,8 +1,8 @@
 class Kubeshark < Formula
   desc "API Traffic Analyzer providing real-time visibility into Kubernetes network"
-  homepage "https://www.kubeshark.co/"
-  url "https://github.com/kubeshark/kubeshark/archive/refs/tags/v52.7.7.tar.gz"
-  sha256 "fb5a674ab6aeab88a1240aa822d43303c7d5d24a680cbdf49d4123bb42ad5418"
+  homepage "https://kubeshark.com"
+  url "https://github.com/kubeshark/kubeshark/archive/refs/tags/v53.1.0.tar.gz"
+  sha256 "09260e91b9feee251213bef5f3decb65ad98b71547140abba6f06fe481f22201"
   license "Apache-2.0"
   head "https://github.com/kubeshark/kubeshark.git", branch: "master"
 
@@ -15,13 +15,12 @@ class Kubeshark < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "34c4636bcc950f34dbd284bee8fbab84089904c997789f10ef2a1c53cfbc31c2"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4edc31bcb4f35fa6ba6157dcb809f288034bfd031f89d55999afef3e1087b0fa"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5987336952060db66c4f44c188f4ce7285794bb48a7dde9039f5d96f10da51ca"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0d257ad6f05178016c238b905fc05754f05c0b7e04aff3c8002d94dcb8e78541"
-    sha256 cellar: :any_skip_relocation, ventura:       "1fbe41422574a55986c4df0300d01c1e9dd150b7f28b5a498a4ae299ae3495e7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2a15b74330f5c92ac05799648732f2d92982997c250555b5bb2fb7b056897bfa"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5b7010d1741c9dc71e8516b9642a233311c5b07a60455b2bcfdfe1669b42c602"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "22762e550f43a4a363377fd5230464288bb77121af2419908316288eaa6421b9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ca2970cae573ce407a2809415a985b78ff6de72b9f99ef6e77a6ee90488e9d35"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9f7ea6e63a2e9017a793050b74b31220e13020b131a8e600b5b1a32a6d34b21d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e197f27e0b2058bb6d648200c36e5c604922e852ce7039261d25d43d767f6570"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "322941647cc7da376abea027f05c7a2b9ca89fc05bc5adc1eae372839a447eec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fef61f28b288c37e1d043c84a085ca98fba52974c2b9ff9affd194c338a1ea73"
   end
 
   depends_on "go" => :build
@@ -35,7 +34,7 @@ class Kubeshark < Formula
     ]
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"kubeshark", "completion")
+    generate_completions_from_executable(bin/"kubeshark", shell_parameter_format: :cobra)
   end
 
   test do

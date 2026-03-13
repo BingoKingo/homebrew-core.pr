@@ -1,18 +1,18 @@
 class Dockerfilegraph < Formula
   desc "Visualize your multi-stage Dockerfiles"
   homepage "https://github.com/patrickhoefler/dockerfilegraph"
-  url "https://github.com/patrickhoefler/dockerfilegraph/archive/refs/tags/v0.18.0.tar.gz"
-  sha256 "8ddc643850658a6370e83012d3eace4a84db2052ad584ce98e7522edc2482a2f"
+  url "https://github.com/patrickhoefler/dockerfilegraph/archive/refs/tags/v0.21.0.tar.gz"
+  sha256 "7593483acf26aefb42b2bc9eeea1d42d2262732d4c88298d1dff78c52278c48f"
   license "MIT"
   head "https://github.com/patrickhoefler/dockerfilegraph.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "77d8eda228923b6ce6aa85a62eb5fc5be66d987b086c42e2786237130dde2136"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "77d8eda228923b6ce6aa85a62eb5fc5be66d987b086c42e2786237130dde2136"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "77d8eda228923b6ce6aa85a62eb5fc5be66d987b086c42e2786237130dde2136"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0075c867275db0510e8b240895f09e3ebcfd52f87b42112a49293b1d8246a2b7"
-    sha256 cellar: :any_skip_relocation, ventura:       "0075c867275db0510e8b240895f09e3ebcfd52f87b42112a49293b1d8246a2b7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9fc35a8424b5643897b6bfdfe7a1fe4e971a9b57a17a5210a42f3311c32f88d6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7ffb6f777419e29eaaa18813927f69177c44783ab45883fc1580f6e62d2a4db7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7ffb6f777419e29eaaa18813927f69177c44783ab45883fc1580f6e62d2a4db7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7ffb6f777419e29eaaa18813927f69177c44783ab45883fc1580f6e62d2a4db7"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b26d495598088cb22b7149734a9f5714d22da02edc921dc0d57c4d4a7ef85b31"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "56434b1d10e42f97edbe1cd176786fd86f91307f8a468d2c46425f16a688ba58"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "693ecc915aec2a80cb833d2ee5d0975f302e147bdbf2dcafcc7a11c85df9e5cd"
   end
 
   depends_on "go" => :build
@@ -26,6 +26,8 @@ class Dockerfilegraph < Formula
       -X github.com/patrickhoefler/dockerfilegraph/internal/cmd.buildDate=#{time.iso8601}
     ]
     system "go", "build", *std_go_args(ldflags:)
+
+    generate_completions_from_executable(bin/"dockerfilegraph", shell_parameter_format: :cobra)
   end
 
   test do

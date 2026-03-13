@@ -1,26 +1,25 @@
 class Cloc < Formula
   desc "Statistics utility to count lines of code"
   homepage "https://github.com/AlDanial/cloc/"
-  url "https://github.com/AlDanial/cloc/archive/refs/tags/v2.04.tar.gz"
-  sha256 "3e6f25000d920fdee1a57575c185236286ab5e05fda7b6ab2e36c34f1bb6afbc"
+  url "https://github.com/AlDanial/cloc/archive/refs/tags/v2.08.tar.gz"
+  sha256 "8099b6275c124f662690f2db3581cd2ad4e9ad4e08332288719838ded00d1da5"
   license "GPL-2.0-or-later"
   head "https://github.com/AlDanial/cloc.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b8283f66cc2a29eb0503f0d6ec5da6d032f8333d6792e969aaebd34149983292"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b8283f66cc2a29eb0503f0d6ec5da6d032f8333d6792e969aaebd34149983292"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ddc04e8018a88a4506d58d5e1024da139c7e228584aba582dfc14e6a1afb12ab"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c20ebdf0cc4416b16cfbf89cda60ea4fd9b094ef4fd0aea3f61819248f589e9d"
-    sha256 cellar: :any_skip_relocation, ventura:       "cabab725242716b2f3d908c0fe861d9175870305d9c5ab1d86d1ebfe0f584ea5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "273d53ef9f8f29740f74ed543e2a1d5ccfe1248483bd7ff2454e90f07fcd9624"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "91b5211f50ed444d66a1de4f851af9d180c7add1c443c3f7b294b8eddc55a5f6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "510402328ad2e7168f94ba8bc210a96cccdb504fa0eb03bec5b5ff8704529c60"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "510402328ad2e7168f94ba8bc210a96cccdb504fa0eb03bec5b5ff8704529c60"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "510402328ad2e7168f94ba8bc210a96cccdb504fa0eb03bec5b5ff8704529c60"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0315d2e9392d3c831b8669f6c960eb31dc86f71d0b4c42e95cba771a0fd913a0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7cb99d35e6037db0b92b9b6887f881499229c09941d8bd431ebdde45c62b9360"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "505c01b326543a8c2841457a793e4213b6069d8f0f568d9f636eeef94663b7e0"
   end
 
   uses_from_macos "perl"
 
   resource "Regexp::Common" do
-    url "https://cpan.metacpan.org/authors/id/A/AB/ABIGAIL/Regexp-Common-2017060201.tar.gz"
-    sha256 "ee07853aee06f310e040b6bf1a0199a18d81896d3219b9b35c9630d0eb69089b"
+    url "https://cpan.metacpan.org/authors/id/A/AB/ABIGAIL/Regexp-Common-2024080801.tar.gz"
+    sha256 "0677afaec8e1300cefe246b4d809e75cdf55e2cc0f77c486d13073b69ab4fbdd"
   end
 
   resource "Algorithm::Diff" do
@@ -29,13 +28,13 @@ class Cloc < Formula
   end
 
   resource "Parallel::ForkManager" do
-    url "https://cpan.metacpan.org/authors/id/Y/YA/YANICK/Parallel-ForkManager-2.02.tar.gz"
-    sha256 "c1b2970a8bb666c3de7caac4a8f4dbcc043ab819bbc337692ec7bf27adae4404"
+    url "https://cpan.metacpan.org/authors/id/Y/YA/YANICK/Parallel-ForkManager-2.04.tar.gz"
+    sha256 "606894fc2e9f7cd13d9ec099aaac103a8f0943d1d80c2c486bae14730a39b7fc"
   end
 
   resource "Sub::Quote" do
-    url "https://cpan.metacpan.org/authors/id/H/HA/HAARG/Sub-Quote-2.006008.tar.gz"
-    sha256 "94bebd500af55762e83ea2f2bc594d87af828072370c7110c60c238a800d15b2"
+    url "https://cpan.metacpan.org/authors/id/H/HA/HAARG/Sub-Quote-2.006009.tar.gz"
+    sha256 "967282d54d2d51b198c67935594f93e4dea3e54d1e5bced158c94e29be868a4b"
   end
 
   resource "Moo::Role" do
@@ -44,8 +43,8 @@ class Cloc < Formula
   end
 
   resource "Module::Runtime" do
-    url "https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz"
-    sha256 "68302ec646833547d410be28e09676db75006f4aa58a11f3bdb44ffe99f0f024"
+    url "https://cpan.metacpan.org/authors/id/H/HA/HAARG/Module-Runtime-0.018.tar.gz"
+    sha256 "0bf77ef68e53721914ff554eada20973596310b4e2cf1401fc958601807de577"
   end
 
   resource "Role::Tiny" do

@@ -1,25 +1,28 @@
 class Gnupg < Formula
-  desc "GNU Pretty Good Privacy (PGP) package"
+  desc "GNU Privacy Guard (OpenPGP)"
   homepage "https://gnupg.org/"
-  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.8.tar.bz2"
-  sha256 "b58c80d79b04d3243ff49c1c3fc6b5f83138eb3784689563bcdd060595318616"
+  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.5.18.tar.bz2"
+  sha256 "0dbd64e0322fe1a4813360d46539d5f8daf4a8fa235cf5fce464e8b0214a7e4f"
   license "GPL-3.0-or-later"
 
-  # GnuPG appears to indicate stable releases with an even-numbered minor
-  # (https://gnupg.org/download/#end-of-life).
+  # GnuPG usually indicates stable releases with an even-numbered minor but
+  # can declare an odd-numbered minor stable. e.g. 2.5 was stable since 2.5.16,
+  # see https://lists.gnupg.org/pipermail/gnupg-announce/2025q4/000500.html.
+  # The livecheck scrapes the version from the templated homepage which is
+  # manually updated by upstream when a new release series is stable, e.g.
+  # https://dev.gnupg.org/rD18a889b403c7a5934d5080be140a4d79e1c83332
   livecheck do
-    url "https://gnupg.org/ftp/gcrypt/gnupg/"
-    regex(/href=.*?gnupg[._-]v?(\d+\.\d*[02468](?:\.\d+)*)\.t/i)
+    url :homepage
+    regex(/The current version of GnuPG is v?(\d+(?:\.\d+)+)\. /i)
   end
 
   bottle do
-    sha256 arm64_sequoia: "7203b8a0af43aa4593cfc22e4152bd9331c35ba68450240353c2365e41d29895"
-    sha256 arm64_sonoma:  "f659c9e637d2c2932ec0402c2a334df0b019d2150b0e78810a9bab06adf82dc8"
-    sha256 arm64_ventura: "96233a9abeb43d4c4b14fcdd6e49e573f7799fc73ea6d4d91f1cd0ddfdbf46ae"
-    sha256 sonoma:        "bccb362c8eeb1f56f7b3fee1982ef890d1f0ff92018b7feb8c4182191cbe0113"
-    sha256 ventura:       "d18a1dc39de9890030ece85ae3df0497defdfbb8422385a3ef75455e8c82680a"
-    sha256 arm64_linux:   "4095b433173396ad34343f81f749ac26313f42287952da334283eb8b25c83116"
-    sha256 x86_64_linux:  "18c50e87640a9bed50bdc7a8fe579697965e5fd939ba5f180da9e4bc2e808977"
+    sha256 arm64_tahoe:   "de9a802a2424e4cd6b38af7bf22e7d0cc8e4108d67821964365ef876cf17a2f3"
+    sha256 arm64_sequoia: "2bd6c837d6774a56415b439e4c7f34cf3a7749c739011e597d9e73ceb6744fad"
+    sha256 arm64_sonoma:  "9834b4a5f1c8ff84649a40a7473bdaa00415b8a503a68550b44914ae480d3a54"
+    sha256 sonoma:        "5028ba5fa794629b43828c4a1ce943ffa303855370e8f400cdec97cba83d8b80"
+    sha256 arm64_linux:   "cbcb3a7d64be37264d6fa879a343381539efd9d1c7785e6823dc554a933cf8c5"
+    sha256 x86_64_linux:  "cd6acef446405bdb6c91ef38a7058b2a66f515ded877d4853d865ac22167bae8"
   end
 
   depends_on "pkgconf" => :build
@@ -35,11 +38,14 @@ class Gnupg < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "openldap"
-  uses_from_macos "sqlite", since: :catalina
-  uses_from_macos "zlib"
+  uses_from_macos "sqlite"
 
   on_macos do
     depends_on "gettext"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   conflicts_with cask: "gpg-suite"

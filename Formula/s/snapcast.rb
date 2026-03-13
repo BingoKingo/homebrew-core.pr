@@ -1,19 +1,17 @@
 class Snapcast < Formula
   desc "Synchronous multiroom audio player"
-  homepage "https://github.com/badaix/snapcast"
-  url "https://github.com/badaix/snapcast/archive/refs/tags/v0.31.0.tar.gz"
-  sha256 "d38d576f85bfa936412413b6860875ba3b462a8e67405f3984a0485778f2fdac"
+  homepage "https://github.com/snapcast/snapcast"
+  url "https://github.com/snapcast/snapcast/archive/refs/tags/v0.35.0.tar.gz"
+  sha256 "cb75a71479bf52910bf5f47ae8120ec41c89459b0d77d7cd560e674e437ef050"
   license "GPL-3.0-or-later"
-  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "503bcd02e9c1cee66a0fe1c31b4fb92c456e0403dbeff251ab37a89d097800ba"
-    sha256 cellar: :any,                 arm64_sonoma:  "5148be65fd513313ab9eae89eada1ab878e311c5bf7bae260adc8d9742005213"
-    sha256 cellar: :any,                 arm64_ventura: "0dbfc1421b25651a69006ac4f2dc5995c79ad832f582b57877b53deed618b47e"
-    sha256 cellar: :any,                 sonoma:        "e7a695a5486603ca20361ee1ea25680f77cbfefe31b073b2f881c1f4dd7e7302"
-    sha256 cellar: :any,                 ventura:       "7c12245e729a102ec2b284ce3cc5ff11532269effd442175acc8890c440a1b7f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f75f295d76b5e75bdebb3131c00c38d134d74ec6268951a27e14fcfb7d1486ca"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f5f9f7d0a5ee35ffa91c5d4e115ce9ba9a16d4cd3511ce01bc882f37b1f3f1f2"
+    sha256 cellar: :any,                 arm64_tahoe:   "d61c8d4bfd965dd2ddcbc77eb73e12a59aef21dd2835bbca7e8b246b110750f4"
+    sha256 cellar: :any,                 arm64_sequoia: "dacaa2ae4beec81fafada1b9549b04b8bba3d6276827b7988844b1a6810e05f8"
+    sha256 cellar: :any,                 arm64_sonoma:  "a9613d42b9eeafb28a03889f260adbc225865dca3715ddf8023a903e6fcbc807"
+    sha256 cellar: :any,                 sonoma:        "14aa0fbaf99749b161e79b1f216d1e4396f550d8ed242733bc058e7eacb4528a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7e40d4b536ed307ff8f8982fbb660ef400444c5096f894834470c3596fcf4593"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cf3c9e17907d2351ada549641c22b570b970d35b46d41d6fc1e045dc50acf1f2"
   end
 
   depends_on "boost" => :build
@@ -39,9 +37,6 @@ class Snapcast < Formula
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
-    # FIXME: if permissions aren't changed, the install fails with:
-    # Error: Failed to read Mach-O binary: share/snapserver/plug-ins/meta_mpd.py
-    chmod 0555, share/"snapserver/plug-ins/meta_mpd.py"
   end
 
   test do
@@ -53,7 +48,7 @@ class Snapcast < Formula
       client_pid = spawn bin/"snapclient", [:out, :err] => output_log.to_s
       sleep 10
       if OS.mac?
-        assert_match("Connected to", output_log.read)
+        assert_match version.to_s, output_log.read
       else
         # Needs Avahi (which also needs D-Bus system bus) which requires root
         assert_match "BrowseAvahi - Failed to create client", output_log.read

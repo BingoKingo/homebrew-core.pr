@@ -1,25 +1,24 @@
 class Bup < Formula
   desc "Backup tool"
   homepage "https://bup.github.io/"
-  url "https://github.com/bup/bup/archive/refs/tags/0.33.7.tar.gz"
-  sha256 "03bf3c02ee6912d9f2e017e488625948818efc8538bbc6a7d6a993fbdee709a4"
+  url "https://github.com/bup/bup/archive/refs/tags/0.33.10.tar.gz"
+  sha256 "5b7d169b3b0d821dc93c55798e18339594af618f018aae88dff28b8cc6333b00"
   license all_of: ["BSD-2-Clause", "LGPL-2.0-only"]
-  head "https://github.com/bup/bup.git", branch: "master"
+  head "https://github.com/bup/bup.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "190deba7059ec4e0fabef2a19d2e505538f19d72c8e7b0b7e19c640d02cc07b4"
-    sha256 cellar: :any,                 arm64_sonoma:  "7c0fcc1869f7bbbd04817e038c93bf112343e2c350899eb42e5c7f1cb76a1738"
-    sha256 cellar: :any,                 arm64_ventura: "bf776628703118c1778d0d65a7e63d916afd13db57645d65747933e33c3f2390"
-    sha256 cellar: :any,                 sonoma:        "75c558710f3d49f210a251824ffd22ff52c786bcea59cb95849b10ec1263f201"
-    sha256 cellar: :any,                 ventura:       "2f88d8a0073a46e7ae72300251ef2c504823f09a96ac7cb353d97b4ccb2dbd96"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9a403d35dc2c5d4d5f466bcbc45e9d302f7727ee089efa324f347ffb29cf5892"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "31d618a8be5d4085a9e72e429e9e3156e1467944be7a49f83e491e258b9d9f0f"
+    sha256 cellar: :any,                 arm64_tahoe:   "e8dd1764fdfdcb4e0a3be1c0187a5c9fae165c38130282620f4683d47bc4886f"
+    sha256 cellar: :any,                 arm64_sequoia: "9aad3e7860b09e030da32a5800505ebfe0b5fe7a647879db0cff40d919e9767f"
+    sha256 cellar: :any,                 arm64_sonoma:  "a4536482d2a0d6d13ec56e1574fb7a6913a561d4548ab7f3428cb289b2b28225"
+    sha256 cellar: :any,                 sonoma:        "a132b47d549095e472be6cb7703c0c8cf78f8850b0aa8dadc76210a00120e055"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1916cb6c7346701861a8d1206d68eaf8e19bd79ff1e93a9cd60f7c6de26b7a27"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1419ad06f33c6f879c55e6e40596f58ffd7d83a903c801433ee1f5b993adb5cd"
   end
 
   depends_on "pandoc" => :build
   depends_on "pkgconf" => :build
 
-  depends_on "python@3.13"
+  depends_on "python@3.14"
   depends_on "readline"
 
   on_linux do
@@ -27,7 +26,7 @@ class Bup < Formula
   end
 
   def python3
-    which("python3.13")
+    which("python3.14")
   end
 
   def install

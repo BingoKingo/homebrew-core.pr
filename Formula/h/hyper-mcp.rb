@@ -1,19 +1,23 @@
 class HyperMcp < Formula
   desc "MCP server that extends its capabilities through WebAssembly plugins"
-  homepage "https://github.com/tuananh/hyper-mcp"
-  url "https://github.com/tuananh/hyper-mcp/archive/refs/tags/v0.1.3.tar.gz"
-  sha256 "32a7515748856f2564006dec54b3ad822dee90187ce88c384c18f4e5cacc0066"
+  homepage "https://github.com/hyper-mcp-rs/hyper-mcp"
+  url "https://github.com/hyper-mcp-rs/hyper-mcp/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "b1e4238156ab069967cd8ba31e6750119e90bab80027dc624dcdbbcb817b22d9"
   license "Apache-2.0"
-  head "https://github.com/tuananh/hyper-mcp.git", branch: "main"
+  head "https://github.com/hyper-mcp-rs/hyper-mcp.git", branch: "main"
+
+  livecheck do
+    url :stable
+    strategy :github_releases
+  end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2a47ba9534141b16a9f7599a0ae988a98c6d12c21d57655be20330833a1b9324"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "68f718a26b90661c85b10b330128bc2176c5eddbc2e7f762057f212b8c34c330"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d1cae9171ecf44e4af0685fb6b33300bf4be6aa66392903e83672d84578a7315"
-    sha256 cellar: :any_skip_relocation, sonoma:        "54ab3644c4c208c07084484366629734e2eea3fc969bbe840b92213571a0675c"
-    sha256 cellar: :any_skip_relocation, ventura:       "10086f91485d4a86d7688d8b77a8c2145a2ac67fb799c3d45d4d365852989268"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e35f8ba102fa85f79279a21802ce8b0484fbc1119c59420b20f2f48aef88920b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e6bece954e8e2edbe6cd19a2a8817dc3776c1d3db12157f7d1dce12998daace8"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "05357a981a81d3e283b7f11c4e0fdf0b04f54d3f8be9209a2e0782c912717242"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0b580c7b1e0f731d841369d58fd3cd885ed3431a0b90018b6b9a45438dfb4680"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b289de70d45f36417e4ca35a062e1f27987eb55cf4d5c6232f502cfaed754c20"
+    sha256 cellar: :any_skip_relocation, sonoma:        "3867ff7403081ea8715fcd44f7190cc832e0cd3ac58b4a366c7f951d26a4a722"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ab0f45a0249cb1fef039f82d9662e95c2c3b3ee63ecf4ff2f4c4c29afef01506"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "390ecbd017d185a5b8bf024a91820a3cc6740043c959e484a84f5853545414e4"
   end
 
   depends_on "rust" => :build
@@ -30,7 +34,7 @@ class HyperMcp < Formula
   test do
     (testpath/"config.json").write <<~JSON
       {
-        "plugins": []
+        "plugins": {}
       }
     JSON
 

@@ -1,8 +1,8 @@
 class Azurehound < Formula
   desc "Azure Data Exporter for BloodHound"
   homepage "https://github.com/SpecterOps/AzureHound"
-  url "https://github.com/SpecterOps/AzureHound/archive/refs/tags/v2.5.0.tar.gz"
-  sha256 "133c88761831991b237de0aaf4aaa2f15190afd4ee85ffed45a7c8caf523873a"
+  url "https://github.com/SpecterOps/AzureHound/archive/refs/tags/v2.10.0.tar.gz"
+  sha256 "719ec0e89d8c1cf84782bc9cc856e54fbe16dfa108bffa639433a5b30e0d23a0"
   license "GPL-3.0-or-later"
   head "https://github.com/SpecterOps/AzureHound.git", branch: "main"
 
@@ -12,12 +12,12 @@ class Azurehound < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0f2df09ff9b302a1dcdbbea7b01c4dbb087fb11d88ab001400c1adf15bbc60b0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0f2df09ff9b302a1dcdbbea7b01c4dbb087fb11d88ab001400c1adf15bbc60b0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "0f2df09ff9b302a1dcdbbea7b01c4dbb087fb11d88ab001400c1adf15bbc60b0"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5221e3dca0df8110448a2789e7a63f3f3aa5c04c12129bd499c4c513aa47cd5d"
-    sha256 cellar: :any_skip_relocation, ventura:       "5221e3dca0df8110448a2789e7a63f3f3aa5c04c12129bd499c4c513aa47cd5d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "184ef4b185b516dc43a13bbf887c985c52d7c712ef730e75a5f957cb8da94d68"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "5c219c34b4b97251da87cd3b561329828c3afc6a74548595f010c10535f9549d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5c219c34b4b97251da87cd3b561329828c3afc6a74548595f010c10535f9549d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5c219c34b4b97251da87cd3b561329828c3afc6a74548595f010c10535f9549d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ea125c4f13a37b63dcdffe88e0244d5dbc4d7b5fa4ea52bab0de4f376537a698"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2ed0bee508e20fcfe2cdda934ad87e8416b0b0e4011a70a04293af5bc496c536"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0a26a61a72705de61a1050441c6f725dcd26d247607676ec41d8153c9731460f"
   end
 
   depends_on "go" => :build
@@ -25,7 +25,7 @@ class Azurehound < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/bloodhoundad/azurehound/v2/constants.Version=#{version}")
 
-    generate_completions_from_executable(bin/"azurehound", "completion")
+    generate_completions_from_executable(bin/"azurehound", shell_parameter_format: :cobra)
   end
 
   test do

@@ -11,6 +11,7 @@ class Ephemeralpg < Formula
   end
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "05b1fb03e03f8f4dce4484d9ef866159c0b46ebacfaf93c25d542eee54281703"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "25ee1164b3312255ecfc046555f575f1ebf20371f7fe189c686142896d520115"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d1b0710f623c89f3840148e02891c94b468893cb8b174da5c5b0774bd7cd3209"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "a6eb787bc5394b64ccfe181e402594d0d2b5576d296eed60383027014e41bf3f"
@@ -20,10 +21,18 @@ class Ephemeralpg < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux:  "05c7d1aabdd8c6703627c23d63e5ef52e611046fab89e8a81030623b58f82095"
   end
 
+  depends_on "postgresql@18" => :test
   depends_on "libpq"
 
   def install
     system "make"
     system "make", "PREFIX=#{prefix}", "MANPREFIX=#{man}", "install"
+  end
+
+  test do
+    pgsql = Formula["postgresql@18"]
+    ENV.prepend_path "PATH", pgsql.opt_bin
+    uri = shell_output("#{bin}/pg_tmp -d #{testpath} -t")
+    system pgsql.bin/"psql", uri, "-c", "\\l"
   end
 end

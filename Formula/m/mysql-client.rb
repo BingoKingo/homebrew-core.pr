@@ -3,8 +3,9 @@ class MysqlClient < Formula
   # FIXME: Actual homepage fails audit due to Homebrew's user-agent
   # homepage "https://dev.mysql.com/doc/refman/9.3/en/"
   homepage "https://github.com/mysql/mysql-server"
-  url "https://cdn.mysql.com/Downloads/MySQL-9.3/mysql-9.3.0.tar.gz"
-  sha256 "1a3ee236f1daac5ef897c6325c9b0e0aae486389be1b8001deb3ff77ce682d60"
+  url "https://cdn.mysql.com/Downloads/MySQL-9.6/mysql-9.6.0.tar.gz"
+  mirror "https://repo.mysql.com/apt/ubuntu/pool/mysql-innovation/m/mysql-community/mysql-community_9.6.0.orig.tar.gz"
+  sha256 "240061d869d5ae188c9a333845928899e9d963ccbd67865a8a2e4b6fcb67178c"
   license "GPL-2.0-only" => { with: "Universal-FOSS-exception-1.0" }
 
   livecheck do
@@ -13,13 +14,12 @@ class MysqlClient < Formula
 
   bottle do
     rebuild 1
-    sha256 arm64_sequoia: "975fd82ddc975521c79adc5b8d91c8fe739e2d4b4f2f7716bb52dfaad32cd8cb"
-    sha256 arm64_sonoma:  "b0f29c9fbf56dd9f36ba0518e6a08fcedd7cf39884a2828a34e3c1b69cf5ac5d"
-    sha256 arm64_ventura: "20d77f2b858872d0fdfdddc552d0f0c513bdc4e939bfe43eea57a6b47fb7070d"
-    sha256 sonoma:        "418c9c100877a4dae7dd49b6e78c1aafb0db23bcddbf94e522e39a78c8130398"
-    sha256 ventura:       "3529c333d6cc9ca4925f0297a4ed70cf5d41bbcdb3d45dfee4a81bd16b56a8e7"
-    sha256 arm64_linux:   "b7cb2de7878be31f6896f08617393a83d836620192ad20649361c101a48b591f"
-    sha256 x86_64_linux:  "b19afb43de7e7a05235af8abbabec78a12fddac8278079d449cda6824683205e"
+    sha256 arm64_tahoe:   "3d6400b8506b200e4e7354a285c88f5ae9dcb7d9d63d39b9591475b64776508d"
+    sha256 arm64_sequoia: "59bfc71e5306c82a61c77b86593c491323b7f0fa78efada507b795b59b2481ee"
+    sha256 arm64_sonoma:  "1c973f3df2c1fe3d6a60b27da4de950ff9ca55bdfc2e883ca7dd607bed0a396c"
+    sha256 sonoma:        "23e8086ec33e795a0d909d14a4cc0f2955a2022e2293c5d4b6bab24aa4e93069"
+    sha256 arm64_linux:   "6517f09f113664259d5d3661f8f4596cdaa6d395b73b2412ed0e923d79132178"
+    sha256 x86_64_linux:  "532740bb598637db0167e0cf56063d383e14c6f734684cf4a05c928de0f8b0dc"
   end
 
   keg_only "it conflicts with mysql (which contains client libraries)"
@@ -28,10 +28,8 @@ class MysqlClient < Formula
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "libfido2"
-  # GCC is not supported either, so exclude for El Capitan.
-  depends_on macos: :sierra if DevelopmentTools.clang_build_version < 900
   depends_on "openssl@3"
-  depends_on "zlib" # Zlib 1.2.13+
+  depends_on "zlib-ng-compat" # Zlib 1.2.13+
   depends_on "zstd"
 
   uses_from_macos "libedit"
@@ -57,12 +55,8 @@ class MysqlClient < Formula
   end
 
   def install
-    if OS.linux?
-      # Disable ABI checking
-      inreplace "cmake/abi_check.cmake", "RUN_ABI_CHECK 1", "RUN_ABI_CHECK 0"
-    elsif MacOS.version <= :ventura
-      ENV.llvm_clang
-    end
+    # Disable ABI checking
+    inreplace "cmake/abi_check.cmake", "RUN_ABI_CHECK 1", "RUN_ABI_CHECK 0" if OS.linux?
 
     # -DINSTALL_* are relative to `CMAKE_INSTALL_PREFIX` (`prefix`)
     args = %W[

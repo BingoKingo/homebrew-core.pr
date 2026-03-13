@@ -1,19 +1,18 @@
 class Prqlc < Formula
   desc "Simple, powerful, pipelined SQL replacement"
   homepage "https://prql-lang.org"
-  url "https://github.com/PRQL/prql/archive/refs/tags/0.13.4.tar.gz"
-  sha256 "1d214df7827659e9573afc339078e421e326953f7954ba0cba0b996e0d110531"
+  url "https://github.com/PRQL/prql/archive/refs/tags/0.13.10.tar.gz"
+  sha256 "ca618ce52bbec3de60b5bf8193c4c0f208b7681374575b809e4f1604867dba47"
   license "Apache-2.0"
   head "https://github.com/prql/prql.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2b7e06cd44eb914925c510a1960a2dc4300256a8110e61a48c9376cc5db73f4d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1c415be246789f5c4f0186faff43375c7426b6a76c99f524ee8e613381ff28a9"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1bf53c05419ba357804e4e7860f7b890d175b81f6ee5c0ef480ca7a2e7bfdddc"
-    sha256 cellar: :any_skip_relocation, sonoma:        "9678c394ba845c4bac9f02060921cb912b7f273e983a5e29e222988445c75156"
-    sha256 cellar: :any_skip_relocation, ventura:       "ad5b425bcd4bca3cd7150d5f791b40e8101b080aa5ebb052a009be39355bb44d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "389518823c39646ad75a842c27e22bb599b4c6959d530f869cd2feb6e78945c6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5d3c89c64c998f4d9d48a827e8bbb099105aef8201029df041faaf0345fd043a"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "dcb91072733b283682b4c9d3dca802ecec5ad33935f54092184d2c496e3ba3c1"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a342aa3ae3364743dd5ca259dfe7e59a89a94e6e92a79bf0a32e7d7504a3821c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9d3b5b71aabc6d888bd4b46ed35cb40a3e798a002b24c24d6394750b99f8d002"
+    sha256 cellar: :any_skip_relocation, sonoma:        "17c8d48e115b06614e4e417a4d2b8635f08fde0544ad663703c7faeeb881a7db"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "25e37b1562abe783c7c255f61eed8530f74f0d75fb8a5710110ccd3f6494eaba"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2cf210eb5b1b31dcad620de55f4247bd6b149a5c79b84507b88d55eb9cb0371c"
   end
 
   depends_on "rust" => :build

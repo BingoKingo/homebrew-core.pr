@@ -1,8 +1,8 @@
 class LibatomicOps < Formula
   desc "Implementations for atomic memory update operations"
   homepage "https://github.com/bdwgc/libatomic_ops/"
-  url "https://github.com/bdwgc/libatomic_ops/releases/download/v7.8.2/libatomic_ops-7.8.2.tar.gz"
-  sha256 "d305207fe207f2b3fb5cb4c019da12b44ce3fcbc593dfd5080d867b1a2419b51"
+  url "https://github.com/bdwgc/libatomic_ops/releases/download/v7.10.0/libatomic_ops-7.10.0.tar.gz"
+  sha256 "0db3ebff755db170f65e74a64ec4511812e9ee3185c232eeffeacd274190dfb0"
   license all_of: ["GPL-2.0-or-later", "MIT"]
   head "https://github.com/bdwgc/libatomic_ops.git", branch: "master"
 
@@ -12,16 +12,12 @@ class LibatomicOps < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sequoia:  "27c948cb8ca7db52ae09a76402fd1180ca110ece2ba7a20c88b16902967980f4"
-    sha256 cellar: :any,                 arm64_sonoma:   "b1b86350238369d9aeec01fe06db92fa0bda5aadabdc6867e4d7f34eca09b72f"
-    sha256 cellar: :any,                 arm64_ventura:  "df3aefc169055fa94ec868131c894b8fcae8dc7ea33e64a700e3746576e93ebb"
-    sha256 cellar: :any,                 arm64_monterey: "81dde253b3f27f98a1b64110ec13ba9181e8ab34bc0060fc878e98e6090777ba"
-    sha256 cellar: :any,                 sonoma:         "4f402b92483d9647fc328a8b02e2ea1abeb25d3460720f4530d3cc432c5c5550"
-    sha256 cellar: :any,                 ventura:        "37d4fa5e739558798fc23471ba5efe49043ec46a8c07242fcc790f28f9940806"
-    sha256 cellar: :any,                 monterey:       "e673e4f5126a4c2d43a98209bd9165413fc6d189d22e3481824bca60f74ec4c4"
-    sha256 cellar: :any_skip_relocation, arm64_linux:    "f35abbec6820d8c0597494560dff420dfd416511f4538c81eea5e3ab599c4fb3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "d1eac8d8ea0bd234b72ce311c92d02dc2ca33029b819327b6c2236309d549bca"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "2b3dae32f7ff10faaa84a3a5ee3486cf65496feb75519dcaa2cf2d171be73fd7"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4378fe1188ad59424d8f452c9123fd04d117a44644a94ba8cc6376a6dcee2a00"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "81c1175fc0dc5c6c001328997b805cb39be52690b3609df78ccead64b655f694"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ab9bc50267eab633db6d61166db93be0e5bf365b09106e1aeaaf581c093f3c46"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "241c6cae391092c83e9d29d593085476df8ace090d633578d7e387bbbe730765"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "11be1a0fc988f891a83af51dcaa1712b17e4475acf92abf19f4f15a7ae92364e"
   end
 
   depends_on "cmake" => :build

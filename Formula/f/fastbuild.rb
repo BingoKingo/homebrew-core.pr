@@ -1,14 +1,16 @@
 class Fastbuild < Formula
   desc "High performance build system for Windows, OSX and Linux"
   homepage "https://fastbuild.org/"
-  url "https://github.com/fastbuild/fastbuild/archive/refs/tags/v1.15.tar.gz"
-  sha256 "c08d9233d575d6dbbc42363caa64e16cd9709e22f58b492dc1b65620fbdfc297"
+  url "https://github.com/fastbuild/fastbuild/archive/refs/tags/v1.19.tar.gz"
+  sha256 "a0014ce2f3c31ee1db21883151141a2633739f8147fb6b9888603f423fccec56"
   license "Zlib"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, sonoma:       "61c25b4f9dbf1cdd1956a23a46ead3d306fa029825312ed88dee6a6849e5d5b0"
-    sha256 cellar: :any_skip_relocation, ventura:      "f2ed6f7c462b3a7d23fe9e5e7c63c049fc343b56df292c0e91f69e5587146930"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "64bf2acdbf4398851da98943e21cd69a6549464e16178b3ce4c8746188dc48d1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "a95661f3b3667aeb271bc2eca4ab45c748fa6414684be88ec151ecd0df6feb73"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a95661f3b3667aeb271bc2eca4ab45c748fa6414684be88ec151ecd0df6feb73"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9639b58016ff7672f5fa76a7023cd00bf392bf7f2a33cbec745e8c90ad200428"
+    sha256 cellar: :any_skip_relocation, sonoma:        "9588121fcfcf5433ce1b0357df57b80407a97885198003c4dd9949bde471b69c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7374315d541cf5b53077ef653910e6d76bb1e6a3b7ae4c5c28e1e638808fb54f"
   end
 
   on_linux do
@@ -17,12 +19,12 @@ class Fastbuild < Formula
 
   resource "bootstrap-fastbuild" do
     on_macos do
-      url "https://fastbuild.org/downloads/v1.13/FASTBuild-OSX-x64%2BARM-v1.13.zip"
-      sha256 "290e60e0c3527c3680c488c67f1c7e20ca7082d35e38664cd08ca365d18b46fe"
+      url "https://fastbuild.org/downloads/v1.17/FASTBuild-OSX-x64%2BARM-v1.17.zip"
+      sha256 "66ac01d8aa2e04f7a9c4870fdb7ef79674473462a0dde818768b67c25eaa893b"
     end
     on_linux do
-      url "https://fastbuild.org/downloads/v1.13/FASTBuild-Linux-x64-v1.13.zip"
-      sha256 "0aede5c4963056bd90051626e216ca4dfcc647c43a082fab6f304f2d4b083d6e"
+      url "https://fastbuild.org/downloads/v1.17/FASTBuild-Linux-x64-v1.17.zip"
+      sha256 "cbaae008fad417339734a32e24180958d5f0df640bc324d2b976cdb9dc97f2ac"
     end
   end
 

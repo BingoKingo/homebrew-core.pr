@@ -6,13 +6,9 @@ class Libu2fServer < Formula
   license "BSD-2-Clause"
   revision 3
 
-  livecheck do
-    url "https://developers.yubico.com/libu2f-server/Releases/"
-    regex(/href=.*?libu2f-server[._-]v?(\d+(?:\.\d+)+)\.t/i)
-  end
-
   bottle do
     rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:    "bfeddb8ea5570906354b711dd21758baaa28c612ddde47ec17f22f30c2d8b9ac"
     sha256 cellar: :any,                 arm64_sequoia:  "ba4f595c0638e3c766d45b0bae4ae189482ef6e14611073cee2c805d8ff947aa"
     sha256 cellar: :any,                 arm64_sonoma:   "02828c78b609450b8675cda154506543bdd3b6c7290af5ff8dc6031e28d1073f"
     sha256 cellar: :any,                 arm64_ventura:  "3ee5815ba1a374c9a85206466bd83b20f5de894ede219927281bf17cf4a1f415"
@@ -26,6 +22,10 @@ class Libu2fServer < Formula
     sha256 cellar: :any_skip_relocation, arm64_linux:    "380db415620d20a896929d242dfeceae1ee2588ad8fd18544fef87b3f10a2d0c"
     sha256 cellar: :any_skip_relocation, x86_64_linux:   "c7e4dfb9db89bfc5720aba123638286a77d5d76d9bb108a1bf7b2c1bf01ffa6e"
   end
+
+  # https://www.yubico.com/support/terms-conditions/yubico-end-of-life-policy/eol-products/
+  deprecate! date: "2025-11-22", because: :unmaintained, replacement_formula: "libfido2"
+  disable! date: "2026-11-22", because: :unmaintained, replacement_formula: "libfido2"
 
   depends_on "check" => :build
   depends_on "gengetopt" => :build

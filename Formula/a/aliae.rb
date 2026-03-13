@@ -1,18 +1,19 @@
 class Aliae < Formula
   desc "Cross shell and platform alias management"
   homepage "https://aliae.dev"
-  url "https://github.com/jandedobbeleer/aliae/archive/refs/tags/v0.26.5.tar.gz"
-  sha256 "fae24264ba59214a657f0e4022e527ecd9459e66eb7bf3fdab1484a2fef78276"
+  url "https://github.com/jandedobbeleer/aliae/archive/refs/tags/v0.26.6.tar.gz"
+  sha256 "905602b3dd56b6caf099970132edf7e3366b3ef0d98a71b277e23c00990e979d"
   license "MIT"
   head "https://github.com/jandedobbeleer/aliae.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "893962f0bc61841a44fb822e3c73b61579b7547f99d5ddd957ac65cad761bb85"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bd2ea50e4ed2466e2b5a85376f6b03f664d76ba31fd4f7860a3e253ebc5147a8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5dea9ce9501d131f2400499794562a1c35499557c72ce3710aa28f6a6edff30c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "6b057fb7d3f910025e0297ac4029248611d90eb68dae4991f2eadbd5941415b2"
-    sha256 cellar: :any_skip_relocation, ventura:       "aa29d6f7f2c54751786bbf7881f5f97d44408f85e55c069c3ea0e43e5850497f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8f1b7a1febbe233213e950e1e3766786170543e8ce9f0a6c509af2bd61aeffb2"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d53160d4849356a90a2678dbf28084f59adb0500f7e9afd84878f5f70bd05ec5"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "98d44f2dca6d2b36d623e1b32c314020a7df181556e35b2e958929bd949c500c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2e673fd81753e7e90ea1e6869fe8df79d44030cd4df7fa5081b46c05c73977bd"
+    sha256 cellar: :any_skip_relocation, sonoma:        "2232257f5cb03001eaba175dc4049386f8f93052907e8be1e1563f5635fd2089"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "749bcd42aad96e35d801f5eb1b732c58d2fd5f6e4dc521fbd2459384bde14a33"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1d640083863cad4b03db8646421e518a9a02e9b599fe2344fad201d226db5499"
   end
 
   depends_on "go" => :build
@@ -23,7 +24,7 @@ class Aliae < Formula
       system "go", "build", *std_go_args(ldflags:)
     end
 
-    generate_completions_from_executable(bin/"aliae", "completion")
+    generate_completions_from_executable(bin/"aliae", shell_parameter_format: :cobra)
   end
 
   test do

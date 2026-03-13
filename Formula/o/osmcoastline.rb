@@ -1,45 +1,49 @@
 class Osmcoastline < Formula
   desc "Extracts coastline data from OpenStreetMap planet file"
   homepage "https://osmcode.org/osmcoastline/"
-  url "https://github.com/osmcode/osmcoastline/archive/refs/tags/v2.4.1.tar.gz"
-  sha256 "3a76ed8c8481e5499c8fedbba3b6af4f33f73bbbfc4e6154ea50fe48ae7054a9"
+  url "https://github.com/osmcode/osmcoastline/archive/refs/tags/v2.5.0.tar.gz"
+  sha256 "7980c77acbbf460d6de7df1d30b2f2d9da550db1512d0e828623851c687b238a"
   license "GPL-3.0-or-later"
-  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "c35ab027223ca2ea5a8555eb16f6f28e3b08dd4b2041d4796331391a1458a5f7"
-    sha256 cellar: :any,                 arm64_sonoma:  "4792911cf6b33270e68cac5e9bb1810dff2a0869410905ae47c1978a5683e7b5"
-    sha256 cellar: :any,                 arm64_ventura: "a791ac1186a07fb44e973b7d08e2db4d73694e34d45aac133ebf399900e72486"
-    sha256 cellar: :any,                 sonoma:        "aef43094262f2b19ef4fa3c689ecfa6a51064e8ecddd9fda6d625cb690a6b0a1"
-    sha256 cellar: :any,                 ventura:       "51f97203e6f852e9ee35a14a98ba7d65f8aa1dea74a5711123e897e3e54eec8c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "cfd02b5ffbd8862c4c8f753c921c6db4930f64740883e9c4bd76ca0d7a89e1d4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "512cdfad91e7e710a01e2f387d73661032fb267fc90c6a51131953c184956bb0"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "c594f9f9ef9f7dd27e3decdc3e17f52b040836ba8574901414134d1c94666ac0"
+    sha256 cellar: :any,                 arm64_sequoia: "be34804e33a4dc5106e58b9e97eecefb2cd162842c8106bf19d51b36976fceb1"
+    sha256 cellar: :any,                 arm64_sonoma:  "711e33588946976ca7e2e68e9f1f42f6ac5975e9c814f62ab126a224610776da"
+    sha256 cellar: :any,                 sonoma:        "d3d8c1f5652b522195c764a951abf041b962308757953c45caac2ec79195f15f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c251ca8a96cb5020fa83e406ed3aaccf1ff5c93d43284a86876ef62475cfc1af"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bc4f8e794f3b8619d5dd0c24c61b75077cb775849cbc1442b9bd9fb07d36f744"
   end
 
   depends_on "cmake" => :build
   depends_on "libosmium" => :build
-
-  depends_on "expat"
+  depends_on "protozero" => :build
   depends_on "gdal"
   depends_on "geos"
   depends_on "libspatialite"
   depends_on "lz4"
 
   uses_from_macos "bzip2"
+  uses_from_macos "expat"
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  # Work around superenv to avoid mixing `expat` usage in libraries across dependency tree.
+  # Brew `expat` usage in Python has low impact as it isn't loaded unless pyexpat is used.
+  # TODO: Consider adding a DSL for this or change how we handle Python's `expat` dependency
+  def remove_brew_expat
+    env_vars = %w[CMAKE_PREFIX_PATH HOMEBREW_INCLUDE_PATHS HOMEBREW_LIBRARY_PATHS PATH PKG_CONFIG_PATH]
+    ENV.remove env_vars, /(^|:)#{Regexp.escape(Formula["expat"].opt_prefix)}[^:]*/
+    ENV.remove "HOMEBREW_DEPENDENCIES", "expat"
+  end
 
   def install
-    # Work around an Xcode 15 linker issue which causes linkage against LLVM's
-    # libunwind due to it being present in a library search path.
-    if DevelopmentTools.clang_build_version >= 1500
-      recursive_dependencies
-        .select { |d| d.name.match?(/^llvm(@\d+)?$/) }
-        .map { |llvm_dep| llvm_dep.to_formula.opt_lib }
-        .each { |llvm_lib| ENV.remove "HOMEBREW_LIBRARY_PATHS", llvm_lib }
-    end
+    remove_brew_expat if OS.mac? && MacOS.version < :sequoia
 
-    protozero = Formula["libosmium"].opt_libexec/"include"
+    protozero = Formula["protozero"].opt_include
     args = %W[
       -DPROTOZERO_INCLUDE_DIR=#{protozero}
     ]
@@ -49,13 +53,13 @@ class Osmcoastline < Formula
   end
 
   test do
-    (testpath/"input.opl").write <<~EOS
+    (testpath/"input.opl").write <<~OPL
       n100 v1 x1.01 y1.01
       n101 v1 x1.04 y1.01
       n102 v1 x1.04 y1.04
       n103 v1 x1.01 y1.04
       w200 v1 Tnatural=coastline Nn100,n101,n102,n103,n100
-    EOS
+    OPL
     system bin/"osmcoastline", "-v", "-o", "output.db", "input.opl"
   end
 end

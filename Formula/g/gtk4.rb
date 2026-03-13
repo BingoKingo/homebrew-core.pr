@@ -1,9 +1,11 @@
 class Gtk4 < Formula
   desc "Toolkit for creating graphical user interfaces"
   homepage "https://gtk.org/"
-  url "https://download.gnome.org/sources/gtk/4.18/gtk-4.18.5.tar.xz"
-  sha256 "bb5267a062f5936947d34c9999390a674b0b2b0d8aa3472fe0d05e2064955abc"
+  url "https://download.gnome.org/sources/gtk/4.22/gtk-4.22.0.tar.xz"
+  sha256 "ed3932469d3d891df53451f2cd28380af7673f736aa443bb3dda7adb40994f1e"
   license "LGPL-2.1-or-later"
+  revision 1
+  head "https://gitlab.gnome.org/GNOME/gtk.git", branch: "main"
 
   livecheck do
     url :stable
@@ -11,13 +13,12 @@ class Gtk4 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "a24eb2e0972814018d8b7df4752fd0ad4e2e35ded2edd341075f7146e87db48f"
-    sha256 arm64_sonoma:  "71ed52f780ffb00e494d389df7e6ea8ec6af86b490c3d6692d7515fbeee6ce92"
-    sha256 arm64_ventura: "7146c5646c0f083d298bd6e50d955a8ba68b4c38d4806d6d11d33e90702f9b5c"
-    sha256 sonoma:        "3543d8f74c468d7d8b183bb1a4166df671594be3890d79a63873d86378893892"
-    sha256 ventura:       "540518e3e5f28db0cc0c5f97d2aeb651d03fc38f6cafa8a6cd82281fac4e7160"
-    sha256 arm64_linux:   "f98d60ba716d8cef10285e73c2b0d29cfd1eeeadbb551eb3ff382f8497847bf1"
-    sha256 x86_64_linux:  "67270bcd26dc1e078d49f96c4d79b16b8dda34ca7638f47eeaeaec6aa0b559a3"
+    sha256 arm64_tahoe:   "4477e0eacc0c37ebc8a0fc3f8f1e3b1dd578487a47eefcd44d21aa32ac12a1d0"
+    sha256 arm64_sequoia: "7587a125118fa5272812378882b7f9b643213b47b844478b2130760779096206"
+    sha256 arm64_sonoma:  "35c1027cdada0559f61e33690bf527c330c850afa096a8d32af26d600532045c"
+    sha256 sonoma:        "8d796c2d0090b1ce8b88085fd7d59149c2f3c9ef86229598558b66f866708fac"
+    sha256 arm64_linux:   "eb4192d1a5dca511a8758953de6b3aa062a91cd35b0b76e6a227560719f58bf9"
+    sha256 x86_64_linux:  "44702959a8656d9f822bd3639bc59bd52605c55db9200ab9c9904239bad58fa4"
   end
 
   depends_on "docbook" => :build
@@ -40,6 +41,7 @@ class Gtk4 < Formula
   depends_on "jpeg-turbo"
   depends_on "libepoxy"
   depends_on "libpng"
+  depends_on "librsvg"
   depends_on "libtiff"
   depends_on "pango"
 
@@ -77,7 +79,6 @@ class Gtk4 < Formula
     if OS.mac?
       args << "-Dx11-backend=false"
       args << "-Dmacos-backend=true"
-      args << "-Dprint-cups=disabled" if MacOS.version <= :mojave
     end
 
     # ensure that we don't run the meson post install script

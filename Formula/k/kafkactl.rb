@@ -1,18 +1,18 @@
 class Kafkactl < Formula
   desc "CLI for managing Apache Kafka"
   homepage "https://deviceinsight.github.io/kafkactl/"
-  url "https://github.com/deviceinsight/kafkactl/archive/refs/tags/v5.8.0.tar.gz"
-  sha256 "fe76c997cdc10aa52d984b6abcc14fe4c832182a1e03e1dd6225f38a4f5b5615"
+  url "https://github.com/deviceinsight/kafkactl/archive/refs/tags/v5.18.0.tar.gz"
+  sha256 "f07b27c973412651dc35fc09e0db8644da0575e1293f1c85689feda19d917ef0"
   license "Apache-2.0"
   head "https://github.com/deviceinsight/kafkactl.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f5deecb945ab1c7f60dd9231cbc7ad9e921260a6c3c09ae950e65754b68716d7"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f5deecb945ab1c7f60dd9231cbc7ad9e921260a6c3c09ae950e65754b68716d7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f5deecb945ab1c7f60dd9231cbc7ad9e921260a6c3c09ae950e65754b68716d7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d6b7d4466e3d793e4dda82a96539f79851b7424219f7724aedcdb4b2fdd36f43"
-    sha256 cellar: :any_skip_relocation, ventura:       "d6b7d4466e3d793e4dda82a96539f79851b7424219f7724aedcdb4b2fdd36f43"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "467ce6793c7872edebdd2f4b417249af775103b404e25d0ca4033fdfea2ed161"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "4281fec8deef02f0999cf85c76239496d84e6f2bc570e8fc78dc5a1fbe424665"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4281fec8deef02f0999cf85c76239496d84e6f2bc570e8fc78dc5a1fbe424665"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4281fec8deef02f0999cf85c76239496d84e6f2bc570e8fc78dc5a1fbe424665"
+    sha256 cellar: :any_skip_relocation, sonoma:        "cf2c04d06546043f4e4079e480d7e3a48f12c4a0f14e98c8df47f8f24f075eb2"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "45730352148fd6b5d21fec66f97339eb49d7886d78ccf244ea77013ffefbd8e0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "36cfecee236a47e0abfbdfb126edb31a6d5cf5fc1223e9c78d96eeda132ce09d"
   end
 
   depends_on "go" => :build
@@ -20,13 +20,13 @@ class Kafkactl < Formula
   def install
     ldflags = %W[
       -s -w
-      -X github.com/deviceinsight/kafkactl/v5/cmd.Version=#{version}
+      -X github.com/deviceinsight/kafkactl/v5/cmd.Version=v#{version}
       -X github.com/deviceinsight/kafkactl/v5/cmd.GitCommit=#{tap.user}
       -X github.com/deviceinsight/kafkactl/v5/cmd.BuildTime=#{time.iso8601}
     ]
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"kafkactl", "completion")
+    generate_completions_from_executable(bin/"kafkactl", shell_parameter_format: :cobra)
   end
 
   test do

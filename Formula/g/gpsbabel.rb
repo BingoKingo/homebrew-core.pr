@@ -10,21 +10,29 @@ class Gpsbabel < Formula
     regex(/^gpsbabel[._-]v?(\d+(?:[._]\d+)+)$/i)
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "2fdf2224f180cf49634c7262ae03f435dc5a6717bba6b780e8b56d3901d00ffd"
-    sha256 cellar: :any,                 arm64_ventura: "f33d3021cb041af672e04d337d783eda512ac37e2f1c53eb7b86341d6f13e332"
-    sha256                               sonoma:        "8018d83e557a241772517a69440b16e3367e4a20542e688de3f9f6e1452420c5"
-    sha256                               ventura:       "3ccb0910e87721002a8de68f301ed95e0d0e940e9565dedcc9d2082f19275d7f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e04ac4e5f6077a3636e8cfc501ee4acfb965f220b4c85008d50033156f0e18f7"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_tahoe:   "f5a6e165e7d310ead14a3f4eba01ea1d7367fe5feb7e0736cdbe1291e25cf9f1"
+    sha256 cellar: :any,                 arm64_sequoia: "ee0edd5748373bc587c31d0d97064f2b23058e2c8cd2627ed49e5e14cbe0b23a"
+    sha256 cellar: :any,                 arm64_sonoma:  "224cc493bf2f416e2f4b9da7237ec75d53a2dbdcbdb031795982747070b60ab9"
+    sha256 cellar: :any,                 sonoma:        "5ccb88102bb1902e6ab6f9ff5cd275fc966be2f2b2082b0aa94ab83419f0ef9c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3d9644f2f53d57333345dc3b75d93d05443072654d5600d92e87cc7732b3fd3a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b5008e8faffe2128519d5fdd5ebfc432f74f021a3b2937763b3a0b6cb54f68ff"
   end
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
+  depends_on "qtserialport" => :build
   depends_on "libusb"
-  depends_on "qt"
+  depends_on "qt5compat"
+  depends_on "qtbase"
   depends_on "shapelib"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     ENV.cxx11
@@ -44,7 +52,7 @@ class Gpsbabel < Formula
   end
 
   test do
-    (testpath/"test.loc").write <<~EOS
+    (testpath/"test.loc").write <<~XML
       <?xml version="1.0"?>
       <loc version="1.0">
         <waypoint>
@@ -52,7 +60,7 @@ class Gpsbabel < Formula
           <coord lat="37.331695" lon="-122.030091"/>
         </waypoint>
       </loc>
-    EOS
+    XML
     system bin/"gpsbabel", "-i", "geo", "-f", "test.loc", "-o", "gpx", "-F", "test.gpx"
     assert_path_exists testpath/"test.gpx"
   end

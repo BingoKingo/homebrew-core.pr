@@ -1,10 +1,10 @@
 class Pdal < Formula
   desc "Point data abstraction library"
-  homepage "https://www.pdal.io/"
-  url "https://github.com/PDAL/PDAL/releases/download/2.8.4/PDAL-2.8.4-src.tar.bz2"
-  sha256 "c27dc79af0b26f9cb3209b694703e9d576f1b0c8c05b36206fd5e310494e75b5"
+  homepage "https://pdal.org/"
+  url "https://github.com/PDAL/PDAL/releases/download/2.10.0/PDAL-2.10.0-src.tar.bz2"
+  sha256 "65eba26e24a2cb1752d3542cc84e8035ecb8dc890b72145128f9b33bd184f2f5"
   license "BSD-3-Clause"
-  revision 1
+  compatibility_version 1
   head "https://github.com/PDAL/PDAL.git", branch: "master"
 
   livecheck do
@@ -13,43 +13,53 @@ class Pdal < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "64bb0d0e90ce547231899e349d64126c75c9a89e4564e57ede59eeca6c654e5e"
-    sha256 cellar: :any,                 arm64_sonoma:  "6b051c39b6bb6c691cc76aca04fd53191515ac9ae64971185f601f5dfadbe32c"
-    sha256 cellar: :any,                 arm64_ventura: "7b44dbcbfdfac6af9dcf1d59f2cc37182224638c5289fc16374c465aae0a415b"
-    sha256 cellar: :any,                 sonoma:        "4bc10dded0e56135067113caa32b25833dda96c80bb14673b840952b58e85f29"
-    sha256 cellar: :any,                 ventura:       "725b858faef46f66946bc1e29ae644bef8f42c71295196a070bec68ec6222de2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "be97476fd1203ef225f9aa71469adac4aac70314af62aafe9abf8921e812f32c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e28a8d44c02b9f638c76824ad8a17a90cbb9f806bf4b5aba66a49a29ee91738b"
+    sha256 cellar: :any,                 arm64_tahoe:   "9e0016f885a83d366f0bceeb076869ce9d82197cccf15e92b20250a4b01c3023"
+    sha256 cellar: :any,                 arm64_sequoia: "99e61a32ee87f0ea38d9f3b85fb950166f7e7ab09065d806bfb1d041b3457b07"
+    sha256 cellar: :any,                 arm64_sonoma:  "e1f14867f06d20cebb682238598a216689349c1b381b65ad7e6740a328db6ca0"
+    sha256 cellar: :any,                 sonoma:        "0a60db38ee951ecb87fe733b021cf83073e11ddf5b690f994447e1d2b34b1f38"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "03153aa21808408e7c45cf6eb79bf6893dc79205024ebe1b838d1350bc023925"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4ca80129201d5d8c311e15e15e275398b053a662ba6df24ccf0ac003322b5097"
   end
 
   depends_on "cmake" => :build
+  depends_on "googletest" => :build
   depends_on "pkgconf" => :build
+
+  depends_on "apache-arrow"
+  depends_on "curl"
+  depends_on "draco"
   depends_on "gdal"
   depends_on "hdf5"
-  depends_on "laszip"
   depends_on "libgeotiff"
   depends_on "libpq"
   depends_on "libxml2"
+  depends_on "lz4"
   depends_on "numpy"
   depends_on "openssl@3"
   depends_on "proj"
+  depends_on "tiledb"
+  depends_on "xerces-c"
   depends_on "zstd"
-
-  uses_from_macos "curl"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "libunwind"
+    depends_on "zlib-ng-compat"
   end
 
   def install
     args = %w[
-      -DWITH_LASZIP=TRUE
-      -DBUILD_PLUGIN_GREYHOUND=ON
+      -DWITH_TESTS=OFF
+      -DENABLE_CTEST=OFF
+      -DBUILD_PLUGIN_ARROW=ON
+      -DBUILD_PLUGIN_TILEDB=ON
       -DBUILD_PLUGIN_ICEBRIDGE=ON
+      -DBUILD_PLUGIN_HDF=ON
       -DBUILD_PLUGIN_PGPOINTCLOUD=ON
-      -DBUILD_PLUGIN_PYTHON=ON
-      -DBUILD_PLUGIN_SQLITE=ON
+      -DBUILD_PLUGIN_E57=ON
+      -DBUILD_PLUGIN_DRACO=ON
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF
+      -DWITH_ZSTD=ON
+      -DWITH_ZLIB=ON
     ]
     if OS.linux?
       libunwind = Formula["libunwind"]

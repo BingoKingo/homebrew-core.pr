@@ -1,8 +1,8 @@
 class Postgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://download.osgeo.org/postgis/source/postgis-3.5.3.tar.gz"
-  sha256 "650e44de788d38175e3719df1d2ca4356bd987f54fe3d2030808de76464a2a06"
+  url "https://download.osgeo.org/postgis/source/postgis-3.6.2.tar.gz"
+  sha256 "d488089a64ee4060bce7dbba0291fcca358e7f7ac5230e2ee5b344e7485729c4"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -11,12 +11,12 @@ class Postgis < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "4d77e55e3a992c86b7fb55f78ad0d5661735680d55162f7555ba375d6a9ae2b9"
-    sha256 cellar: :any,                 arm64_sonoma:  "d5eddc168c4a7158110015064b89ca1076e9345c02639b5665292894f8874d09"
-    sha256 cellar: :any,                 arm64_ventura: "55ac1beb155c3aa9f2fb13d2a0caa37e984171ba338588693caa890a7c97cd47"
-    sha256 cellar: :any,                 sonoma:        "73251c8a848a26bed7ab684a942e34b2dfb958ab0fbb36716b0c82f5da3af6ec"
-    sha256 cellar: :any,                 ventura:       "6c632fed3fe0d90c558c4d94650159a0162e894f56af1aff34f2a1870c8142bc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "acdcb64101e9ef22b5d91bb1f3129c8052676908dcc51e9a0f1b87ed2c3a9ac2"
+    sha256 cellar: :any,                 arm64_tahoe:   "d1530f71ddfd1229308739475a02d5d569a853efdccd6f4f3848d9d5cf30d824"
+    sha256 cellar: :any,                 arm64_sequoia: "d5339cd23e2e8d1611352c5843085827b8f9ddfc525fa34f95e6187490504e67"
+    sha256 cellar: :any,                 arm64_sonoma:  "fe35643027281d8029b530d3ece678002fb66849c1458ba9da588f08db32245a"
+    sha256 cellar: :any,                 sonoma:        "2ab361e0b2270c2088946c0cf1daa03a60ac1639634c33823f117eff3b19d27f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0ccd63a1425bd72261233bc8523220965631897fe2402cdd8dedbebd0c339a2e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "36288526e76b3bd6ec4daee709c2f845f2a26e32f54ca4d7979de166990ef449"
   end
 
   head do
@@ -28,12 +28,12 @@ class Postgis < Formula
   end
 
   depends_on "pkgconf" => :build
-  depends_on "postgresql@14" => [:build, :test]
   depends_on "postgresql@17" => [:build, :test]
+  depends_on "postgresql@18" => [:build, :test]
 
   depends_on "gdal"
   depends_on "geos"
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   depends_on "json-c"
   depends_on "libpq"
   depends_on "libxml2"
@@ -54,6 +54,8 @@ class Postgis < Formula
   end
 
   def install
+    odie "Too many postgresql dependencies!" if postgresqls.count > 2
+
     # C++17 is required.
     ENV.append "CXXFLAGS", "-std=c++17"
     # Avoid linking to libc++ on Linux due to indirect LLVM dependency

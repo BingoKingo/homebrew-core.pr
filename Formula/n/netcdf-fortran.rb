@@ -6,6 +6,7 @@ class NetcdfFortran < Formula
   license "NetCDF"
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:   "7201bd78c6bdf89900c295717ec925c1a29e98d86c568efe09fab3cab906ad96"
     sha256 cellar: :any,                 arm64_sequoia: "d91c6c35e16156f4542f17de1103e15b8471aa0fca99e94bb3762e9644e383e6"
     sha256 cellar: :any,                 arm64_sonoma:  "5473275962edf3112c6075204d6cdf55dbd90e5677fb96d23a191683620fbf77"
     sha256 cellar: :any,                 arm64_ventura: "46de0b263944a9043587d3786893444f54dbb156f7ee8d9e8db7bce515c6079b"
@@ -16,17 +17,12 @@ class NetcdfFortran < Formula
   end
 
   depends_on "cmake" => :build
+  depends_on "hdf5" => :build
   depends_on "gcc" # for gfortran
-  depends_on "hdf5"
   depends_on "netcdf"
 
   def install
     args = std_cmake_args + %w[-DENABLE_TESTS=OFF -DENABLE_DOXYGEN=OFF]
-
-    # Help netcdf-fortran find netcf
-    # https://github.com/Unidata/netcdf-fortran/issues/301#issuecomment-1183204019
-    args << "-DnetCDF_LIBRARIES=#{Formula["netcdf"].opt_lib}/#{shared_library("libnetcdf")}"
-    args << "-DnetCDF_INCLUDE_DIR=#{Formula["netcdf"].opt_include}"
 
     system "cmake", "-S", ".", "-B", "build_shared", *args, "-DBUILD_SHARED_LIBS=ON"
     system "cmake", "--build", "build_shared"
@@ -60,8 +56,7 @@ class NetcdfFortran < Formula
         end subroutine check
       end program test
     FORTRAN
-    system "gfortran", "test.f90", "-L#{lib}", "-I#{include}", "-lnetcdff",
-                       "-o", "testf"
+    system "gfortran", "test.f90", "-L#{lib}", "-I#{include}", "-lnetcdff", "-o", "testf"
     system "./testf"
   end
 end

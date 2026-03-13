@@ -1,10 +1,9 @@
 class Pybind11 < Formula
   desc "Seamless operability between C++11 and Python"
   homepage "https://github.com/pybind/pybind11"
-  url "https://github.com/pybind/pybind11/archive/refs/tags/v2.13.6.tar.gz"
-  sha256 "e08cb87f4773da97fa7b5f035de8763abc656d87d5773e62f6da0587d1f0ec20"
+  url "https://github.com/pybind/pybind11/archive/refs/tags/v3.0.2.tar.gz"
+  sha256 "2f20a0af0b921815e0e169ea7fec63909869323581b89d7de1553468553f6a2d"
   license "BSD-3-Clause"
-  revision 1
 
   livecheck do
     url :stable
@@ -12,13 +11,12 @@ class Pybind11 < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "d1ac19b7042b5f6b94bff8f1766307bfee68335ecb4dc7423040ae89940173bf"
+    sha256 cellar: :any_skip_relocation, all: "81f2a10b153f9041bba4bbb0b1466656df2878115a11a1d67b5033efb5624bc2"
   end
 
   depends_on "cmake" => :build
-  depends_on "python-setuptools" => :build
-  depends_on "python@3.12" => [:build, :test]
   depends_on "python@3.13" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
 
   def pythons
     deps.map(&:to_formula)
@@ -31,13 +29,12 @@ class Pybind11 < Formula
     system "cmake", "--install", "build"
 
     # build an `:all` bottle.
-    inreplace share/"cmake/pybind11/FindPythonLibsNew.cmake", "/usr/local", HOMEBREW_PREFIX
     inreplace share/"pkgconfig/pybind11.pc", /^prefix=$/, "\\0#{opt_prefix}"
 
     pythons.each do |python|
       # Install Python package too
       python_exe = python.opt_libexec/"bin/python"
-      system python_exe, "-m", "pip", "install", *std_pip_args, "."
+      system python_exe, "-m", "pip", "install", *std_pip_args(build_isolation: true), "."
 
       pyversion = Language::Python.major_minor_version(python_exe)
       (buildpath/"pybind11-config-#{pyversion}").write <<~BASH

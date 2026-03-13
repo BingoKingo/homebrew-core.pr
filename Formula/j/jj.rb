@@ -1,37 +1,23 @@
 class Jj < Formula
   desc "Git-compatible distributed version control system"
   homepage "https://github.com/jj-vcs/jj"
-  url "https://github.com/jj-vcs/jj/archive/refs/tags/v0.29.0.tar.gz"
-  sha256 "57df34a06b1d2125ccd6e8383ea08f24160c48e33e9daecd883a2e59567a9fd9"
+  url "https://github.com/jj-vcs/jj/archive/refs/tags/v0.39.0.tar.gz"
+  sha256 "52a60f058cf66ba3dc0bf69f189e99763b33b6770b3068b2be4fe76ecd287282"
   license "Apache-2.0"
   head "https://github.com/jj-vcs/jj.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "50c511670ee40fa1da2d8b18029bad69223ee3d8e50a3009d4607ac94390fc48"
-    sha256 cellar: :any,                 arm64_sonoma:  "5d6c168d37c55fdfcaaa4c95b3e380cc859296ef9d114ff5830ff8aa2291bbae"
-    sha256 cellar: :any,                 arm64_ventura: "48f0c95193b1714f59799528db6ae6069148fdc21963dcf76c205f9b5b377579"
-    sha256 cellar: :any,                 sonoma:        "33a01d5e4b4cd52ae2dcb1830288cbde9a9560f56c2205fb267140797ffa2d42"
-    sha256 cellar: :any,                 ventura:       "62b3be14fd3c750708c27a70c1edea19c893a67cdd45154ea259583661459970"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "439cd35809f8b0eb10150b5598be56d1afbfa9aa5a2c26aecbd1dcaad1414a46"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2140f62549e58a6938ee9d265d926223bdfca139485464958e89340279f3af47"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "94418d1c38adb5add9e8e4a9de853af1cc61d6ab981959df17b1a78c457837c9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5e0d6abf8ec92f512b0a8598ce32ec736330624c7be5057ff481fa0466385a92"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0469e577868ede409810d4fecd237a0b0dfe74106e707d38ebf833612e95fdc2"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d0699fd6c863c0eae151964d64aa5a1e2bd95e729a3df571b14e8c858932115d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8bf180e9b14f44065ee151c2784c1b8616f17eeccbad42d760d6ff490f8a9626"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "543c47f1eb390ae92b04c750874d1abd2b0fa92cf6b905be36defffffa7764dc"
   end
 
-  depends_on "pkgconf" => :build
   depends_on "rust" => :build
 
-  depends_on "libgit2"
-  depends_on "libssh2"
-  depends_on "openssl@3"
-
-  uses_from_macos "zlib"
-
   def install
-    ENV["LIBGIT2_NO_VENDOR"] = "1"
-    ENV["LIBSSH2_SYS_USE_PKG_CONFIG"] = "1"
-    # Ensure the correct `openssl` will be picked up.
-    ENV["OPENSSL_DIR"] = Formula["openssl@3"].opt_prefix
-    ENV["OPENSSL_NO_VENDOR"] = "1"
-
     system "cargo", "install", *std_cargo_args(path: "cli")
 
     generate_completions_from_executable(bin/"jj", shell_parameter_format: :clap)
@@ -39,22 +25,10 @@ class Jj < Formula
   end
 
   test do
-    require "utils/linkage"
-
     touch testpath/"README.md"
     system bin/"jj", "git", "init"
     system bin/"jj", "describe", "-m", "initial commit"
     assert_match "README.md", shell_output("#{bin}/jj file list")
     assert_match "initial commit", shell_output("#{bin}/jj log")
-
-    [
-      Formula["libgit2"].opt_lib/shared_library("libgit2"),
-      Formula["libssh2"].opt_lib/shared_library("libssh2"),
-      Formula["openssl@3"].opt_lib/shared_library("libcrypto"),
-      Formula["openssl@3"].opt_lib/shared_library("libssl"),
-    ].each do |library|
-      assert Utils.binary_linked_to_library?(bin/"jj", library),
-             "No linkage with #{library.basename}! Cargo is likely using a vendored version."
-    end
   end
 end

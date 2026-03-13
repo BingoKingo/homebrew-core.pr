@@ -4,15 +4,16 @@ class Libfido2 < Formula
   url "https://github.com/Yubico/libfido2/archive/refs/tags/1.16.0.tar.gz"
   sha256 "7d86088ef4a48f9faad4ff6f41343328157849153a8dc94d88f4b5461cb29474"
   license "BSD-2-Clause"
+  revision 1
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "fc3ca624819563b43e5ddc18ea7f391df1573e4e392a8a49c6aa3a510973f4dd"
-    sha256 cellar: :any,                 arm64_sonoma:  "763d62c0d6240560ccdb3249477b7461e941454d8b4697a0d14a4d174eb9a6c4"
-    sha256 cellar: :any,                 arm64_ventura: "64bd12fd3d3f964e781ac631f6f8dae04be4736111e857f17fd65a3cfe37c132"
-    sha256 cellar: :any,                 sonoma:        "2bd458622e779d77c7ae6c359d29223a070ebbb89fcf0324db7671ac30ce8aa5"
-    sha256 cellar: :any,                 ventura:       "c8a44132a8e43fb1dd859cf5f17192a453711ff251f12571bf0e926b86c60fc3"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e85e993e3403b124faafd3ab0c1a16ff9b494f54766f504e90e83bf62fe40675"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "98507976bf7cd461abce2639656bd4456c0e2f52fee5bcd384a7cbec474a28ff"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "432fd520ac9a846d45b344c4ce888fd6ffb898c78e289710de6aac0add686fb6"
+    sha256 cellar: :any,                 arm64_sequoia: "979c5922c7fc50b44cd52b56cc5864c5d084cdc5b7f37e0ef69f611cd02bbf2d"
+    sha256 cellar: :any,                 arm64_sonoma:  "a6446fead07bb8d304ae5d6580dca5f4860a9acbfa01fc45bef79df7cd95eb62"
+    sha256 cellar: :any,                 sonoma:        "c218ca912276907a8b7690f03649becd474c64bb0b12749b6136f3ffc7703126"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5e95b21e17cf4fe231733612ebb7b524e5cacd27b20fb4828e0b3818b45ed00d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dbd9420fb40c7b95ab6011f9d8149a9406a32083d2044ca9dc0a1a4885f9b352"
   end
 
   depends_on "cmake" => :build
@@ -21,10 +22,9 @@ class Libfido2 < Formula
   depends_on "libcbor"
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "systemd" # for libudev
+    depends_on "zlib-ng-compat"
   end
 
   def install

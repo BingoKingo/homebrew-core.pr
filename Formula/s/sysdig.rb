@@ -1,9 +1,14 @@
 class Sysdig < Formula
   desc "System-level exploration and troubleshooting tool"
   homepage "https://sysdig.com/"
-  url "https://github.com/draios/sysdig/archive/refs/tags/0.40.1.tar.gz"
-  sha256 "f4d465847ba8e814958b5f5818f637595f3d78ce93dbc3b8ff3ee65a80a9b90f"
-  license "Apache-2.0"
+  url "https://github.com/draios/sysdig/archive/refs/tags/0.41.4.tar.gz"
+  sha256 "36daa6a06705569fcc9b0579992e2457494003aea0065eabf54b3e16d67511f7"
+  license all_of: [
+    "Apache-2.0",
+    { any_of: ["GPL-2.0-only", "MIT"] },                  # `falcosecurity-libs`, driver/
+    { "GPL-2.0-only" => { with: "Linux-syscall-note" } }, # `falcosecurity-libs`, userspace/libscap/compat/
+  ]
+  revision 3
   head "https://github.com/draios/sysdig.git", branch: "dev"
 
   livecheck do
@@ -12,43 +17,93 @@ class Sysdig < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256                               arm64_sequoia: "1d74a1743a589ba247d4418317ab1bf2e37841f23287196591870b64456dd905"
-    sha256                               arm64_sonoma:  "5416d6073f468637103ca9339dfeebbd4fc20dd35987081fd2cc0cd0afe39033"
-    sha256                               arm64_ventura: "e65cd00a0b2a04345e83ef69050785bdf90387a1a0e8d0f3e959e9161319462d"
-    sha256                               sonoma:        "4d98a1b66242689aad51ad2b449963c912588d9e0ce2bf54a5e8315d4c777f88"
-    sha256                               ventura:       "ee53edd8462e80357fff2ffbd899fe170e73e641fe1b7e811e33ac3b64546705"
-    sha256                               arm64_linux:   "2247387a66aef0547cde9bdbb2175359c76630a2e1f5eb07069ed8574c481126"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3ff8e6dad512d69e79be769177d8bdd78e0b506d5b622d320c6855e1d4b5cc71"
+    sha256                               arm64_tahoe:   "0df639333fcb8267f4b3aabc636628b81a86b3f6a7cfd6a212dff1431c96c01e"
+    sha256                               arm64_sequoia: "f99c3a2bad7e30fd826eed8334fdd6dd99bc6dd2216484130d06478902554668"
+    sha256                               arm64_sonoma:  "64b07554879b8518142aa760be752743e0cf6281d923d34e58a27734db17aa7e"
+    sha256                               sonoma:        "c77d4eec59ed75ac419c498bcfa4073762ecafd94b05ea53bb281a59c94b3530"
+    sha256                               arm64_linux:   "c63e9595260f137127823df077646dd767eedea322d614545d04a0d69d0d15d8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "40f2bbe5313b0d1729873662d54224cee2637437d0b12bb8db458b8f4ee33a21"
   end
 
+  # FIXME: switch to brewed `falcosecurity-libs`
+  # once sysdig supports the most recent version
   depends_on "cmake" => :build
   depends_on "nlohmann-json" => :build
   depends_on "pkgconf" => :build
-  depends_on "falcosecurity-libs"
+  depends_on "valijson" => :build
   depends_on "jsoncpp"
   depends_on "luajit"
   depends_on "ncurses" # for `newterm` function
+  depends_on "re2" # Move to `on_macos` block once it depends on `falcosecurity-libs`
+  depends_on "tbb" # Move to `on_macos` block once it depends on `falcosecurity-libs`
+  depends_on "uthash" # for `falcosecurity-libs`
   depends_on "yaml-cpp"
 
-  on_macos do
-    depends_on "re2"
-    depends_on "tbb"
+  # for `falcosecurity-libs`
+  on_linux do
+    depends_on "abseil"
+    depends_on "curl"
+    depends_on "elfutils"
+    depends_on "grpc"
+    depends_on "protobuf"
+    depends_on "zlib-ng-compat" # for `falcosecurity-libs`
   end
 
   link_overwrite "etc/bash_completion.d/sysdig"
 
+  resource "falcosecurity-libs" do
+    url "https://github.com/falcosecurity/libs/archive/refs/tags/0.21.0.tar.gz"
+    sha256 "9e977001dd42586df42a5dc7e7a948c297124865a233402e44bdec68839d322a"
+  end
+
+  # Fix inclusion of removed `zlib.cmake` module
+  # https://github.com/draios/sysdig/pull/2176
+  patch do
+    url "https://github.com/draios/sysdig/commit/1f4565219b74c8b8ff9084425e24c50b43ec3d7b.patch?full_index=1"
+    sha256 "6002ab9759c08e79d6382b48e43f47e70cf07141981be5a1717bdc4ad503402a"
+  end
+
   def install
+    falco_prefix = libexec/"falcosecurity-libs"
+
+    # Copied installation options from `falcosecurity-libs` formula
+    resource("falcosecurity-libs").stage do
+      args = %W[
+        -DBUILD_DRIVER=OFF
+        -DBUILD_LIBSCAP_GVISOR=OFF
+        -DBUILD_LIBSCAP_EXAMPLES=OFF
+        -DBUILD_LIBSINSP_EXAMPLES=OFF
+        -DBUILD_SHARED_LIBS=ON
+        -DCMAKE_INSTALL_RPATH=#{falco_prefix/"lib"}
+        -DCREATE_TEST_TARGETS=OFF
+        -DFALCOSECURITY_LIBS_VERSION=#{resource("falcosecurity-libs").version}
+        -DUSE_BUNDLED_DEPS=OFF
+      ]
+      # TODO: remove on next release which has dropped option
+      # https://github.com/falcosecurity/libs/commit/d45d53a1e0e397658d23b216c3c1716a68481554
+      args << "-DMINIMAL_BUILD=ON" if OS.mac?
+
+      system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args(install_prefix: falco_prefix)
+      system "cmake", "--build", "build"
+      system "cmake", "--install", "build"
+    end
+
+    # Remove once brewed `falcosecurity-libs` is used
+    ENV.prepend_path "PKG_CONFIG_PATH", falco_prefix/"lib/pkgconfig"
+
     # Workaround to find some headers
     # TODO: Fix upstream to use standard paths, e.g. sinsp.h -> libsinsp/sinsp.h
-    ENV.append_to_cflags "-I#{Formula["falcosecurity-libs"].opt_include}/falcosecurity/libsinsp"
-    ENV.append_to_cflags "-I#{Formula["falcosecurity-libs"].opt_include}/falcosecurity/driver" if OS.linux?
+    ENV.append_to_cflags "-I#{falco_prefix}/include/falcosecurity/libsinsp"
+    ENV.append_to_cflags "-I#{falco_prefix}/include/falcosecurity/driver" if OS.linux?
 
     # Keep C++ standard in sync with `abseil.rb`.
     args = %W[
       -DSYSDIG_VERSION=#{version}
       -DUSE_BUNDLED_DEPS=OFF
     ]
+
+    # FIXME: remove after switching to brewed `falcosecurity-libs`
+    args << "-DCMAKE_INSTALL_RPATH=#{falco_prefix}/lib"
 
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"

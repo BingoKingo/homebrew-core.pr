@@ -7,6 +7,7 @@ class Noseyparker < Formula
   head "https://github.com/praetorian-inc/noseyparker.git", branch: "main"
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "bbce92800f87da1efec15e48fadc645677ac1c690ee9d7d460d824bc088b5a18"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "b3d50cf968e60eff8c5e51bf937bfd8528a7d7cb89d5df6ad8467b50b6cc7893"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "17369ef3f870c5a18489e7baed30d33fb571fadcade62ec1091f6d54f00abe86"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "6ab5f7973f25bc569e1a79c7d978739a9428ce3954b4775efa76e20718e8e0d4"
@@ -29,7 +30,8 @@ class Noseyparker < Formula
     ENV["VERGEN_GIT_BRANCH"] = "main"
     ENV["VERGEN_GIT_COMMIT_TIMESTAMP"] = time.iso8601
     ENV["VERGEN_GIT_SHA"] = tap.user
-    system "cargo", "install", "--features", "release", *std_cargo_args(path: "crates/noseyparker-cli")
+
+    system "cargo", "install", *std_cargo_args(path: "crates/noseyparker-cli", features: "release")
     mv bin/"noseyparker-cli", bin/"noseyparker"
 
     generate_completions_from_executable(bin/"noseyparker", "generate", "shell-completions", "--shell")
@@ -38,7 +40,7 @@ class Noseyparker < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/noseyparker -V")
 
-    output = shell_output(bin/"noseyparker scan --git-url https://github.com/homebrew/.github")
+    output = shell_output("#{bin}/noseyparker scan --git-url https://github.com/homebrew/.github")
     assert_match "0/0 new matches", output
   end
 end

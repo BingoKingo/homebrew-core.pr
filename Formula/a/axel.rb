@@ -3,9 +3,10 @@ class Axel < Formula
   homepage "https://github.com/axel-download-accelerator/axel"
   url "https://github.com/axel-download-accelerator/axel/releases/download/v2.17.14/axel-2.17.14.tar.xz"
   sha256 "938ee7c8c478bf6fcc82359bbf9576f298033e8b13908e53e3ea9c45c1443693"
-  license "GPL-2.0-or-later" => { with: "openvpn-openssl-exception" }
+  license "GPL-2.0-or-later" => { with: "cryptsetup-OpenSSL-exception" }
 
   bottle do
+    sha256 cellar: :any, arm64_tahoe:    "1f8ad603fc44127acc3b97b453360043ffa0610d63248035509a8b9c70d93fdc"
     sha256 cellar: :any, arm64_sequoia:  "b916766161940b92547f4dfddcc72ff0a7138c773e935927e0c8ae3111076494"
     sha256 cellar: :any, arm64_sonoma:   "3304a247f8e410cf41737d083bb6611d74bb5991d7cec6d76b48d9ce2e944423"
     sha256 cellar: :any, arm64_ventura:  "0b24ce8df8e83157f4558afcb41083993d7b7aa5dbf02e06b01037a665a63ae5"
@@ -23,7 +24,6 @@ class Axel < Formula
     depends_on "autoconf" => :build
     depends_on "autoconf-archive" => :build
     depends_on "automake" => :build
-    depends_on "gawk" => :build
     depends_on "gettext" => :build
     depends_on "txt2man" => :build
   end
@@ -36,7 +36,10 @@ class Axel < Formula
   end
 
   def install
-    system "autoreconf", "--force", "--install", "--verbose" if build.head?
+    if build.head?
+      ENV.append_path "ACLOCAL_PATH", Formula["gettext"].pkgshare/"m4"
+      system "autoreconf", "--force", "--install", "--verbose"
+    end
     system "./configure", "--disable-silent-rules",
                           "--sysconfdir=#{etc}",
                           *std_configure_args

@@ -1,18 +1,19 @@
 class Cyphernetes < Formula
   desc "Kubernetes Query Language"
   homepage "https://cyphernet.es"
-  url "https://github.com/AvitalTamir/cyphernetes/archive/refs/tags/v0.17.2.tar.gz"
-  sha256 "7547e10c1776d59a4744c5e91f1723c9c382cdce65da73948fb6424c90c06fd0"
+  url "https://github.com/AvitalTamir/cyphernetes/archive/refs/tags/v0.18.2.tar.gz"
+  sha256 "98c48dbc4263854c74c9216274c8ec1cb327d9accbf0458f86c2231de8c889e9"
   license "Apache-2.0"
   head "https://github.com/AvitalTamir/cyphernetes.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9f9aad0b201d8f6bc34a97ac1da7784f1ceab865321577fc3687a15f1d87e9dc"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9f9aad0b201d8f6bc34a97ac1da7784f1ceab865321577fc3687a15f1d87e9dc"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "9f9aad0b201d8f6bc34a97ac1da7784f1ceab865321577fc3687a15f1d87e9dc"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8495f244906bd38f6ec3b29700b887412c9f13100fdf11e75e11c3914ef610d9"
-    sha256 cellar: :any_skip_relocation, ventura:       "8495f244906bd38f6ec3b29700b887412c9f13100fdf11e75e11c3914ef610d9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "295f7a3df74900d3832f7ae150e7e897b960c6ba0c4684d601a27c400b3f0801"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "75b7e09d1628defdfceec77d3588840df8c7b9f5d6f4f2409f3a3b652b0e085a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "75b7e09d1628defdfceec77d3588840df8c7b9f5d6f4f2409f3a3b652b0e085a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "75b7e09d1628defdfceec77d3588840df8c7b9f5d6f4f2409f3a3b652b0e085a"
+    sha256 cellar: :any_skip_relocation, sonoma:        "36eb2ee7fe1690f6a75f3b87fd33cda95826967af8322547fc3c39c39b81f5e5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8bf78468cac60b77e2498a7bd74e7d7c07776f7389843a0a272a299f02acb5e1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ad94e1890dcd0a59a18fcef531ba649b1e8f5d9786b30754e79d5049229b8c14"
   end
 
   depends_on "go" => :build
@@ -21,7 +22,7 @@ class Cyphernetes < Formula
     system "make", "operator-manifests"
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.Version=#{version}"), "./cmd/cyphernetes"
 
-    generate_completions_from_executable(bin/"cyphernetes", "completion")
+    generate_completions_from_executable(bin/"cyphernetes", shell_parameter_format: :cobra)
   end
 
   test do

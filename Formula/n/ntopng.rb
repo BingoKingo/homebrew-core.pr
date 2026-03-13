@@ -1,42 +1,24 @@
 class Ntopng < Formula
   desc "Next generation version of the original ntop"
   homepage "https://www.ntop.org/products/traffic-analysis/ntop/"
+  url "https://github.com/ntop/ntopng/archive/refs/tags/6.6.tar.gz"
+  sha256 "2e97fbd26c2f9ac526214e2a2e22ecb218e38f5e99a688c25ae6cedbbc3a892c"
   license "GPL-3.0-only"
-  revision 2
-
-  stable do
-    url "https://github.com/ntop/ntopng/archive/refs/tags/6.2.tar.gz"
-    sha256 "de6ef8d468be3272bce27719ab06d5b7eed6e4a33872528f64c930a81000ccd1"
-
-    depends_on "ndpi"
-
-    # Apply Gentoo patch to force dynamically linking nDPI
-    patch do
-      url "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-analyzer/ntopng/files/ntopng-5.4-ndpi-linking.patch?id=25646dfc75b15c2bcc9c80ab3aba7a6bab5eec68"
-      sha256 "ddbfb32a642e890878bef52c4c8e02232e9f11c132e348c78d47c7865d5649e0"
-    end
-  end
+  head "https://github.com/ntop/ntopng.git", branch: "dev"
 
   bottle do
-    sha256 arm64_sequoia: "9f6d0f239b8dc0835e0698849377f502301bc4299936fb3d0aba624e11885604"
-    sha256 arm64_sonoma:  "be65c430079ebbe79ab62ce1ffce5aa7d084fc0b33bc7153b0e1b57bb240c3ad"
-    sha256 arm64_ventura: "a80a9b44e9aaa5852b96d308be805bc44099e83487d92f2cd28f6a88442c73f5"
-    sha256 sonoma:        "df1b923da4e9371ba304e9f72713c6672cc124bc803bde6402e93f9e654fdde0"
-    sha256 ventura:       "4da8a2ccd7d3c0092e1a95c73b36b8a01d8b1ed2dab9f64e004a57b37274c565"
-    sha256 arm64_linux:   "9328b2d8059fc248392e57bf053ac1d2c0ced06c1cb997ea93e2cf269936800b"
-    sha256 x86_64_linux:  "81e384a601f5d00d27a9ec914e9bd4b25266999afa15e4e11a9ad3109609a4b9"
-  end
-
-  head do
-    url "https://github.com/ntop/ntopng.git", branch: "dev"
-
-    resource "nDPI" do
-      url "https://github.com/ntop/nDPI.git", branch: "dev"
-    end
+    rebuild 1
+    sha256 arm64_tahoe:   "ad21a48529fb2d9342fae2ccd7917ea2ec48db11f39f1502b295a08d0014ab0c"
+    sha256 arm64_sequoia: "8aca05d9e9e80b09d69c3840cbfca39c10ce988433b7a3855df7d6479c3598e0"
+    sha256 arm64_sonoma:  "6af02e8b862c98dcd92ecd8447f4b1b8a3ff31c4a7be6fa8c958e85b8c2402ad"
+    sha256 sonoma:        "70de138eb5a6b07cc28c555f784011e9c423cb61b0758ee24440f68debb8af8f"
+    sha256 arm64_linux:   "febfe7fde846b678bcfd8f2aefeea4d807315d4a490cb9e8daee9ae34f6c7792"
+    sha256 x86_64_linux:  "94c2efe3b6277a3f4942865476a329ae413a58c73047a9faed559344a9103654"
   end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
+  depends_on "cmake" => :build
   depends_on "libtool" => :build
   depends_on "pkgconf" => :build
   depends_on "valkey" => :test
@@ -46,6 +28,7 @@ class Ntopng < Formula
   depends_on "libmaxminddb"
   depends_on "libsodium"
   depends_on "mariadb-connector-c"
+  depends_on "ndpi"
   depends_on "openssl@3"
   depends_on "rrdtool"
   depends_on "sqlite"
@@ -54,7 +37,6 @@ class Ntopng < Formula
   uses_from_macos "curl"
   uses_from_macos "expat"
   uses_from_macos "libpcap"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "zstd"
@@ -62,22 +44,24 @@ class Ntopng < Formula
 
   on_linux do
     depends_on "libcap"
+    depends_on "zlib-ng-compat"
+  end
+
+  resource "clickhouse-cpp" do
+    url "https://github.com/ClickHouse/clickhouse-cpp/archive/refs/tags/v2.6.0.tar.gz"
+    sha256 "f694395ab49e7c2380297710761a40718278cefd86f4f692d3f8ce4293e1335f"
   end
 
   def install
     # Remove bundled libraries
     rm_r Dir["third-party/{json-c,rrdtool}*"]
 
-    args = []
-    if build.head?
-      resource("nDPI").stage do
-        system "./autogen.sh"
-        system "make"
-        (buildpath/"nDPI").install Dir["*"]
-      end
-    else
-      args << "--with-ndpi-includes=#{Formula["ndpi"].opt_include}/ndpi"
-    end
+    resource("clickhouse-cpp").stage buildpath/"third-party/clickhouse-cpp"
+
+    args = %W[
+      --with-dynamic-ndpi
+      --with-ndpi-includes=#{Formula["ndpi"].opt_include}/ndpi
+    ]
 
     system "./autogen.sh"
     system "./configure", *args, *std_configure_args

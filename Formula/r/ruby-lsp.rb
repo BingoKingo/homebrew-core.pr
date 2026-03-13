@@ -1,28 +1,27 @@
 class RubyLsp < Formula
   desc "Opinionated language server for Ruby"
   homepage "https://shopify.github.io/ruby-lsp"
-  url "https://github.com/Shopify/ruby-lsp/archive/refs/tags/v0.23.24.tar.gz"
-  sha256 "9044f0190c99d50bf1919da509bb12cfb8d6da4bf15742a5a691e16a71cbbca2"
+  url "https://github.com/Shopify/ruby-lsp/archive/refs/tags/v0.26.8.tar.gz"
+  sha256 "e152af85830348971bfd46ceef9709b531c5cb3bb90febb5aff2b111dccdfcfb"
   license "MIT"
   head "https://github.com/Shopify/ruby-lsp.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "817b290ba0f251461700cf91226b22c79fb7ccf0424e65ee3beabf56b1a4f4b8"
-    sha256 cellar: :any,                 arm64_sonoma:  "3924c5fa6ea13f7aa59d1db4460a2079b000003f45c1a14d1d619f2fd2715c96"
-    sha256 cellar: :any,                 arm64_ventura: "5e22e0ebda5d11da4efba3c77db0809a296af2f98690ad2ceb75a4479d5821ec"
-    sha256 cellar: :any,                 sonoma:        "08d393aba7b455fe9ec71d8f46127008b7b7ae8ff528447c78753fcbfd1d0b71"
-    sha256 cellar: :any,                 ventura:       "43cca011cc3c12c686fda6d1be374ee095ae392420d2cd25834661b2d74ad217"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8d183e914e6a41f51e3ca270fe72174bb0a0e96f2c7359a8dfe930c745e62317"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "50bdc9fa86f6bbae887fd2562ac164cad392827b5159a163cc2c423bce2ec945"
+    sha256 cellar: :any,                 arm64_tahoe:   "ddd35e878d6a335d5c71664f1cfffb7d40a180f705535f9facd17da56c06786a"
+    sha256 cellar: :any,                 arm64_sequoia: "e9c4bc2fbd30950d032019495b69b076d32cd0be54f958ef2f994ba547b313ed"
+    sha256 cellar: :any,                 arm64_sonoma:  "545117d236d7cd98a08773e105f248ae936ab9b56452dcb02252d94a65d7006c"
+    sha256 cellar: :any,                 sonoma:        "b2b64fd3be168c2bfffaa96713963d3ff955a12734cdf560faac0be83ebb6ad3"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b5a9b9ffe511c73a344570b18d1eb30a914c342f179d1bfac81dca58241b47a6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9cbae600afa01ab34b97c2bddaa9e9fc0453e0202b574aa59f2633cbf5488cd3"
   end
 
   depends_on "ruby"
 
   def install
     ENV["BUNDLE_VERSION"] = "system" # Avoid installing Bundler into the keg
+    ENV["BUNDLE_WITHOUT"] = "development test"
     ENV["GEM_HOME"] = libexec
 
-    system "bundle", "config", "set", "without", "development", "test"
     system "bundle", "install"
     system "gem", "build", "#{name}.gemspec"
     system "gem", "install", "#{name}-#{version}.gem"

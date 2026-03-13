@@ -1,18 +1,17 @@
 class Mdless < Formula
   desc "Provides a formatted and highlighted view of Markdown files in Terminal"
   homepage "https://github.com/ttscoff/mdless"
-  url "https://github.com/ttscoff/mdless/archive/refs/tags/2.1.58.tar.gz"
-  sha256 "c82a52a2ff76c2a7e184268ae961bae398fa97012d46ab8dad092f21e2fa8752"
+  url "https://github.com/ttscoff/mdless/archive/refs/tags/2.1.64.tar.gz"
+  sha256 "ff8d3871f1e6cbf35b42f2a3e351bae19346308d439db415ebca97607b8e1785"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "c3170bec5e29e4aa9037952afd01517d85fc9ec217d80e109bcd4bc1bd9f4692"
-    sha256 cellar: :any,                 arm64_sonoma:  "1c26f3603c1b1d8d5951631240ea826f2256d7e9d7d03f3373c81c458c3f9546"
-    sha256 cellar: :any,                 arm64_ventura: "5f69d4e24aa3c4899df7800a264427150a0effb5e4cbd62bca9b4cacd58dfade"
-    sha256 cellar: :any,                 sonoma:        "b64d98c5631d8f3bf59e308861d63f955d8737521131704e475269b237ccdc28"
-    sha256 cellar: :any,                 ventura:       "08ba0765eb24fd5a0219e415a5fc794f30a7efa901e2a88f9808481ac199ea8f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4dac47d6094557b5e505b99b40321e9b4c5572503bc1ba9b76e6b930ea56c340"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5422bb32ab7aaaf248af272af66f297e91c9c81bac139a47f69dd201a48dc10a"
+    sha256 cellar: :any,                 arm64_tahoe:   "2e15d3457eb2eb72eb967997d4a469053d9d23070fbe7a9d0c753f963bf92e38"
+    sha256 cellar: :any,                 arm64_sequoia: "2a41c571cd757cd951038754dd43b1549dd4815d356d22909eb62e14f71ed543"
+    sha256 cellar: :any,                 arm64_sonoma:  "1d9e64555e9ac765abcdff1b00df3724b56ee218ae4a5eaba024e0e25f25d185"
+    sha256 cellar: :any,                 sonoma:        "e83951822a69a2e345235e86b7376dcf9238e90d7f470769f6ac4d38abb78607"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "49ef59639132d021538bef1bc9b2b9667341a25c7b78d64c543cc12a4a6babab"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c9aebcc7a285c2727d227549891da0bbde337b1dcc8e746df0e1d83623171ce4"
   end
 
   # Requires Ruby >= 2.7

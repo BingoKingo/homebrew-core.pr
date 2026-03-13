@@ -1,9 +1,8 @@
 class Rubyfmt < Formula
   desc "Ruby autoformatter"
   homepage "https://github.com/fables-tales/rubyfmt"
-  url "https://github.com/fables-tales/rubyfmt.git",
-      tag:      "v0.11.0",
-      revision: "55f41919cf5779fb9e2c410c04e2f613f7d79f2b"
+  url "https://github.com/fables-tales/rubyfmt/archive/refs/tags/v0.12.0.tar.gz"
+  sha256 "6972f8083a199bee4825ba03805baebd6e4203c543b5f96b716d6964f5628a87"
   license "MIT"
   head "https://github.com/fables-tales/rubyfmt.git", branch: "trunk"
 
@@ -16,32 +15,21 @@ class Rubyfmt < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "96c578513b4ad8026f8c6202855fbbb50d8f22a1f06fa24672e6d4537bebe3cd"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dd1e916ff9236b322ef2fe242e95ff19b0ba244b7798b637c60458e0f9e72311"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "deb61a20206f73f26f5333e4691e3436648a6d5f63b20b5f8c13ff5813dc7853"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0abd972a5129624c5d8b8410a1fbc14ca32e6cf747948f15bc51a1976fc0b04d"
-    sha256 cellar: :any_skip_relocation, ventura:       "f102e74c060458edffe138f457118d18ba73198c77bdb01969fb19d9e8f648b9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4839872a36a77a8cf8b14e9c28ec240524417855d86f715325c33c400971b1ec"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b05509047cd3d31b41d81781cf1db098939b0a6a52848fc861f3b2a71a180d38"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c1ae4924754e4f83c5911314dec2ec3ff4dd4c1cfdf5257223e86742e9c3f842"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4ae3190fb8ad78610482263d7c3ae7b3b5b8377aded523633a9a9a2237ccb977"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c7aef931acdfdf3e26dc32a5cbe679d51d8e291011d05b2c6089b34445202d17"
+    sha256 cellar: :any_skip_relocation, sonoma:        "3c4a05cd5fc646ad2fdf873a63fff26b14b4b2299157065691e881445a5bc4e3"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a2637212bf431afef2a0ae70cea03375fa53cb6602f39b7d88a9deb0f4c2dd7a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "de56de3073592a683d1f8b29dd696eb723b8a818ee57fc2d237052fdd3133e4b"
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "bison" => :build
   depends_on "rust" => :build
-  # https://bugs.ruby-lang.org/issues/18616
-  # error: '__declspec' attributes are not enabled;
-  # use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
-  depends_on macos: :monterey
-  uses_from_macos "ruby"
+  uses_from_macos "llvm" => :build # for libclang to build ruby-prism-sys
 
   def install
-    # Work around build failure with recent Rust
-    # Issue ref: https://github.com/fables-tales/rubyfmt/issues/467
-    ENV["RUSTFLAGS"] = "--allow dead_code"
-
     system "cargo", "install", *std_cargo_args
-    bin.install "target/release/rubyfmt-main" => "rubyfmt"
+    bin.install bin/"rubyfmt-main" => "rubyfmt"
   end
 
   test do

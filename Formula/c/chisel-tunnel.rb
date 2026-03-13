@@ -1,19 +1,18 @@
 class ChiselTunnel < Formula
   desc "Fast TCP/UDP tunnel over HTTP"
   homepage "https://github.com/jpillora/chisel"
-  url "https://github.com/jpillora/chisel/archive/refs/tags/v1.10.1.tar.gz"
-  sha256 "85d121087ea3e1139f63eaa389642bd6d8c2584728ec80d16315b17410844269"
+  url "https://github.com/jpillora/chisel/archive/refs/tags/v1.11.5.tar.gz"
+  sha256 "fed288bfccc2a57e02643565f984047f92f114e40e886fe02b15bc455eca00a0"
   license "MIT"
   head "https://github.com/jpillora/chisel.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "05ab3b695c06c0f9228bfd895ef79863a8e78a6b68e96b06774e703ac9075bd5"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "05ab3b695c06c0f9228bfd895ef79863a8e78a6b68e96b06774e703ac9075bd5"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "05ab3b695c06c0f9228bfd895ef79863a8e78a6b68e96b06774e703ac9075bd5"
-    sha256 cellar: :any_skip_relocation, sonoma:        "6320979297527ca632fa428271fa3519e3382e90c6d02a6bc1fd8c0886d23ae8"
-    sha256 cellar: :any_skip_relocation, ventura:       "6320979297527ca632fa428271fa3519e3382e90c6d02a6bc1fd8c0886d23ae8"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f7957fcca28005c5d81736033b68312872485b673a1e01ec53d1c7e98b11050b"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "daf015703a752a4786c905377001c47d17867503ca896bfaa6ea39e0a65a16cf"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "daf015703a752a4786c905377001c47d17867503ca896bfaa6ea39e0a65a16cf"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "daf015703a752a4786c905377001c47d17867503ca896bfaa6ea39e0a65a16cf"
+    sha256 cellar: :any_skip_relocation, sonoma:        "07575be7da4d9373dad3dbee2b9429097879f6d4fc6d956611dcec9106367b99"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "26f7711d21e5cbc15a36f9a65272f334c892c6ce726bfcbb433fcb092d7a44c7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4137d698fc542b48866abc345d4f443f600a4057bb44cd4b227f5425d8b1191c"
   end
 
   depends_on "go" => :build
@@ -27,16 +26,11 @@ class ChiselTunnel < Formula
   end
 
   test do
-    _, write = IO.pipe
     server_port = free_port
-
-    server_pid = fork do
-      exec "#{bin}/chisel server -p #{server_port}", out: write, err: write
-    end
-
-    sleep 2
+    server_pid = spawn bin/"chisel", "server", "-p", server_port.to_s, [:out, :err] => File::NULL
 
     begin
+      sleep 2
       assert_match "Connected", shell_output("curl -v 127.0.0.1:#{server_port} 2>&1")
     ensure
       Process.kill("TERM", server_pid)

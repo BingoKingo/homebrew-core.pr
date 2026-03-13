@@ -1,22 +1,23 @@
 class Gwyddion < Formula
   desc "Scanning Probe Microscopy visualization and analysis tool"
-  homepage "http://gwyddion.net/"
-  url "https://downloads.sourceforge.net/project/gwyddion/gwyddion/2.68/gwyddion-2.68.tar.xz"
-  sha256 "725c3f71738362b10b1e2cf76d391684cf2f15a71a2b34ef1caddabd6d5a9bfa"
+  homepage "https://gwyddion.net/"
+  url "https://downloads.sourceforge.net/project/gwyddion/gwyddion/2.70/gwyddion-2.70.tar.xz"
+  sha256 "942f4e041945a850bc32d05193a115ac8a5118a6f841afa6d4dea510f9913f59"
   license "GPL-2.0-or-later"
 
   livecheck do
-    url "http://gwyddion.net/download.php"
-    regex(/stable version Gwyddion v?(\d+(?:\.\d+)+):/i)
+    url "https://gwyddion.net/download.php"
+    regex(/stable\s+version\s+Gwyddion\s+v?(\d+(?:\.\d+)+)[:<\s]/im)
   end
 
   bottle do
-    sha256 arm64_sonoma:  "b43e730eff6442bc243f8ac823d66f9662ddb19d3b45ba2fd4839539633ceec1"
-    sha256 arm64_ventura: "102134d0cc82e99b16f10beca65fbff50cf90fc20e8dfb9109947f38397c6e27"
-    sha256 sonoma:        "2a46d8ac980a10cff9a5dd4e6ad6676732f36f3683e3f15527e73cbd2fbc00fe"
-    sha256 ventura:       "98f80d6914545e03d705f8b36386f25c40c24b28790c68b3cd960f57736777e0"
-    sha256 arm64_linux:   "50c3c92bfa90b717cd0363f1848160dd2f09460cf7c9bc2bac377dc773c976cc"
-    sha256 x86_64_linux:  "ddb58bb61054c7d019aa1db4b8da4378829026a723bcd40d3181382e2809f562"
+    rebuild 1
+    sha256 arm64_tahoe:   "2a9be119dd5c8893162a0dcbfac468e8d92b8542e308005b171d98e671d1017d"
+    sha256 arm64_sequoia: "946f4dd90604f6e89c8fc696786ca9c67c2f74252e2ead399f29dc434490a303"
+    sha256 arm64_sonoma:  "65d5b8eb804d4d996544ce6e70caba8c6cb54f41a0639015f1ad84bd381822fd"
+    sha256 sonoma:        "507f7a6ed8de871c6e6ea6576ede975c04bff306deeaeb9511b6e2c4a23d7944"
+    sha256 arm64_linux:   "e73cf62e1f3a43063c484d2bbdc962a7f94ef40b6e1688b8eb657bbb40bf9bf6"
+    sha256 x86_64_linux:  "2abe37cb9a8afe42ec478fb057e3dfc4ca19ca1de0b5428ace7df39ab8cc5a2b"
   end
 
   depends_on "pkgconf" => [:build, :test]
@@ -32,7 +33,6 @@ class Gwyddion < Formula
   depends_on "pango"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
 
   on_macos do
     # Regenerate autoconf files to avoid flat namespace in library
@@ -46,6 +46,13 @@ class Gwyddion < Formula
     depends_on "gettext"
     depends_on "harfbuzz"
   end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  # Fix Autoconf ≥2.72 compatibility by explicitly declaring gettext version.
+  patch :DATA
 
   def install
     system "autoreconf", "--force", "--install", "--verbose" if OS.mac?
@@ -74,3 +81,17 @@ class Gwyddion < Formula
     system "./test"
   end
 end
+
+__END__
+diff --git a/configure.ac b/configure.ac
+index b1f75d4..8a0895c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -883,6 +883,7 @@ AC_CHECK_FUNCS([sincos log2 exp2 lgamma tgamma j0 j1 y0 y1 log1p expm1 memrchr m
+ #############################################################################
+ # I18n
+ GETTEXT_PACKAGE=$PACKAGE_TARNAME
++AM_GNU_GETTEXT_VERSION([0.19])
+ AM_GNU_GETTEXT([external])
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
+ AC_SUBST(GETTEXT_PACKAGE)

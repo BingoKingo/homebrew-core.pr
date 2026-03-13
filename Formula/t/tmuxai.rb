@@ -1,24 +1,24 @@
 class Tmuxai < Formula
   desc "AI-powered, non-intrusive terminal assistant"
   homepage "https://tmuxai.dev/"
-  url "https://github.com/alvinunreal/tmuxai/archive/refs/tags/v1.1.0.tar.gz"
-  sha256 "cd4e7eca5958b83e726a81d96ab0d5304fc57c6b336423fc6aeaa90ce43dff83"
+  url "https://github.com/BoringDystopiaDevelopment/tmuxai/archive/refs/tags/v2.1.0.tar.gz"
+  sha256 "e6de2038f7af82f11b6b3780684a737f5922db175f6298617f94f42a8bbc7ce1"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e27e7c9ba5c9919df1663bf381ac44cbcf47e68b6ee65572bc6e2b822d2d8ddb"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e27e7c9ba5c9919df1663bf381ac44cbcf47e68b6ee65572bc6e2b822d2d8ddb"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e27e7c9ba5c9919df1663bf381ac44cbcf47e68b6ee65572bc6e2b822d2d8ddb"
-    sha256 cellar: :any_skip_relocation, sonoma:        "56b9618ed0f656423887a9f2bb7d20110034b81c93ce9b1696fe70548e45eb6c"
-    sha256 cellar: :any_skip_relocation, ventura:       "56b9618ed0f656423887a9f2bb7d20110034b81c93ce9b1696fe70548e45eb6c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fccb2d9531d433deddf272d07882be82c3cc84f410f434399bcfcb46d05fb08d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "21c0d6c8ca6109978def90e47719257a971c7a5ff8557b873d7425ce873f307f"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "21c0d6c8ca6109978def90e47719257a971c7a5ff8557b873d7425ce873f307f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "21c0d6c8ca6109978def90e47719257a971c7a5ff8557b873d7425ce873f307f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "66c4fbbc2f883303b924e19723d448f0313db3ab8d45df65e4993f02134fd9b9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9eba30c6f393f722e1bbe2fcf3c5ce8e900701ecc08f6cf1a45945cf97ea96a0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1aa42f0436c47e94b571e737e9e9f227b0f131aafc8e88ec76df2681dbc32d1a"
   end
 
   depends_on "go" => :build
   depends_on "tmux"
 
   def install
-    ldflags = "-s -w -X github.com/alvinunreal/tmuxai/internal.Version=v#{version}"
+    ldflags = "-s -w -X github.com/BoringDystopiaDevelopment/tmuxai/internal.Version=v#{version}"
 
     system "go", "build", *std_go_args(ldflags:)
   end

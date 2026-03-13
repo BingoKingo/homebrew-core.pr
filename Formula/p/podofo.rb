@@ -1,8 +1,8 @@
 class Podofo < Formula
   desc "Library to work with the PDF file format"
   homepage "https://github.com/podofo/podofo"
-  url "https://github.com/podofo/podofo/archive/refs/tags/1.0.0.tar.gz"
-  sha256 "e44276d927838034b51c4c79001e7ae5c3fef90b6844824004c77f160c1a22ea"
+  url "https://github.com/podofo/podofo/archive/refs/tags/1.0.3.tar.gz"
+  sha256 "02815b21a51632c2849d41b067597e9356bbc54bad0efcd84c902b555c203ce7"
   license all_of: ["LGPL-2.0-only", "GPL-2.0-only"]
   head "https://github.com/podofo/podofo.git", branch: "master"
 
@@ -12,13 +12,13 @@ class Podofo < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "746fab5e13fff37b542e22aa312460ef0a7f682d0753451860f10b749543ad08"
-    sha256 cellar: :any,                 arm64_sonoma:  "f8c140ea8d95f9c79d1d8b0c779e2f8a42a668f2b9a1405d3c964b7bf7904abf"
-    sha256 cellar: :any,                 arm64_ventura: "8cf0efc5f48abb1287f0c51f8fba04507fea0243a3b0e079ce584e96254a5f3e"
-    sha256 cellar: :any,                 sonoma:        "3f2dbdff549ecf6aebc768cd6acd3364d9451b1d6bb3a26d7f8feb381b52a164"
-    sha256 cellar: :any,                 ventura:       "4985f589d79001c1a6fbcf4783f77cfcc0902fa93dd42b7ee5827d046df820be"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "558bd4ab20e1971706cf525638d2706166d3ae9e5fa2b6338f8c38f168621a53"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1fbc9e09e5bee79e8fefd31fa9bfed573bb22e2241c3eb4dac467fcbbf76b6a0"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "9a6e4ab30d6d9c3f4048d2e50af123295fe41aabf46f8cdf04fda16b80634f5b"
+    sha256 cellar: :any,                 arm64_sequoia: "dc1910830503d893481807302ab276b8c7b6af2a2eb5f2b037a2fde24a6f869d"
+    sha256 cellar: :any,                 arm64_sonoma:  "8af3bbe091cd5fcd623fd26fe720bbc4d43c2fd1d83d54ddbfd2b84b753788b5"
+    sha256 cellar: :any,                 sonoma:        "1e8b850aa39280bcd77c5c008f2a40368155dc1010d7ec2bf02a17b8b3f1c24c"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ff0ffddeb53e9590f5ae388f4c33a79ff51b66604fa74f058b182d09b423006c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "312f1f9db2bb46c3de26b0062ea1316d641ecf47705c47f223ba99870eb37a96"
   end
 
   depends_on "cmake" => :build
@@ -27,13 +27,11 @@ class Podofo < Formula
   depends_on "fontconfig"
   depends_on "freetype"
   depends_on "jpeg-turbo"
-  depends_on "libidn"
   depends_on "libpng"
   depends_on "libtiff"
   depends_on "openssl@3"
 
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
 
   on_ventura :or_older do
     depends_on "llvm"
@@ -43,9 +41,12 @@ class Podofo < Formula
     end
   end
 
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
   def install
     if OS.mac? && MacOS.version <= :ventura
-      ENV.llvm_clang
       # When using Homebrew's superenv shims, we need to use HOMEBREW_LIBRARY_PATHS
       # rather than LDFLAGS for libc++ in order to correctly link to LLVM's libc++.
       ENV.prepend_path "HOMEBREW_LIBRARY_PATHS", Formula["llvm"].opt_lib/"c++"

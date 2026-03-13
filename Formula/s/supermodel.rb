@@ -1,79 +1,40 @@
 class Supermodel < Formula
   desc "Sega Model 3 arcade emulator"
-  homepage "https://www.supermodel3.com/"
+  homepage "https://github.com/trzy/Supermodel"
+  url "https://github.com/trzy/Supermodel/archive/refs/tags/v0.3a-20260228-git-d6dec3d.tar.gz"
+  version "0.3a-20260228-git-d6dec3d"
+  sha256 "4b99ca451379436ad284d682c6849a925d8810daa229271be2e63d24c0cf340b"
   license "GPL-3.0-or-later"
-  revision 1
-
-  stable do
-    url "https://www.supermodel3.com/Files/Supermodel_0.2a_Src.zip"
-    sha256 "ecaf3e7fc466593e02cbf824b722587d295a7189654acb8206ce433dcff5497b"
-
-    depends_on "sdl12-compat"
-  end
-
-  livecheck do
-    url "https://www.supermodel3.com/Download.html"
-    regex(/href=.*?Supermodel[._-]v?(\d+(?:\.\d+)+[a-z]?)[._-]Src\.zip/i)
-  end
+  head "https://github.com/trzy/Supermodel.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 arm64_sequoia: "55806d70707f24311eac885aa6ec3963cc508dbd397b159a7a80611392bb9c9f"
-    sha256 arm64_sonoma:  "7c5571842431f0b73847af493d4fe4d79ae4a834954a567f7c6732e3e83c387b"
-    sha256 arm64_ventura: "60d857bc4b057fdb6950645b22eb04970bca9e21e5065f44486bbf5dfd4b4754"
-    sha256 sonoma:        "8a730dcfcf67bd5091d7b589f9111ae735ec35c939caf14e4e8469be35c2611a"
-    sha256 ventura:       "c3d65f9c8c50660fb2f6fe7cdc3cf6e641f6acefdb396088328ec6c103258d11"
-    sha256 arm64_linux:   "9a8fbf1e975303f9c7858caa8d2829cf0cce382971ffa6035576bf9fae7b8e71"
-    sha256 x86_64_linux:  "9bffc6af81706a65a8355fe1618d9a4062e48ae2ae969d24888d0802434ca38d"
+    sha256 cellar: :any,                 arm64_tahoe:   "0371f7d2f4c880a1cb0be485e0cce84256540a1000d203cbf0cfccc3dea7aa79"
+    sha256 cellar: :any,                 arm64_sequoia: "f7e3f881dfc4c4010bbde38779f7b28ff9ea53d8ea623d07a935c39e6e1154ca"
+    sha256 cellar: :any,                 arm64_sonoma:  "e4e7f42b1a731d17984fb9ffa48e02e5439280e625ecdf50da9566482f1dd54d"
+    sha256 cellar: :any,                 sonoma:        "cd2c90c6b7e2459b867b92476255d138093871804c562b2455e97405b88878b6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b5c42ecc38e0cf4ccd479739c8f33a20e1feb0689530e552155bb956a6bb95c4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "61f47cc3b5ada785aeabd68913e9bab259ec7a3af3ce6715e512b9173e91e81b"
   end
 
-  head do
-    url "https://github.com/trzy/Supermodel.git", branch: "master"
-
-    depends_on "sdl2"
-  end
-
-  uses_from_macos "zlib"
+  depends_on "sdl2"
 
   on_linux do
     depends_on "mesa"
     depends_on "mesa-glu"
+    depends_on "zlib-ng-compat"
   end
 
   def install
     os = OS.mac? ? "OSX" : "UNIX"
-    makefile_dir = build.head? ? "Makefiles/Makefile.#{os}" : "Makefiles/Makefile.SDL.#{os}.GCC"
+    makefile_dir = "Makefiles/Makefile.#{os}"
 
-    if build.stable?
-      inreplace makefile_dir do |s|
-        if OS.mac?
-          # Set up SDL library correctly
-          s.gsub! "-framework SDL", "`sdl-config --libs`"
-          s.gsub!(/(\$\(COMPILER_FLAGS\))/, "\\1 -I#{Formula["sdl12-compat"].opt_prefix}/include")
-        end
-        # Fix missing label issue for auto-generated code
-        s.gsub! %r{(\$\(OBJ_DIR\)/m68k\w+)\.o: \1.c (.*)\n(\s*\$\(CC\)) \$<}, "\\1.o: \\2\n\\3 \\1.c"
-        # Add -std=c++14
-        s.gsub! "$(CPPFLAGS)", "$(CPPFLAGS) -std=c++14" if OS.linux?
-        # Fix compile with newer Clang.
-        if DevelopmentTools.clang_build_version >= 1403
-          s.gsub!(/^COMPILER_FLAGS = /, "\\0 -Wno-implicit-function-declaration ")
-        end
-      end
-      # Use /usr/local/var/supermodel for saving runtime files
-      inreplace "Src/OSD/SDL/Main.cpp" do |s|
-        s.gsub! %r{(Config|Saves|NVRAM)/}, "#{var}/supermodel/\\1/"
-        s.gsub!(/(\w+\.log)/, "#{var}/supermodel/Logs/\\1")
-      end
-    else
-      ENV.deparallelize
-      # Set up SDL2 library correctly
-      inreplace makefile_dir, "-framework SDL2", "`sdl2-config --libs`" if OS.mac?
-    end
+    ENV.deparallelize
+    # Set up SDL2 library correctly
+    inreplace makefile_dir, "-framework SDL2", "`sdl2-config --libs`" if OS.mac?
 
     system "make", "-f", makefile_dir
-    bin.install "bin/Supermodel" => "supermodel"
-    (var/"supermodel/Config").install "Config/Supermodel.ini"
+    bin.install "bin/supermodel"
+
     (var/"supermodel/Saves").mkpath
     (var/"supermodel/NVRAM").mkpath
     (var/"supermodel/Logs").mkpath

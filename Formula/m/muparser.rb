@@ -4,29 +4,29 @@ class Muparser < Formula
   url "https://github.com/beltoforion/muparser/archive/refs/tags/v2.3.5.tar.gz"
   sha256 "20b43cc68c655665db83711906f01b20c51909368973116dfc8d7b3c4ddb5dd4"
   license "BSD-2-Clause"
-  revision 1
+  revision 2
   head "https://github.com/beltoforion/muparser.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "b9dd0fef93be805c1e9d38e0a65f780482e4f31600e2ca06de03117961482515"
-    sha256 cellar: :any,                 arm64_sonoma:  "45cdabf66b22739dc8e558b062cc6a1f330d38d0ec7400c0ba0399f4b70f8d18"
-    sha256 cellar: :any,                 arm64_ventura: "0e8b448240be0fc032dee25dae2d40a7d4c143b7acbabd7abfce2f066e09da24"
-    sha256 cellar: :any,                 sonoma:        "bb235a4e1df126fe983925b4debd0b971abab5d2d588d1184fa55cef232b7eef"
-    sha256 cellar: :any,                 ventura:       "a17fbefec1301c80a8ff8f5d1fece66401a4e959c6f9aded0290f51cf31edede"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "8d3d3f6acf9815f9e2c3bb3210ea66d744f88d72a75a70e9a3214bafb8306f14"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "531bcd3892d0938e5fd2b8e174be8a0ddb75183601bea0a31199bfdeabbf822a"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "23a51e97ef3d4ff02c8d8d6fb5dd53b142e89899927a9204eb4dd0018d21afe5"
+    sha256 cellar: :any,                 arm64_sequoia: "533245424ca9045f9e246b1c2092466b11b26fb13545b19d82469c8fd36eb2c6"
+    sha256 cellar: :any,                 arm64_sonoma:  "6e95b519ddaac7419352a19803d374262d8edf9780e942b287046be0e2e5c9c5"
+    sha256 cellar: :any,                 sonoma:        "62577464227b08a4c38a09c93f7438e21c55cd3438fdf67f227ee6bc5c2a51ee"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d9b39ed5b616e3f67f8429a33ed9c42b3f404c74881c4718e4f12444153611ca"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9e7935fbf6a0c3698082df30fb1b5e7140e45c9b98d16377810efd80585691d5"
   end
 
   depends_on "cmake" => :build
 
   on_macos do
-    conflicts_with "gromacs", because: "gromacs ships its own copy of muparser"
+    depends_on "libomp"
   end
 
-  def install
-    ENV.cxx11 if OS.linux?
+  link_overwrite "lib/libmuparser.dylib", "lib/libmuparser.2.dylib"
 
-    system "cmake", "-S", ".", "-B", "build", "-DENABLE_OPENMP=#{OS.mac? ? "OFF" : "ON"}", *std_cmake_args
+  def install
+    system "cmake", "-S", ".", "-B", "build", "-DENABLE_OPENMP=ON", *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
   end

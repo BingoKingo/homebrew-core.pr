@@ -1,21 +1,21 @@
 class Pspg < Formula
   desc "Unix pager optimized for psql"
   homepage "https://github.com/okbob/pspg"
-  url "https://github.com/okbob/pspg/archive/refs/tags/5.8.11.tar.gz"
-  sha256 "ae1122d7946c69ca17b3e2e672418957a1b3c6efa221eed62be7d5f7b5e3d0ea"
+  url "https://github.com/okbob/pspg/archive/refs/tags/5.8.16.tar.gz"
+  sha256 "3dcfb810cc6675cac6e3ea53775a6f819e0e12e0d2bde8122e3136b740f38ae5"
   license "BSD-2-Clause"
   head "https://github.com/okbob/pspg.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "3143bad00e148c314f25e37badb7796c5890ba816b7654f624db05871e004214"
-    sha256 cellar: :any,                 arm64_sonoma:  "7e9871c7d9bf2c7a91da45a4c44fc22fd1e567422912c036c1485bb4691c933f"
-    sha256 cellar: :any,                 arm64_ventura: "d7916c67a1a411635211fc671b35c0d674079da1748df030be5d621ec372e1d0"
-    sha256 cellar: :any,                 sonoma:        "922d22058c09a756855f2cce188bfeb95c21898ceef753574d505ff8f7054249"
-    sha256 cellar: :any,                 ventura:       "ce2080def3035640960ed61538a3ce377f46b6767d74b49f03103889e14f57f5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d45dda1e0800fd8b68c12b46e6209c94c500f0d17c1e0c7ff3c83353150b22c2"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "22ea92fa7dedbae7874668a64a298a9cd3a4cdaae71f818fc5fee4ebc22264b0"
+    sha256 cellar: :any,                 arm64_tahoe:   "8dd9ef474eaf5c99b2119f4a49fbdefd42fc8cfed43d87d37cf6913fdc3707e0"
+    sha256 cellar: :any,                 arm64_sequoia: "ddfc22db81961ba59d8bd6e4a3e930694f513f0e9d82822633b620df1677afe5"
+    sha256 cellar: :any,                 arm64_sonoma:  "d4bc31a1f509fcf4d95d237ab38ca0ddf41135336d3b4712c686df9204001fce"
+    sha256 cellar: :any,                 sonoma:        "ae834e0bd0ef320b448797dc3f5ef5c8106c08ba1834cbcc2eb5ec0af75a3a80"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "6afc64962efc19340ebc106abcf81994edfed6c1dd84d9e631e7c020222178ee"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f18b85a40c801269b01cfcef69ccac84a09e910585e67a1040b48d4191904ca5"
   end
 
+  depends_on "pkgconf" => :build
   depends_on "libpq"
   depends_on "ncurses"
   depends_on "readline"

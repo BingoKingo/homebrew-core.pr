@@ -1,7 +1,8 @@
 class Wcstools < Formula
   desc "Tools for using World Coordinate Systems (WCS) in astronomical images"
   homepage "http://tdc-www.harvard.edu/wcstools/"
-  url "http://tdc-www.harvard.edu/software/wcstools/wcstools-3.9.7.tar.gz"
+  url "https://distfiles.macports.org/wcstools/wcstools-3.9.7.tar.gz"
+  mirror "http://tdc-www.harvard.edu/software/wcstools/wcstools-3.9.7.tar.gz"
   sha256 "525f6970eb818f822db75c1526b3122b1af078affa572dce303de37df5c7b088"
   license "GPL-2.0-or-later"
 
@@ -11,6 +12,7 @@ class Wcstools < Formula
   end
 
   bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "77a31db1617c161a3b9b32c79738444ee90e0493eae441dc5782b790331a37a0"
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "71c2d28775be44e3d583d1058fc42b7ed1facc6d2a47fa0f51a6c4be76642bf9"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "62c6a1ee4cba5821d4f08ad5996140118ec774432766fde5394a755e3f737b7d"
     sha256 cellar: :any_skip_relocation, arm64_ventura: "36f13821bae6872cf2a0efb838b16848747e7a08b9f862696c545c62c571d3e3"

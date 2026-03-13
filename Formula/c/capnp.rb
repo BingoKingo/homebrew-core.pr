@@ -1,11 +1,10 @@
 class Capnp < Formula
   desc "Data interchange format and capability-based RPC system"
   homepage "https://capnproto.org/"
-  url "https://capnproto.org/capnproto-c++-1.1.0.tar.gz"
-  sha256 "07167580e563f5e821e3b2af1c238c16ec7181612650c5901330fa9a0da50939"
+  url "https://github.com/capnproto/capnproto/archive/refs/tags/v1.3.0.tar.gz"
+  sha256 "01ab2ba7f52fcc3c51a10e22935aae56f3bc5e99b726b7e507fe6700cb12147d"
   license "MIT"
-  revision 1
-  head "https://github.com/capnproto/capnproto.git", branch: "master"
+  head "https://github.com/capnproto/capnproto.git", branch: "v2"
 
   livecheck do
     url "https://capnproto.org/install.html"
@@ -13,20 +12,20 @@ class Capnp < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "da943b772529cbb7c2440eb94cd2f10f46c6c8581ff71955c91eb525f02ef77c"
-    sha256 arm64_sonoma:  "65f9b719ce1f34ad4ecf701c4746a8171373f6823cb49092240a72873a236e26"
-    sha256 arm64_ventura: "a189e48e415f6c948dc65316273d4e3ef61c382afc8e87b3e0f9ff39de1a756b"
-    sha256 sonoma:        "b10e583f8c1e19e55799c99976bdcf1a72525159d1dafbbf34ce81e0e23e27f6"
-    sha256 ventura:       "5b7db9d3f90102f106d9fb4c4f9a940d6c3f41ec88d37b43448935e98cd0d8c8"
-    sha256 arm64_linux:   "c1e25a52e5c2c575e99556aaf4f201e62ee6bda6f9c4ad126e6f92a1a4949a0d"
-    sha256 x86_64_linux:  "565ef7ec4280086a04817c3b66eacff9fb21bb572e83a29a9aba77535bce0d8b"
+    rebuild 2
+    sha256 arm64_tahoe:   "7cc44347381c8fe4c691bb7684f1664ebc47c3f5ded704604e9f5ddf09445754"
+    sha256 arm64_sequoia: "3127500be3b5b7ec1dc964ceb15cf49911a22e47295c622299114e25ba45cbf5"
+    sha256 arm64_sonoma:  "820d5befe53e826fb307ecac9cc045c9e6391019bcb715d55a7a7180f6f156b9"
+    sha256 sonoma:        "607ed6bed655af9a7dd6b13a4941bcd3ce36342254dddeda7a442c9f9ba545cc"
+    sha256 arm64_linux:   "fa02acb983940b8eb6354198371ee5533b4a2144e0a0699e9c4ec11e5cc1aa92"
+    sha256 x86_64_linux:  "15fa47fde394d8b2b443338a89bc5893539dc79da5aa593e24c9cfab433b0939"
   end
 
   depends_on "cmake" => :build
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "openssl@3"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -49,8 +48,8 @@ class Capnp < Formula
                     "-DCMAKE_CXX_FLAGS=-fPIC",
                     *std_cmake_args
     system "cmake", "--build", "build_static"
-    lib.install buildpath.glob("build_static/src/capnp/*.a")
-    lib.install buildpath.glob("build_static/src/kj/*.a")
+    lib.install buildpath.glob("build_static/c++/src/capnp/*.a")
+    lib.install buildpath.glob("build_static/c++/src/kj/*.a")
   end
 
   test do

@@ -1,18 +1,18 @@
 class Crane < Formula
   desc "Tool for interacting with remote images and registries"
   homepage "https://github.com/google/go-containerregistry"
-  url "https://github.com/google/go-containerregistry/archive/refs/tags/v0.20.5.tar.gz"
-  sha256 "624b950f4dec1a34eeed15b2162352e0a47d78f0609125864710f490de34fcf8"
+  url "https://github.com/google/go-containerregistry/archive/refs/tags/v0.21.2.tar.gz"
+  sha256 "4b8a2c8a4c1955da7802806ea9437952e2c7f17f3dcf0362ac6c2f75388c389a"
   license "Apache-2.0"
   head "https://github.com/google/go-containerregistry.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3d15d4ebf0b40154dc03e24fb074e7ffb0ad1ceacd68db3d63e9cd31015fbfef"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3d15d4ebf0b40154dc03e24fb074e7ffb0ad1ceacd68db3d63e9cd31015fbfef"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "3d15d4ebf0b40154dc03e24fb074e7ffb0ad1ceacd68db3d63e9cd31015fbfef"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d2383011d0bbae459fb1e07575c4cf17d7ca859916991aebba106db7e5a13c08"
-    sha256 cellar: :any_skip_relocation, ventura:       "d2383011d0bbae459fb1e07575c4cf17d7ca859916991aebba106db7e5a13c08"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3da60b05afd8010acad34e54808360c9a0bc1b72ceb402825f426174950c66c0"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "afe54e46ae44c1a5a5ea600d3b114aacb0161d7e62625e01dc1ba645a672471f"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "afe54e46ae44c1a5a5ea600d3b114aacb0161d7e62625e01dc1ba645a672471f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "afe54e46ae44c1a5a5ea600d3b114aacb0161d7e62625e01dc1ba645a672471f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b1e2f70f95fe1a1a19256a2b7d4c182ca8dbc2138eb3ea67c3b4dd18f21ec631"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3a7870bb77c80f31197918707d286f63cbdd2552444499ffb931c5c4f1d9f452"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5ee232e2b59bbc12cd1e83a7611fdfe79bb481ecddbe981ff3abee9ce3e1ef2d"
   end
 
   depends_on "go" => :build
@@ -25,7 +25,7 @@ class Crane < Formula
 
     system "go", "build", *std_go_args(ldflags:), "./cmd/crane"
 
-    generate_completions_from_executable(bin/"crane", "completion")
+    generate_completions_from_executable(bin/"crane", shell_parameter_format: :cobra)
   end
 
   test do

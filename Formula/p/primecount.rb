@@ -1,18 +1,17 @@
 class Primecount < Formula
   desc "Fast prime counting function program and C/C++ library"
   homepage "https://github.com/kimwalisch/primecount"
-  url "https://github.com/kimwalisch/primecount/archive/refs/tags/v7.18.tar.gz"
-  sha256 "9d8a0127cc4dd9319006b5db6c6f9844532dab9da9c2d410d1e244902463a399"
+  url "https://github.com/kimwalisch/primecount/archive/refs/tags/v8.2.tar.gz"
+  sha256 "870f2c17b660449d10a593b31d2c69e720ff8060ec1b5099c37f451c005f671e"
   license "BSD-2-Clause"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "d1481dca0ff40292686b2732be1e4a2f595fc0e1c87cdf1fbb47d88e448324c1"
-    sha256 cellar: :any,                 arm64_sonoma:  "8a4a88e83d308bb3e08f12a512b749129f5052a0540b3f669d33e7057d983846"
-    sha256 cellar: :any,                 arm64_ventura: "d732e1d2b4ab2046dca0f3d199f830f48e03dba3a733c6c6018c2eb0851ad6fb"
-    sha256 cellar: :any,                 sonoma:        "9542671d8d6a290e5df6559eb253bb3d10466e783f9813a0f33b300275376dff"
-    sha256 cellar: :any,                 ventura:       "ddd9a1c45a424659c71867a522531647c8ddd8cc51cfcc293b327307890ba791"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "4ae092abec241b1e6d61dc2b28fc505afb3c366a4c948d7681fa82bd42f2ccef"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d3181e38e05c2a4319f683f5cae69de62742715d5f45347d76c5df61abcdfdc2"
+    sha256 cellar: :any,                 arm64_tahoe:   "e5bafa9ed909a8f306433c3136eb0973b12c869854699a0b68b4f080b1754671"
+    sha256 cellar: :any,                 arm64_sequoia: "e20fc99778dd82d54076df60d688f56f40f72854c5de476eb514e537b8961d79"
+    sha256 cellar: :any,                 arm64_sonoma:  "518d165e5b989b8bc3b435f87ab0a5ca66d3310dc241c0140c8e48388405d146"
+    sha256 cellar: :any,                 sonoma:        "dc7d918669464ea47ed5a28d899acb222987b86f31973f447f28c52900f5fd78"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "caac747ff7853027853c52c240426d3d2c274a818ba73f494a4cd730be8065bf"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "018799ca38a0df81b385891690be551cc705301e02e4a22a9ff6366759538e85"
   end
 
   depends_on "cmake" => :build

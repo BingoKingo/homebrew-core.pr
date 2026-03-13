@@ -1,9 +1,9 @@
 class ApacheArrowGlib < Formula
   desc "GLib bindings for Apache Arrow"
   homepage "https://arrow.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=arrow/arrow-20.0.0/apache-arrow-20.0.0.tar.gz"
-  mirror "https://archive.apache.org/dist/arrow/arrow-20.0.0/apache-arrow-20.0.0.tar.gz"
-  sha256 "89efbbf852f5a1f79e9c99ab4c217e2eb7f991837c005cba2d4a2fbd35fad212"
+  url "https://www.apache.org/dyn/closer.lua?path=arrow/arrow-23.0.1/apache-arrow-23.0.1.tar.gz"
+  mirror "https://archive.apache.org/dist/arrow/arrow-23.0.1/apache-arrow-23.0.1.tar.gz"
+  sha256 "bd09adb4feac11fe49d1604f296618866702be610c86e2d513b561d877de6b18"
   license "Apache-2.0"
   head "https://github.com/apache/arrow.git", branch: "main"
 
@@ -12,13 +12,12 @@ class ApacheArrowGlib < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "8294049b1709df4be53384fdafbec4e87a2a6ddc118a9f3e2867c67efcc9b02a"
-    sha256 cellar: :any, arm64_sonoma:  "ccde01a3671cac00aab2015fed3e35a5b74ebcd270c79e994fa48955dc08eb73"
-    sha256 cellar: :any, arm64_ventura: "df19557f102ca5b5e91b31ee6b5b7a33dbcbd15ced6cd3652864e85fc6359621"
-    sha256 cellar: :any, sonoma:        "a7cb4dc9dfbe8a3246661f1f754d4dc4c84b665ee8e6313683bfbf63ce784492"
-    sha256 cellar: :any, ventura:       "1f6cdbbbad28c17ad4b496568364cd787bcd3c0956ede80435837f370485b946"
-    sha256               arm64_linux:   "b3750439d49985c88717279650068e5b278b8f0e2973f993d176a342d5692d3b"
-    sha256               x86_64_linux:  "23c52e3e3e12a375416a6920e8983856b8a00dd4ff0ab7f4a5c6c8f2899bc068"
+    sha256 cellar: :any, arm64_tahoe:   "24553932397543b3d41feebb2fa20c8d559ddcadf6e3f06c6ff779975372a821"
+    sha256 cellar: :any, arm64_sequoia: "b994f13b97fbd98404c610cb55309db467f0ab945494f4dfcd4cc3ba18bc7979"
+    sha256 cellar: :any, arm64_sonoma:  "fa4d5c0c81ebe2cc1c4ce81eae1925d1970c387750c1caec3cdb06e65dd28580"
+    sha256 cellar: :any, sonoma:        "86ad2fa2782c4882f9c00ff72baa65b62860071112085f9b9484291eb06f167a"
+    sha256               arm64_linux:   "cbe8b75ac2f2bcaa5fb4da3ec5d04e67f4792dba890d93bdeb9db4524d844caa"
+    sha256               x86_64_linux:  "a3e637fb77960c7cbd20190a3c5aa65ec646d275b6dc9c56836114f7fb943143"
   end
 
   depends_on "gobject-introspection" => :build

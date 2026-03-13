@@ -12,13 +12,13 @@ class Mednafen < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "e100baeaab0eb1f32d42f02ed07741683c6e344d9df1a73498b5ae1388d69329"
-    sha256 arm64_sonoma:  "1a44117a0ab7696c1fc8a53fe01857dc50c79687f22191b669cb3fb0ba2eb762"
-    sha256 arm64_ventura: "41f73f24d64c67f03e321ca8c5e69cb63af7335865894bd977d1733ffc47a2dd"
-    sha256 sonoma:        "64d38f660b3c5b464efe66424b0cbd5b20601a69a00b138733bc706ffa88cc55"
-    sha256 ventura:       "b40afba5777537935fe7c79d0b275e0ef186d91d4220cdc82de150d31d212575"
-    sha256 arm64_linux:   "3a7871f139d7ab711a311bf62be6de85445694aa79e0fb11f1e532d5600bce61"
-    sha256 x86_64_linux:  "dfd1940dfa9917d20668ee7f53f30b682d49b6674a768b43dd77db6f181d135d"
+    rebuild 2
+    sha256 arm64_tahoe:   "2145cf181313a45d6c144a8050fd7c81a53346b15aa5283772b2b3ed4ab7e831"
+    sha256 arm64_sequoia: "212f9102b71ec08e7ecc343d9a71dfae00d614b686d6ba493e0fb8634566c5fd"
+    sha256 arm64_sonoma:  "61361a259b71446de15e5b2a5d76e018dcd466356ee40ffdc93a5069f1af4eb5"
+    sha256 sonoma:        "3606d9e9e61a51287d17f1d7d6816d78755a8501ec1cf9569bec3c7ad80d4afd"
+    sha256 arm64_linux:   "0025b636b515e34cd89e39b43b14f2886d8d5cb7257b9a994027fefbbf5d34d7"
+    sha256 x86_64_linux:  "6f13f9eb2ea6d1a62eae0c6f9cfcb5e37d2b13db516568d0a7a38a823aeef010"
   end
 
   depends_on "gettext" => :build
@@ -27,40 +27,33 @@ class Mednafen < Formula
   depends_on "flac"
   depends_on "libsndfile"
   depends_on "lzo"
-  depends_on macos: :sierra # needs clock_gettime
+  depends_on "musepack"
   depends_on "sdl2"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "gettext"
-    # musepack is not bottled on Linux
-    # https://github.com/Homebrew/homebrew-core/pull/92041
-    depends_on "musepack"
   end
 
   on_linux do
     depends_on "alsa-lib"
     depends_on "mesa"
+    depends_on "zlib-ng-compat"
   end
 
   def install
     args = %w[
       --with-external-lzo
       --with-external-libzstd
+      --with-external-mpcdec
       --enable-ss
     ]
-    args << "--with-external-mpcdec" if OS.mac? # musepack
 
     system "./configure", *args, *std_configure_args
     system "make", "install"
   end
 
   test do
-    # Test fails on headless CI: Could not initialize SDL: No available video device
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     assert_match version.to_s, shell_output("#{bin}/mednafen", 255)
   end
 end

@@ -1,18 +1,18 @@
 class Pan < Formula
   desc "Usenet newsreader that's good at both text and binaries"
   homepage "https://gitlab.gnome.org/GNOME/pan"
-  url "https://gitlab.gnome.org/GNOME/pan/-/archive/v0.163/pan-v0.163.tar.bz2"
-  sha256 "f15b5ad48729424fc5c31d1c3b609563374f1993e4b37ed17cf36f5e4e65589c"
+  url "https://gitlab.gnome.org/GNOME/pan/-/archive/v0.165/pan-v0.165.tar.bz2"
+  sha256 "0e393f81efe59ec9169cf8b0d519500e4da7c73f8cb3635d2c5c0f98db3bf573"
   license "GPL-2.0-only"
 
   bottle do
-    sha256 arm64_sequoia: "fe6f4ce88b08fc33e3bbc24966ebaccd7a097d0c0f7f7e74f0393b87c0ddd246"
-    sha256 arm64_sonoma:  "8f8c65db6328a70fde77845c576a3e4d7a56ce81f51d49f3826cb3b12e6aab3c"
-    sha256 arm64_ventura: "92f3339ce3499cd6f4991ea03a011553c4c3304e86cddbedc159b928d6aee08e"
-    sha256 sonoma:        "57237340a6f1a9e19357ca236115a08d4a6a9cf91d2557259d883bb07c449de3"
-    sha256 ventura:       "9349b86b4e76eb15423480985c961d222c70627858ed19cc3bf1e5d2a85a75cb"
-    sha256 arm64_linux:   "eb919df1a737833206151621a14bc24f8666695d46ef5e11cbdae64806076ebb"
-    sha256 x86_64_linux:  "b57e6f564d8e793ea6372443e5be72251d1619e9fa3af7c231ac8b1378312b7b"
+    rebuild 1
+    sha256 arm64_tahoe:   "fc39105d5b48f22b138d5e626c42098275959204729ef193ef91ae6837d504d7"
+    sha256 arm64_sequoia: "2e171ead5e91ddde91ec9adfbc04f0a87587e23b98ad31bac4499669f941b823"
+    sha256 arm64_sonoma:  "df046b01f313cdf657b78d17b4166c882844e72181c685c12072dbc6bc18a4bb"
+    sha256 sonoma:        "cdce7a683c5aaf45652ac0bbe8e440fdea8ca44169bb24e1379865023160d5b6"
+    sha256 arm64_linux:   "69cb546174ad3bd1c3d534cb3a1ee5aa40f42b747fef0e23d5121be2efc450db"
+    sha256 x86_64_linux:  "9f4fa7cdfb0692cc38119803c6c2d97de0b1e64dfef6f4244a0cc25e7322bf01"
   end
 
   depends_on "cmake" => :build
@@ -32,11 +32,14 @@ class Pan < Formula
   depends_on "harfbuzz"
   depends_on "pango"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "at-spi2-core"
     depends_on "gettext"
+  end
+
+  on_linux do
+    depends_on "xorg-server" => :test
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -46,9 +49,6 @@ class Pan < Formula
   end
 
   test do
-    # Test fails on headless CI
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
-
     minimal = testpath/"minimal.nzb"
     minimal.write <<~XML
       <?xml version="1.0" encoding="iso-8859-1"?>
@@ -66,7 +66,8 @@ class Pan < Formula
     XML
 
     # this test works only if pan has not yet been configured with news servers
-    assert_match "Please configure Pan's news servers before using it as an nzb client.",
-      shell_output("#{bin}/pan --nzb #{testpath}/minimal.nzb 2>&1", 1)
+    cmd = "#{bin}/pan --nzb #{testpath}/minimal.nzb 2>&1"
+    cmd = "#{Formula["xorg-server"].bin}/xvfb-run #{cmd}" if OS.linux? && ENV.exclude?("DISPLAY")
+    assert_match "Please configure Pan's news servers before using it as an nzb client.", shell_output(cmd, 1)
   end
 end

@@ -1,8 +1,8 @@
 class PythonTkAT311 < Formula
   desc "Python interface to Tcl/Tk"
   homepage "https://www.python.org/"
-  url "https://www.python.org/ftp/python/3.11.12/Python-3.11.12.tgz"
-  sha256 "379c9929a989a9d65a1f5d854e011f4872b142259f4fc0a8c4062d2815ed7fba"
+  url "https://www.python.org/ftp/python/3.11.15/Python-3.11.15.tgz"
+  sha256 "f4de1b10bd6c70cbb9fa1cd71fc5038b832747a74ee59d599c69ce4846defb50"
   license "Python-2.0"
 
   livecheck do
@@ -10,13 +10,12 @@ class PythonTkAT311 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "672aecb6ab1193e4a2dbdfcb3720679b998f012a61bb8c13579881c064b53e65"
-    sha256 cellar: :any,                 arm64_sonoma:  "1e80c600dc458c670be96f05e134fcdb0835a1bb0c711e689fdd0ebda486f2f5"
-    sha256 cellar: :any,                 arm64_ventura: "55632e676b562fa016c95d109ae0ed7347988a48f1281024f6cfd67df118d63e"
-    sha256 cellar: :any,                 sonoma:        "c10a084ec54b28fbb8973128666616335ec7ca3b7a05ca7c5dba46759094cc8f"
-    sha256 cellar: :any,                 ventura:       "e99d656fa71673fcdf75badbcab914ab9f156ea322a2ec1049301a1d56856aae"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3a8e65ca09eca6756e94281113bed781522698102dd42b61fc73f70285651c14"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4a3388da80f4fee1b80eea795ed2e0f9af2c94b73d8fec91affc1a02e6262bb2"
+    sha256 cellar: :any,                 arm64_tahoe:   "9d4c3595e2ea5d5cd9023119821ef0bd2a0de04e95747f61afee97c37163222a"
+    sha256 cellar: :any,                 arm64_sequoia: "4ba4218e08f4544b714d7a1985390c4774de9dc3c10c55ddd135d285bbe9fc99"
+    sha256 cellar: :any,                 arm64_sonoma:  "acfb91bc8ba2025471a0d707549b0ac30fed7dcdbd23f2256b5905c1c43ab008"
+    sha256 cellar: :any,                 sonoma:        "b5e63b585151fdf740650d132c819c8d536ad515dae9adc2ea4dca3168b2d912"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8dcf8018fd89bb9e1341e8aa2cbebbe4a6f738e244a64d1db71c587a63e87d9f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fd083f95a984b7d674e4399acbe1278ebfa44653de01af5789dd59f8f6e33801"
   end
 
   depends_on "python@3.11"

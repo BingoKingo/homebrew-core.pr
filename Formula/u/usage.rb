@@ -1,29 +1,30 @@
 class Usage < Formula
   desc "Tool for working with usage-spec CLIs"
   homepage "https://usage.jdx.dev/"
-  url "https://github.com/jdx/usage/archive/refs/tags/v2.1.1.tar.gz"
-  sha256 "8a28fe01b2c3b1273e80b113d137197fc62c97a542f577dc2dd2414a236c78d0"
+  url "https://github.com/jdx/usage/archive/refs/tags/v3.0.0.tar.gz"
+  sha256 "6a8e521b466b63b3c25d78b1e72662b548babe15423061c691c7039b2e0c03d4"
   license "MIT"
   head "https://github.com/jdx/usage.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "48749a36fe6f537c4fe3e123d21627fd4b25ff38609d4d24cc81f1fad83ea000"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3943027449c6376bdfe6a1ddc228d1b3a78cf003dd88c20126f6cabc04a6799b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "73feaf7c10b53a1aa1eeee36a906c122a66ba270020ab632172d94cf0e07f438"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f31104fa7604e9fea8b2f2c09b90bbc539f18d98e7a36d50bd549507e002c61b"
-    sha256 cellar: :any_skip_relocation, ventura:       "470250bcd2129d522eae4da6f001dafc87b4e753d244928905824b4ed3ed25e7"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e31653c676b32d99ae9e5e7f7fb431ea3d11b90f08013ab7c482f97231012baf"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "752b905bbfd6fa99f56ae3dc6d1c2cc0d430d6c0023dae8a84ef7eb4f5c05f07"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "a4583cfb6dd4be62e056384be34d0c9d81d98d000dc509ddce4dba20ecc437b4"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2306a0f553989c7ca68a7e4dc34431864aa10dc588c7e8f96545e3b54112de6c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "60d3c46df92c593780b694cbb6e8a3ba041397f634022720c30db61fec95808b"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d848d04a817ee76d2ebc9f2cc2706bbfb5d893a0f981ebfdad0ee64ea73765ab"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b78feaa7f8cd50b3d644338478b7de0ff45381805b4808bb47238f531eb7a117"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "50dd708f98356b11a75f6173d91cdc0c483a9299f719ec51ca9b3ec41b6918e0"
   end
 
   depends_on "rust" => :build
 
   def install
     system "cargo", "install", *std_cargo_args(path: "cli")
+    man1.install "cli/assets/usage.1"
+    generate_completions_from_executable(bin/"usage", "--completions")
   end
 
   test do
-    assert_match "usage-cli", shell_output(bin/"usage --version").chomp
-    assert_equal "--foo", shell_output(bin/"usage complete-word --spec 'flag \"--foo\"' -").chomp
+    assert_match "usage-cli", shell_output("#{bin}/usage --version").chomp
+    assert_equal "--foo", shell_output("#{bin}/usage complete-word --spec 'flag \"--foo\"' -").chomp
   end
 end

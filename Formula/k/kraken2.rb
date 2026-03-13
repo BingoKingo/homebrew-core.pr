@@ -1,30 +1,39 @@
 class Kraken2 < Formula
   desc "Taxonomic sequence classification system"
   homepage "https://github.com/DerrickWood/kraken2"
-  url "https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.1.5.tar.gz"
-  sha256 "6feb9b1e0840a574598b84a3134a25622e5528ac6d0f4c756cdab629275d8f42"
+  url "https://github.com/DerrickWood/kraken2/archive/refs/tags/v2.17.1.tar.gz"
+  sha256 "4dc64ead045b5ae9180731c260046aa37b6642244be085a9ba9b15db78ab442d"
   license "MIT"
   head "https://github.com/DerrickWood/kraken2.git", branch: "master"
 
-  bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3ee275caf279a788ea6a7bce93190ab31165bbdc79fd1dc812ba120336a1918f"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fb22cec35e13ee86ec66e1f65f90a4b6454e418da5df13bf786e48a1dc846e8b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a875a1a58dde84ca8651102d3e99fb1eb0ff2c1089fc5fc4587e56f0ac0ece33"
-    sha256 cellar: :any_skip_relocation, sonoma:        "84e6e9db41f330e526dcdaa1061c530ecfc351f1f89004ce69695b480fffc195"
-    sha256 cellar: :any_skip_relocation, ventura:       "43e3bb6870bb0d9cf4d5a9d09bc8850939922acca99ccfa56a84c9f77d9a3162"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ba5490c61e588570bfbab8976c233dcf75d57ffe3113bfa800d6e8470f298b8f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0ca42ce0aa2688d8ca4f9bb123ab1cf372a79e8944f511312a26b9da4ead3927"
+  livecheck do
+    url :stable
+    strategy :github_latest
   end
 
-  depends_on "python@3.13"
+  bottle do
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "e794c89e70f0060b0e02caf5c439b3f8a2300a55cfd9f923aa3e7616d68b9e8b"
+    sha256 cellar: :any,                 arm64_sequoia: "5aff480752ccf8c12530d8cbecd3c11ef804452ff751ddc81e89c093980f6623"
+    sha256 cellar: :any,                 arm64_sonoma:  "749bdff8f9a6f7c305241e3a90015230113601e6600150e47ea1fa7d879ccc57"
+    sha256 cellar: :any,                 sonoma:        "8b216c4a508c451475740893d10f241c24f7ca5c6b23a78efb753d2f72ac05e0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a57001fc63b43ce00a3d8c4f02fd7b6d34123752e6684fdfbac73699660497a3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c369951fd44567712e4dacb34d20b6a4ad3b729669ddecea0dca256ca74d4cc8"
+  end
+
+  depends_on "gperftools"
+  depends_on "python@3.14"
   depends_on "wget"
 
   uses_from_macos "perl"
   uses_from_macos "rsync"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "libomp"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   def install

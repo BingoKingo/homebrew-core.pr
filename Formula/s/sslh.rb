@@ -1,20 +1,18 @@
 class Sslh < Formula
   desc "Forward connections based on first data packet sent by client"
   homepage "https://www.rutschle.net/tech/sslh.shtml"
-  url "https://www.rutschle.net/tech/sslh/sslh-v2.2.4.tar.gz"
-  sha256 "696edac467111d0c1353a4ff32ed8dfa33bc914036644c69a7b9506b7ee49115"
+  url "https://www.rutschle.net/tech/sslh/sslh-v2.3.1.tar.gz"
+  sha256 "51a5516ec5cb01823633b4d8cacdeee4efa0c56ef620d1c996d4f52ca51a601b"
   license all_of: ["GPL-2.0-or-later", "BSD-2-Clause"]
-  revision 1
   head "https://github.com/yrutschle/sslh.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "e33d422b1f3f1d783ee9eeec9cd64c42cd6e0d06c362637f1bfc7f537d5f2814"
-    sha256 cellar: :any,                 arm64_sonoma:  "091f2de2472186c442ae24c9ff763df2b2d434a1fa0ca7500d268e58ff791f2a"
-    sha256 cellar: :any,                 arm64_ventura: "a2209306dc2d303d47cc270a19a871c5f2c4f5ca7a717a8d4dc329702413de1e"
-    sha256 cellar: :any,                 sonoma:        "c8eee00ba3f59650f9a59e1e1a6a8424daad7450c5d08d6d1808a4d44a179a0d"
-    sha256 cellar: :any,                 ventura:       "4c54b471800cb1bf08765a1a8110bc8e2ea6c9620789b4adf5f669a6d087d16a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "56772fbb85b860f1a6813151f01adee469d0dd31d77d66e84e4362df8ce877d2"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dee17158a3b5586ec93fbbd1934dfb06d20314a6b8b73409530aa7de3350bff7"
+    sha256 cellar: :any,                 arm64_tahoe:   "5aa0861161f4e13c703825e23a3c885010d68a0f494c1af257929654dc3af9b6"
+    sha256 cellar: :any,                 arm64_sequoia: "3752f8347e8768b3a6f6866b2c810367c4f6616ac7f2768e6697b7b8fcb0fffd"
+    sha256 cellar: :any,                 arm64_sonoma:  "516c630dcc63639159d464b219c1a197558dcfd51fb76f470d0dd9d50e1a5c5d"
+    sha256 cellar: :any,                 sonoma:        "6fa68b12118c439cda8382787c169945c638a70881aa1b4efccb277a9043748d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0c6921906b1a5168ffb2ebb6bf2ee85bc391510420566cda8646cd778ef2782a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c98c1400165331ac59969b19840ab324097188e3f79d9f0ee904463ea0724aad"
   end
 
   depends_on "libconfig"

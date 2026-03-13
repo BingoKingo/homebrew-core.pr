@@ -7,6 +7,7 @@ class Fq < Formula
   head "https://github.com/circonus-labs/fq.git", branch: "master"
 
   bottle do
+    sha256 arm64_tahoe:   "319d0358ae90ea27c5159a4585fc403b3d7aad3e58a9b6d0f9b2cc5e336e4228"
     sha256 arm64_sequoia: "33e9232200183fa00074369edd7822c4bdd5b34eca4f0bf1e6f46536b99bdf22"
     sha256 arm64_sonoma:  "37327110567a05788dbae0310ac20b1c1790a1e1642117435ac900a013bfc5dd"
     sha256 arm64_ventura: "0c8d4409a94927f6f2a848bb04de94f78de2c1237bc84e0c798ab7cb66900663"
@@ -41,12 +42,12 @@ class Fq < Formula
   test do
     ipv4 = shell_output("dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com | tr -d '\"'").strip
     port = free_port
-    pid = fork { exec sbin/"fqd", "-p", port.to_s, "-n", ipv4, "-D", "-c", testpath/"test.sqlite" }
-    sleep 10
+    pid = spawn sbin/"fqd", "-p", port.to_s, "-n", ipv4, "-D", "-c", testpath/"test.sqlite"
     begin
-      assert_match "Circonus Fq Operational Dashboard", shell_output("curl 127.0.0.1:#{port}")
+      output = shell_output("curl --silent --retry 5 --retry-connrefused 127.0.0.1:#{port}")
+      assert_match "Circonus Fq Operational Dashboard", output
     ensure
-      Process.kill 9, pid
+      Process.kill "TERM", pid
       Process.wait pid
     end
   end

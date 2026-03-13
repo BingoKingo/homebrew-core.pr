@@ -1,12 +1,12 @@
 class Fantom < Formula
   desc "Object oriented, portable programming language"
   homepage "https://fantom.org/"
-  url "https://github.com/fantom-lang/fantom/releases/download/v1.0.81/fantom-1.0.81.zip"
-  sha256 "34a7a6aa843a84d3da53941ed37113fb374f2f82396a764472c52fcc671bf78a"
+  url "https://github.com/fantom-lang/fantom/releases/download/v1.0.83/fantom-1.0.83.zip"
+  sha256 "f695b731526a7981f419a61e6265192feff6b18643c45437c317e6420c8ec588"
   license "AFL-3.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "209d185a4de42ef7a89d38c945373ed1d6930c3cbeb6e79a2d709b4f961a5a46"
+    sha256 cellar: :any_skip_relocation, all: "e9698cbdcb6d5dc0f35b8ae8754017021b8a2ae04b057a1fde7c28912736656e"
   end
 
   depends_on "openjdk"
@@ -21,8 +21,8 @@ class Fantom < Formula
     inreplace "etc/build/config.props", %r{//jdkHome=/System.*$}, "jdkHome=#{java_home}"
 
     libexec.install Dir["*"]
-    chmod 0755, Dir["#{libexec}/bin/*"]
-    bin.install Dir["#{libexec}/bin/*"]
+    chmod 0755, libexec.glob("bin/*")
+    bin.install libexec.glob("bin/*")
     bin.env_script_all_files libexec/"bin", JAVA_HOME: java_home
   end
 

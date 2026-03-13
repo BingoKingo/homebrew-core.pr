@@ -11,25 +11,27 @@ class BaculaFd < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "5865d13599bead592dd24ba7ad6b630f1aeb33adadf8a204f63b2778d9f89bee"
-    sha256                               arm64_sonoma:  "bbe8baa1d28de02cf1da748963a63c79f7a6a8730af1d43c314809e7f835e649"
-    sha256                               arm64_ventura: "952b7913ffd831cc691731c74aa73976197958187d71cf544755bd8536640ffa"
-    sha256                               sonoma:        "9e3fe3200227872cc89e6f9606edc904fbc8e416b87349bb40a6b1faa774c56f"
-    sha256                               ventura:       "e16028347bfe77bcd7ac5f511440225b545d256bcd8e53b510a90c1ea5306a24"
-    sha256                               arm64_linux:   "7b13e3aead69c44d4ee74e7781414a2aaa4b273710837d5a623c4076f25cbb5e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c9427205610275599c958920ccf09b076528aa2ad5e73118260cdae55e15b964"
+    rebuild 2
+    sha256                               arm64_tahoe:   "d8e6479890fe58003ea82668949e353c887a5142551e12fa482ab94291a41567"
+    sha256                               arm64_sequoia: "1b45de630f6e4739ae934b5d00ae94500d70f6671bba548b08a0be0d980ed295"
+    sha256                               arm64_sonoma:  "fbe7144f73805ae418979f1585cbdeb44fd567d029123887790b45e066471839"
+    sha256                               sonoma:        "25564b366864ae82e37c6c6daebf04d060c416c47bd62981cfa984bacbe58dc8"
+    sha256                               arm64_linux:   "00e58d0749aa2b73b7c7f41074e77f62c072cd02c47a0d9e0bcf781775bc415f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3f29b7a47f97ba906ad99a6ca74735719764540697d700495e4545bbf66c1038"
   end
 
   depends_on "openssl@3"
   depends_on "readline"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "bareos-client", because: "both install a `bconsole` executable"
 
   # Fix -flat_namespace being used on Big Sur and later.
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-pre-0.4.2.418-big_sur.diff"
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/libtool/configure-pre-0.4.2.418-big_sur.diff"
     sha256 "83af02f2aa2b746bb7225872cab29a253264be49db0ecebb12f841562d9a2923"
   end
 
@@ -58,9 +60,6 @@ class BaculaFd < Formula
     inreplace prefix/"etc/bacula_config", "#{Superenv.shims_path}/", ""
 
     (var/"lib/bacula").mkpath
-  end
-
-  def post_install
     (var/"run").mkpath
   end
 

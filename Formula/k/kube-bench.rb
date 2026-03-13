@@ -1,18 +1,18 @@
 class KubeBench < Formula
   desc "Checks Kubernetes deployment against security best practices (CIS Benchmark)"
   homepage "https://github.com/aquasecurity/kube-bench"
-  url "https://github.com/aquasecurity/kube-bench/archive/refs/tags/v0.10.6.tar.gz"
-  sha256 "0b6ba3e7cda64de606a091bbb7a24ed5e5e34c7413ef0574895812a86e868ec7"
+  url "https://github.com/aquasecurity/kube-bench/archive/refs/tags/v0.15.0.tar.gz"
+  sha256 "7d9e894863998800a57cc5045a62dd5b7e958951347f172a96aea0907f200b19"
   license "Apache-2.0"
   head "https://github.com/aquasecurity/kube-bench.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "99c1056199fb24036403acd6de4cc8d24f42206f1c80389e0d56397b2fc201ec"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "99c1056199fb24036403acd6de4cc8d24f42206f1c80389e0d56397b2fc201ec"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "99c1056199fb24036403acd6de4cc8d24f42206f1c80389e0d56397b2fc201ec"
-    sha256 cellar: :any_skip_relocation, sonoma:        "446492b022d51ca3c7d57ce81931475b74d57171721df9b4f9934176403ffbeb"
-    sha256 cellar: :any_skip_relocation, ventura:       "446492b022d51ca3c7d57ce81931475b74d57171721df9b4f9934176403ffbeb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "21370ca6054be4c33195271d9b52773536b75e15cca1c9ff55123b05713ba39a"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "78f5fe779d3aaa2fe518a5a6a34a92d36993bb157f60848307d511194a5f443a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "78f5fe779d3aaa2fe518a5a6a34a92d36993bb157f60848307d511194a5f443a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "78f5fe779d3aaa2fe518a5a6a34a92d36993bb157f60848307d511194a5f443a"
+    sha256 cellar: :any_skip_relocation, sonoma:        "1eca0d5815a129efa69b75b756fdd554adcc6d85618110d83c5187ff60b2f837"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2355e2d2cffbfab948499fa1a3c3d759becdd035cdd1dde35de0f66e012d55b3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0b0883040ac4a1ae9a6c84a7dc6f76a92b801e5e619ecde4de77be1b3adb56d0"
   end
 
   depends_on "go" => :build
@@ -20,7 +20,7 @@ class KubeBench < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=#{version}")
 
-    generate_completions_from_executable(bin/"kube-bench", "completion")
+    generate_completions_from_executable(bin/"kube-bench", shell_parameter_format: :cobra)
   end
 
   test do

@@ -1,26 +1,28 @@
 class Cue < Formula
   desc "Validate and define text-based and dynamic configuration"
   homepage "https://cuelang.org/"
-  url "https://github.com/cue-lang/cue/archive/refs/tags/v0.13.0.tar.gz"
-  sha256 "a72115fc5273341a706c33488336b7c6f3974fbbd5ac27a45291b5c8148779dc"
+  url "https://github.com/cue-lang/cue.git",
+      tag:      "v0.16.0",
+      revision: "de47a5efb4a5ee1129a470e73717f59ac03ba535"
   license "Apache-2.0"
   head "https://github.com/cue-lang/cue.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ca9b64555ac8c9f93d83ccc774115fbfbd0271fb20837f6db01518298d3c0ee3"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ca9b64555ac8c9f93d83ccc774115fbfbd0271fb20837f6db01518298d3c0ee3"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ca9b64555ac8c9f93d83ccc774115fbfbd0271fb20837f6db01518298d3c0ee3"
-    sha256 cellar: :any_skip_relocation, sonoma:        "4e53f7a8a0e6ca5c2db1e0939a7661d938a7b8f8d25151405b55729847b079fc"
-    sha256 cellar: :any_skip_relocation, ventura:       "4e53f7a8a0e6ca5c2db1e0939a7661d938a7b8f8d25151405b55729847b079fc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0fa2cdbb299be876c54849082fc15caef7e340750bed44848753f06012e170a3"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "283fc576a33f724a6dcc301136ed9570932302305199ff73520045152683b744"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "283fc576a33f724a6dcc301136ed9570932302305199ff73520045152683b744"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "283fc576a33f724a6dcc301136ed9570932302305199ff73520045152683b744"
+    sha256 cellar: :any_skip_relocation, sonoma:        "97ca9e03644d7282c33f5b12528876909340ecab5b279444c2e4e8512fcde323"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "356c1262b0e80ef595a17296e698953859a9ef753a5ce04d35d159a056f025f2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2b52392d7ad11f7f9b24d615f5b92d1712c3e243a5ccab2e656ad5fe65247668"
   end
 
   depends_on "go" => :build
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w -X cuelang.org/go/cmd/cue/cmd.version=v#{version}"), "./cmd/cue"
+    system "go", "build", *std_go_args(ldflags: "-s -w"), "./cmd/cue"
 
-    generate_completions_from_executable(bin/"cue", "completion")
+    generate_completions_from_executable(bin/"cue", shell_parameter_format: :cobra)
   end
 
   test do
@@ -43,8 +45,8 @@ class Cue < Formula
           ./ranges.yml:5:6
     EOS
 
-    assert_equal expected, shell_output(bin/"cue vet ranges.yml check.cue 2>&1", 1)
+    assert_equal expected, shell_output("#{bin}/cue vet ranges.yml check.cue 2>&1", 1)
 
-    assert_match version.to_s, shell_output(bin/"cue version")
+    assert_match version.to_s, shell_output("#{bin}/cue version")
   end
 end

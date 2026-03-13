@@ -1,24 +1,27 @@
 class Got < Formula
   desc "Version control system"
   homepage "https://gameoftrees.org/"
-  url "https://gameoftrees.org/releases/portable/got-portable-0.111.tar.gz"
-  mirror "https://pkg.freebsd.org/ports-distfiles/got-portable-0.111.tar.gz"
-  sha256 "d096f76e91a700dd0d22fbaf9641c2b94f8a6de16f09b0f4939c9b96a9d878ce"
+  url "https://gameoftrees.org/releases/portable/got-portable-0.123.tar.gz"
+  mirror "https://pkg.freebsd.org/ports-distfiles/got-portable-0.123.tar.gz"
+  sha256 "53ae795f03e2ee4f4696bf85768a9a7d64a473f20622fcc8508fa246cc288526"
   license "ISC"
 
+  # Since GitHub runners are not able to access the homepage, our Linux build
+  # requires FreeBSD mirror to exist before we can bump the version.
   livecheck do
-    url "https://gameoftrees.org/releases/portable/"
-    regex(/href=.*?got-portable[._-]v?(\d+(?:\.\d+)+)\.t/i)
+    url "https://raw.githubusercontent.com/freebsd/freebsd-ports/refs/heads/main/devel/got/distinfo"
+    regex(/got-portable[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
+  no_autobump! because: "GitHub runners are not abile to access the homepage or livecheck URL"
+
   bottle do
-    sha256 arm64_sequoia: "68c85a42020eab8fc3d8c682ac925ca722972404198b2c7129fd8bc15301a82a"
-    sha256 arm64_sonoma:  "197a48d590f8151bc84c29c1eddc44ec3e093df6f34ef43f5cae7d2d9c9167de"
-    sha256 arm64_ventura: "89586da487f0f879033b928ddd73a8fa6f53d64b1f11f491c8a8803a48620c6f"
-    sha256 sonoma:        "3f4cd4125196482e709e44dc99dd774c794b187049b0f796f4f705a95d3cd246"
-    sha256 ventura:       "3df41972ed98834ef6c38086991aec8f9f38c8709c3a4e1cedcd0963f7850545"
-    sha256 arm64_linux:   "4038503c0a1b9dd1d34c868cd1d3da6383f26b9cb0fdb645073b59491a75d039"
-    sha256 x86_64_linux:  "e07cba7746ca57fa40d78a2df34c9f100d9d18c79637f16d5968ed3e65c68093"
+    sha256 arm64_tahoe:   "42153eec1c0cdd6a97f3fcfa9844379169310d69662f573e3bc3620391ac1f79"
+    sha256 arm64_sequoia: "94acc8884c6e8843c24552969c5e4ee95be069e215500317b6ed942413d7e080"
+    sha256 arm64_sonoma:  "82666d475d8b4434acfa4ad6323e4ee4d5e1c8de1fe1a7a907d53eb0f37b4d3f"
+    sha256 sonoma:        "0e1653964d8b02c503ddda3faa78fa9a0751533497cab54528618526f01babb0"
+    sha256 arm64_linux:   "b7be5020527e8afca69dfd0de84519588af0f3004dea3aa6d79fa9271ff61d61"
+    sha256 x86_64_linux:  "8d5f523e7be43f222443c7e5ca66aa51434480c8329f1665db9bde32db061b78"
   end
 
   depends_on "bison" => :build
@@ -28,12 +31,11 @@ class Got < Formula
   depends_on "ncurses"
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "libbsd"
     depends_on "libmd"
     depends_on "util-linux" # for libuuid
+    depends_on "zlib-ng-compat"
   end
 
   def install

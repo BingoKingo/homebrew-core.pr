@@ -1,19 +1,18 @@
 class CargoRelease < Formula
   desc "Cargo subcommand `release`: everything about releasing a rust crate"
   homepage "https://github.com/crate-ci/cargo-release"
-  url "https://github.com/crate-ci/cargo-release/archive/refs/tags/v0.25.18.tar.gz"
-  sha256 "a212d974db4cf46e580cf41e1f0bcf81ff30aac1dfe9e31cd0dc89c0b5eb3586"
+  url "https://github.com/crate-ci/cargo-release/archive/refs/tags/v1.1.1.tar.gz"
+  sha256 "c380a3db83142791b6408132aa60c0226e3f67c84d9e7403e5ad5987901f3adf"
   license any_of: ["Apache-2.0", "MIT"]
   head "https://github.com/crate-ci/cargo-release.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1b9ef97a22b96c2855ff78669f71a2262e3d021e490f63a0846ef1822f5ab1e8"
-    sha256 cellar: :any,                 arm64_sonoma:  "3938cbec73223f3399ba771d6a2d64067a3c8783120e69bcfd51ac0f148b66c2"
-    sha256 cellar: :any,                 arm64_ventura: "6978e3f6f0830214570a66544466c79ebf9d5aa06ca9dc482713422aa7a7e43e"
-    sha256 cellar: :any,                 sonoma:        "112c6f6dd8f26537171a283851da6f236cb0cb5f9001a09deb188f40e79364f4"
-    sha256 cellar: :any,                 ventura:       "3808557d4a75b9a295c60f887c0c67163c130bf1065b21b946842bbbc29cfa80"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d02b46b6b026b5b87c6434da3c840ce18d3227d256607c9df0dd67ec8877d732"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "39931a7937cfbad8a1460122044fd01d78e2472af66d95d2a09f2b7970c673f8"
+    sha256 cellar: :any,                 arm64_tahoe:   "95170088deb94fe7a3aedefe7e1f2018d7d09c9168a148f6f4e00daf80aa7b0f"
+    sha256 cellar: :any,                 arm64_sequoia: "6cc876f034603c29d2088eaf09f9b39f65d1d3c4eb68d1ba4e7afecaeabc6526"
+    sha256 cellar: :any,                 arm64_sonoma:  "7c7360839aef8a4c403533dfaad7d05a3450b1c7c54550428c34a83235f35fc7"
+    sha256 cellar: :any,                 sonoma:        "b8cd67e9e59557bea93f9d2d119e585f185c05481ba1debbf3a94a2f1c0cb376"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "99b52ccfe05e6faa4247fa7acf67a5ef30b7cd01b6838d83742931dabeb4bece"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8ca81471ef75b0f160b1277cb805cdfb31e3ae728176a90f0ec61d4cbca9651c"
   end
 
   depends_on "pkgconf" => :build

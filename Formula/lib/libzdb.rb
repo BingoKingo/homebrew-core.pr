@@ -1,8 +1,8 @@
 class Libzdb < Formula
   desc "Database connection pool library"
   homepage "https://tildeslash.com/libzdb/"
-  url "https://tildeslash.com/libzdb/dist/libzdb-3.4.0.tar.gz"
-  sha256 "abd675719bcbdde430aa4ee13975b980d55d2abcb5cc228082a30320a6bb9f0f"
+  url "https://tildeslash.com/libzdb/dist/libzdb-3.5.0.tar.gz"
+  sha256 "90c79bf23b0c8fcb6543634844d17c094a24a360c9d63ddf6efc3741ebec32c5"
   license "GPL-3.0-only"
 
   livecheck do
@@ -11,17 +11,15 @@ class Libzdb < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "c2cdc0ace2bf1ef0a9d2526c7ae60e9274b89554b0c102fbec55e3de814644fe"
-    sha256 cellar: :any,                 arm64_sonoma:  "64f246320a51ae3c3c964b5d43727117c86496dd00d3fa1502ffc5bd3b1dee2d"
-    sha256 cellar: :any,                 arm64_ventura: "726e589d4f8923d5637a0e2e783646b72c27fc67be1b9964751a84756eff31f0"
-    sha256 cellar: :any,                 sonoma:        "7edcecb1ca7c17d03534e6af574756ec864b4def522cb7e08eafe6b6644a726c"
-    sha256 cellar: :any,                 ventura:       "241ebf0e383ea2e76a0f50a7631732196b766c2db21a7a9777dbfb698b099661"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5298d25e7949700706d31195a5e6002340099bb67bda72a895f068cc5b8205a6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a3c1a98b88d064a8046b123cd741283a5135edc37bac2567a650fdf561c9ed22"
+    sha256 cellar: :any,                 arm64_tahoe:   "e823552985e05bb6f5506fa3cead177bc8e2f388342567efb731e53f10f5c9e7"
+    sha256 cellar: :any,                 arm64_sequoia: "fce519ab90a9ed0c1a753df628afed46f7e9079532c87a366b5f1bdd06ae0503"
+    sha256 cellar: :any,                 arm64_sonoma:  "d7f4b9d1ff186e53c0f57201471a3cff895c8006a9a6d3a49c2687590acfb495"
+    sha256 cellar: :any,                 sonoma:        "37fa3aac2e71b2319ffeac999a72baecf86194484e4a663beba0cdc6417cf25f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e309f3c47a01f6cfda5b621e4d358048f22201f973df4615163eacbd3422e47a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e7f359cdb4916f44128b64c324d27915dec76d917d380509ab05ffc11e869ddb"
   end
 
   depends_on "libpq"
-  depends_on macos: :high_sierra # C++ 17 is required
   depends_on "mariadb-connector-c"
   depends_on "sqlite"
 

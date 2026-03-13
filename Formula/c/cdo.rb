@@ -1,8 +1,8 @@
 class Cdo < Formula
   desc "Climate Data Operators"
   homepage "https://code.mpimet.mpg.de/projects/cdo"
-  url "https://code.mpimet.mpg.de/attachments/download/29938/cdo-2.5.2.tar.gz"
-  sha256 "3b28da72d75547663b1b9b08332bfe3f884d27742d0eeeb7f3c8b2c70f521fa9"
+  url "https://code.mpimet.mpg.de/attachments/download/30182/cdo-2.6.0.tar.gz"
+  sha256 "752d5cda6fa3fdb8a04dcea16af5918e5f9f54657d9a5d2e35ae34f5755c31d8"
   license "GPL-2.0-only"
 
   livecheck do
@@ -13,13 +13,12 @@ class Cdo < Formula
   no_autobump! because: :incompatible_version_format
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "72b20bad237dc2bbd3d932817afc2be1e68f30faf0226b7eb3d56899b5b85bcf"
-    sha256 cellar: :any,                 arm64_sonoma:  "a68f498131b4df243f6e31a90ce7a34359fbf278f95ae0edc5213bc9f7d5ee93"
-    sha256 cellar: :any,                 arm64_ventura: "2cef53daf49c4bbd6109397143cce2eee07052dfe125c3fdd452e6051f73403d"
-    sha256 cellar: :any,                 sonoma:        "2622bf6731390da67a9af8d926f6f24d559d12ea73f87590a8bde19f1dc8420b"
-    sha256 cellar: :any,                 ventura:       "184828138292f7baf4e1033188098023d5b0e04c4e4673fe71423256c6c2e47f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c0df99aa7aa8b09ed31172adab69dbec3ba900ea139bdbeb62abbb83cab6a58e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e6463f2e45d2dbb4e2fb51d197394a164cfea9e0769eadb167b585a04ed8d7f5"
+    sha256 cellar: :any,                 arm64_tahoe:   "6ba8a2f9742d13f5aa6a7cff08f8ba6e27df53a3f535762f0fafc432cf72150f"
+    sha256 cellar: :any,                 arm64_sequoia: "3ef898f47d4050e5d68d584494c426990bac21004927e5aa90d79638d464f212"
+    sha256 cellar: :any,                 arm64_sonoma:  "120b0a3bde18f4bff97d86858bebae0eb4d5cbd1af15260c6a2c2dfe64133789"
+    sha256 cellar: :any,                 sonoma:        "fe86c49e27d75e036471845bbbbf26239fabcd7cd52d0f7df0471bcb9b214add"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "fe3e3ca55382e51cc4d7ffefbe2cd9a073da639aefa05f289c2293a3de88d8e7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1a73f6c3ce13ff500639aa8905e35415bdc28e5a0161d3518f0f3f33c5e41b04"
   end
 
   depends_on "eccodes"
@@ -44,13 +43,12 @@ class Cdo < Formula
   end
 
   def install
-    ENV.llvm_clang if OS.mac? && DevelopmentTools.clang_build_version <= 1500
-
     args = %W[
       --disable-openmp
       --with-eccodes=#{Formula["eccodes"].opt_prefix}
       --with-netcdf=#{Formula["netcdf"].opt_prefix}
       --with-hdf5=#{Formula["hdf5"].opt_prefix}
+      --with-proj=#{Formula["proj"].opt_prefix}
       --with-szlib=#{Formula["libaec"].opt_prefix}
     ]
 

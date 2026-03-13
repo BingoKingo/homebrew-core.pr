@@ -1,19 +1,18 @@
 class Marmite < Formula
   desc "Static Site Generator for Blogs using Markdown"
   homepage "https://rochacbruno.github.io/marmite/"
-  url "https://github.com/rochacbruno/marmite/archive/refs/tags/0.2.5.tar.gz"
-  sha256 "b1de4525533185b9d0dcd592bb2eb7e9af7cdc863bf110a45720be2534e2e301"
+  url "https://github.com/rochacbruno/marmite/archive/refs/tags/0.2.7.tar.gz"
+  sha256 "49328d4df08c964562d4b4cb61e42a5d00f88fa4f19f2967241eb32e96b623d9"
   license "AGPL-3.0-or-later"
   head "https://github.com/rochacbruno/marmite.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9044fed2abbe05930f74bee4f4f1de20700f8d6f32a1e0d03fe6141f1036c8e8"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f7636b8ca3ec1608843d67c90590ea95c71b4aefbdeba4d163fb40df66d8bc5b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "88830317a2357d363919fe06b1b4c0804860f257f0a859aa39f1ef622e0840de"
-    sha256 cellar: :any_skip_relocation, sonoma:        "bff5c7b07e1e059b78fc491dc3898d8e2c1d2c3d6d76d27e9845c674edab3d15"
-    sha256 cellar: :any_skip_relocation, ventura:       "cc0448b1262edc1fe173095d3317c8945dd444d6627b07c81374cd901d279243"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2cc57b7a0831ae19203aaccee8ccc5226d277ed76f60939639b727cd8a4a1da1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "591b5b32a8a0e8ccf269226dfe0ece3947db93e80f58138a1db37a1836575e88"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "514f120a07a927221e1d7b32d4bf88cd6803ccf89b0fb161f2df2c7bf0fde157"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7925bb005ab5ef0a0e4308df1372504e777bd72b48c916b755a155557f750824"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1fc98400aaf655a96b5f32f94386cef05384cc9f0062d533a40e5eb29f59a226"
+    sha256 cellar: :any_skip_relocation, sonoma:        "8c66b8196d07d5505d8bca9f22418b86456e6a1a575f159c97ec278e28816e68"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7ca66295223c38697f46a5d5298c42f024e6aed96b3ac10f427474657cf9069c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "60bfff999533244337df417baf2a6ceea6cd0de1540a2624350e552641590f8e"
   end
 
   depends_on "rust" => :build

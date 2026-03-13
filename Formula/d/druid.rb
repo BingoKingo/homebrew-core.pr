@@ -1,9 +1,9 @@
 class Druid < Formula
   desc "High-performance, column-oriented, distributed data store"
   homepage "https://druid.apache.org/"
-  url "https://dlcdn.apache.org/druid/33.0.0/apache-druid-33.0.0-bin.tar.gz"
-  mirror "https://archive.apache.org/dist/druid/33.0.0/apache-druid-33.0.0-bin.tar.gz"
-  sha256 "5ee5ddbcc2273834af8a18dd173b2a04b9a911cb7ce516279db605788abd7d79"
+  url "https://dlcdn.apache.org/druid/36.0.0/apache-druid-36.0.0-bin.tar.gz"
+  mirror "https://archive.apache.org/dist/druid/36.0.0/apache-druid-36.0.0-bin.tar.gz"
+  sha256 "e4a61b1ada6aedba77b12a9819a03e452e167d9605fd71c12af8a59074b9b490"
   license "Apache-2.0"
 
   livecheck do
@@ -12,7 +12,7 @@ class Druid < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "6142abfc9a042da4990f758ac9e284b7f59ede3e94dc30e85a7fc357d06ba917"
+    sha256 cellar: :any_skip_relocation, all: "09c60d994d8322faf5943d8d0c748909a2ed92b4868e48b54061f1c47a0c85b1"
   end
 
   depends_on "zookeeper" => :test
@@ -20,6 +20,7 @@ class Druid < Formula
 
   # check https://github.com/apache/druid/blob/master/docs/development/extensions-core/mysql.md#install-mysql-connectorj
   # for mysql-connector-java version compatibility
+  # upstream report on updating mysql-connector-java, https://github.com/apache/druid/issues/18999
   resource "mysql-connector-java" do
     url "https://search.maven.org/remotecontent?filepath=com/mysql/mysql-connector-j/8.2.0/mysql-connector-j-8.2.0.jar"
     sha256 "06f14fbd664d0e382347489e66495ca27ab7e6c2e1d9969a496931736197465f"
@@ -58,9 +59,7 @@ class Druid < Formula
     Pathname.glob("#{bin}/*.sh") do |file|
       mv file, bin/"druid-#{file.basename}"
     end
-  end
 
-  def post_install
     %w[
       druid/hadoop-tmp
       druid/indexing-logs
@@ -70,6 +69,20 @@ class Druid < Formula
       druid/task
     ].each do |dir|
       (var/dir).mkpath
+    end
+
+    # Reduce bottle and install size by hardlinking duplicate JARs
+    # TODO: Move logic to brew DSL
+    libexec.glob("**/*.jar").each_with_object({}) do |jar, jars_hash|
+      next if !jar.file? || jar.symlink?
+
+      found_jar = jars_hash[jar.basename.to_s]
+      if found_jar.nil?
+        jars_hash[jar.basename.to_s] = jar
+      elsif found_jar.stat.ino != jar.stat.ino && compare_file(found_jar, jar)
+        rm(jar)
+        jar.make_link(found_jar)
+      end
     end
   end
 
@@ -81,15 +94,15 @@ class Druid < Formula
 
     system Formula["zookeeper"].opt_bin/"zkServer", "start"
     begin
-      pid = fork { exec bin/"druid-broker.sh", "start" }
+      pid = spawn bin/"druid-broker.sh", "start"
       sleep 40
-      output = shell_output("curl -s http://localhost:8082/status")
-      assert_match "version", output
     ensure
       system bin/"druid-broker.sh", "stop"
       # force zookeeper stop since it is sometimes still alive after druid-broker.sh finishes
       system Formula["zookeeper"].opt_bin/"zkServer", "stop"
       Process.wait pid
     end
+
+    assert_match "All servers have been synced successfully at least once.", (testpath/"broker.log").read
   end
 end

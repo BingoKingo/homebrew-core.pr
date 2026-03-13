@@ -2,24 +2,23 @@ class Genometools < Formula
   desc "Versatile open source genome analysis software"
   homepage "https://genometools.org/"
   # genometools does not have source code on par with their binary dist on their website
-  url "https://github.com/genometools/genometools/archive/refs/tags/v1.6.5.tar.gz"
-  sha256 "f71b95c84761847223cd52a17d30ad9e6d55854448c2139fcd0aac437f73fbbe"
+  url "https://github.com/genometools/genometools/archive/refs/tags/v1.6.6.tar.gz"
+  sha256 "cc5d92c44708a4566a07650bbe7e9009fb602262548427814c04d3a7043d26e9"
   license "ISC"
   head "https://github.com/genometools/genometools.git", branch: "master"
 
   bottle do
     rebuild 2
-    sha256 cellar: :any,                 arm64_sequoia: "c1a9595a2911398dab4d2b22c2b0182e1cf5b83f5c648ba3e61787ac9a2f9250"
-    sha256 cellar: :any,                 arm64_sonoma:  "fada49496d68c5b3270ca9a075e7ea313eeb9c9bdaa263e3f16d12b3cb087b69"
-    sha256 cellar: :any,                 arm64_ventura: "a6ee8e5efc50803249afd3d9eb483e48f0008840800075aa1ab3a382b3800fad"
-    sha256 cellar: :any,                 sonoma:        "a04778fc4c9cb45a2b8f728527e3d865f653c1674f19c1972ef8d1144afdb955"
-    sha256 cellar: :any,                 ventura:       "14a0b5028decdfcc90c0d3220cbe2b48880e346509a05507bb0dabbefa91a9f2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "dd73938ff6ed8d07d1d3e028ff9b198e3439b7987daf61dd92c68b4c744926e0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c570e15eef30b96b5ae3e6e398097589d6c8f9827a0694835071026e2793b3cf"
+    sha256 cellar: :any,                 arm64_tahoe:   "93b7227c19b00dcfc203cd07035c587c581f50290c60d9c2c01aa8eb8243ef39"
+    sha256 cellar: :any,                 arm64_sequoia: "36d3a55a5f66a64b9e0f71335057388eeb752d0fb1df95f0e723d6172d759b09"
+    sha256 cellar: :any,                 arm64_sonoma:  "ab952c4fab136b0eb780b29a9bcfdfa11743dc0d89c057181a821a2a21b5d8c4"
+    sha256                               sonoma:        "710d23047dbe28c95592437e8d08e9cdaed34d416f5430090354efe0f0552564"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a6183d1cfa09dea81e547a747785a419753cc0c044934f96e0919c79e9858e18"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "20bd4d59acfc6ceb6c15053a4e00494a563cfaa4a0736a18a18db2e0a73d0b08"
   end
 
   depends_on "pkgconf" => :build
-  depends_on "python@3.13" => [:build, :test]
+  depends_on "python@3.14" => [:build, :test]
   depends_on "cairo"
   depends_on "glib"
   depends_on "pango"
@@ -28,17 +27,20 @@ class Genometools < Formula
   uses_from_macos "bzip2"
   uses_from_macos "expat"
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "gettext"
     depends_on "harfbuzz"
   end
 
-  conflicts_with "libslax", because: "both install `bin/gt`"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  conflicts_with "gastown", "libslax", because: "both install `gt` binaries"
 
   def python3
-    which("python3.13")
+    which("python3.14")
   end
 
   def install

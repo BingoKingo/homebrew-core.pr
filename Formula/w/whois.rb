@@ -1,19 +1,18 @@
 class Whois < Formula
   desc "Lookup tool for domain names and other internet resources"
   homepage "https://github.com/rfc1036/whois"
-  url "https://github.com/rfc1036/whois/archive/refs/tags/v5.6.1.tar.gz"
-  sha256 "d219c7f130c6f1565f769b0e079d9509a6aadfe6690423b4428d027fdd43ecd1"
+  url "https://github.com/rfc1036/whois/archive/refs/tags/v5.6.6.tar.gz"
+  sha256 "43d3b3cc64c75e8bd10aee6feff3906e9488ed335076d206e70f3b25bf644969"
   license "GPL-2.0-or-later"
   head "https://github.com/rfc1036/whois.git", branch: "next"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "0b9980ce74dccd2db75e71fc993fca8e7349ad9ac53afe5526733a3a95a54a5c"
-    sha256 cellar: :any,                 arm64_sonoma:  "5b241adffad818826ee2d8a03c95e9cf7f818436e142fa8444d3fcb485bd57e5"
-    sha256 cellar: :any,                 arm64_ventura: "3ae63df848ede6c098bf46af84018c502efb960a356f28ce67de290ebb94908c"
-    sha256 cellar: :any,                 sonoma:        "ae44dc18f2b8a408b8b9aad625c1a95ee4df3353bed0101ba7aaf0039d783905"
-    sha256 cellar: :any,                 ventura:       "32db1168ea21c3c94774318be6dca256f8a3a207f5dde742803b20427cecae0b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9d3dd5f7356299c04c87745672edc38f70cfdb16fbf4bc38bbdc8118f5275db3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4b16b682d44bee04915e4fd039b7ac36361dd7dcf17c990beca96ec588f809c3"
+    sha256 cellar: :any,                 arm64_tahoe:   "9b65a782bd5207b250ef0fb7754658493326c1d4b72bd5f89bfdbb815795ebd7"
+    sha256 cellar: :any,                 arm64_sequoia: "76cd02aff01bd38c1cb6363a0bb418d5582330754135f982d57044b6bcae0028"
+    sha256 cellar: :any,                 arm64_sonoma:  "c0660ae80290d002a9acb72bf7c1bbd62983616f96f71eb00078b1596ceb75f6"
+    sha256 cellar: :any,                 sonoma:        "fa5e4c41154dda1a222cab6cc7e94a325d1e65b81998306ff48766cde7f41a63"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b74ce0496d081d448ec321bd25789c5417a9a105104ccbe4cbc98b0a2686c094"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b994d8b2b6493b16adb403a54f455376383a0f368f9aa08f8906e365782aa2b3"
   end
 
   keg_only :provided_by_macos
@@ -33,10 +32,7 @@ class Whois < Formula
       "HAVE_ICONV=0"
     end
 
-    system "make", "whois", have_iconv
-    bin.install "whois"
-    man1.install "whois.1"
-    man5.install "whois.conf.5"
+    system "make", "install-whois", "prefix=#{prefix}", have_iconv
   end
 
   test do

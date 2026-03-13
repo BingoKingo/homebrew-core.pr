@@ -3,16 +3,15 @@ class Docutils < Formula
 
   desc "Text processing system for reStructuredText"
   homepage "https://docutils.sourceforge.io"
-  url "https://files.pythonhosted.org/packages/ae/ed/aefcc8cd0ba62a0560c3c18c33925362d46c6075480bfa4df87b28e169a9/docutils-0.21.2.tar.gz"
-  sha256 "3a6b18732edf182daa3cd12775bbb338cf5691468f91eeeb109deff6ebfa986f"
+  url "https://files.pythonhosted.org/packages/ae/b6/03bb70946330e88ffec97aefd3ea75ba575cb2e762061e0e62a213befee8/docutils-0.22.4.tar.gz"
+  sha256 "4db53b1fde9abecbb74d91230d32ab626d94f6badfc575d6db9194a49df29968"
   license all_of: [:public_domain, "BSD-2-Clause", "GPL-3.0-or-later", "Python-2.0"]
-  revision 1
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "902ea89749b8809d45604630f6246d07294e95af725a23d856d5b7006a1efb96"
+    sha256 cellar: :any_skip_relocation, all: "858cbe0370c24a44e6225f3209232b5378ec399c3d5ecd9c0adc9511d4ee1cc2"
   end
 
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   def install
     virtualenv_install_with_resources
@@ -39,7 +38,7 @@ class Docutils < Formula
     EOS
 
     mkdir_p testpath/"docs"
-    touch testpath/"docs"/"header0.txt"
+    touch testpath/"docs/header0.txt"
     system bin/"rst2man", testpath/"README.txt"
   end
 end

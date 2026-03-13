@@ -3,8 +3,8 @@ class Katago < Formula
   homepage "https://github.com/lightvector/KataGo"
   # Occasionally check upstream docs in case recommended model/network is changed.
   # Ref: https://github.com/lightvector/KataGo?tab=readme-ov-file#other-questions
-  url "https://github.com/lightvector/KataGo/archive/refs/tags/v1.16.1.tar.gz"
-  sha256 "5e004042dc1ee8185b8fb7a807e3d421d09349dccb858e41ffe2e9b96a4173d0"
+  url "https://github.com/lightvector/KataGo/archive/refs/tags/v1.16.4.tar.gz"
+  sha256 "51b1a9b48053b0de910f44abf2cc95160de7b6d43bb22300e0b80ea0b3ed0ca8"
   license all_of: [
     "MIT",
     "CC0-1.0", # g170 resources
@@ -16,27 +16,29 @@ class Katago < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "196387b2b8364d6c21b3ad7f21e99ce5a9a0de12ea8bd1b13df64267a9247808"
-    sha256 cellar: :any,                 arm64_sonoma:  "f18c1f3a208bc7db520b128de3f554c22a3f06e2f3b7359c2a7399ef4ad6015c"
-    sha256 cellar: :any,                 arm64_ventura: "721c9102dac3e2e115a05cfcc87ad46d3e4ed8b1b2a4e97c0fc27768fb0efcd4"
-    sha256 cellar: :any,                 sonoma:        "8a11310fbdc2db3bd226f99266b7f4440a2d8ecefa68a2ec64306a1f72bd167e"
-    sha256 cellar: :any,                 ventura:       "a756163f9bc8424595dd5e2bf03eb9243b03749bbbdd58c31b9e471337a3c9ee"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3617c29c7f43a9224c99d3d3a649d5427be69fb9c152b0f2c5dd456979b9278d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1a6a7e66ecb9f2c5972fb8836157bb3b11285efca806d314f75b59840643f0a5"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "9a745eb869cb6483a6874ef3461d1783182d1baed31516306165658f8d93f4bf"
+    sha256 cellar: :any,                 arm64_sequoia: "22d43916ce8a2c5881b7065d7aa74b8ad2a91e0254484c08b3dbe0e8379041c9"
+    sha256 cellar: :any,                 arm64_sonoma:  "b5c8c0a2f05134e7b9c04ffee2f31c5758011648fd87be94084f0fdfed0089c1"
+    sha256 cellar: :any,                 sonoma:        "77c6344b5729fe74169718809c61a81aa241e9dd8810035a18f5126f1b53a922"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "505e647b8eb34d86230447b9a6099247c2688451c7eb7477c746eed34d70e4fa"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6e3f0a950c6729864b6fc2c91e2930d53c2691ce05fccb60eedd5671c71c0f64"
   end
 
   depends_on "cmake" => :build
   depends_on "libzip"
-  depends_on macos: :mojave
-
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "ninja" => :build
   end
 
+  on_sequoia do
+    depends_on xcode: :build # to avoid build getting stuck
+  end
+
   on_linux do
     depends_on "eigen" => :build
+    depends_on "zlib-ng-compat"
   end
 
   # Using most recent b18c384nbt rather than strongest as it is easier to track
@@ -75,7 +77,7 @@ class Katago < Formula
     args += if OS.mac?
       ["-DUSE_BACKEND=METAL", "-GNinja"]
     else
-      ["-DUSE_BACKEND=EIGEN"]
+      ["-DUSE_BACKEND=EIGEN", "-DEIGEN3_INCLUDE_DIRS=#{Formula["eigen"].opt_include}/eigen3"]
     end
 
     system "cmake", "-S", "cpp", "-B", "build", *args, *std_cmake_args

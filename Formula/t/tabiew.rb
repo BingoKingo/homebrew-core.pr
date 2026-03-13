@@ -1,21 +1,22 @@
 class Tabiew < Formula
   desc "TUI to view and query tabular files (CSV,TSV, Parquet, etc.)"
   homepage "https://github.com/shshemi/tabiew"
-  url "https://github.com/shshemi/tabiew/archive/refs/tags/v0.9.4.tar.gz"
-  sha256 "4b466e72a17e9dc9d8cf59a92398eba1fde361932bc644c2c1badc937fba0e44"
+  url "https://github.com/shshemi/tabiew/archive/refs/tags/v0.12.0.tar.gz"
+  sha256 "a1deae7e912493f89223e19c017d3e38ea17f821b00e9213c4506dc503242a2e"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ef11e7b97169d0843d91ea84cb2508720d5e14ea4244a273d1c8da823bd5b316"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6086e407d6e3e6f7fb00972c1e2b03d4b5c83e5eff56ca851d45f4c213bc981b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "dbc553069a5738242f2d8d592b758d8219f7a01fe6b9680845015884930d6389"
-    sha256 cellar: :any_skip_relocation, sonoma:        "eceae1ef2d389972a3ef414b3bc0dc8f565e7bb93aa8c91d7e953ac0718525ea"
-    sha256 cellar: :any_skip_relocation, ventura:       "afd72e67da0dcf5fd93fc5260ef97fd7d4301269c7c0d54cff82767d3bcc1b38"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "67ac5f2c7b85568c6c5ef28a79079e159c926c89908460ded52d7e007f932b29"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cd5507813514018a791c355965e06f1b0f2fe79abec74158bfc3eab5d3591562"
+    sha256 cellar: :any,                 arm64_tahoe:   "5fe26af0d775f7f38e58a4af2cd5c8a9877bd5c9e745dda6fc9b200066d41bfa"
+    sha256 cellar: :any,                 arm64_sequoia: "dc4771f858152520fea4fffebd98814ec95b444cced99c0e740726fbef08dd8e"
+    sha256 cellar: :any,                 arm64_sonoma:  "e86594ad0b1e26c4b7a373bd8092bbf364747a43748bf8c66256caf4caa9bf91"
+    sha256 cellar: :any,                 sonoma:        "168ce86a9420304295c58ed81f8bd0940dc8ab18b93d14896f3a11c913dccb0b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ab43c2c430f32bd4b400f0f60c671937f257e70dce5feb62acbedaf9aa1b4226"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2593655526975484ea5ad31526ce5e1adb57b6a9b701fe1f837cb66802329420"
   end
 
+  depends_on "pkgconf" => :build
   depends_on "rust" => :build
+  depends_on "openssl@3"
 
   conflicts_with "watcher", because: "both install `tw` binaries"
 

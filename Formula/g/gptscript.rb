@@ -1,18 +1,19 @@
 class Gptscript < Formula
   desc "Develop LLM Apps in Natural Language"
   homepage "https://docs.gptscript.ai/"
-  url "https://github.com/gptscript-ai/gptscript/archive/refs/tags/v0.9.5.tar.gz"
-  sha256 "48cc2e6ec6425c030e9d10a81135a5e20ab15ec8eee0a49d35a83eda06c5cc92"
+  url "https://github.com/gptscript-ai/gptscript/archive/refs/tags/v0.9.8.tar.gz"
+  sha256 "13666d4cce007c3da8c1a9afdd6ffa0ae9d584aaa5ca57597caf71c5008d490c"
   license "Apache-2.0"
   head "https://github.com/gptscript-ai/gptscript.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fc050c14ef0a51596c4273df592c16c5d400d3e14b9094990f46029e227967b6"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fc050c14ef0a51596c4273df592c16c5d400d3e14b9094990f46029e227967b6"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "fc050c14ef0a51596c4273df592c16c5d400d3e14b9094990f46029e227967b6"
-    sha256 cellar: :any_skip_relocation, sonoma:        "0ca84273cc3c87fe0ae551ac4cd981b60400e4a8205c6748484ccd3944c3bad9"
-    sha256 cellar: :any_skip_relocation, ventura:       "0ca84273cc3c87fe0ae551ac4cd981b60400e4a8205c6748484ccd3944c3bad9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bf7dcf27cef7f521453a62a5db71d452ceb23236d17679e4ae1682914df6a50d"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "98967124df84610751260f4f03fa7fee00a941da36856e3ffb8e20e41726d232"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "98967124df84610751260f4f03fa7fee00a941da36856e3ffb8e20e41726d232"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "98967124df84610751260f4f03fa7fee00a941da36856e3ffb8e20e41726d232"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0fc40388c1dbb5e75e5270e56fb52a91972345b29499c6a101480b7f4fc6a6a0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f0563f0afa41010c31bab0afa7be1c030e92f341851a44c04c16bb7d327e0109"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "251b0b4896122432f75e7402bb84e136999962195563ca19e0d4cf05e5103dc4"
   end
 
   depends_on "go" => :build
@@ -25,14 +26,14 @@ class Gptscript < Formula
     system "go", "build", *std_go_args(ldflags:)
 
     pkgshare.install "examples"
-    generate_completions_from_executable(bin/"gptscript", "completion")
+    generate_completions_from_executable(bin/"gptscript", shell_parameter_format: :cobra)
   end
 
   test do
     ENV["OPENAI_API_KEY"] = "test"
-    assert_match version.to_s, shell_output(bin/"gptscript -v")
+    assert_match version.to_s, shell_output("#{bin}/gptscript -v")
 
-    output = shell_output(bin/"gptscript #{pkgshare}/examples/bob.gpt 2>&1", 1)
+    output = shell_output("#{bin}/gptscript #{pkgshare}/examples/bob.gpt 2>&1", 1)
     assert_match "Incorrect API key provided", output
   end
 end

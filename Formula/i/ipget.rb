@@ -1,19 +1,18 @@
 class Ipget < Formula
   desc "Retrieve files over IPFS and save them locally"
   homepage "https://github.com/ipfs/ipget/"
-  url "https://github.com/ipfs/ipget/archive/refs/tags/v0.11.1.tar.gz"
-  sha256 "3dd56e9243ab59383d206c2b374980cc987c016a391976dd9dcf5bff33a96f35"
+  url "https://github.com/ipfs/ipget/archive/refs/tags/v0.13.0.tar.gz"
+  sha256 "f23da18910d2cbed3d69f95d494bf60bc6465b668ff192e1e0980846052f7fbb"
   license "MIT"
   head "https://github.com/ipfs/ipget.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d8ae441fecd189ca058e76d0acfb30e93a2fa8a04beffdaa27b1780d3f0ba34b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d963166f966424517640b342f72019fd6d1f5d7721a508f60d3841f512ded3d2"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "4e5a57ab51fe284bb42595846d991d16f16c9af8b9edc1ca59a8d4601abc2ffa"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f918f9a023d8f9259c75ed408752e6a0cfe660806ec2e9aef326ebaf19ac199f"
-    sha256 cellar: :any_skip_relocation, ventura:       "f5725f63532333b6729f26664512984c4e2914358344894c6c9cfe8fabf81245"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f21317d1628e7a600ef4480d5ab43d707ad7a1241fd873fb1afad2f9fac5674d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "304bebe13417bc89ee71aab782f6f528824b4fd3dae6d8bf6a01540b2e11832c"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ae191e404fb22d27e536be300bb1846eff193e07cd5f6ba708db4de72e6745ce"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d84d5bfa92c6eb9803695595470fa28790947f3991bc3d76a71460d200df83ca"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3e1a68437518df67a1f9ea6c055515cb3c997b14a1966ab295a5b294856ff7b7"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d2d37965fd49661e14955b9eed121b61d07c6b0b1b1154469162ad9f6c840885"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7a4531272cf503af7428a4b151489011936d2c3b1b1f9d569a8005af26e0ae5e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "15c1dd49bebdce8b9ab5fdbedd3cd48f9a831c42549fe9781c6de8284409d0fd"
   end
 
   depends_on "go" => :build

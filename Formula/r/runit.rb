@@ -1,8 +1,8 @@
 class Runit < Formula
   desc "Collection of tools for managing UNIX services"
   homepage "https://smarden.org/runit/"
-  url "https://smarden.org/runit/runit-2.2.0.tar.gz"
-  sha256 "95ef4d2868b978c7179fe47901e5c578e11cf273d292bd6208bd3a7ccb029290"
+  url "https://smarden.org/runit/runit-2.3.1.tar.gz"
+  sha256 "634f23c8c4d1d440043be0fe928ddf904626289e97bfe7c5826e93aaf2cc6fe9"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,14 +11,15 @@ class Runit < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5c6d9fe18b8ab5e4f85de166d9300367cbdb8c4157ae7ba26d6f891376bb248d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e48a87a97472f98638753b03e3a9fd5aa6b622cbd59c114c1ab3b4b2dca4158f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a02febc253e32ca872f45183b70298c703b86a69d756850170b10454f921efcb"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f820d9806a8247bd514c135b926100b205fa13aaded0f77ef73c22156ebd8309"
-    sha256 cellar: :any_skip_relocation, ventura:       "2fb88364202380b041df206331f369cd8b90cb7b38407e83195ab5c5cecb4d6f"
-    sha256                               arm64_linux:   "86e7afab38bcc1a78ed0652367ca988d2c3fa33fc3a2b9456d689ece9cd067da"
-    sha256                               x86_64_linux:  "84004a0ce4e354a57c901166bfd58276a281c22f56fccae2690b3c7c158f055d"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "9df648ce12c6d653303f224386961cda0ac9f8b0745fcc41821f671538a28c08"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e82c5e0878d603839613a0046ccaa773ba88f67acd54290afd77bc01716e0fb6"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fe4f3826fdd17af52828597c22754a6a1e0952a0f2a66179cf572e3858fb82b8"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e35ad2f49f4b0cf4a0dd60d08c3d071e96a26b87ce4a8bf872e43488794eb4ca"
+    sha256                               arm64_linux:   "b54ca8cbb080d15c9eafc949d595dd23d456595a6bfc4f9ef1231f662ea79c74"
+    sha256                               x86_64_linux:  "291aed06b55caca42f5af93eec0143d85d2e96db8556a53eb4f9e62b6a84045c"
   end
+
+  conflicts_with "sandvault", because: "both install `sv` binaries"
 
   def install
     # Runit untars to 'admin/runit-VERSION'

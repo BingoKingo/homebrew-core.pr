@@ -1,10 +1,10 @@
 class Suil < Formula
   desc "Lightweight C library for loading and wrapping LV2 plugin UIs"
   homepage "https://drobilla.net/software/suil.html"
-  url "https://download.drobilla.net/suil-0.10.22.tar.xz"
-  sha256 "d720969e0f44a99d5fba35c733a43ed63a16b0dab867970777efca4b25387eb7"
+  url "https://download.drobilla.net/suil-0.10.26.tar.xz"
+  sha256 "62808916602c47d201a1ec2d246323a8048243f2bf972f859f0db1db4662ee43"
   license "ISC"
-  head "https://gitlab.com/lv2/suil.git", branch: "master"
+  head "https://gitlab.com/lv2/suil.git", branch: "main"
 
   livecheck do
     url "https://download.drobilla.net/"
@@ -12,12 +12,12 @@ class Suil < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "b27db9a3ce79f632d05b548af8aa895cc763f16b501a9c9bdc8034e4859dea86"
-    sha256 arm64_sonoma:  "529c47a29c76d87980ea9834dd2a01e2590d0adb8dc9a2a47fb82eb5a705d984"
-    sha256 arm64_ventura: "bd054ff192b6136795fc419d57c5424d32e10ff8549d63429999e6fc6e85ecb4"
-    sha256 sonoma:        "f22ed2c24dfd9fdd0e046c4373717a5bcd9b5934d816357814b461cc3eba1e72"
-    sha256 ventura:       "28cba60e06927ded4633dedf3b1c9541e5ff8fe692df7e9d6ad0d52055f2abd4"
-    sha256 x86_64_linux:  "c82fc9ca3e304f4ddab55a00cddc288ba608f5114103e22a1afb7e85d413d87c"
+    sha256 arm64_tahoe:   "adce2989ab987d21cf92671496284df3396f22dd113495c8ba44e2bbe90c22fb"
+    sha256 arm64_sequoia: "3465540e13410f3444375c0588c26c58d947aa1c5781801252f43f89406f8eff"
+    sha256 arm64_sonoma:  "4e500b8273217d5c1f0eccf6f3d8d34e8ff1845342c001c3ea95a104a206007a"
+    sha256 sonoma:        "6a071ed376235a2f02b4a7a085b8eba6af48835aeccec1f4d3a44dd874a0e543"
+    sha256 arm64_linux:   "f33735b4417b37962f04cc8f6d4f199037af19d6ff15d2273e5784fa98efbfd3"
+    sha256 x86_64_linux:  "96d50ae9d442fbc64791d9e12ea1fe44fb1aa0f3082bb37bcbff908e355c5e3f"
   end
 
   depends_on "meson" => :build
@@ -25,11 +25,20 @@ class Suil < Formula
   depends_on "pkgconf" => :build
   depends_on "libx11"
   depends_on "lv2"
-  depends_on "qt@5"
+
+  on_macos do
+    # Can undeprecate if new release with Qt 6 support is available.
+    # Alternatively can just build direct X11 wrapper (libsuil_x11.dylib)
+    # Issue ref: https://gitlab.com/lv2/suil/-/issues/11
+    deprecate! date: "2026-05-19", because: "needs end-of-life Qt 5"
+
+    depends_on "qt@5" # cocoa still needs Qt5
+  end
 
   on_linux do
     depends_on "glib"
     depends_on "gtk+3"
+    depends_on "qtbase"
   end
 
   def install

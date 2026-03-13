@@ -1,14 +1,14 @@
 class Uftrace < Formula
   desc "Function graph tracer for C/C++/Rust"
   homepage "https://uftrace.github.io/slide/"
-  url "https://github.com/namhyung/uftrace/archive/refs/tags/v0.17.tar.gz"
-  sha256 "04d560011c7587eddedcc674677cbef9ddc0ace449601d4b355e78589b16134f"
+  url "https://github.com/namhyung/uftrace/archive/refs/tags/v0.19.tar.gz"
+  sha256 "c35ef25f279684fc7d79dcc250fb29386890870fd2c9f812e587151419ca01af"
   license "GPL-2.0-only"
   head "https://github.com/namhyung/uftrace.git", branch: "master"
 
   bottle do
-    sha256 arm64_linux:  "ec90ba5e7e1e22a853790ebaea9e4e227f71b5cc61785c44d213a7c11ce42458"
-    sha256 x86_64_linux: "1403c9e2ac729fcb07b71e4a376d3b2824df0d7017e4266cf8bbd147e58d9160"
+    sha256 arm64_linux:  "474888f226426228396ec21e4549c176b1132e17f71e6faf906211f34571e7dc"
+    sha256 x86_64_linux: "2b2940e30ccba1e5aa78ec4e0428abfa4e7ffabf6949a4e38c20fefb75fae78c"
   end
 
   depends_on "pandoc" => :build
@@ -19,13 +19,13 @@ class Uftrace < Formula
   depends_on :linux
   depends_on "luajit"
   depends_on "ncurses"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   def install
     # TODO: Obsolete with git master, to be removed when updating to next release
     inreplace "misc/version.sh", "deps/have_libpython2.7", "deps/have_libpython*"
 
-    python3 = "python3.13"
+    python3 = "python3.14"
     pyver = Language::Python.major_minor_version python3
     # Help pkg-config find python as we only provide `python3-embed` for aliased python formula
     inreplace Dir["check-deps/Makefile{,.check}"], "pkg-config python3", "pkg-config python-#{pyver}"

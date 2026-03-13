@@ -1,19 +1,19 @@
 class MarkdownlintCli2 < Formula
   desc "Fast, flexible, config-based cli for linting Markdown/CommonMark files"
   homepage "https://github.com/DavidAnson/markdownlint-cli2"
-  url "https://registry.npmjs.org/markdownlint-cli2/-/markdownlint-cli2-0.18.1.tgz"
-  sha256 "c35d3ff486bf201d8b75877762f33f9e7d673082a85d0cdc29b05055880431ec"
+  url "https://registry.npmjs.org/markdownlint-cli2/-/markdownlint-cli2-0.21.0.tgz"
+  sha256 "3ff893617ece08d5fffea2451d758cfad7cee1b96e64d5d4585e06ffb97091c3"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "9e6e7eb65eaf3bfe2141af846369a2cd4dbb41aafa99734bc56d656cea6fca32"
+    sha256 cellar: :any_skip_relocation, all: "75815202384c09a554262233a2ff084d1f9be0978a32c829e879fbfe9b4bedad"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

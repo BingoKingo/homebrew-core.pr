@@ -1,9 +1,9 @@
 class X8664ElfGcc < Formula
   desc "GNU compiler collection for x86_64-elf"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-15.1.0/gcc-15.1.0.tar.xz"
-  sha256 "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea"
+  url "https://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz"
+  sha256 "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
   livecheck do
@@ -11,13 +11,13 @@ class X8664ElfGcc < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "a2ef38ca5207ee7eb12f815392169220a7a24fcf3848ea2fe1f592f315fbf188"
-    sha256 arm64_sonoma:  "e1773647d8ed32fb82e6f042ec94b88d162d83e3bdf3330de46264ad6f2bc227"
-    sha256 arm64_ventura: "462617b5d54609ef51342a4185bbb657f9fb95e88d7659fdad9a38e4799952c2"
-    sha256 sonoma:        "a3be452f8def32721bccd47aed6245510684fe9e0763a5e479900d98590151da"
-    sha256 ventura:       "22560f07c1909a4b9a6726c4f3cdaa1a1714f779ca06b71071919daecaff800e"
-    sha256 arm64_linux:   "664e2703de6f940cd66281726919d64eb2eb725c4437c0d4707dbcaf2318738d"
-    sha256 x86_64_linux:  "819c5510630041d67f2b8f1c3c31a6e18ca4b664d6a834cb7078ea934d9c12cf"
+    rebuild 1
+    sha256 arm64_tahoe:   "c09336382ae4333e2e8f4f87bed391f86a47470a3432321a0f56c404c1146f36"
+    sha256 arm64_sequoia: "77f70f69f5c62e425fd619acfabba6efe710c92a04c1a1c9ec149aad59ee84b4"
+    sha256 arm64_sonoma:  "0e8de4013e8b6d1de430cf0444be0bc9400f391b1f6342373a82dc20fc7cd761"
+    sha256 sonoma:        "e6e89c590cd3487f158f988cf1863712045e517286c04ff610320dba1cecb0fb"
+    sha256 arm64_linux:   "69660b3b18050c91c9859d50d3406528769f9962151040832bb521c842333bad"
+    sha256 x86_64_linux:  "29f9506ffca0f41dbf6c866535ea4cef4dcdde626822d291adbdc27f3c6a0eac"
   end
 
   depends_on "gmp"
@@ -26,7 +26,9 @@ class X8664ElfGcc < Formula
   depends_on "x86_64-elf-binutils"
   depends_on "zstd"
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     target = "x86_64-elf"

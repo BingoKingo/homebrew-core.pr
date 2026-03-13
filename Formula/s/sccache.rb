@@ -1,8 +1,8 @@
 class Sccache < Formula
   desc "Used as a compiler wrapper and avoids compilation when possible"
   homepage "https://github.com/mozilla/sccache"
-  url "https://github.com/mozilla/sccache/archive/refs/tags/v0.10.0.tar.gz"
-  sha256 "2c9f82c43ce6a1b1d9b34f029ce6862bedc2f01deff45cde5dffc079deeba801"
+  url "https://github.com/mozilla/sccache/archive/refs/tags/v0.14.0.tar.gz"
+  sha256 "f2f194874e6b435896201655432f623d749f5583256f773743c376a6d06cede5"
   license "Apache-2.0"
   head "https://github.com/mozilla/sccache.git", branch: "main"
 
@@ -12,13 +12,12 @@ class Sccache < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "76044f2cbf1b86123d1ade30aea038d3d336e6c3163c0e9aa3c3b9dae6f2bf33"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d7899f07009ac8943df04166f75d6f66d7a527ae94dc22d85ed754f293850dbf"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1095ee95cd648fe084d020f7924ecff7939aef844fd27386130d6136cef69049"
-    sha256 cellar: :any_skip_relocation, sonoma:        "21582a47c1d845b38d1b86062dde48a1dd422eec2d4021a37e5c943f0ef587e7"
-    sha256 cellar: :any_skip_relocation, ventura:       "859ecb045382d2b2078ad25b63d975bfa949b10bf476cdd81586435a3d3e5d92"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "43569e48d75f62d92dc6d3500ac738390da87f0e03d9bacd8b2e44a6bc2d373f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b53ed3e9f8745cbfa1e5a6b018225f7e30326af3fecd6701887acc580f1254c6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "1d78493b2b4aa6442d30d215533bf5fdc40335e2a441f5528b72bac5a02ce41a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "9c66dd3515c23a6de299c895d0d66f3d946f358186ee4e7f905c86447f95049c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cef877482d61072478b30067b193cb3d8992d70670f37769aa3deb91e90d4e29"
+    sha256 cellar: :any_skip_relocation, sonoma:        "f8423405b506fc8ac1b78060e9cce47ff74f8ef5228ba53682375ccffb69c8be"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "e04a9be07ddd5016f6597255e03cb892d9ca9e45d40715c55203c324420d5de9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "045e12f0c8a7ac055585962e6f9978339d84862c200bca4bd9545d8a07a8fdbf"
   end
 
   depends_on "pkgconf" => :build
@@ -29,7 +28,7 @@ class Sccache < Formula
   end
 
   def install
-    system "cargo", "install", "--features", "all", *std_cargo_args
+    system "cargo", "install", *std_cargo_args(features: "all")
   end
 
   test do

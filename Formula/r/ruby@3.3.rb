@@ -1,8 +1,8 @@
 class RubyAT33 < Formula
   desc "Powerful, clean, object-oriented scripting language"
   homepage "https://www.ruby-lang.org/"
-  url "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.8.tar.gz"
-  sha256 "5ae28a87a59a3e4ad66bc2931d232dbab953d0aa8f6baf3bc4f8f80977c89cab"
+  url "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.10.tar.gz"
+  sha256 "b555baa467a306cfc8e6c6ed24d0d27b27e9a1bed1d91d95509859eac6b0e928"
   license "Ruby"
 
   livecheck do
@@ -12,13 +12,12 @@ class RubyAT33 < Formula
 
   bottle do
     rebuild 1
-    sha256 arm64_sequoia: "dc9adec3972b25001078b160b3397c5691dffaf58f4f473d53e51fe790e770cb"
-    sha256 arm64_sonoma:  "1113aa90c9e7f5c6ae74e692e48b4ef914809dcddf2dde39b7f42cb48a9dfc9f"
-    sha256 arm64_ventura: "bcb80b97bac49bfa3a01387ddfc1316cce13dbbb76ff1c0fd2cb531bb37dee85"
-    sha256 sonoma:        "23b89fe8306d30294c71adea174614dfa2037d0965b9b84e3953ad4dd67daddc"
-    sha256 ventura:       "23d55faa41ee59010f6032b3daf8af40d400ed4dca1f4c148ce526991a452fac"
-    sha256 arm64_linux:   "16926fca0ffd7ab9df6e3159ee9c1b06239eecb551675b448ab0b0932592be15"
-    sha256 x86_64_linux:  "82d5099f32bb50f261407a77d77ee510fe821e069d71b7b32297b21bc684a701"
+    sha256 arm64_tahoe:   "c830a047d7a1c3762671aaa1c47a83a110d814e5a22c0ad7d620a63a7abe1856"
+    sha256 arm64_sequoia: "e79e4ff1adc9cd327f3b96e25db7f1abcd6f4b5accb81a58fe25c243a5ba25c7"
+    sha256 arm64_sonoma:  "3ddab5432e6d6be84dc311932178096bcd5c1e584ed212d134f881b3cc90b700"
+    sha256 sonoma:        "411dfdad202446d0565e3fa2d37e0c93df728cd996c2e1005fbb08d1282544aa"
+    sha256 arm64_linux:   "b9c2c7a320f6e60deae6a68e823c775b58c7d90d00b28cdd89bda384ba78bd54"
+    sha256 x86_64_linux:  "432c5405267a58d87add30db949d1e85134eedb304e2af7d04416578bb7434e3"
   end
 
   keg_only :versioned_formula
@@ -32,14 +31,17 @@ class RubyAT33 < Formula
   uses_from_macos "gperf"
   uses_from_macos "libffi"
   uses_from_macos "libxcrypt"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   # Should be updated only when Ruby is updated (if an update is available).
   # The exception is Rubygem security fixes, which mandate updating this
   # formula & the versioned equivalents and bumping the revisions.
   resource "rubygems" do
-    url "https://rubygems.org/rubygems/rubygems-3.6.7.tgz"
-    sha256 "d23cfe2724cf84120d3a5059c7c0eed3a062f8b6e581f9b7bf01a3c447fa2f37"
+    url "https://rubygems.org/rubygems/rubygems-3.7.1.tgz"
+    sha256 "750c8c771180d41ed2358344e5461edee83158c0a81b779969a1339961bc1163"
 
     livecheck do
       url "https://rubygems.org/pages/download"

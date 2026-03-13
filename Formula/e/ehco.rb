@@ -1,8 +1,8 @@
 class Ehco < Formula
   desc "Network relay tool and a typo :)"
   homepage "https://github.com/Ehco1996/ehco"
-  url "https://github.com/Ehco1996/ehco/archive/refs/tags/v1.1.5.tar.gz"
-  sha256 "d6883b1ecdf4551f0b8fcbc8863089de0c5971944d0d2fa778835fd2ec76cfe8"
+  url "https://github.com/Ehco1996/ehco/archive/refs/tags/v1.1.6.tar.gz"
+  sha256 "002d18a6b631f5026b2dc90dbbe55dc46469fbaaef24ad812a281356d54ebe26"
   license "GPL-3.0-only"
   head "https://github.com/Ehco1996/ehco.git", branch: "master"
 
@@ -12,14 +12,12 @@ class Ehco < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia:  "f18885bbcbafe2095ce0f0d3d7c180d8e2a646d69525a7528b38499ffa2ed065"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "7a922799139ed0c48b58976708f27d3d59976c91f39db062720c3b502f70ec52"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "ace45d76fd53671e7c3bbe1a75f7cf5b1e5c2098f5ba41c2a35ab10d71b050f6"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "10ba3e478b23911fc098632347f408b9cfc4a38e2a46f86c6d6c7ee3582aa4d0"
-    sha256 cellar: :any_skip_relocation, sonoma:         "321d48abbed4fd8b95819fe99bb469fd6003ffd8f1b2d5604cbbc61235edbf86"
-    sha256 cellar: :any_skip_relocation, ventura:        "702dad8245708582ae80e98b18e421cfabf625446a7367c0f91f59ce9fb4ea40"
-    sha256 cellar: :any_skip_relocation, monterey:       "4f6e8ee224725f9d7d5fe78ebf9db83950b878a8432856846c54cbd639510678"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "6fc15a224177b50b7f245e3071f6d1116e77f4e9317424decedb3b38a4d346e6"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ce103e44cecc91df6afb8fbc1de0832857851f393613b802cb966db8429851e0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8bf2af4784fbb7d9d852ac928e11393068452d3dd6667340f3cd2e1155e224bc"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "214a9fd3b94ec63e70ab9b3866b42e41a4dc70b5d64eea8145910512b4446424"
+    sha256 cellar: :any_skip_relocation, sonoma:        "60bedc9271b9192659103f62dcea107ff83244baff75d8b593b165e236b3dc4f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "eaf25741f4d61ba3f1b5ce1ba2fbffbbbf7c4ada95949d58549baf11b9a5d562"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d506b0b7b1914beb056d7d81c91704812e51d1673d490203f4c0802650cc58f2"
   end
 
   depends_on "go" => :build

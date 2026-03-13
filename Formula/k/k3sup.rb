@@ -2,8 +2,8 @@ class K3sup < Formula
   desc "Utility to create k3s clusters on any local or remote VM"
   homepage "https://k3sup.dev"
   url "https://github.com/alexellis/k3sup.git",
-      tag:      "0.13.9",
-      revision: "a1700f64dcffd249890b13cf6d97f4c120a53e08"
+      tag:      "0.13.12",
+      revision: "ce927dd148cbc42f75fb3dd44f8836b4d3f9a0e0"
   license "MIT"
   head "https://github.com/alexellis/k3sup.git", branch: "master"
 
@@ -13,12 +13,12 @@ class K3sup < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e992cdffa70372fb9c34859b46743200e15c83413f29798c962501921043f79a"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e992cdffa70372fb9c34859b46743200e15c83413f29798c962501921043f79a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e992cdffa70372fb9c34859b46743200e15c83413f29798c962501921043f79a"
-    sha256 cellar: :any_skip_relocation, sonoma:        "65477f847cb4a33fec045e910c4313f0c8d7f7a3e5b07ad00eb34ae5dfd3dcbf"
-    sha256 cellar: :any_skip_relocation, ventura:       "65477f847cb4a33fec045e910c4313f0c8d7f7a3e5b07ad00eb34ae5dfd3dcbf"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b4dc6504f421b47e2d9afe45917df5affe3902e299cad7c861b91c5684050fc2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "28a9ee3f378c4c3d7779394f1874f928c4cf5998e5872b6cedc81b368e632a6c"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "28a9ee3f378c4c3d7779394f1874f928c4cf5998e5872b6cedc81b368e632a6c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "28a9ee3f378c4c3d7779394f1874f928c4cf5998e5872b6cedc81b368e632a6c"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ccfabb4d5060daf24b3be3459208a056ea73a7e2dd05d6bfb4dbcf7c050e180d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ca5bcf145ad386bf836f92cfdd57aeae600d146bf6b9de7b57d7be4a4d5b900a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f0a1700b591de02276fcb18db949915000da6612f72a954c127fc49a1344e5a7"
   end
 
   depends_on "go" => :build
@@ -31,7 +31,7 @@ class K3sup < Formula
     ]
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"k3sup", "completion")
+    generate_completions_from_executable(bin/"k3sup", shell_parameter_format: :cobra)
   end
 
   test do

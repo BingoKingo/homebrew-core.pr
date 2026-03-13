@@ -1,18 +1,19 @@
 class Dalfox < Formula
   desc "XSS scanner and utility focused on automation"
   homepage "https://dalfox.hahwul.com"
-  url "https://github.com/hahwul/dalfox/archive/refs/tags/v2.11.0.tar.gz"
-  sha256 "3bb78fcdcfd620aebb5f7488770ee4df7c7fb6448181963f290e60a1cba95459"
+  url "https://github.com/hahwul/dalfox/archive/refs/tags/v2.12.0.tar.gz"
+  sha256 "b87848b17cac23352d674e63fee554ae6b976a53fe3e62822512232030430cd5"
   license "MIT"
   head "https://github.com/hahwul/dalfox.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "91f55801c696f298971522b7ce6d824a9a1df13b047916ae74f0ab5316ee3d64"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "91f55801c696f298971522b7ce6d824a9a1df13b047916ae74f0ab5316ee3d64"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "91f55801c696f298971522b7ce6d824a9a1df13b047916ae74f0ab5316ee3d64"
-    sha256 cellar: :any_skip_relocation, sonoma:        "d89e7889cfb98452513664f667326fc9d75cca2ac01c1f3efe70703ee9f4a81e"
-    sha256 cellar: :any_skip_relocation, ventura:       "d89e7889cfb98452513664f667326fc9d75cca2ac01c1f3efe70703ee9f4a81e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f947d564a27d70be00487e9ba33ba79e681e6f6ad230f2e635ad32aef925e5f4"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b9c0218ff805fd1927381e6368303cb0c7c094b6f24ffc35bcde5d7f91af597b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b9c0218ff805fd1927381e6368303cb0c7c094b6f24ffc35bcde5d7f91af597b"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b9c0218ff805fd1927381e6368303cb0c7c094b6f24ffc35bcde5d7f91af597b"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b15343c0af3360b9928245305c51b58d9551c3064bcb3d9404d50cb44e06f3bf"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c6a002ddfa96025c7693b1607b3d591d874651c89517eace68f1c7e9cae273a6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5b9e95b6d2bf7f3512476fd112cef2ce22aa39b1c7e10249f0187f960e6140c8"
   end
 
   depends_on "go" => :build
@@ -20,7 +21,7 @@ class Dalfox < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w")
 
-    generate_completions_from_executable(bin/"dalfox", "completion")
+    generate_completions_from_executable(bin/"dalfox", shell_parameter_format: :cobra)
   end
 
   test do

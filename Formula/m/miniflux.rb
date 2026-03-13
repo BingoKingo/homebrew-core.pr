@@ -1,21 +1,21 @@
 class Miniflux < Formula
   desc "Minimalist and opinionated feed reader"
   homepage "https://miniflux.app"
-  url "https://github.com/miniflux/v2/archive/refs/tags/2.2.9.tar.gz"
-  sha256 "7735912fbb232fd588f16528ead4b3a7e5bd02688827120316ba5c60f5fc0bcd"
+  url "https://github.com/miniflux/v2/archive/refs/tags/2.2.17.tar.gz"
+  sha256 "06cee3802e3534d6c05e6f35762141433b06b43d21b91f463e708696606803e4"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a844a312744c03a5fc807eb5e040f967997283789da0dd6815b0859edf5cb8bd"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7aeb636b8ac11847dc819d8e503b8e37656cf17e867c6790b13666963277b049"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "4d2d504906c6f36a3ecb38389c746ad5895b3d537a419daf66741132f4b82909"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a2ee9be699f5b904675e54e9b7b1804d986182bf3c8763a995b1c4758bd51432"
-    sha256 cellar: :any_skip_relocation, ventura:       "9f0a2d1527eba1f1cd850f3789ef0e382e8cba4ef2d5f983c7dc8a80e9baf46a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e5d0528805e324b3c2139ff5079622e325c1751283b2c8744afee84263bcaa93"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "30b90cdd56f930cf376c0358c71dbe858bc546718718dbc3b0cc018d69dc24b5"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "06d5ddf52f4185b1a40b398636c558d0ded8bf39e640ceabfc66762eb451ecd7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dd23d929b6a99c2bf57927bc1a9218a6582b015ee96f164a1fbc1aadf1ee9066"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b5f18d20e0d7cb1131413c601b8afc9a37aac96014ed937bd6499aa09b963faf"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "71831293ea409bdb7d743f7e7844837e750cb4fd2364d8b546392594e1ff6418"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4539765daf20c6e77048430702ec309dcec7fd712971afa654830c5990040c86"
   end
 
   depends_on "go" => :build
-  depends_on "postgresql@17" => :test
+  depends_on "postgresql@18" => :test
 
   def install
     ldflags = %W[
@@ -39,7 +39,7 @@ class Miniflux < Formula
     ENV["LC_ALL"] = "C"
 
     pg_port = free_port
-    pg_bin = Formula["postgresql@17"].opt_bin
+    pg_bin = Formula["postgresql@18"].opt_bin
     pg_ctl = pg_bin/"pg_ctl"
 
     datadir = testpath/"postgres"
@@ -68,8 +68,8 @@ class Miniflux < Formula
 
       miniflux_pid = spawn(bin/"miniflux", "-c", testpath/"miniflux.conf")
       begin
-        sleep 2
-        assert_equal "OK", shell_output("curl -s http://127.0.0.1:#{miniflux_port}/healthcheck")
+        assert_equal "OK",
+          shell_output("curl --silent --retry 5 --retry-connrefused http://127.0.0.1:#{miniflux_port}/healthcheck")
       ensure
         Process.kill "TERM", miniflux_pid
         Process.wait miniflux_pid

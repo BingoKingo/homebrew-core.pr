@@ -16,12 +16,9 @@ class Grok < Formula
     end
   end
 
-  livecheck do
-    skip "No longer developed or maintained"
-  end
-
   bottle do
     rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:    "aae7022d4d10e22471c089584b5b02b44277647fa982c9491cf6f58648be6f3a"
     sha256 cellar: :any,                 arm64_sequoia:  "b74690719200cd67624f98e63ed4df5bd400ddc82ab728da9ce152b2bb4f0250"
     sha256 cellar: :any,                 arm64_sonoma:   "275855bc35b651480b009f1b186c12a7c031f0aa037d53180266fb319b0b49c5"
     sha256 cellar: :any,                 arm64_ventura:  "37014a946e46e858efa3c43779aeb7f318196ef35cbe453b0d031bfe618f74fc"
@@ -32,6 +29,10 @@ class Grok < Formula
     sha256 cellar: :any_skip_relocation, arm64_linux:    "279f0ea66a716d0781273e5c3f89198c7a652f548eb074a99768a11597241bc9"
     sha256 cellar: :any_skip_relocation, x86_64_linux:   "3b35c01acc0d3b0640c42c3b003e03bbedccc91bdd0d69294dbbe4ae71e29841"
   end
+
+  # Last release on 2011-10-28 and needs EOL `pcre`
+  deprecate! date: "2026-01-11", because: :unmaintained
+  disable! date: "2027-01-11", because: :unmaintained
 
   depends_on "libevent"
   depends_on "pcre"

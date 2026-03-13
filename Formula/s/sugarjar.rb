@@ -1,17 +1,17 @@
 class Sugarjar < Formula
   desc "Helper utility for a better Git/GitHub experience"
   homepage "https://github.com/jaymzh/sugarjar/"
-  url "https://github.com/jaymzh/sugarjar/archive/refs/tags/v2.0.1.tar.gz"
-  sha256 "7ae427d8dff1a293f063617365e76615ea7d238aaa7def260fd2b6f2cfa5e768"
+  url "https://github.com/jaymzh/sugarjar/archive/refs/tags/v2.0.2.tar.gz"
+  sha256 "b6db88d6539e662749a7cb78804bcdf89feac188310b87ab55d791aa18475ee3"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "dd160e6f1f1274ca6ccd308d7a7b3561797957d2fdddaa97ed06d02b275b195d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dd160e6f1f1274ca6ccd308d7a7b3561797957d2fdddaa97ed06d02b275b195d"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "dd160e6f1f1274ca6ccd308d7a7b3561797957d2fdddaa97ed06d02b275b195d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1692b320ec4f62d0e176ac95bd437d706cb8e84720c5aa90a190cb36644e517f"
-    sha256 cellar: :any_skip_relocation, ventura:       "1692b320ec4f62d0e176ac95bd437d706cb8e84720c5aa90a190cb36644e517f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b9738a3c6fb7a4096ecd215c6557f9bcf2ce2c8216f51066d6ba1a5e4e8a15c1"
+    sha256 cellar: :any,                 arm64_tahoe:   "1ea59ae258cb0a280477db2508df2f70645df8860d1713d34f1c3c7304e60d70"
+    sha256 cellar: :any,                 arm64_sequoia: "701a642c86fa408018f6c4431c6b108667b177d46ea29db2bc31faf7568f02d8"
+    sha256 cellar: :any,                 arm64_sonoma:  "2b66f25d655ae20cca9104a9b6ae6f3c19d7fe8bc82b3a86136e6c35e5693086"
+    sha256 cellar: :any,                 sonoma:        "faa748b8acbc999bae3834785abfa3ee835bedd5c5ed1e11cd1a8d61b794e55b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a518760f0fae7fe19353cfa1ebcf304eb18dd15f60f362d28ebaef1cc2196256"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5e3a13b8ac77471cf1ff034b5edb50ba9d77aba8856b45a82c57645647efdf78"
   end
 
   depends_on "gh"
@@ -20,10 +20,11 @@ class Sugarjar < Formula
   uses_from_macos "libffi"
 
   def install
+    ENV["BUNDLE_FORCE_RUBY_PLATFORM"] = "1"
     ENV["BUNDLE_VERSION"] = "system" # Avoid installing Bundler into the keg
+    ENV["BUNDLE_WITHOUT"] = "development test"
     ENV["GEM_HOME"] = libexec
 
-    system "bundle", "config", "set", "without", "development", "test"
     system "bundle", "install"
     system "gem", "build", "#{name}.gemspec"
     system "gem", "install", "#{name}-#{version}.gem"

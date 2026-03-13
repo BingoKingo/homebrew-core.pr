@@ -1,8 +1,8 @@
 class JettyRunner < Formula
   desc "Use Jetty without an installed distribution"
   homepage "https://jetty.org/"
-  url "https://search.maven.org/remotecontent?filepath=org/eclipse/jetty/jetty-runner/11.0.25/jetty-runner-11.0.25.jar"
-  sha256 "40549bd12c0b8818ad1c93e588d3482f9f110a182405684563f5d4e381958993"
+  url "https://search.maven.org/remotecontent?filepath=org/eclipse/jetty/jetty-runner/11.0.26/jetty-runner-11.0.26.jar"
+  sha256 "b6403baf0782c2154231b23109fb84247e2ee95d295f4621ca9bdc75dfebc762"
   license any_of: ["Apache-2.0", "EPL-1.0"]
 
   livecheck do
@@ -11,8 +11,11 @@ class JettyRunner < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "15aef216430d1b1c1a0d7823e12102cf7a8d5b1974bb8611ee6bbc3363394844"
+    sha256 cellar: :any_skip_relocation, all: "8958471cd8133f453afbee348c696884a56eaaa493ecf224beab6d7d57887dbd"
   end
+
+  # See: https://github.com/jetty/jetty.project/issues/1905#issuecomment-409662335
+  deprecate! date: "2018-08-02", because: :deprecated_upstream
 
   depends_on "openjdk"
 
@@ -26,16 +29,14 @@ class JettyRunner < Formula
     touch "#{testpath}/test.war"
 
     port = free_port
-    pid = fork do
-      exec "#{bin}/jetty-runner --port #{port} test.war"
-    end
-    sleep 10
+    pid = spawn bin/"jetty-runner", "--port", port.to_s, "test.war"
 
     begin
+      sleep 10
       output = shell_output("curl -I http://localhost:#{port}")
-      assert_match %r{HTTP/1\.1 200 OK}, output
+      assert_match "HTTP/1.1 200 OK", output
     ensure
-      Process.kill 9, pid
+      Process.kill "TERM", pid
       Process.wait pid
     end
   end

@@ -1,14 +1,13 @@
 class Pinot < Formula
   desc "Realtime distributed OLAP datastore"
   homepage "https://pinot.apache.org/"
-  url "https://downloads.apache.org/pinot/apache-pinot-1.3.0/apache-pinot-1.3.0-bin.tar.gz"
-  sha256 "9cdc4423187c44569b8c6dd376d0162cc05339f56498a7f3a594303f17e44af0"
+  url "https://downloads.apache.org/pinot/apache-pinot-1.4.0/apache-pinot-1.4.0-bin.tar.gz"
+  sha256 "cb2a03abcdd0aa35e20e8c2918f78438efb1301a6f1918c3ae27b9ac1daa3f2b"
   license "Apache-2.0"
   head "https://github.com/apache/pinot.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, all: "dd4c35dab1e00cb76d570424d53e76cb020343111b7be8fc3ed73dee0c6dcc90"
+    sha256 cellar: :any_skip_relocation, all: "b506cb9aee29895a8e06e79df73e078a71146b32ee758d0071b388ac30d93c7c"
   end
 
   depends_on "openjdk@21"
@@ -37,25 +36,13 @@ class Pinot < Formula
     zkport = free_port
     controller_port = free_port
 
-    zkpid = fork do
-      exec "#{opt_bin}/pinot-admin",
-        "StartZookeeper",
-        "-zkPort",
-        zkport.to_s
-    end
-
+    zkpid = spawn "#{opt_bin}/pinot-admin", "StartZookeeper", "-zkPort", zkport.to_s
     sleep 10
     sleep 30 if Hardware::CPU.intel?
 
-    controller_pid = fork do
-      exec "#{opt_bin}/pinot-admin",
-        "StartController",
-        "-zkAddress",
-        "localhost:#{zkport}",
-        "-controllerPort",
-        controller_port.to_s
-    end
-
+    controller_pid = spawn "#{opt_bin}/pinot-admin", "StartController",
+                           "-zkAddress", "localhost:#{zkport}",
+                           "-controllerPort", controller_port.to_s
     sleep 30
     sleep 30 if Hardware::CPU.intel?
 

@@ -2,18 +2,23 @@ class AliyunCli < Formula
   desc "Universal Command-Line Interface for Alibaba Cloud"
   homepage "https://github.com/aliyun/aliyun-cli"
   url "https://github.com/aliyun/aliyun-cli.git",
-      tag:      "v3.0.281",
-      revision: "246577869563236cf81ba4f5eab8ebbba870838b"
+      tag:      "v3.3.0",
+      revision: "75165d64678f9a4842d24a4f79e3a070e986264d"
   license "Apache-2.0"
   head "https://github.com/aliyun/aliyun-cli.git", branch: "master"
 
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5a23338a1468ab810b9020158382f8cd96202d8cc06ca78155ad3ad4eb94ab2c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5a23338a1468ab810b9020158382f8cd96202d8cc06ca78155ad3ad4eb94ab2c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5a23338a1468ab810b9020158382f8cd96202d8cc06ca78155ad3ad4eb94ab2c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "518930278d336b8026e65479c916ce97de5e1c2f96e6a959e009dfffccccd77b"
-    sha256 cellar: :any_skip_relocation, ventura:       "518930278d336b8026e65479c916ce97de5e1c2f96e6a959e009dfffccccd77b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "bba373c268f389f502a7515f2f52f6dd4c440a5fd507c55245e8cbb678f6ee56"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b00aa0b2d94cbd84e32b71fd388641076c909893eb422b1e1e49d1feb0adeeec"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b00aa0b2d94cbd84e32b71fd388641076c909893eb422b1e1e49d1feb0adeeec"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b00aa0b2d94cbd84e32b71fd388641076c909893eb422b1e1e49d1feb0adeeec"
+    sha256 cellar: :any_skip_relocation, sonoma:        "8eb16ed3f04646a75cc1960f8195a4e13e230ff28e1f54e6dd50b26bbeffefcd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8c015f06bbef29973196fc2813a719be910c708cd9c4994f0fc3b5d5189e20a8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f52d2a650448987c93f8f12168dd6c6e6e54e7acf851d05cb74fd1a16c8be3ad"
   end
 
   depends_on "go" => :build

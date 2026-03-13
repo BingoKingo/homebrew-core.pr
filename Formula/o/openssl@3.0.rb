@@ -1,8 +1,8 @@
 class OpensslAT30 < Formula
   desc "Cryptography and SSL/TLS Toolkit"
   homepage "https://openssl-library.org"
-  url "https://github.com/openssl/openssl/releases/download/openssl-3.0.16/openssl-3.0.16.tar.gz"
-  sha256 "57e03c50feab5d31b152af2b764f10379aecd8ee92f16c985983ce4a99f7ef86"
+  url "https://github.com/openssl/openssl/releases/download/openssl-3.0.19/openssl-3.0.19.tar.gz"
+  sha256 "fa5a4143b8aae18be53ef2f3caf29a2e0747430b8bc74d32d88335b94ab63072"
   license "Apache-2.0"
 
   livecheck do
@@ -11,36 +11,38 @@ class OpensslAT30 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "233627d17c14610b73e61d9fbe8483047964a25288129439f75796cfdfbec284"
-    sha256 arm64_sonoma:  "46463e4f63526dc94b47d5cf35742fc9f582037af4701408a47ff67d460b8729"
-    sha256 arm64_ventura: "68703232022ea59ffbaa9df18af2729deafd8156d429eeee776d8ef3bdb71d42"
-    sha256 sonoma:        "78f7c4e520022d939f044b633e445285464d750335673415580e4276edd4832d"
-    sha256 ventura:       "99481795ad61ca2c0c5d4b2b04289e34d60af0e4a134cb45cb51c959b97f70fb"
-    sha256 arm64_linux:   "27ff49771ec269c196f1186c71379dc14efa2dc36d128480a72f3c0e1980e073"
-    sha256 x86_64_linux:  "8bb05cb857db7d6c328960cf1bfc9ba72b566cc0a4efaddab5879b91b44d369f"
+    sha256 arm64_tahoe:   "9619d2fb3b6919841f21b2cb093ef88109985755dcb84ea6498a0930ad49684a"
+    sha256 arm64_sequoia: "32fb5993fed07584ba005b8d639d7b632e517af3f6cc1a40d02295f4e924fbef"
+    sha256 arm64_sonoma:  "4a27401ee1913548c813f4449257ab3775590abdba2147f1e4f0b41b0022da33"
+    sha256 sonoma:        "1e9402edf1c94163731358634f313fb0daac05a22e612ae94f16878afcd0cde7"
+    sha256 arm64_linux:   "0b944da57f0fe0cba86f617ce0d570876dc5cf5925f58ae3b2a5844e6ceb41a6"
+    sha256 x86_64_linux:  "4be61c87690ed707e71ee39dfe6147d02bc9d598760b93807cc46b8785a0463a"
   end
 
   keg_only :versioned_formula
+
+  # See: https://www.openssl.org/policies/releasestrat.html
+  deprecate! date: "2026-09-07", because: :unsupported
 
   depends_on "ca-certificates"
 
   on_linux do
     resource "Test::Harness" do
-      url "https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.50.tar.gz"
-      mirror "http://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.50.tar.gz"
-      sha256 "79b6acdc444f1924cd4c2e9ed868bdc6e09580021aca8ff078ede2ffef8a6f54"
+      url "https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.52.tar.gz"
+      mirror "http://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.52.tar.gz"
+      sha256 "8fe65cfc0261ed3c8a4395f0524286f5719669fe305f9b03b16cf3684d62cd70"
     end
 
     resource "Test::More" do
-      url "https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302209.tar.gz"
-      mirror "http://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302209.tar.gz"
-      sha256 "dde1a388b94e178808039361f6393c7195f72518c39967a7a3582299b8c39e3e"
+      url "https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302219.tar.gz"
+      mirror "http://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302219.tar.gz"
+      sha256 "420600911230de768427f6646758d89b6c07977b565e5b40118e5b8440dbb30b"
     end
 
     resource "ExtUtils::MakeMaker" do
-      url "https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.70.tar.gz"
-      mirror "http://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.70.tar.gz"
-      sha256 "f108bd46420d2f00d242825f865b0f68851084924924f92261d684c49e3e7a74"
+      url "https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.76.tar.gz"
+      mirror "http://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.76.tar.gz"
+      sha256 "30bcfd75fec4d512e9081c792f7cb590009d9de2fe285ffa8eec1be35a5ae7ca"
     end
   end
 

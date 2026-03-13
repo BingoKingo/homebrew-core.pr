@@ -1,7 +1,8 @@
 class Montage < Formula
   desc "Toolkit for assembling FITS images into custom mosaics"
   homepage "http://montage.ipac.caltech.edu"
-  url "http://montage.ipac.caltech.edu/download/Montage_v6.0.tar.gz"
+  url "https://distfiles.macports.org/montage/Montage_v6.0.tar.gz"
+  mirror "http://montage.ipac.caltech.edu/download/Montage_v6.0.tar.gz"
   sha256 "1f540a7389d30fcf9f8cd9897617cc68b19350fbcde97c4d1cdc5634de1992c6"
   license "BSD-3-Clause"
   revision 1
@@ -14,6 +15,7 @@ class Montage < Formula
 
   bottle do
     rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:    "58eb821dc6f0b9c1a85b8e5664f11465d87e00d719943644bdf303d25c7de909"
     sha256 cellar: :any,                 arm64_sequoia:  "b1d5f7c20f35e617f62197124a7c5c7e43bd4fc6272cf642346f6311d1da41b3"
     sha256 cellar: :any,                 arm64_sonoma:   "322fc326957e3d7173087350a50a5e5c034223fe631e5e2d45556a4e3eb2a85b"
     sha256 cellar: :any,                 arm64_ventura:  "64bead5a3b77bd80dd4cdb5980ac40b4f140246a8dd77ffc91cc476e1d5201e0"

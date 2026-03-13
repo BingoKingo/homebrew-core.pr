@@ -1,25 +1,19 @@
 class GraphqlInspector < Formula
   desc "Validate schema, get schema change notifications, validate operations, and more"
   homepage "https://the-guild.dev/graphql/inspector"
-  url "https://registry.npmjs.org/@graphql-inspector/cli/-/cli-5.0.8.tgz"
-  sha256 "738d81999b8c2851ce264112d2a773b225794f21aee3c555f9bdb0f78bc79aab"
+  url "https://registry.npmjs.org/@graphql-inspector/cli/-/cli-6.0.7.tgz"
+  sha256 "76bbb81865889106069a508f83fe5b3462665d63e77959220162152121eb9695"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "cd9a9963b98f89373fa2a37db49e9012f9ca0d1a1485ad554038f5d45e7f9125"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cd9a9963b98f89373fa2a37db49e9012f9ca0d1a1485ad554038f5d45e7f9125"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "cd9a9963b98f89373fa2a37db49e9012f9ca0d1a1485ad554038f5d45e7f9125"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5b3ebcff1fd9ff768e66b7b4edb37995ab3c079ad0e9bf08501965a60f36c6ae"
-    sha256 cellar: :any_skip_relocation, ventura:       "5b3ebcff1fd9ff768e66b7b4edb37995ab3c079ad0e9bf08501965a60f36c6ae"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "51c7fdaf0df2146853bb2314f09c4e7086e8f700712d7fd360d009ecfa582ee3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cd9a9963b98f89373fa2a37db49e9012f9ca0d1a1485ad554038f5d45e7f9125"
+    sha256 cellar: :any_skip_relocation, all: "c04e5b55172c5a121340e0a2bbe41867cc1c108a4db6967f3160fa816dc2f551"
   end
 
   depends_on "node"
 
   def install
     system "npm", "install", *std_npm_args
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

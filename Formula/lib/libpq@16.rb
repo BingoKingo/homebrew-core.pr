@@ -1,8 +1,8 @@
 class LibpqAT16 < Formula
   desc "Postgres C API library"
   homepage "https://www.postgresql.org/docs/16/libpq.html"
-  url "https://ftp.postgresql.org/pub/source/v16.9/postgresql-16.9.tar.bz2"
-  sha256 "07c00fb824df0a0c295f249f44691b86e3266753b380c96f633c3311e10bd005"
+  url "https://ftp.postgresql.org/pub/source/v16.13/postgresql-16.13.tar.bz2"
+  sha256 "dc2ddbbd245c0265a689408e3d2f2f3f9ba2da96bd19318214b313cdd9797287"
   license "PostgreSQL"
 
   livecheck do
@@ -11,12 +11,12 @@ class LibpqAT16 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "67a3882334f2448796238f87a74a594218dbf8cf19ab4161d7de7b0ca6146415"
-    sha256 arm64_sonoma:  "25b4ea9f563b4d7098da7aec89f0891af7f4c60bd2fec6cc914b6791266c882d"
-    sha256 arm64_ventura: "af1e4227b8408aa7d62ecce5681d739ca5e967e244ea47638c92cfd2c4fb4320"
-    sha256 sonoma:        "234174030c3d3b291162f43c23b12515e0b16ce559b863c9933f7fd906c1cc11"
-    sha256 ventura:       "ff78291761e454338f6f567915cd3e491f7775c92e8b4f7c9ca0577038d0f73f"
-    sha256 x86_64_linux:  "c2dc9c741adb74eb78080bbd99630fccb056a3eb8e19220ba732b7a9829c8a46"
+    sha256 arm64_tahoe:   "5cc46c4542ca515a886a7a510611f10026ca3a3a91071c8220a6adb0e24c1080"
+    sha256 arm64_sequoia: "a64f8e38fb21fc67c85a763aa62052b45b81db53fd63e8e4f027d76eea63a25a"
+    sha256 arm64_sonoma:  "bebe5031c645c3ef0d3aea8b9e0d5e09047c7c439ccf2ccd613df024957b403c"
+    sha256 sonoma:        "9df34f501f38042a1549accc95a17888dfc4ed2bd764fee90384d3491ebcde20"
+    sha256 arm64_linux:   "be173df5566c4bc70daae6af37c60b58f11783dc0ce66c35547af15b6512145b"
+    sha256 x86_64_linux:  "bb0e0b7fbff7b5bf283c350b1023afeb1f3f0700c67bbfe77003be6833753ed4"
   end
 
   keg_only :versioned_formula
@@ -25,19 +25,20 @@ class LibpqAT16 < Formula
   deprecate! date: "2028-11-09", because: :unmaintained, replacement_formula: "libpq"
 
   depends_on "pkgconf" => :build
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
   # GSSAPI provided by Kerberos.framework crashes when forked.
   # See https://github.com/Homebrew/homebrew-core/issues/47494.
   depends_on "krb5"
   depends_on "openssl@3"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "readline"
+    depends_on "zlib-ng-compat"
   end
 
   def install
+    ENV.runtime_cpu_detection
+
     system "./configure", "--disable-debug",
                           "--prefix=#{prefix}",
                           "--with-gssapi",
@@ -61,7 +62,7 @@ class LibpqAT16 < Formula
   end
 
   test do
-    (testpath/"libpq.c").write <<~EOS
+    (testpath/"libpq.c").write <<~C
       #include <stdlib.h>
       #include <stdio.h>
       #include <libpq-fe.h>
@@ -84,7 +85,7 @@ class LibpqAT16 < Formula
 
           return 0;
         }
-    EOS
+    C
     system ENV.cc, "libpq.c", "-L#{lib}", "-I#{include}", "-lpq", "-o", "libpqtest"
     assert_equal "Connection to database attempted and failed", shell_output("./libpqtest")
   end

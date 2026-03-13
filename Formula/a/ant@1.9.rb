@@ -15,13 +15,14 @@ class AntAT19 < Formula
 
   # End-of-life on 2024-06-19: https://lists.apache.org/thread/f6jw4v3gjwhqt5fz25og0my2o6xwvvm1
   deprecate! date: "2024-07-24", because: :unsupported
+  disable! date: "2025-07-26", because: :unsupported
 
   depends_on "openjdk"
 
   def install
     rm Dir["bin/*.{bat,cmd,dll,exe}"]
     libexec.install Dir["*"]
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    bin.install_symlink libexec.glob("bin/*")
     rm bin/"ant"
     (bin/"ant").write <<~SHELL
       #!/bin/sh

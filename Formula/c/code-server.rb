@@ -1,22 +1,21 @@
 class CodeServer < Formula
   desc "Access VS Code through the browser"
   homepage "https://github.com/coder/code-server"
-  url "https://registry.npmjs.org/code-server/-/code-server-4.100.2.tgz"
-  sha256 "869f21594fb63ef255b7c53ecafc4f5bcf973f8d1897829b6246341ad926f7d3"
+  url "https://registry.npmjs.org/code-server/-/code-server-4.111.0.tgz"
+  sha256 "188c0fbe96cd5602e05c80e4636cc7aa20af95cc222ba7abfcd7f87562728bd1"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6e8fe656adf763150a5900ec863e041e3d9cee4b4132f4a485dc27ccc3d720f8"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "03f1b17800fa23541788c0a4b2b564ed900f7c8ba8eb8a764e312442d10ffd55"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "5234907d787f9631965e9d0d003bdafb0b613b6e4949a8658852524f09bdbc21"
-    sha256 cellar: :any_skip_relocation, sonoma:        "f8b55e21a44a88bc6e2ef923ea2eca68d2abfd24d4b946980bed9567ef024e2d"
-    sha256 cellar: :any_skip_relocation, ventura:       "08fbb86ce75941f8a3818ab55039a79f9948ffdae6d788c40388517c644ef09c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "601cffb081453ffec004d5797e208eb882c9e176c1e5cc6a5d9effb28d9c849e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "320a3e07e323e30ff7abeadf933fe3577e8aed1a5f6f9c3d1a3e823ba64f68e7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "ba9bf4654740eed1df567f7c4d30e0db549f563f315e8ff41da98e7c5dab29b9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6ee59877d9c15084482bc69bd635c2d70dab3568f55ea19efd8d903bc04345ce"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4e6f9361a0a12a1d8e822078107ab383d43abc9b6e724d4c30147428bd05a5be"
+    sha256 cellar: :any_skip_relocation, sonoma:        "e990be73ea70067e77cf1f830213280f9756652dbc53c8a140a79d52c74198a9"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a5dbfc015c75027614d188deb4eb3637668e554a2c52ed5f6198726eb6da2554"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "365bb459647a46ba029a7f7420267ff2427d3825cb65530277d8656009c1ddb4"
   end
 
   depends_on "pkgconf" => :build
-  depends_on "node@20"
+  depends_on "node@22"
   uses_from_macos "python" => :build
 
   on_linux do
@@ -30,21 +29,28 @@ class CodeServer < Formula
     # Fix broken node-addon-api: https://github.com/nodejs/node/issues/52229
     ENV.append "CXXFLAGS", "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT"
 
-    system "npm", "install", *std_npm_args(prefix: false), "--unsafe-perm", "--omit", "dev"
+    system "npm", "install", *std_npm_args(ignore_scripts: false, prefix: false), "--unsafe-perm", "--omit", "dev"
 
     libexec.install Dir["*"]
     bin.install_symlink libexec/"out/node/entry.js" => "code-server"
 
-    # Remove incompatible pre-built binaries
-    os = OS.kernel_name.downcase
-    arch = Hardware::CPU.intel? ? "x64" : Hardware::CPU.arch.to_s
-    vscode = libexec/"lib/vscode/node_modules/@parcel"
-    permitted_dir = OS.linux? ? "watcher-#{os}-#{arch}-glibc" : "watcher-#{os}-#{arch}"
-    vscode.glob("watcher-*").each do |dir|
-      next unless (Pathname.new(dir)/"watcher.node").exist?
+    # Remove pre-built binaries which are unused as a source-built binary is available
+    rm_r(libexec/"node_modules/argon2/prebuilds")
 
-      rm_r(dir) if permitted_dir != dir.basename.to_s
-    end
+    # Remove non-native binaries
+    arch = Hardware::CPU.intel? ? "arm64" : "x64"
+    anthropic_node_modules = libexec/"lib/node_modules/@anthropic-ai/node_modules"
+    vscode_node_modules = libexec/"lib/vscode/node_modules"
+    rm_r(vscode_node_modules.glob("@anthropic-ai/sandbox-runtime/dist/vendor/seccomp/#{arch}"))
+    rm_r(vscode_node_modules.glob("@anthropic-ai/sandbox-runtime/vendor/seccomp/#{arch}"))
+    rm_r(anthropic_node_modules.glob("@parcel/watcher-{darwin,linux}*"))
+    rm_r(vscode_node_modules.glob("@parcel/watcher-{darwin,linux}*"))
+
+    # Remove pre-built binaries where source in not available to allow compilation
+    # https://www.npmjs.com/package/@azure/msal-node-runtime
+    # https://github.com/AzureAD/microsoft-authentication-library-for-cpp
+    dist = libexec/"lib/vscode/extensions/microsoft-authentication/dist"
+    rm([dist/"libmsalruntime.so", dist/"msal-node-runtime.node"])
   end
 
   def caveats

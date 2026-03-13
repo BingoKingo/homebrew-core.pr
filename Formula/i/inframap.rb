@@ -1,8 +1,8 @@
 class Inframap < Formula
   desc "Read your tfstate or HCL to generate a graph"
   homepage "https://github.com/cycloidio/inframap"
-  url "https://github.com/cycloidio/inframap/archive/refs/tags/v0.7.0.tar.gz"
-  sha256 "1dd1080245198eb53451502b40994a90e97eb283dc61b0d77d620f0ee6c1d23b"
+  url "https://github.com/cycloidio/inframap/archive/refs/tags/v0.8.0.tar.gz"
+  sha256 "f0e3d2a5f51339549802f8ad1650850ddfe81650ceb72ac9ea86fdd95ab2bfb8"
   license "MIT"
   head "https://github.com/cycloidio/inframap.git", branch: "master"
 
@@ -13,12 +13,12 @@ class Inframap < Formula
 
   bottle do
     rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "045720e46c73c4a8f8398d48d0a66207e62195d8797c7f69a8ac1ab1a3bf7412"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "045720e46c73c4a8f8398d48d0a66207e62195d8797c7f69a8ac1ab1a3bf7412"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "045720e46c73c4a8f8398d48d0a66207e62195d8797c7f69a8ac1ab1a3bf7412"
-    sha256 cellar: :any_skip_relocation, sonoma:        "aa596b7fd67f707f8a838582b00f65c4a195c1051654a2f72c4e78d0f0d968a0"
-    sha256 cellar: :any_skip_relocation, ventura:       "aa596b7fd67f707f8a838582b00f65c4a195c1051654a2f72c4e78d0f0d968a0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6621e3619bcb502a7e99fbf8043fac869cf1d03b6fffb09945bf759d721093b7"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "35238fd6006c1e1292640c56f85a7f36c2794851727b2ea8ea91a28ecd3b5056"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "35238fd6006c1e1292640c56f85a7f36c2794851727b2ea8ea91a28ecd3b5056"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "35238fd6006c1e1292640c56f85a7f36c2794851727b2ea8ea91a28ecd3b5056"
+    sha256 cellar: :any_skip_relocation, sonoma:        "869a30f97467cc4df989f532fd8e587e600bbcea1e32b7ae1ecb54ef7f545122"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "34b08303d1e7bf81b263e4c775e3fca3900eb31d1e951667255a3cc5e6dc7ad0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "373101f264996d311db6bf6fdb35db1f53d1f0099ec8964bfd5168cdab64f1da"
   end
 
   depends_on "go" => :build
@@ -26,7 +26,7 @@ class Inframap < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/cycloidio/inframap/cmd.Version=v#{version}")
 
-    generate_completions_from_executable(bin/"inframap", "completion")
+    generate_completions_from_executable(bin/"inframap", shell_parameter_format: :cobra)
   end
 
   test do

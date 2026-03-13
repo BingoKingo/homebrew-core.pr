@@ -1,18 +1,18 @@
 class Xroar < Formula
   desc "Dragon and Tandy 8-bit computer emulator"
   homepage "https://www.6809.org.uk/xroar/"
-  url "https://www.6809.org.uk/xroar/dl/xroar-1.8.2.tar.gz"
-  sha256 "34431cc352bad47f70570243644a96bce54e877a6f7e348208fcae259835ae31"
+  url "https://www.6809.org.uk/xroar/dl/xroar-1.10.tar.gz"
+  sha256 "b16b83f75a55e685658155e13ca393d5bc9553d120dd78a76febdd4a54ff9d58"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "66d251d967c3745b9aa87eb67a82222fbc0fceec7f9610fc348226c86846b1d2"
-    sha256 cellar: :any,                 arm64_sonoma:  "04fc798fa46ba0d83518a8fe26bf80e77b19afff2c41a9d4b7b739a6c8e9ac00"
-    sha256 cellar: :any,                 arm64_ventura: "24372127bc5875450dca9f8508e7ae1ee523519f46e2503ddf584e833e213cab"
-    sha256 cellar: :any,                 sonoma:        "c0bf5c651a318a9a23f4f97e76f7e6e4205f4b7557a14f58e56993e65a97a7d1"
-    sha256 cellar: :any,                 ventura:       "6c32e3d2690b479ae90aaed59f9b035d458b78a0abffea17544a4a1115492cf2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5499a115ff0ca98c9e01b4e08b99088b07c761cc8bae761f5b7b8c58e616e2ae"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "baf6d0b2ca8c7764f489bf159b86d9c9f0acf473968e11dd68a4ee67f59d599e"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "52681ca01fcb75069b25d62f754db55d9c1968ba97302d808aa0819077b24091"
+    sha256 cellar: :any,                 arm64_sequoia: "1dfac9438d100ba243eb330606532c68dcc2fb148761fed094a97c505ccd8e51"
+    sha256 cellar: :any,                 arm64_sonoma:  "66b65b60b50cbace3336700d6f3958ecf13d2d7ff373afbc78b5496028874474"
+    sha256 cellar: :any,                 sonoma:        "d1f01e6bbabcb9330824fb1c5a002d4bd9ec806b3a95b4d58e64ddd52ea94860"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f0c1417b6d9167ea76ca199b4b29a041d964180753e51c42a2450af222d445be"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e47407779ad729169ce38b140396558791b16ff01f6e2f1b32f37f70720c26ba"
   end
 
   head do
@@ -28,12 +28,11 @@ class Xroar < Formula
   depends_on "libsndfile"
   depends_on "sdl2"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "alsa-lib"
     depends_on "mesa"
     depends_on "pulseaudio"
+    depends_on "zlib-ng-compat"
   end
 
   def install
@@ -46,7 +45,7 @@ class Xroar < Formula
   end
 
   test do
-    output = shell_output(bin/"xroar -config-print")
+    output = shell_output("#{bin}/xroar -config-print")
 
     assert_match(/machine dragon32/, output)
     assert_match(/machine dragon64/, output)

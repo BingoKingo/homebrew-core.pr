@@ -1,24 +1,24 @@
 class OcamlFindlib < Formula
   desc "OCaml library manager"
   homepage "http://projects.camlcity.org/projects/findlib.html"
-  url "http://download.camlcity.org/download/findlib-1.9.8.tar.gz"
-  sha256 "662c910f774e9fee3a19c4e057f380581ab2fc4ee52da4761304ac9c31b8869d"
+  url "https://github.com/ocaml/ocamlfind/archive/refs/tags/findlib-1.9.8.tar.gz"
+  sha256 "d6899935ccabf67f067a9af3f3f88d94e310075d13c648fa03ff498769ce039d"
   license "MIT"
-  revision 1
+  revision 2
 
   livecheck do
-    url "http://download.camlcity.org/download/"
+    url "https://opam.ocaml.org/packages/ocamlfind/"
     regex(/href=.*?findlib[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 arm64_sequoia: "9364a3bfccbfa17b1de67b0811237748181251ca875105e010deca7c8b8c7c38"
-    sha256 arm64_sonoma:  "45a15d80b15f259a02a9665646a85ec6844445670e3b7f083ab1bcd447b2d480"
-    sha256 arm64_ventura: "70d057e89961c844b0a54234a7630f0e73ef9654bda57da6da9ac98bd4ea6e26"
-    sha256 sonoma:        "7d40608def1547faa7db079f9d6e8e1bb84ecd22bb3b51af0562416eae5b580d"
-    sha256 ventura:       "9953fc46d00a4952c6f5982e241743aee3a1587abbaaa2ab084e3c1a07f5f94a"
-    sha256 arm64_linux:   "946dec027ce88f81d2342a021bb3839ca38d7eda3e8777bb115f369575af4cd6"
-    sha256 x86_64_linux:  "2aada46fd1e1d708cbb09f084dc896e26d35869ea8fdfd2830fb0d31caeb0b27"
+    rebuild 1
+    sha256               arm64_tahoe:   "6f6f7669b4187e082f14cb9c9f617bec4490a32d719caecad5b7f4d01dff2d91"
+    sha256               arm64_sequoia: "fca7c5a0a0cf78d4339970cee1d0a80605e4adce120ba9e75eaaaed96cd0055d"
+    sha256               arm64_sonoma:  "4cf42f610e5248913f7cf5b494ccb84384063c3a13470547fc573dc1a532e746"
+    sha256 cellar: :any, sonoma:        "4addf3b776fbe1b639f4c3f7412a04ba799125dbdc567b79879310401481bd54"
+    sha256               arm64_linux:   "06f20185aef240f8b740a0347c04e4ba2f912c912b8c36b3464cc54fafaa1f56"
+    sha256               x86_64_linux:  "26996e1d983d47ca18e8fef158d9254b94a2ea7e0399386f518e9935aaf032c4"
   end
 
   depends_on "ocaml"

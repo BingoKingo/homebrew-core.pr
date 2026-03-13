@@ -1,9 +1,9 @@
 class Riscv64ElfGdb < Formula
   desc "GNU debugger for riscv64-elf cross development"
   homepage "https://www.gnu.org/software/gdb/"
-  url "https://ftp.gnu.org/gnu/gdb/gdb-16.3.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gdb/gdb-16.3.tar.xz"
-  sha256 "bcfcd095528a987917acf9fff3f1672181694926cc18d609c99d0042c00224c5"
+  url "https://ftpmirror.gnu.org/gnu/gdb/gdb-17.1.tar.xz"
+  mirror "https://ftp.gnu.org/gnu/gdb/gdb-17.1.tar.xz"
+  sha256 "14996f5f74c9f68f5a543fdc45bca7800207f91f92aeea6c2e791822c7c6d876"
   license "GPL-3.0-or-later"
   head "https://sourceware.org/git/binutils-gdb.git", branch: "master"
 
@@ -12,24 +12,26 @@ class Riscv64ElfGdb < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "fc182c3f9b43f0706c5e38ad0cc227b5a0462f413b3e7975137baafcbf9f75bb"
-    sha256 arm64_sonoma:  "0e376f70fab060eb7a19ea146565b21f25c39fad626b9345f16ba541f98b7e05"
-    sha256 arm64_ventura: "c6289ed531b09195c7288e49bdd5ea128b7b95d0c28b15408a8a24041dbdc748"
-    sha256 sonoma:        "67fbc5381005c1223d1c3bdd444f7114c748448913a81daa57db9d27df947b1b"
-    sha256 ventura:       "efcdc16f939bad13162938caf972b390bbd62be3f5888af79bf0062d6f87adfb"
-    sha256 arm64_linux:   "1cec187ec64758bdacd6fb7707fbc7851a70efcbe6ba3f42881c0889d19b710e"
-    sha256 x86_64_linux:  "8bf342fa7ae748f0917c42d37db64a0b44e7f2f5c867898f975b93928bd3c292"
+    rebuild 1
+    sha256 arm64_tahoe:   "344d83c9a04d59afc809e82167085b7f433f3e71ce10d52327616fb2b1c59a27"
+    sha256 arm64_sequoia: "7f1a33aeca41fa9cc246aa753c69e05475f922d6df4f1cc96baab10cd01f1ea4"
+    sha256 arm64_sonoma:  "b4633f0c3f1d3cae9aa62d0da3714ec4f94ac84c7a8fed11434d0cac316a89e5"
+    sha256 sonoma:        "93c7d4db868c46f356b600c6432a7d48547b949ccbacf95528e02d1d7456f767"
+    sha256 arm64_linux:   "9688531223cf253300b484d52b3c535aa5c0361da5ce9b0bef84c3313f9193ba"
+    sha256 x86_64_linux:  "38c247e15ce82e284a1e97d44bc8415094c7f475bb2f5f2e3e75d5a99e84670e"
   end
 
+  depends_on "pkgconf" => :build
   depends_on "riscv64-elf-gcc" => :test
   depends_on "gmp"
   depends_on "mpfr"
-  depends_on "python@3.13"
+  depends_on "ncurses" # https://github.com/Homebrew/homebrew-core/issues/224294
+  depends_on "python@3.14"
+  depends_on "readline"
   depends_on "xz" # required for lzma support
+  depends_on "zstd"
 
   uses_from_macos "expat", since: :sequoia # minimum macOS due to python
-  uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   # Workaround for https://github.com/Homebrew/brew/issues/19315
   on_sequoia :or_newer do
@@ -42,6 +44,10 @@ class Riscv64ElfGdb < Formula
     depends_on "texinfo" => :build
   end
 
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
   def install
     target = "riscv64-elf"
     args = %W[
@@ -50,10 +56,16 @@ class Riscv64ElfGdb < Formula
       --includedir=#{include}/#{target}
       --infodir=#{info}/#{target}
       --mandir=#{man}
-      --with-lzma
-      --with-python=#{which("python3.13")}
-      --with-system-zlib
       --disable-binutils
+      --disable-nls
+      --enable-tui
+      --with-curses
+      --with-expat
+      --with-lzma
+      --with-python=#{which("python3.14")}
+      --with-system-readline
+      --with-system-zlib
+      --with-zstd
     ]
 
     mkdir "build" do

@@ -1,14 +1,14 @@
 class Umockdev < Formula
   desc "Mock hardware devices for creating unit tests and bug reporting"
   homepage "https://github.com/martinpitt/umockdev"
-  url "https://github.com/martinpitt/umockdev/releases/download/0.19.1/umockdev-0.19.1.tar.xz"
-  sha256 "2cece0e8e366b89b4070be74f3389c9f7fa21aca56d8a5357e96e30cd8d4f426"
+  url "https://github.com/martinpitt/umockdev/releases/download/0.19.5/umockdev-0.19.5.tar.xz"
+  sha256 "e90820d2e2a95abf01c5b9813a98b74241391862254906017641bee30cc4ad08"
   license "LGPL-2.1-or-later"
   head "https://github.com/martinpitt/umockdev.git", branch: "main"
 
   bottle do
-    sha256 arm64_linux:  "ca0cdf39df6bd2a6520a838d7c72945674574019b48b7863f31df0e4e5d67234"
-    sha256 x86_64_linux: "7ad4f20e560ca3dbff215a5780424964b2773b4f8f10269cab867ffaa5dbb86d"
+    sha256 arm64_linux:  "44ed4a06fea13a89af68990a2c52d172bed4df2d25f0ff77a43f8961fb7edf13"
+    sha256 x86_64_linux: "57809a46842bcb007a73103868d5758b05291bf6f2f24792c335ab260b9a1433"
   end
 
   depends_on "gobject-introspection" => :build

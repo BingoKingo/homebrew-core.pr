@@ -1,18 +1,18 @@
 class Tproxy < Formula
   desc "CLI tool to proxy and analyze TCP connections"
   homepage "https://github.com/kevwan/tproxy"
-  url "https://github.com/kevwan/tproxy/archive/refs/tags/v0.9.0.tar.gz"
-  sha256 "ceed58273c2a5f542f378fe963f815c4b5b49a550409768985f072d5ed7b54dd"
+  url "https://github.com/kevwan/tproxy/archive/refs/tags/v0.9.2.tar.gz"
+  sha256 "5376816b6f5d7765b401f74d3feb78fbf307cb6b725627b2e953ff9d02e8dc53"
   license "MIT"
   head "https://github.com/kevwan/tproxy.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d8ec0fe223603e2b5f100a9aefd415c8e7c27c7db92aadade292812d0cd14d66"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d8ec0fe223603e2b5f100a9aefd415c8e7c27c7db92aadade292812d0cd14d66"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "d8ec0fe223603e2b5f100a9aefd415c8e7c27c7db92aadade292812d0cd14d66"
-    sha256 cellar: :any_skip_relocation, sonoma:        "6f8605f431b78c3cbf0792d2764aed057479af3c93428e872e7aa36249155331"
-    sha256 cellar: :any_skip_relocation, ventura:       "6f8605f431b78c3cbf0792d2764aed057479af3c93428e872e7aa36249155331"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "123df9d7f9259ef84639a7ab4dd1c75e9f1844d1c3044848aad74fec24be5d27"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "7ab25a051fc746628c60b3112afe09dd6acd27da5e6abdba9c899bcf726bea0d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7ab25a051fc746628c60b3112afe09dd6acd27da5e6abdba9c899bcf726bea0d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "7ab25a051fc746628c60b3112afe09dd6acd27da5e6abdba9c899bcf726bea0d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "14fc2adcdc0bc52e12e3a3a76abd49b182ff8a71efe1e87bb8cd632cfc6096a3"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1d1ba9e470cf6a647f83c94cb2a4d34c27d2463d2e94993a248b3a2cd3f57537"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "aa2b5079962182fcbf0d691a8f57d5271a9a6daacf256b88e984b42938cbcc33"
   end
 
   depends_on "go" => :build

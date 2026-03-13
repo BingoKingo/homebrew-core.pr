@@ -1,19 +1,18 @@
 class Chdig < Formula
   desc "Dig into ClickHouse with TUI interface"
   homepage "https://github.com/azat/chdig"
-  url "https://github.com/azat/chdig/archive/refs/tags/v25.4.1.tar.gz"
-  sha256 "5956bccc99f5c86eef6095ee03dde53590dd03370b06cd04348074ea223f2297"
+  url "https://github.com/azat/chdig/archive/refs/tags/v26.2.3.tar.gz"
+  sha256 "5e05de1cee0db50bbb709887ddf04625029756963edb5e2497e7ef86d03b3e7d"
   license "MIT"
   head "https://github.com/azat/chdig.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4b983bd8086b13f4c9b8656678f01a517c9a1dea76ce4c90d6c0931eab195beb"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8c0609d8c5284a2e7b717123e71036ec434fa4aa311c4cedf9fbec31b3d348e7"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1b39d50f8782ae0b1c20a35254aac710c8705020189337fb98b859fca647582c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "3ac80eca9b7d94b9d9d1a1570fcd1494f0ac96bc1ea25dc4e6979703ad67a7fb"
-    sha256 cellar: :any_skip_relocation, ventura:       "fc41f28455ef3bdd91b01f10994c1878917d8f4c8584e9442d4da8e83e4f18b9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "6d110d05f6b19f1d5db298a2b979e67f9df13e7b276254ce49fad2e18694c99f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c3a9dc13cd1c5fa758858c77cd83d169d98b382a6254cca0facc75c5e3330251"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "82b1f8af833047a8f9a11173fbcc6054c9c4d17d75e432da6bde14064ad51063"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ca993c7430687cea8b522233a53ab3ed86405a1f10a53fdcfa002d58ee98a089"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "425b2cd1cd9f30fe03ecf9ce1494e9e625dba1a5d13b7391a016f7dc4bdccf21"
+    sha256 cellar: :any_skip_relocation, sonoma:        "1fca71ddde544243c3858e3c5a7cdafa5c17fa6376dd33da4d70f5b30ea64e15"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "807cc8744cd3ce84156d3c5a716d3e98a1faab59c8535b4318249faff64eb89a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "25b9891422340d3d4aa85d9ed8b7d91263a4aa2c45cbe8a8392b12b5d52326b4"
   end
 
   depends_on "rust" => :build
@@ -26,9 +25,6 @@ class Chdig < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/chdig --version")
-
-    # failed with Linux CI, `No such device or address (os error 6)`
-    return if OS.linux? && ENV["HOMEBREW_GITHUB_ACTIONS"]
 
     output = shell_output("#{bin}/chdig --url 255.255.255.255 dictionaries 2>&1", 1)
     assert_match "Error: Cannot connect to ClickHouse", output

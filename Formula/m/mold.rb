@@ -1,8 +1,8 @@
 class Mold < Formula
   desc "Modern Linker"
   homepage "https://github.com/rui314/mold"
-  url "https://github.com/rui314/mold/archive/refs/tags/v2.40.0.tar.gz"
-  sha256 "ee93ef0868cd54d1f30dfba1070dbacf04c1a35428bbea307a4b9242a883ad20"
+  url "https://github.com/rui314/mold/archive/refs/tags/v2.40.4.tar.gz"
+  sha256 "69414c702ec1084e1fa8ca16da24f167f549e5e11e9ecd5d70a8dcda6f08c249"
   license "MIT"
   head "https://github.com/rui314/mold.git", branch: "main"
 
@@ -15,20 +15,19 @@ class Mold < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "6a3b7de9bbbfb364a531a64be2832a97129435985c6dede2f315eab17e5951ce"
-    sha256 cellar: :any,                 arm64_sonoma:  "a651e31a2f57f6064a86070467e4db12fecb379106d4bf5d0f297a788295bcc7"
-    sha256 cellar: :any,                 arm64_ventura: "bf6d2d220e4773eaf8b3e9cfeadae57145dda34462c9a10dbe2f1bda7cd3b01f"
-    sha256 cellar: :any,                 sonoma:        "ef35ce5f2a6a069ad4b37794241c305bf6d17bb2918b5ad1c59dd68aebe31868"
-    sha256 cellar: :any,                 ventura:       "de59aa1cfb6098e23df1cc96e3d62550b39d1a0ffd1ae3c558c82198fa5c1368"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b750229fe4364318e4a7ba0db1fc60089b7df5fcdec75cf97974f8ed86c90f48"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4edd2600bf10982548f59bf8073afecf049daa14d74c074fedc3ca06516355fc"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "5733b66bbcb80581733ce9c5b890d920ece84dd8fbf19416ca3565f6ea6de0be"
+    sha256 cellar: :any,                 arm64_sequoia: "2ebfecf9ccf2c38f4f4ef592f0c3e7c0a2823732c0832f9b52916e3a57453005"
+    sha256 cellar: :any,                 arm64_sonoma:  "cb22350cbe464777f397ee4ea99aa05c52b506b11ae6271ebbb11b72d22ed0c3"
+    sha256 cellar: :any,                 sonoma:        "d68d8c192b9d685abb2260d42ad117cc2aa0aa35ede04b6a33435e5c18af899a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a0e5fe128a94e3665ae2423743f9fc0cdcf775cb21b021c1ca4379910a645eed"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d0a3edd10d03ae3340bcb0e13cff3a55e2a59e0d0f4c2c6ecf7eeec41ce2e3c3"
   end
 
   depends_on "cmake" => :build
   depends_on "blake3"
   depends_on "tbb"
   depends_on "zstd"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1500
@@ -36,6 +35,7 @@ class Mold < Formula
 
   on_linux do
     depends_on "mimalloc"
+    depends_on "zlib-ng-compat"
   end
 
   fails_with :clang do
@@ -49,8 +49,6 @@ class Mold < Formula
   end
 
   def install
-    ENV.llvm_clang if OS.mac? && (DevelopmentTools.clang_build_version <= 1500)
-
     # Avoid embedding libdir in the binary.
     # This helps make the bottle relocatable.
     inreplace "lib/config.h.in", "@CMAKE_INSTALL_FULL_LIBDIR@", ""
@@ -72,9 +70,7 @@ class Mold < Formula
   end
 
   def caveats
-    <<~EOS
-      Support for Mach-O targets has been removed.
-    EOS
+    "Support for Mach-O targets has been removed."
   end
 
   test do

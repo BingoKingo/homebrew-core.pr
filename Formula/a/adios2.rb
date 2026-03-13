@@ -1,9 +1,10 @@
 class Adios2 < Formula
   desc "Next generation of ADIOS developed in the Exascale Computing Program"
   homepage "https://adios2.readthedocs.io"
-  url "https://github.com/ornladios/ADIOS2/archive/refs/tags/v2.10.2.tar.gz"
-  sha256 "14cf0bcd94772194bce0f2c0e74dba187965d1cffd12d45f801c32929158579e"
+  url "https://github.com/ornladios/ADIOS2/archive/refs/tags/v2.11.0.tar.gz"
+  sha256 "0a2bd745e3f39745f07587e4a5f92d72f12fa0e2be305e7957bdceda03735dbf"
   license "Apache-2.0"
+  revision 3
   head "https://github.com/ornladios/ADIOS2.git", branch: "master"
 
   livecheck do
@@ -12,18 +13,19 @@ class Adios2 < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "502983bb973c584e61ea4325857019308d37ed7876149ca8b692e462a7350e96"
-    sha256 arm64_sonoma:  "f85ec0a3210c79e1730d3f7f71c88de5f75fe6a4a9ca9449935ebd2e97145044"
-    sha256 arm64_ventura: "e75a203fbaa7987772e61ba24b66419ae5a5e1b69d8f29524d431330accb9caf"
-    sha256 sonoma:        "5caafa5a27988407eb69e25b2a1f03a61d584af7d152efbc90b2f197586a6f2e"
-    sha256 ventura:       "f22fdaa080f998c8ecd24b826c148ad60bc587a7acc3f0c49171e8d61ddcb7a3"
-    sha256 arm64_linux:   "411a036e81100ec289c17b95296b8665dddc42b41ba01660bdd1dab70ae1e723"
-    sha256 x86_64_linux:  "6eccf49dc0677c2e62f0a5fdc69872e35552137b6339ebccca057795480be4bf"
+    rebuild 1
+    sha256 arm64_tahoe:   "0fc0bba06d97e22d5c1869d158bc966d4edae99020e4ca7c8c4c13004f3b52c4"
+    sha256 arm64_sequoia: "92c091315f8dbadb845f200cace50fc6e18b55a78d8cdd6ef45872e8c8ee6486"
+    sha256 arm64_sonoma:  "45d3e08530811c78a0aa15aa60d41b44a70698a4c44b741d16be03365f103dc1"
+    sha256 sonoma:        "d9fef9268fa1e89e72598057dac3eb94651f795bda0db338ddd995c76c62fb0e"
+    sha256 arm64_linux:   "534704afd26df44507961778f55a3792962cfe487fd94efe4b9148330e976b12"
+    sha256 x86_64_linux:  "b52a6393a46cb6e8c64b502f88b2d032f029d15148347038cc709870f156cfb4"
   end
 
   depends_on "cmake" => :build
   depends_on "nlohmann-json" => :build
-  depends_on "c-blosc"
+  depends_on "pybind11" => :build
+  depends_on "c-blosc2"
   depends_on "gcc" # for gfortran
   depends_on "libfabric"
   depends_on "libpng"
@@ -31,18 +33,23 @@ class Adios2 < Formula
   depends_on "mpi4py"
   depends_on "numpy"
   depends_on "open-mpi"
+  depends_on "openssl@3"
   depends_on "pugixml"
-  depends_on "pybind11"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
   depends_on "sqlite"
   depends_on "yaml-cpp"
   depends_on "zeromq"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "llvm" => :build if DevelopmentTools.clang_build_version == 1400
+    depends_on "lz4"
+    depends_on "zstd"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   # clang: error: unable to execute command: Segmentation fault: 11
@@ -50,12 +57,19 @@ class Adios2 < Formula
   # Apple clang version 14.0.0 (clang-1400.0.29.202)
   fails_with :clang if DevelopmentTools.clang_build_version == 1400
 
+  # Upstream PR: https://github.com/ornladios/ADIOS2/pull/4791
+  patch do
+    url "https://github.com/ornladios/ADIOS2/commit/1dcffdf15a90282549ce679e96ac59f35e93acde.patch?full_index=1"
+    sha256 "1133316f038abed99824d00584b70454122083cf0e2717a1322511b91a14c4dd"
+  end
+
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install
-    ENV.llvm_clang if DevelopmentTools.clang_build_version == 1400
+    # CMake FortranCInterface_VERIFY fails with LTO on Linux due to different GCC and GFortran versions
+    ENV.append "FFLAGS", "-fno-lto" if OS.linux?
 
     # fix `include/adios2/common/ADIOSConfig.h` file audit failure
     inreplace "source/adios2/common/ADIOSConfig.h.in" do |s|
@@ -64,7 +78,7 @@ class Adios2 < Formula
     end
 
     args = %W[
-      -DADIOS2_USE_Blosc=ON
+      -DADIOS2_USE_Blosc2=ON
       -DADIOS2_USE_BZip2=ON
       -DADIOS2_USE_DataSpaces=OFF
       -DADIOS2_USE_Fortran=ON
@@ -99,7 +113,8 @@ class Adios2 < Formula
 
   test do
     adios2_config_flags = Utils.safe_popen_read(bin/"adios2-config", "--cxx").chomp.split
-    system "mpic++", pkgshare/"test/bpWriter.cpp", *adios2_config_flags
+    adios2_config_flags += %W[-L#{Formula["lz4"].opt_lib} -llz4]
+    system "mpic++", "-std=c++17", pkgshare/"test/bpWriter.cpp", *adios2_config_flags
     system "./a.out"
     assert_path_exists testpath/"myVector_cpp.bp"
 

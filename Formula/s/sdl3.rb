@@ -1,8 +1,8 @@
 class Sdl3 < Formula
   desc "Low-level access to audio, keyboard, mouse, joystick, and graphics"
   homepage "https://libsdl.org/"
-  url "https://github.com/libsdl-org/SDL/releases/download/release-3.2.16/SDL3-3.2.16.tar.gz"
-  sha256 "6340e58879b2d15830c8460d2f589a385c444d1faa2a4828a9626c7322562be8"
+  url "https://github.com/libsdl-org/SDL/releases/download/release-3.4.2/SDL3-3.4.2.tar.gz"
+  sha256 "ef39a2e3f9a8a78296c40da701967dd1b0d0d6e267e483863ce70f8a03b4050c"
   license "Zlib"
   head "https://github.com/libsdl-org/SDL.git", branch: "main"
 
@@ -13,13 +13,12 @@ class Sdl3 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1c67df52a37bbd4f13f61eca7c19bea36a53ff3dc0d310c9a878cd0f924edb21"
-    sha256 cellar: :any,                 arm64_sonoma:  "85d25691ab5555af9cdc272551be6564bc0b460f57b2eae7effb6f6f044c2061"
-    sha256 cellar: :any,                 arm64_ventura: "abf021c48b6276686d35220f7288635fca53b0bec6f433c6810df091350e3bca"
-    sha256 cellar: :any,                 sonoma:        "d7f87a73bb06d65c1c3e5cb5d67fccccfe40ba4abf665909e4693ca41f442527"
-    sha256 cellar: :any,                 ventura:       "4275579a0a85d883b83906aa14a4bca6f1759af443bd70a8f8032d10cba925d9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "237d70db22ec812af6eb7568604c20868d1766e2e161350892402498c4ff8102"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "601e5d04d6e7d2f1ed8a2c50850952a49fa149f8e6458f841fc2f35725bf8521"
+    sha256 cellar: :any,                 arm64_tahoe:   "b941840dd9cf51e809caace7b82226c9c0733b50bb5e9672cff9d66bcf7aa145"
+    sha256 cellar: :any,                 arm64_sequoia: "72b0114451067003c6ad857b4a462f303f24ef756d2e01d6b6872421635d6a47"
+    sha256 cellar: :any,                 arm64_sonoma:  "bc23a37e5bd9af3fdd6fa958294d9579b5000ab9702a992332c4a2acf40edf38"
+    sha256 cellar: :any,                 sonoma:        "7691c5be02726b18dddd7ce5b4a866248eafeb1cdd8b5627f26d1c1a32cee753"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f21a84f5266c61587b23c5bb238fe5d952419062e0f81f22ac5a42c0b13b31ce"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b7d16d1f21eb263ae96fe3afe6958b96d2e951ad2a288d0e7735561206ecb7f7"
   end
 
   depends_on "cmake" => :build
@@ -37,9 +36,10 @@ class Sdl3 < Formula
   def install
     inreplace "cmake/sdl3.pc.in", "@SDL_PKGCONFIG_PREFIX@", HOMEBREW_PREFIX
 
-    args = [
-      "-DSDL_HIDAPI=ON",
-      "-DSDL_WAYLAND=OFF",
+    args = %w[
+      -DSDL_HIDAPI=ON
+      -DSDL_WAYLAND=OFF
+      -DSDL_X11_XTEST=OFF
     ]
 
     args += if OS.mac?

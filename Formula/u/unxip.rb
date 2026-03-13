@@ -1,37 +1,46 @@
 class Unxip < Formula
   desc "Fast Xcode unarchiver"
   homepage "https://github.com/saagarjha/unxip"
-  url "https://github.com/saagarjha/unxip/archive/refs/tags/v3.1.tar.gz"
-  sha256 "d76cabf3c0c057d87fd910ab0de5d9a1108b037f7e7406802f40885d80d49295"
+  url "https://github.com/saagarjha/unxip/archive/refs/tags/v3.3.tar.gz"
+  sha256 "490c27aeabad33a8c811ada09008d24835f0f701ad40092b450c4788cdf99198"
   license "LGPL-3.0-only"
   head "https://github.com/saagarjha/unxip.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "abf884e88603357d56ed83f95f8d1bc6f366e3542578d823beb6414c97240d58"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6b25d509ece5113ddc99bb39e0ce031b578be3a6d146ecce3105e208da6f214c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "e7f685faaad5e16412bce583d9420617136a7b3b04d2b399b6c25492afcddd54"
-    sha256                               arm64_linux:   "2307c9e9f92bd26c481d2754d2026470a8c9197af2ac0fba2b2da1081366a713"
-    sha256                               x86_64_linux:  "e8ce3607ab1d6aeb51833fc2862c38e28068d172d00b865a89cd2d305ebf69a3"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3b6c919fc617737fbffc245d013c8e7512c6d7db1c33df373b2afa79d82db96b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8b878c072c1a77f52d4e7cf49875b9237d32227aa4fec26c39a88de74081b42c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2707cf947f3c5a15b59a74fd8822efb1ac92d002df0164a70f53ef7c7e96871f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "21d28010c3c9aac3ce826ff7a0f3ecb87d258786848b0b879e982b850388b707"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "cc43a268cc4b16019d4f8b2379117f91e34f3ebab4eb25d516fc94a290baeec7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f980d6217df53dc0c7e7c976a4a8bca29e7c38028876ce17184917df790253f9"
   end
 
   depends_on macos: :sonoma
 
-  uses_from_macos "swift", since: :sonoma
+  uses_from_macos "swift" => :build
 
-  on_sonoma :or_older do
+  on_sequoia :or_older do
     depends_on xcode: ["16.0", :build]
   end
 
   # Uses Compression framework on macOS
   on_linux do
+    depends_on "libxml2"
     depends_on "xz"
-    depends_on "zlib"
+    depends_on "zlib-ng-compat"
   end
 
   def install
-    args = %w[--disable-sandbox --configuration release]
-    args += %W[-Xcc -I#{HOMEBREW_PREFIX}/include -Xlinker -L#{HOMEBREW_PREFIX}/lib] if OS.linux?
-
+    args = %w[--configuration release]
+    if OS.mac?
+      args << "--disable-sandbox"
+    else
+      args += %w[--static-swift-stdlib -Xswiftc -use-ld=ld]
+      # Swift doesn't run our CC so manually pass in shim include paths to find correct headers
+      ENV["HOMEBREW_ISYSTEM_PATHS"].to_s.split(":").each { |path| args += %W[-Xcc -isystem#{path}] }
+      ENV["HOMEBREW_INCLUDE_PATHS"].to_s.split(":").each { |path| args += %W[-Xcc -I#{path}] }
+    end
     system "swift", "build", *args
     bin.install ".build/release/unxip"
   end

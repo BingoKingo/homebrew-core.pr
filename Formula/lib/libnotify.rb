@@ -1,18 +1,17 @@
 class Libnotify < Formula
   desc "Library that sends desktop notifications to a notification daemon"
   homepage "https://gitlab.gnome.org/GNOME/libnotify"
-  url "https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.6.tar.xz"
-  sha256 "c5540aaefb60e1d63b1c587c05f2284ebe72ece7d0c0e5e4a778cfd5844b6b58"
+  url "https://download.gnome.org/sources/libnotify/0.8/libnotify-0.8.8.tar.xz"
+  sha256 "23420ef619dc2cb5aebad613f4823a2fa41c07e5a1d05628d40f6ec4b35bfddd"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "ea69f7b5455c3a6541cf0860074b7b6e3e68e6bbb48c64cb4cc6221e6ce8dde9"
-    sha256 cellar: :any, arm64_sonoma:  "ebea4c89f379ab596f73e8613cdb45085b91995f8ab225b22abc9143ef3418c6"
-    sha256 cellar: :any, arm64_ventura: "d4c06f68f3f4fd97e56695bb166a806488f78ccd6d677d943d2a49bde302aef7"
-    sha256 cellar: :any, sonoma:        "d6a909e188f2dff4caa76a5c8cdc1204cb8b8e6cf752cefb5dd8e25b19be774f"
-    sha256 cellar: :any, ventura:       "75bab3ee807d8c9f36a039b973279f8e154bd29d9a2cbcf533141b82bced5450"
-    sha256               arm64_linux:   "995dc473382763e33a51546b3ae69ba723c5cb5815e1a5f688f9c17e62ba9b42"
-    sha256               x86_64_linux:  "f040cf5598067f5d9af35c90bd5df9520f5a3d422c78a1b0fd01c01ddcbee021"
+    sha256 cellar: :any, arm64_tahoe:   "d8ee57b001510f29334c55080553cf34f41b9e8643484429ec1a0d4852f9fb58"
+    sha256 cellar: :any, arm64_sequoia: "4081e1a50cd23929e7c1ae070e81bf2dc85e6099a274d4e1b98a60da459d0cb6"
+    sha256 cellar: :any, arm64_sonoma:  "2f5cab371969079dbee0c140accfc7a3267bbf006c63e3a1935c153fde4033a7"
+    sha256 cellar: :any, sonoma:        "43ec242ea169e80dda511f44370f9df94f2f50d0996a60149f236c9bbcc515ef"
+    sha256               arm64_linux:   "30a82c884d084884e6d52521fd84aa30c4192e60bca5756b8973a4a786280cf1"
+    sha256               x86_64_linux:  "8a89fcc90b7fc4b1a4559cadd439c9565ea597d4b6184125eb7e17ece817e483"
   end
 
   depends_on "docbook-xsl" => :build

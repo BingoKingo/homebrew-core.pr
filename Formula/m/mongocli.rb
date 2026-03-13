@@ -1,23 +1,23 @@
 class Mongocli < Formula
   desc "MongoDB CLI enables you to manage your MongoDB in the Cloud"
   homepage "https://www.mongodb.com/docs/mongocli/current/"
-  url "https://github.com/mongodb/mongodb-cli/archive/refs/tags/mongocli/v2.0.4.tar.gz"
-  sha256 "30ffcc61931147c6ace31e87ac487cc2b125a6cb65178e63e8c0f73e6b454cbe"
+  url "https://github.com/mongodb/mongodb-cli/archive/refs/tags/mongocli/v2.0.7.tar.gz"
+  sha256 "39060cf7b67650963b45e7e8f5bb3ba1b91187adf4bf779bb88fd4d43782f71e"
   license "Apache-2.0"
   head "https://github.com/mongodb/mongodb-cli.git", branch: "main"
 
   livecheck do
     url :stable
-    regex(%r{^mongocli/v?(\d+(?:\.\d+)+)$}i)
+    strategy :github_latest
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8d0c52b4c6e706d1389f19727c753ca29ef1a0940b4213dca72482bd231bb5db"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "440b512b69c89ab20fbe28fcfcb998eec7a1aae02f247fd5a0371126ff189ea0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c1b3f86cab303584d947c08fd06bde708c713a3e5274cb4e9f228b9e4902d58d"
-    sha256 cellar: :any_skip_relocation, sonoma:        "047ab97e0d080a6ab9485d44637cdfc5c519e7f1004263c34149ff09b176d24b"
-    sha256 cellar: :any_skip_relocation, ventura:       "32b03be3eab6e447440e4de98a8c80f72cb98823266d8c7d9c9e357879d83529"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b5be0afe265ea707d682d30cfce89888c5a20e51068aa0ce44ea0a6b757223f1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c1f35ee0b5565c50098d5153c9ab3fdaeae8e5980b9c3c247218c232e130e507"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c69443a3dee4214f6c7f4df6389658dc3559454f692ad9816e59309fd9bc50bb"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "772f76e5ff26d57ae8560413ce8164339f0189f91b22685bf9b6498590932af4"
+    sha256 cellar: :any_skip_relocation, sonoma:        "1ec225fe62b327fc3ba91969ebbf1b5a84b568070e5152b2f657b5cc2f39c192"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4c34d8f7f035603070b116f1bbc8067ea3a389a0ef8a57662774dd1c0cb98780"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dea1584b44fa20fd97342d27690b9e0361fb0b05d9be4f85f864b9502465b592"
   end
 
   depends_on "go" => :build
@@ -31,7 +31,7 @@ class Mongocli < Formula
     end
     bin.install "bin/mongocli"
 
-    generate_completions_from_executable(bin/"mongocli", "completion")
+    generate_completions_from_executable(bin/"mongocli", shell_parameter_format: :cobra)
   end
 
   test do

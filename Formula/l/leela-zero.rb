@@ -6,27 +6,26 @@ class LeelaZero < Formula
       tag:      "v0.17",
       revision: "3f297889563bcbec671982c655996ccff63fa253"
   license "GPL-3.0-or-later"
-  revision 10
+  revision 12
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "89c9cd32fe6c7a9c5239fd79cb4478b59c3fab520ef41b6eac2420c549d485c2"
-    sha256 cellar: :any,                 arm64_sonoma:  "d53fa2be94dea4d05c53dec8fe788b9d0592ba2fe9a1859f469a3561514b0503"
-    sha256 cellar: :any,                 arm64_ventura: "6be25e10e1be034a3b7aef791fba5d45e1b288c818035b997a9d26f0742ef463"
-    sha256 cellar: :any,                 sonoma:        "0a10d9190312af4f6f6469d57163a463cd99f52fc16100f6c145a107001e1a5e"
-    sha256 cellar: :any,                 ventura:       "da90734e4217838d1e9ccb08df23b9d841eea2f5daf3107e17a45a1af8e4db8f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "75cf01a629f8eeecf1e21f43b6ed281aad1ab5bd434fbd25e762c2ee1ff6e47b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2e5ee03297c6c74f7bc78ed0ce6f77a798720c27e099f2949b855db92dac4086"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "8ccf615e92183ab7d8f06a8148e89ebe79c45e0f3e12ba4c845d15ec9492542d"
+    sha256 cellar: :any,                 arm64_sequoia: "d7d8ddd70a07c331aa0900ba316bfc2f21bb3793ea72784bcf7df910feac651d"
+    sha256 cellar: :any,                 arm64_sonoma:  "16214ba1b05b5cb5854f2f4bd38e5bc0e1af03eb07e6bbd42eb9d4ddaf98ef65"
+    sha256 cellar: :any,                 sonoma:        "9b671b74931247c299cc35f74154b3e433aab14ce3beecbbbe61ef4bd2694435"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "8118f4939edb749336936eea44f839b8960cdeded29190c8fbbe9dbccf65824d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "30aeb411b41c6d336ee9a21bb7c34613d6a04135993b177ed398a8395e2161df"
   end
 
   depends_on "cmake" => :build
   depends_on "boost"
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "opencl-headers" => :build
     depends_on "opencl-icd-loader"
     depends_on "pocl"
+    depends_on "zlib-ng-compat"
   end
 
   resource "network" do

@@ -1,8 +1,8 @@
 class Apko < Formula
   desc "Build OCI images from APK packages directly without Dockerfile"
   homepage "https://github.com/chainguard-dev/apko"
-  url "https://github.com/chainguard-dev/apko/archive/refs/tags/v0.27.9.tar.gz"
-  sha256 "8fed1401cf5010edc73aa8d47323fe5d35dcfac573a461e64cf729fadf8afbb4"
+  url "https://github.com/chainguard-dev/apko/archive/refs/tags/v1.1.14.tar.gz"
+  sha256 "60e7d222ee33e6c481c8d7071c395c49e161a1a967d04911bc3b4550f694b182"
   license "Apache-2.0"
   head "https://github.com/chainguard-dev/apko.git", branch: "main"
 
@@ -15,12 +15,12 @@ class Apko < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1d27f9d4afafba45fdb243ab0e119cf6d13a5c757eb297deb1ea3880bac38b4c"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1d27f9d4afafba45fdb243ab0e119cf6d13a5c757eb297deb1ea3880bac38b4c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "1d27f9d4afafba45fdb243ab0e119cf6d13a5c757eb297deb1ea3880bac38b4c"
-    sha256 cellar: :any_skip_relocation, sonoma:        "2bb5505819e2fe071d90e509b9e4975cf8dfc6830ab7a079fc402cbb75eb109b"
-    sha256 cellar: :any_skip_relocation, ventura:       "2bb5505819e2fe071d90e509b9e4975cf8dfc6830ab7a079fc402cbb75eb109b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3c77d0a43f2ca3eef17789e743115061cb4aa3177e53dae31a4ba1e399cb1759"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "400ccd2c8ade5a1c6f019b35a86e222394e934c95b9e2889b056e04498bd359a"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "48ed3b059320ea08fecb9c2fc67fe60ca8cc8e13659c3bbb1bfd7ce3a1ac1832"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a8ce97b22409c6d2edc461033e41c725b3a649055cd630dda5e5fa7e801546a0"
+    sha256 cellar: :any_skip_relocation, sonoma:        "49c3e4c07c40e3682abe69433d1de1b93834424cf0a292fa2cba7197de1d0e22"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "9eab0a8a68c3800dd28155dc1c3822063873759669becbd88ff742336aef9506"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fb4f59ec9e95865544780c460feab055033e48e08fc1f740758065995a19a921"
   end
 
   depends_on "go" => :build
@@ -29,13 +29,13 @@ class Apko < Formula
     ldflags = %W[
       -s -w
       -X sigs.k8s.io/release-utils/version.gitVersion=#{version}
-      -X sigs.k8s.io/release-utils/version.gitCommit=brew
+      -X sigs.k8s.io/release-utils/version.gitCommit=#{tap.user}
       -X sigs.k8s.io/release-utils/version.gitTreeState=clean
       -X sigs.k8s.io/release-utils/version.buildDate=#{time.iso8601}
     ]
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"apko", "completion")
+    generate_completions_from_executable(bin/"apko", shell_parameter_format: :cobra)
   end
 
   test do
@@ -44,7 +44,7 @@ class Apko < Formula
         repositories:
           - https://dl-cdn.alpinelinux.org/alpine/edge/main
         packages:
-          - alpine-base
+          - apk-tools
 
       entrypoint:
         command: /bin/sh -l
@@ -60,6 +60,6 @@ class Apko < Formula
     system bin/"apko", "build", testpath/"test.yml", "apko-alpine:test", "apko-alpine.tar"
     assert_path_exists testpath/"apko-alpine.tar"
 
-    assert_match version.to_s, shell_output(bin/"apko version 2>&1")
+    assert_match version.to_s, shell_output("#{bin}/apko version")
   end
 end

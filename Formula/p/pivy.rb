@@ -4,25 +4,27 @@ class Pivy < Formula
   url "https://github.com/coin3d/pivy/archive/refs/tags/0.6.10.tar.gz"
   sha256 "7b409816c9fad84cf94f93659281f9dd2501d285eb2fc609e9401a3d004ce723"
   license "ISC"
+  revision 1
   head "https://github.com/coin3d/pivy.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sonoma:  "8b87dac25665d8517854cb34f96c4e9237495781555a4eb8c8de59a1c6476037"
-    sha256 cellar: :any,                 arm64_ventura: "0378b486fef297474f82175e844633a21a00772f523acc0f84ccf97e368ce143"
-    sha256 cellar: :any,                 sonoma:        "d9f23884af3e774e654ee22911feeed221e02f3d829f94d8f95582fb2997b9b1"
-    sha256 cellar: :any,                 ventura:       "73bc75f176e815f882879135054ac7e018482292250f8101a9206b12156bb7f4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f0f07d2aca7c37e78d292ef734d91d07bd5fad4adf46359a0a86123fd82fabbd"
+    sha256 cellar: :any,                 arm64_tahoe:   "7af9cc64f5c26f519c8c8116982c84a4dd77b217c5fc91e508aa3a056e066a49"
+    sha256 cellar: :any,                 arm64_sequoia: "1749994556abef4f47023dc4831c8f66d3ab5345655c971eed253d841c3daec6"
+    sha256 cellar: :any,                 arm64_sonoma:  "6c70ff465259e3ea3b8b778e2afb81d664831214ab35be393b8647da04e7682e"
+    sha256 cellar: :any,                 sonoma:        "50e39ab5c9e250a552c416b7b50128f5d5c3100acab15b8c5114a78a7b41ba39"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5f3dd2afff6c77e1501b70461fd6efd481fc601710faef30a7feb22bdca305c9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b5867393be9c9375ba219639d2a73a5ceab1dccc72b048f9f879ffc3ae2391cb"
   end
 
   depends_on "cmake" => :build
   depends_on "swig" => :build
   depends_on "coin3d"
   depends_on "pyside"
-  depends_on "python@3.13"
-  depends_on "qt"
+  depends_on "python@3.14"
+  depends_on "qtbase"
 
   def python3
-    "python3.13"
+    "python3.14"
   end
 
   def install

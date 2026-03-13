@@ -1,8 +1,8 @@
 class Hck < Formula
   desc "Sharp cut(1) clone"
   homepage "https://github.com/sstadick/hck"
-  url "https://github.com/sstadick/hck/archive/refs/tags/v0.11.4.tar.gz"
-  sha256 "f6c87edfeabf33c12b08c4c585d7fece3a618a56dbd87c695ca18629ca599457"
+  url "https://github.com/sstadick/hck/archive/refs/tags/v0.11.5.tar.gz"
+  sha256 "5ce5fc816e9e009dafe8c42a0bd6b9e6c8b7ca5a839af6a797fba9accc569242"
   license any_of: ["MIT", "Unlicense"]
   head "https://github.com/sstadick/hck.git", branch: "master"
 
@@ -12,19 +12,21 @@ class Hck < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "80c37f8d57ec62a4a1cad9def4ada5e68d8b9f3cba9f92cb3dd1b9c8d0335503"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a26a272867f32a7165106dfbbbfa78be9eb2897903325641bf32650ad68f0340"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "56e22305a058ad39a97212158329f8a55f6a1c9365dc370ff6bdbdc6b75c04be"
-    sha256 cellar: :any_skip_relocation, sonoma:        "945b035add2b676ad6e0eb2654e89088834c82a188960dd49aa861bab5e66c79"
-    sha256 cellar: :any_skip_relocation, ventura:       "ab31471f5828d042a4593047b0cc8fea9206dc456ff9c3c65fd930099269fbc5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "cec9d7ffe968172f6e6312fe9a6519f6dcc13b84744cd120b58e8726a6d38964"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3d588364e3b545a16083916df392dd0cca81eaa9cd1f84eb09533b7980840b0a"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "d4df79cddcbf021932b7300c9a6cc6cdebc9b9d85a551353456d4f8c8c07538d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6b3406b0ab689cba7e8d8ffe40033e3b3867ac0527a3c7a903915254532f6a6e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "93ce77bb3b5310079ada1d764f560e692d96b4ca65aeaa90893195aa5d58abb0"
+    sha256 cellar: :any_skip_relocation, sonoma:        "f6a147eff8f1e3e69aeeaa681afd81dd69e19bd865e0b675b21fc680fb752c80"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0b6a6b21c1ecb5cf9da85863fbf8e23e05275e1a6883552199fb697f12f99e05"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0b46f9971e8d64866900c0b57f67903455d7c0dbeebb4a5fa59e093118b150ff"
   end
 
   depends_on "cmake" => :build
   depends_on "rust" => :build
 
-  uses_from_macos "zlib"
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "cargo", "install", *std_cargo_args

@@ -1,24 +1,18 @@
 class PythonAT39 < Formula
   desc "Interpreted, interactive, object-oriented programming language"
   homepage "https://www.python.org/"
-  url "https://www.python.org/ftp/python/3.9.22/Python-3.9.22.tar.xz"
-  sha256 "8c136d199d3637a1fce98a16adc809c1d83c922d02d41f3614b34f8b6e7d38ec"
+  url "https://www.python.org/ftp/python/3.9.25/Python-3.9.25.tar.xz"
+  sha256 "00e07d7c0f2f0cc002432d1ee84d2a40dae404a99303e3f97701c10966c91834"
   license "Python-2.0"
-  revision 1
-
-  livecheck do
-    url "https://www.python.org/ftp/python/"
-    regex(%r{href=.*?v?(3\.9(?:\.\d+)*)/?["' >]}i)
-  end
 
   bottle do
-    sha256 arm64_sequoia: "2615cd792702cfa009cdf53de341a2f3e3afe47f0badd4146b1774446e9fc0db"
-    sha256 arm64_sonoma:  "02eede67f8c40fd8f370e8b15f90b9601f5943c4175cca86f891c21e8bbf49e9"
-    sha256 arm64_ventura: "112dd83db002b08bd6db327838b6240f3f3791bfd58c0edcb815d8241bfaec55"
-    sha256 sonoma:        "91d13f4897308fb1cb4a41b202e778018b744b34c90c1c2d8422b844db79f3e4"
-    sha256 ventura:       "90a57938879980381944d65b282146e627fc9d6d8960e9afc2f4e4710cfd1a24"
-    sha256 arm64_linux:   "55b2a518b57bec731980e317ea42e6d23b223dd9d5f6ed034b4315bb626603ae"
-    sha256 x86_64_linux:  "75eed312f581e9defd9d5531de1facb106cf3cf5da11d014b6501e6dc6f84cb3"
+    rebuild 1
+    sha256 arm64_tahoe:   "5dacd6c96b01ab87a5ea6112b9d90185ebaea6057d8fce7b8f4abc435a767830"
+    sha256 arm64_sequoia: "86e3f3b3e6661968121763e16e65af98631914c9fed3b6776313baae75910623"
+    sha256 arm64_sonoma:  "36ca5f187ed46be8f27b1607eeb5620c563a3deddd28f86daab972a136d274a4"
+    sha256 sonoma:        "1a1b49850f0a2ee6b9307f5edaf78a7b2bbd1f2303e7ac520cb6e9a5be236ea0"
+    sha256 arm64_linux:   "2f1119b3d9943ba00b4ff9057c9adc7312a3f7335f7743113990daa372023480"
+    sha256 x86_64_linux:  "90706d3e2fd0e65744c40d489e707adb4edace78859a1376f40705cd2999be68"
   end
 
   # setuptools remembers the build flags python is built with and uses them to
@@ -27,6 +21,7 @@ class PythonAT39 < Formula
 
   # https://devguide.python.org/versions/#versions
   deprecate! date: "2025-10-15", because: :deprecated_upstream
+  disable! date: "2026-10-15", because: :deprecated_upstream
 
   depends_on "pkgconf" => :build
   depends_on "gdbm"
@@ -38,16 +33,19 @@ class PythonAT39 < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "expat"
-  uses_from_macos "libffi", since: :catalina
+  uses_from_macos "libffi"
   uses_from_macos "libxcrypt"
   uses_from_macos "ncurses"
   uses_from_macos "unzip"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "libnsl"
     depends_on "libtirpc"
+    depends_on "zlib-ng-compat"
   end
+
+  pypi_packages package_name:   "",
+                extra_packages: %w[flit-core pip setuptools wheel]
 
   # Always update to latest release
   resource "flit-core" do
@@ -56,13 +54,13 @@ class PythonAT39 < Formula
   end
 
   resource "pip" do
-    url "https://files.pythonhosted.org/packages/59/de/241caa0ca606f2ec5fe0c1f4261b0465df78d786a38da693864a116c37f4/pip-25.1.1.tar.gz"
-    sha256 "3de45d411d308d5054c2168185d8da7f9a2cd753dbac8acbfa88a8909ecd9077"
+    url "https://files.pythonhosted.org/packages/fe/6e/74a3f0179a4a73a53d66ce57fdb4de0080a8baa1de0063de206d6167acc2/pip-25.3.tar.gz"
+    sha256 "8d0538dbbd7babbd207f261ed969c65de439f6bc9e5dbd3b3b9a77f25d95f343"
   end
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/9e/8b/dc1773e8e5d07fd27c1632c45c1de856ac3dbf09c0147f782ca6d990cf15/setuptools-80.7.1.tar.gz"
-    sha256 "f6ffc5f0142b1bd8d0ca94ee91b30c0ca862ffd50826da1ea85258a06fd94552"
+    url "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz"
+    sha256 "f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c"
   end
 
   resource "wheel" do
@@ -474,7 +472,7 @@ class PythonAT39 < Formula
       They will install into the site-package directory
         #{HOMEBREW_PREFIX}/lib/python#{version.major_minor}/site-packages
 
-      tkinter is no longer included with this formula, but it is available separately:
+      `idle#{version.major_minor}` requires tkinter, which is available separately:
         brew install python-tk@#{version.major_minor}
 
       If you do not need a specific version of Python, and always want Homebrew's `python3` in your PATH:

@@ -1,8 +1,8 @@
 class Pypy < Formula
   desc "Highly performant implementation of Python 2 in Python"
   homepage "https://pypy.org/"
-  url "https://downloads.python.org/pypy/pypy2.7-v7.3.19-src.tar.bz2"
-  sha256 "8703cdcb01f9f82966dd43b6a6018f140399db51ebb43c125c1f9a215e7bb003"
+  url "https://downloads.python.org/pypy/pypy2.7-v7.3.21-src.tar.bz2"
+  sha256 "23537c62e875ad1a3e675c64d4435eff392ea20843e20d690fd1400b79363d64"
   license "MIT"
   head "https://github.com/pypy/pypy.git", branch: "main"
 
@@ -12,13 +12,12 @@ class Pypy < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "58bb108411e8647d3dd78869113ae11b982b243785136d876c9181a8e1d35132"
-    sha256 cellar: :any,                 arm64_sonoma:  "04f649d0679c90024d9c74bada227b201e119d427a30c0221ae1569e5cd78501"
-    sha256 cellar: :any,                 arm64_ventura: "bd4c3f56ba5df8881c381dde593ea05084fc2aed6aeaf023700f1e62d84666e1"
-    sha256 cellar: :any,                 sonoma:        "731e075bdfe1a731a2f95731def57dc4effc35a9eff413b9710874996d24cc38"
-    sha256 cellar: :any,                 ventura:       "1c0d7f23afe5b128b2be5c93af7c22dab16af4c76bd8fac5626050b5223e099c"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "e428e5396ea79feeedc99e1a753b6af06d7bed608bcf432633c550345158a603"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3eb0b648e17940b5e7c4bbb7f5c04ad0cee9bdfab7f7585a384dedd53c027329"
+    sha256 cellar: :any,                 arm64_tahoe:   "36d9cf694cfd593c6e7bee6062749b88bc13b585e8ae3e9db8fc5e3eb4dd4a31"
+    sha256 cellar: :any,                 arm64_sequoia: "c9efcb91aa406ca6c2c618712013655bb873f18047dee6b7af9ac4a0d716d26d"
+    sha256 cellar: :any,                 arm64_sonoma:  "d15a72ab63690f79f685a78f6f9a5fa4b8a1c77f85d014431ae5e48f210806d9"
+    sha256 cellar: :any,                 sonoma:        "40d7a665ea9dcf3f56738d213659dfeb14b9bd7f1db70bc5f729577e368f1e5d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1056baf16f2311a1b2ac1b3a6cffaf5974133d1e83b3bb0cf222689689348cd5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6eca856704967e468bdb8b64ccb32bf27996ca91565cbe1a088cd8064714e45c"
   end
 
   depends_on "pkgconf" => :build
@@ -32,7 +31,10 @@ class Pypy < Formula
   uses_from_macos "libffi"
   uses_from_macos "ncurses"
   uses_from_macos "unzip"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   resource "bootstrap" do
     on_macos do
@@ -74,7 +76,10 @@ class Pypy < Formula
   # Build fixes:
   # - Disable Linux tcl-tk detection since the build script only searches system paths.
   #   When tcl-tk is not found, it uses unversioned `-ltcl -ltk`, which breaks build.
-  patch :DATA
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/homebrew-core/f3c99d21d0b8fe79a579ef1a7405f10fa18ccde8/Patches/pypy/tcl-tk.diff"
+    sha256 "ed10c9fc9d3a5b8f43ef51c23224605e0ac7bca07aa2e8dc20335b69d13a082f"
+  end
 
   def install
     # Work-around for build issue with Xcode 15.3
@@ -88,8 +93,8 @@ class Pypy < Formula
     tcltk = Formula["tcl-tk@8"]
     inreplace "lib_pypy/_tkinter/tklib_build.py" do |s|
       s.gsub! "['/usr/local/opt/tcl-tk/include']", "[]"
-      s.gsub! "(homebrew + '/include')", "('#{tcltk.opt_include}/tcl-tk')"
-      s.gsub! "(homebrew + '/opt/tcl-tk/lib')", "('#{tcltk.opt_lib}')"
+      s.gsub! "(homebrew + '/opt/tcl-tk@8/include/tcl-tk')", "('#{tcltk.opt_include}/tcl-tk')"
+      s.gsub! "(homebrew + '/opt/tcl-tk@8/lib')", "('#{tcltk.opt_lib}')"
     end
 
     if OS.mac?
@@ -214,25 +219,3 @@ class Pypy < Formula
     system scripts_folder/"pip", "list"
   end
 end
-
-__END__
---- a/lib_pypy/_tkinter/tklib_build.py
-+++ b/lib_pypy/_tkinter/tklib_build.py
-@@ -17,7 +17,7 @@ elif sys.platform == 'win32':
-     incdirs = []
-     linklibs = ['tcl86t', 'tk86t']
-     libdirs = []
--elif sys.platform == 'darwin':
-+else:
-     # homebrew
-     homebrew = os.environ.get('HOMEBREW_PREFIX', '')
-     incdirs = ['/usr/local/opt/tcl-tk/include']
-@@ -26,7 +26,7 @@ elif sys.platform == 'darwin':
-     if homebrew:
-         incdirs.append(homebrew + '/include')
-         libdirs.append(homebrew + '/opt/tcl-tk/lib')
--else:
-+if False: # disable Linux system tcl-tk detection
-     # On some Linux distributions, the tcl and tk libraries are
-     # stored in /usr/include, so we must check this case also
-     libdirs = []

@@ -4,7 +4,7 @@ class Latexml < Formula
   url "https://dlmf.nist.gov/LaTeXML/releases/LaTeXML-0.8.8.tar.gz"
   sha256 "7d2bbe2ce252baf86ba3f388cd0dec3aa4838f49d612b9ec7cc4ff88105badcc"
   license :public_domain
-  revision 1
+  revision 3
   head "https://github.com/brucemiller/LaTeXML.git", branch: "master"
 
   livecheck do
@@ -13,13 +13,12 @@ class Latexml < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a37c6fd0d637c43e26e452ceb11ae7dcb92c395fb857a031e49530e3cd3a1f14"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cb545c7e7242db92803f0576ed29431209e64bdfccd0247a6d23afa5cc39cd82"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "e38b026b0b334cc52d75564b715319a30001d6399acd836d19c7024d98ee0372"
-    sha256 cellar: :any_skip_relocation, sonoma:        "fdb835e5e6e8f1c7036f8660d177b7d1010a6409734f2171993f7a76ff5a32f4"
-    sha256 cellar: :any_skip_relocation, ventura:       "b2273557c72715d4b7705c008f0baf9c6c20e5e2cb91fe35c26246e9bc452f82"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "78da7de6a0e0b354b9cf56fc3aadcd7825879af459e71188569c027aaf32981a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2ccca1cfac575c937655ad5ae0482606378c56aa463d303a91493983727f584f"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "bf351f2a5fabcf2e7a3c41e3eed74e545d2b7e9794d453e36063a4fda573fba6"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "42357059c8adcd3b7fb4fee64e394bb12eb2f41b08b73ac3094a72ae230d3c5a"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "976befc421c0dc888763fa18bca525d9d73129be22cbfc51c6d1314c2c3f7c10"
+    sha256 cellar: :any_skip_relocation, sonoma:        "43ec71440eb6168973a749bf05991317208dfd3321489bf0bb96e816391cf3d7"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "cc89bfc08c008d55534468490880499f205e56454f5e731899be2f2698d70742"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fc94fb47aa14b8abe6542e3d6fc55139259a702f91ffe335ab5da1567dfae542"
   end
 
   depends_on "pkgconf" => :build

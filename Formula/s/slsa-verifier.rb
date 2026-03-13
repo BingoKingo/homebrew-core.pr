@@ -1,8 +1,8 @@
 class SlsaVerifier < Formula
   desc "Verify provenance from SLSA compliant builders"
   homepage "https://github.com/slsa-framework/slsa-verifier"
-  url "https://github.com/slsa-framework/slsa-verifier/archive/refs/tags/v2.7.0.tar.gz"
-  sha256 "156190a6c96ef20747a88d28b69ee7fe60dc4d0fce3f9037da86778dcfdd2af8"
+  url "https://github.com/slsa-framework/slsa-verifier/archive/refs/tags/v2.7.1.tar.gz"
+  sha256 "19af322eb0ae0cb738f8e2395b3dcff756537277d62688fc9d2b4fc5ad6b16e4"
   license "Apache-2.0"
   head "https://github.com/slsa-framework/slsa-verifier.git", branch: "main"
 
@@ -15,12 +15,13 @@ class SlsaVerifier < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2aa2a807e3b7f681fe3a2202b0dbf80310dd26ec55275698354094db272d970b"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "2aa2a807e3b7f681fe3a2202b0dbf80310dd26ec55275698354094db272d970b"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "2aa2a807e3b7f681fe3a2202b0dbf80310dd26ec55275698354094db272d970b"
-    sha256 cellar: :any_skip_relocation, sonoma:        "106517b350402f5df5b7593cc10b501f878e1f244dd34a3db73f019846592e49"
-    sha256 cellar: :any_skip_relocation, ventura:       "07fb4459305a82d44c6c128b1255f5a0a996d241f9c07432fd76f6e6ee4c74df"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8794fbe8d5196f2e41227ec58833f905557f107199a2735f0ff6b4df7938dcb8"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "74a05f9a862de1e4b5ff0c5ec8a276684dddb282196ecb13010941960049274f"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "74a05f9a862de1e4b5ff0c5ec8a276684dddb282196ecb13010941960049274f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "74a05f9a862de1e4b5ff0c5ec8a276684dddb282196ecb13010941960049274f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6af212bf84e8c9a121278554c084c8316cd360ecf3a29cbe0d9918b256e3f1dd"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "f211fb47549850522eb0187f98471eda17743dfc79c7572a6018aa282f141267"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e588593813873d0d0c768d1e85c38db2e6e1871cc567950fd7a2e053b4706841"
   end
 
   depends_on "go" => :build
@@ -29,14 +30,14 @@ class SlsaVerifier < Formula
     ldflags = %W[
       -s -w
       -X sigs.k8s.io/release-utils/version.gitVersion=#{version}
-      -X sigs.k8s.io/release-utils/version.gitCommit=brew
+      -X sigs.k8s.io/release-utils/version.gitCommit=#{tap.user}
       -X sigs.k8s.io/release-utils/version.gitTreeState=clean
       -X sigs.k8s.io/release-utils/version.buildDate=#{time.iso8601}
     ]
 
     system "go", "build", *std_go_args(ldflags:), "./cli/slsa-verifier"
 
-    generate_completions_from_executable(bin/"slsa-verifier", "completion")
+    generate_completions_from_executable(bin/"slsa-verifier", shell_parameter_format: :cobra)
   end
 
   test do
@@ -45,6 +46,6 @@ class SlsaVerifier < Formula
     expected_output = "FAILED: SLSA verification failed: the image is mutable: 'docker://alpine'"
     assert_match expected_output, output
 
-    assert_match version.to_s, shell_output("#{bin}/slsa-verifier version 2>&1")
+    assert_match version.to_s, shell_output("#{bin}/slsa-verifier version")
   end
 end

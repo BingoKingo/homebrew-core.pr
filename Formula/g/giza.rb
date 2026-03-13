@@ -7,6 +7,7 @@ class Giza < Formula
   head "https://github.com/danieljprice/giza.git", branch: "master"
 
   bottle do
+    sha256 cellar: :any,                 arm64_tahoe:   "357de5d9ec314c012a17c428792abc415a69b41c79a3a70217306b99b7b0553f"
     sha256 cellar: :any,                 arm64_sequoia: "d5cc5b8ea3baf6cb3405ec37acb4ef91623456492cd0222787bf9461272d4e80"
     sha256 cellar: :any,                 arm64_sonoma:  "77d5fc21407f015635c46f41f0bdcb5aabbb320c967f30d3eafe639f9b1d9b71"
     sha256 cellar: :any,                 arm64_ventura: "bdd8d667ec2cd0d4553748b79f8e77f41a4740f7bae0e584e0981274f3def56d"
@@ -28,25 +29,13 @@ class Giza < Formula
     system "./configure", "--disable-silent-rules", *std_configure_args
     system "make", "install"
 
-    # Clean up stray Makefiles in test folder
-    makefiles = File.join("test", "**", "Makefile*")
-    Dir.glob(makefiles).each do |file|
-      rm file
-    end
-
+    # Install test files to use during `brew test`
+    rm(Dir["test/**/Makefile*"])
     prefix.install "test"
   end
 
-  def caveats
-    <<~EOS
-      Test suite has been installed at:
-        #{opt_prefix}/test
-    EOS
-  end
-
   test do
-    test_dir = "#{prefix}/test/C"
-    cp_r test_dir, testpath
+    cp_r prefix/"test/C/.", testpath
 
     flags = %W[
       -I#{include}
@@ -66,7 +55,7 @@ class Giza < Formula
       test-rectangle.c
       test-window.c
     ].each do |file|
-      system ENV.cc, testpath/"C"/file, *flags
+      system ENV.cc, file, *flags
     end
   end
 end

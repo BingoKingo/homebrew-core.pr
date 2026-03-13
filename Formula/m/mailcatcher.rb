@@ -4,31 +4,31 @@ class Mailcatcher < Formula
   url "https://github.com/sj26/mailcatcher/archive/refs/tags/v0.10.0.tar.gz"
   sha256 "4cd027e22878342d6a002402306d42ada1f34045cc1d7f35b5a7fa37b944326e"
   license "MIT"
-  revision 1
+  revision 2
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "42f5b6813789c297bfb3f2cf9867cb89c387124336f78f0b2db31a9490ff8e39"
-    sha256 cellar: :any,                 arm64_sonoma:  "98688362105e37e7b5642971887ec454fa5953c013c499b7401ec75f1705f6d3"
-    sha256 cellar: :any,                 arm64_ventura: "d8947cfeb3b8e095f9e9df810fe9eccb62e1da2e73889fac2e1b60794056655d"
-    sha256 cellar: :any,                 sonoma:        "65c435eea0ed3421e911b11a64f8cc73c53070b1ae015dbc2523abe62bc1c06c"
-    sha256 cellar: :any,                 ventura:       "aab17598a1e1836e38c145aaae6777516b92b0163b4deece91839d2c790280b2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3c166212f22ec358d05746d6ca05518198425233c862a414a5fc34319a226b03"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "391be8e92219c2ecdb1a9990be909b52d5d45ca818a82ae02953f291aec5649c"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "3403bf380a433529d8be12139efa13559b1e6d8edd8459291c38b9d1d3739540"
+    sha256 cellar: :any,                 arm64_sequoia: "8922d322087511af1252413be29da5acc36a80c0fa3f8637cabd045fe51b5c33"
+    sha256 cellar: :any,                 arm64_sonoma:  "2f7ae002bbc85e18e6ffb5961be8d88bd8b30eba798c674e705973973af180c3"
+    sha256 cellar: :any,                 sonoma:        "5eea40aec4d9fc9eae8a4312eaf695b287af5ae86f207911b20d7bc9b68469c6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "d4e5e7f3396a9ed8a27acba60216f835aec1d4db497c8ad1b66185cd395cd47d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "84be37438a4f72435ac7646b2abb4595163a560f015a833c5c8d5a35ce36f4a3"
   end
 
   depends_on "pkgconf" => :build
-  depends_on "libedit"
   depends_on "libyaml"
   depends_on "openssl@3"
   depends_on "ruby"
 
   uses_from_macos "xz" => :build
+  uses_from_macos "libedit"
   uses_from_macos "libffi"
   uses_from_macos "sqlite"
-  uses_from_macos "zlib"
 
   on_linux do
     depends_on "node" => :build
+    depends_on "zlib-ng-compat"
   end
 
   resource "rack" do
@@ -148,10 +148,6 @@ class Mailcatcher < Formula
   end
 
   def install
-    if OS.mac? && MacOS.version >= :mojave && MacOS::CLT.installed?
-      ENV["SDKROOT"] = ENV["HOMEBREW_SDKROOT"] = MacOS::CLT.sdk_path(MacOS.version)
-    end
-
     ENV["GEM_HOME"] = libexec
     resources.each do |r|
       r.fetch

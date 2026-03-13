@@ -4,16 +4,16 @@ class GetIplayer < Formula
   url "https://github.com/get-iplayer/get_iplayer/archive/refs/tags/v3.36.tar.gz"
   sha256 "9a70383143b6e3f43ee079f551b7f5719037ada86eb48d9defc66e00e619d996"
   license "GPL-3.0-or-later"
-  head "https://github.com/get-iplayer/get_iplayer.git", branch: "develop"
+  revision 2
+  head "https://github.com/get-iplayer/get_iplayer.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fe0570e670e29b55c71caff7f76158b197edde3bf04ca4a566ff5134c3505892"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "fe0570e670e29b55c71caff7f76158b197edde3bf04ca4a566ff5134c3505892"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "778f90bf66b84cbc936f725ccbde41f5bb36e0018ccc922cedc8cd0f68331046"
-    sha256 cellar: :any_skip_relocation, sonoma:        "70efc995f75309e52e41cdb02ecaa28c0abee82fdaded3859a73037c30aba2e4"
-    sha256 cellar: :any_skip_relocation, ventura:       "bdb8fe4d4e0251e3eda0d7891544a4567a0303fb75fd1802253b1016ee9add64"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2980bb4bf82c8b923ca76764b062848dceb99f0d3b9bf9d0df86129240a3b96d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "388dd1be26959b14f608452d34b4b582d49aab98a37c7fc7911e4a704f05137a"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "6649b501cf57ce9a491ddca1d29121b5dc788c992c76923bc3646fde1c72064d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6649b501cf57ce9a491ddca1d29121b5dc788c992c76923bc3646fde1c72064d"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6649b501cf57ce9a491ddca1d29121b5dc788c992c76923bc3646fde1c72064d"
+    sha256 cellar: :any_skip_relocation, sonoma:        "7e3d88866060016afedd3a9f2f1e0391b23acc14382965aaccc5b69f3c78d67b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3da975c4e996da72f40d5e744461409a18eedf3001d3d75c66bac1446e75b2d4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f59d1d219e4d21eac63b70301c62e9c5bc28f82e4d63530ba88f02f2b2b36d8f"
   end
 
   depends_on "atomicparsley"

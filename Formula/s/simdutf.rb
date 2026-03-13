@@ -1,9 +1,10 @@
 class Simdutf < Formula
   desc "Unicode conversion routines, fast"
   homepage "https://simdutf.github.io/simdutf/"
-  url "https://github.com/simdutf/simdutf/archive/refs/tags/v7.3.0.tar.gz"
-  sha256 "e337abe416898d1d997d729cc04370c89c8dddf688648e876f37970e98cf93aa"
+  url "https://github.com/simdutf/simdutf/archive/refs/tags/v8.1.0.tar.gz"
+  sha256 "64851568d57899f6f8dbc237e184e215ef9f464e6e7ebfb1c5785d19eaddbeb5"
   license any_of: ["Apache-2.0", "MIT"]
+  compatibility_version 1
   head "https://github.com/simdutf/simdutf.git", branch: "master"
 
   livecheck do
@@ -12,34 +13,26 @@ class Simdutf < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "6a9b20ff5eedd441325216819e22e42420200f7738ccead54dd1aee9dd99d557"
-    sha256 cellar: :any,                 arm64_sonoma:  "6cb738dbfcba72277f7bfea52b0471577ab23aec6fa8bc4f27e004513f1b5529"
-    sha256 cellar: :any,                 arm64_ventura: "40c3c1577a8c5494a3dc22a3ba4f9596c0fd0550a197f90c3e248dafffbafe3b"
-    sha256 cellar: :any,                 sonoma:        "86917209f8009cdaaee70170adbe529a204ef6742ccc9099f94a94feaa38d5b0"
-    sha256 cellar: :any,                 ventura:       "e59bf45c9a87d09b451b6023904b138c572aebbbf87da540b86f6bc0894baaaa"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "81a1452432282fe777d02cae642c9717cd6f0bf08d73bb0de3325c4a0027e223"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "75f0837ac8f666e8f08b813c0495723014c7be124849938bde434808087acb2e"
+    sha256 cellar: :any,                 arm64_tahoe:   "8bafee0245351d11c88f9439d2e17a872ae9c36bef7cbe3130e48f1687efdea1"
+    sha256 cellar: :any,                 arm64_sequoia: "6f8a8c871423701346a5203349987c8ecfbec4b0aefa4693135bd1d84745ea4b"
+    sha256 cellar: :any,                 arm64_sonoma:  "6f636e1a322ab0bf46b74082485ab33caca0abf0a94e1023538acbca7660d4cf"
+    sha256 cellar: :any,                 sonoma:        "cef3b171225c4b6c471830baf8e797709dfda6cdbe129d23e5719820bd365ab6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "faefd84f4b4cc89ffe7b04ce57a5ebf91e8c0849f87848646011b071e9c03c1a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c00641461c4ecca00b0c5c8204ad62870f25fa76ff565a095ef98d4e2a8a7b61"
   end
 
+  depends_on "aklomp-base64" => :build
   depends_on "cmake" => :build
-  depends_on "icu4c@77"
+  depends_on "icu4c@78"
 
   uses_from_macos "python" => :build
 
-  # VERSION=#{version} && curl -s https://raw.githubusercontent.com/simdutf/simdutf/v$VERSION/benchmarks/base64/CMakeLists.txt | grep -C 1 'VERSION'
-  resource "base64" do
-    url "https://github.com/aklomp/base64/archive/refs/tags/v0.5.2.tar.gz"
-    sha256 "723a0f9f4cf44cf79e97bcc315ec8f85e52eb104c8882942c3f2fba95acc080d"
-  end
-
   def install
-    (buildpath/"base64").install resource("base64")
-
     args = %W[
       -DBUILD_SHARED_LIBS=ON
       -DCMAKE_INSTALL_RPATH=#{rpath}
       -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
-      -DFETCHCONTENT_SOURCE_DIR_BASE64=#{buildpath}/base64
+      -DCPM_LOCAL_PACKAGES_ONLY=ON
       -DPython3_EXECUTABLE=#{which("python3")}
       -DSIMDUTF_BENCHMARKS=ON
     ]

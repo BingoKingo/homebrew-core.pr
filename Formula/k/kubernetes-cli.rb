@@ -2,8 +2,8 @@ class KubernetesCli < Formula
   desc "Kubernetes command-line interface"
   homepage "https://kubernetes.io/docs/reference/kubectl/"
   url "https://github.com/kubernetes/kubernetes.git",
-      tag:      "v1.33.1",
-      revision: "8adc0f041b8e7ad1d30e29cc59c6ae7a15e19828"
+      tag:      "v1.35.2",
+      revision: "fdc9d74cbf2da6754ebf81d56f80ae2948cd6425"
   license "Apache-2.0"
   head "https://github.com/kubernetes/kubernetes.git", branch: "master"
 
@@ -13,21 +13,20 @@ class KubernetesCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "dfe3b28b44ac119c76b7d68396eea2dc5715208317ba8d70024a292908a66795"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ee2df9d9511bdc5b3a7e38e6427d0aab88ad999501d727032828dfbe751e0ef8"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "a4446ef3c48d701b20eaf392eee1a83c815f394bbee6168d8b481e0805bda603"
-    sha256 cellar: :any_skip_relocation, sonoma:        "fee0b134359e6e6f7cab5aace688b3eed584b771ded17ee2da6ea7c8f0a44c0c"
-    sha256 cellar: :any_skip_relocation, ventura:       "6099cff31f345023541bef208efdf936fa8888f2666ba39c3ba197dd5f75517f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "f8003784d44c5a4db1360535383ee2b91f1924ec14dedf8d6ce29cd59dd0823b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6f253773fdd67c1a68f07b59f0a924b5b88d3b091f22a6f9c7f377261688f3b4"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b046e3185705e96be7638188f2bf3efd7512d13f0f40c1d302c81d5a065db203"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "490a1510146b7934f8df0e2beb3d6cbdb031d5be65637f3b86c3ef2bea6633a9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "3be2d48bb3edbadd8be2016ec123b832ef474f16c7d50f698347361926d13bc0"
+    sha256 cellar: :any_skip_relocation, sonoma:        "5f23cb8f756876049e693128cad01255e9348fb2c4a67a7ab7459dbe6b6ff00d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a5aa9b04a45c8099f88574214502c9a7db4457db8f30c75b93cad8760c3a99b5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5353f4e92bc86fc3fceae57e8115dd8725e55474a1c61f73d0502a70a50693b4"
   end
 
-  depends_on "bash" => :build
   depends_on "go" => :build
 
   uses_from_macos "rsync" => :build
 
   on_macos do
+    depends_on "bash" => :build
     depends_on "coreutils" => :build
   end
 
@@ -37,7 +36,7 @@ class KubernetesCli < Formula
     system "make", "WHAT=cmd/kubectl"
     bin.install "_output/bin/kubectl"
 
-    generate_completions_from_executable(bin/"kubectl", "completion")
+    generate_completions_from_executable(bin/"kubectl", shell_parameter_format: :cobra)
 
     # Install man pages
     # Leave this step for the end as this dirties the git tree

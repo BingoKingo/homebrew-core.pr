@@ -1,28 +1,23 @@
 class Kcptun < Formula
   desc "Stable & Secure Tunnel based on KCP with N:M multiplexing and FEC"
   homepage "https://github.com/xtaci/kcptun"
-  url "https://github.com/xtaci/kcptun/archive/refs/tags/v20250427.tar.gz"
-  sha256 "345f3df927d9496e1266699e4ab8bea1b559b3874ebea1e240b4cfd3578d2561"
+  url "https://github.com/xtaci/kcptun/archive/refs/tags/v20260101.tar.gz"
+  sha256 "814dcd0b1af47b8230b28139fda2187b3b1c2bf4c04b31648d72bc32daca299d"
   license "MIT"
   head "https://github.com/xtaci/kcptun.git", branch: "master"
 
-  # Upstream appears to use GitHub releases to indicate that a version is
-  # released (and some tagged versions don't end up as a release), so it's
-  # necessary to check release versions instead of tags.
-  livecheck do
-    url :stable
-    regex(/^v?(\d+(?:\.\d+)*)$/i)
-    strategy :github_latest
+  bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "966cf0596429206627bddde19064d5056c205f7bbaa2f4a8359d7b3e045ee433"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "966cf0596429206627bddde19064d5056c205f7bbaa2f4a8359d7b3e045ee433"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "966cf0596429206627bddde19064d5056c205f7bbaa2f4a8359d7b3e045ee433"
+    sha256 cellar: :any_skip_relocation, sonoma:        "da4d188c1e30dbe1885719381bbc3e5c39304f22d714efec18cb2de64c2c5123"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "48bd3cba76710b64c3ec47769984b02cc006e79c344af099ce0cfd6233fc315e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0c71cd11997ea6c9d0454a6ee452c619b178dfa34918e8f9c909998a138ab423"
   end
 
-  bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "919ab411c452e95d7038a9b85fc8543e4371c6ba4302702c8411efd01b4b8ba0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "919ab411c452e95d7038a9b85fc8543e4371c6ba4302702c8411efd01b4b8ba0"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "919ab411c452e95d7038a9b85fc8543e4371c6ba4302702c8411efd01b4b8ba0"
-    sha256 cellar: :any_skip_relocation, sonoma:        "a6c2f08ebfb334fcd1574b9cf4a0bf006faabb2b62cb06e2fdb05b33adb892d0"
-    sha256 cellar: :any_skip_relocation, ventura:       "a6c2f08ebfb334fcd1574b9cf4a0bf006faabb2b62cb06e2fdb05b33adb892d0"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "afb4443a3e692c4426a07556a051c32473cf3d539624103b7c0acacf1fc87565"
-  end
+  # Purged repository so unable to build on any support OS
+  deprecate! date: "2026-02-11", because: :repo_archived
+  disable! date: "2026-05-11", because: :repo_archived
 
   depends_on "go" => :build
 

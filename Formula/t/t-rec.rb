@@ -1,18 +1,17 @@
 class TRec < Formula
   desc "Blazingly fast terminal recorder that generates animated gif images for the web"
   homepage "https://github.com/sassman/t-rec-rs"
-  url "https://github.com/sassman/t-rec-rs/archive/refs/tags/v0.7.9.tar.gz"
-  sha256 "1744fb7743209ea153a729f89e8e7f2f03bd61247488fbeea31abbe234087cd7"
+  url "https://github.com/sassman/t-rec-rs/archive/refs/tags/v0.8.2.tar.gz"
+  sha256 "79ea7cbfe88e45ab913fa9963d74b9b7530cb73e39b686b0d8a692b7a9f331b8"
   license "GPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "31e705c01ca086aeb97ea2ab92f97cdc982e8a2c003fa1262352c282c9e184f1"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "9f6104c42e6d8dc1dd9c33f8d9a62b2c331054878b475991b1ed32ad72012cc6"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "3697e02ec5dfa92fc7168ffac442b767fc4d3a2a6ec994e8ca90f22720e52e96"
-    sha256 cellar: :any_skip_relocation, sonoma:        "7ee2792601edc77380d0749e1e7605cd8f2607311b1225ecae60a7314b3bc68b"
-    sha256 cellar: :any_skip_relocation, ventura:       "20f8a41fa02ef8d34c2525dd831f67be5e13a87df27ef3ff9289ca69272e44cd"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "a7f070666a185ffc61a81f8e9d5c9bd128b3fcb12e53d01c6906df0d91d92c10"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "62fa013bdcdb71ede6a588656dad31e8af3e6184d6ced54c6218959ab79899fe"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "157385e3762d2e024b351cffb777869ce4e7ad9113047b8cae70abfd6e572254"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "df45c6c6354b2fb570c29e252d892b714fc3cef78b01ee9b2a77d099cacf3dc0"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "11e3c4fe21f9571c79fd41638781a4d27b274df574a2b8330bbc98b1d3904c8c"
+    sha256 cellar: :any_skip_relocation, sonoma:        "5276859a6a2b1beb31ecb92edc804f73f3241e7caa71fc175415b15362a02d65"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3e88a77bda09c3124d85389a9c1942a1af5cdf4886304dbefb770514fc30c172"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "626548f7c83623216cf151c1238264e074a2d7e6cae14256f50a59147f357db9"
   end
 
   depends_on "rust" => :build

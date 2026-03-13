@@ -2,9 +2,11 @@ class Grpc < Formula
   desc "Next generation open source RPC library and framework"
   homepage "https://grpc.io/"
   url "https://github.com/grpc/grpc.git",
-      tag:      "v1.72.1",
-      revision: "1ca7b983850ef2ee154a86133108ae6e3732c2bd"
+      tag:      "v1.78.1",
+      revision: "5b6492ea90b2b867a6adad1b10a6edda28e860d1"
   license "Apache-2.0"
+  revision 2
+  compatibility_version 1
   head "https://github.com/grpc/grpc.git", branch: "master"
 
   # There can be a notable gap between when a version is tagged and a
@@ -19,19 +21,16 @@ class Grpc < Formula
   end
 
   bottle do
-    sha256                               arm64_sequoia: "4779a055ef0920fba7c83b9bd24f8821ce3d6a9e1efd06114987c50bb35b0820"
-    sha256                               arm64_sonoma:  "fef9f36852782dfaa442b2217334a0d7277f50d44d2a16b32577e58c13ebda99"
-    sha256                               arm64_ventura: "ffc1e49e11b50dd03557e3290ee00537b11b397d12bf1ee1286ef004420ce20d"
-    sha256 cellar: :any,                 sonoma:        "8ba4540b659b027320af96ee69fa1b0e8024e16b01592bdab55ce45a8ae13773"
-    sha256 cellar: :any,                 ventura:       "fe52d25dda4f1ee6594918e2b05cb8414448a382ad8eddbb414c6c5708df79af"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "7caca9c8444d8cf95915243e329bcc3c83c60bd3a5fdaf84ebfd3b2739982c0a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8d9b655b16f5d69e5406fcfce770d8965c06127f7935bcf5f7786656600fcb27"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe:   "aec56e6c00c9e2731b076fa474af1c72d38f930a31b42beafc7c605f3900f97c"
+    sha256 cellar: :any, arm64_sequoia: "aa6173766eadbec001d8668f241b9f538a0288b874f8f367d9d5c13b58cdcfbe"
+    sha256 cellar: :any, arm64_sonoma:  "05fff1a84df10fdf2aad256c09812dd2aee481ff4c1872a03533dcdc035ee735"
+    sha256 cellar: :any, sonoma:        "f83adaee52b346e32500691541cab06c8b798d67d9f33ceb26c6600028257b49"
+    sha256               arm64_linux:   "e8cb24e7983383547590a5bfd28b1e5e756c81bfc9041669f13f9a0b60f4cdd5"
+    sha256               x86_64_linux:  "2a0b0a024984e29d57386574b10009e6f6e3b452d32fad6687983fe37b4bdb4f"
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
   depends_on "cmake" => :build
-  depends_on "libtool" => :build
   depends_on "pkgconf" => :test
   depends_on "abseil"
   depends_on "c-ares"
@@ -39,10 +38,12 @@ class Grpc < Formula
   depends_on "protobuf"
   depends_on "re2"
 
-  uses_from_macos "zlib"
-
   on_macos do
     depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1100
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
   end
 
   fails_with :clang do
@@ -50,14 +51,18 @@ class Grpc < Formula
     cause "Requires C++17 features not yet implemented"
   end
 
+  # Apply open PR to support building grpc_cli with Protobuf 34+
+  # PR ref: https://github.com/grpc/grpc/pull/41775
+  patch do
+    url "https://github.com/grpc/grpc/commit/168b069208538e58a72bf46a6410f9ac0d24019a.patch?full_index=1"
+    sha256 "406731204b925c3ba57c8dc84da573b2755c3365cd59c1f0a04c1791f7db6565"
+  end
+
   def install
-    ENV.llvm_clang if OS.mac? && (DevelopmentTools.clang_build_version <= 1100)
     args = %W[
       -DCMAKE_CXX_STANDARD=17
-      -DCMAKE_CXX_STANDARD_REQUIRED=TRUE
       -DCMAKE_INSTALL_RPATH=#{rpath}
       -DBUILD_SHARED_LIBS=ON
-      -DgRPC_BUILD_TESTS=OFF
       -DgRPC_INSTALL=ON
       -DgRPC_ABSL_PROVIDER=package
       -DgRPC_CARES_PROVIDER=package
@@ -66,32 +71,38 @@ class Grpc < Formula
       -DgRPC_ZLIB_PROVIDER=package
       -DgRPC_RE2_PROVIDER=package
     ]
-    linker_flags = []
-    linker_flags += %w[-undefined dynamic_lookup] if OS.mac?
-    args << "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,#{linker_flags.join(",")}" if linker_flags.present?
-    system "cmake", "-S", ".", "-B", "_build", *args, *std_cmake_args
+    system "cmake", "-S", ".", "-B", "_build", "-DgRPC_BUILD_TESTS=OFF", *args, *std_cmake_args
     system "cmake", "--build", "_build"
     system "cmake", "--install", "_build"
 
+    # `grpc_cli` fails to build on Linux. In any case, it looks like it isn't meant to be installed.
+    # TODO: consider dropping this on macOS too.
+    odie "Remove grpc_cli!" if build.stable? && version >= "1.80.0"
+    return unless OS.mac?
+
     # The following are installed manually, so need to use CMAKE_*_LINKER_FLAGS
     # TODO: `grpc_cli` is a huge pain to install. Consider removing it.
-    linker_flags += %W[-rpath #{rpath} -rpath #{rpath(target: HOMEBREW_PREFIX/"lib")}]
-    args = %W[
+    linker_flags = %W[-rpath #{rpath}]
+    grpc_cli_args = %W[
       -DCMAKE_EXE_LINKER_FLAGS=-Wl,#{linker_flags.join(",")}
       -DCMAKE_SHARED_LINKER_FLAGS=-Wl,#{linker_flags.join(",")}
-      -DBUILD_SHARED_LIBS=ON
       -DgRPC_BUILD_TESTS=ON
-      -DgRPC_ABSL_PROVIDER=package
-      -DgRPC_CARES_PROVIDER=package
-      -DgRPC_PROTOBUF_PROVIDER=package
-      -DgRPC_SSL_PROVIDER=package
-      -DgRPC_ZLIB_PROVIDER=package
-      -DgRPC_RE2_PROVIDER=package
     ]
-    system "cmake", "-S", ".", "-B", "_build-grpc_cli", *args, *std_cmake_args
+    system "cmake", "-S", ".", "-B", "_build-grpc_cli", *args, *grpc_cli_args, *std_cmake_args
     system "cmake", "--build", "_build-grpc_cli", "--target", "grpc_cli"
-    bin.install "_build-grpc_cli/grpc_cli"
     lib.install (buildpath/"_build-grpc_cli").glob(shared_library("libgrpc++_test_config", "*"))
+    libexec.install "_build-grpc_cli/grpc_cli"
+    (bin/"grpc_cli").write <<~SHELL
+      #!/bin/bash
+      echo "WARNING: grpc_cli will be removed from grpc formula in version 1.80.0" >&2
+      exec "#{libexec}/grpc_cli" "$@"
+    SHELL
+  end
+
+  def caveats
+    on_macos do
+      "grpc_cli will be removed from grpc formula in 1.80.0"
+    end
   end
 
   test do
@@ -103,10 +114,15 @@ class Grpc < Formula
         return GRPC_STATUS_OK;
       }
     CPP
+
     ENV.prepend_path "PKG_CONFIG_PATH", Formula["openssl@3"].opt_lib/"pkgconfig"
+    ENV.prepend_path "PKG_CONFIG_PATH", Formula["zlib-ng-compat"].opt_lib/"pkgconfig" if OS.linux?
     flags = shell_output("pkgconf --cflags --libs libcares protobuf re2 grpc++").chomp.split
     system ENV.cc, "test.cpp", "-L#{Formula["abseil"].opt_lib}", *flags, "-o", "test"
     system "./test"
+
+    # We don't build `grpc_cli` on Linux.
+    return unless OS.mac?
 
     output = shell_output("#{bin}/grpc_cli ls localhost:#{free_port} 2>&1", 1)
     assert_match "Received an error when querying services endpoint.", output

@@ -1,18 +1,22 @@
 class Docfx < Formula
   desc "Tools for building and publishing API documentation for .NET projects"
   homepage "https://dotnet.github.io/docfx/"
-  url "https://github.com/dotnet/docfx/archive/refs/tags/v2.78.3.tar.gz"
-  sha256 "d97142ff71bd84e200e6d121f09f57d28379a0c9d12cb58f23badad22cc5c1b7"
+  url "https://github.com/dotnet/docfx/archive/refs/tags/v2.78.5.tar.gz"
+  sha256 "79f9e2c4bb8de2225d91a812a4e9d2cc71a8ed5613b3b4b2940d2a1d5db38793"
   license "MIT"
 
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
+
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "abb66975d8752e67e031dd9f7a29bf6c3e896f5b424815d5dc088436ecfd8a40"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f97bed8a6dde6e7a73af444d845a63027029dc9dcb604177f166c712dc871d7e"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "063a6dc7fb65e9d026503301fe0fe7b840d2e08b22015cb72773a9f7d92e4089"
-    sha256 cellar: :any_skip_relocation, ventura:       "b1792841cb03d32d705e997d97ce7cc5a1e92ed3293de92b84d7055c7cdc5d2f"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "c965e56932c64b38e3321027a5252e9ef6ca06aa8464e8d11def4b3cff09a609"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "41d6acfb56f458d4113e56c3a4b3368a29247d8ad4cf2caea98d2d7583fe38c8"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "523bb3a1bb69486ba96ed04a14cf5275a03eaee24666548664367c6ec751008b"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4285f72a9207278e027124dacd47cfca73a31697f318a55699b27f5a0f586231"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "a2ea16f5a93cabc62e5206f4b58fc4962f7193502983909d8d8706ff1011153e"
+    sha256 cellar: :any_skip_relocation, sonoma:        "74dd5ee74560f786debd8cbda5021834c5b2199b9890f385325de614f6be39be"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "ef38f65f11a369979e4a188ba5677a49831eac7d2c5160f65b80bd324d8ea38c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f703a20bc12c55ae2083dadc0364892ee5aa0bec6b34c53aa2758fa48cd0d762"
   end
 
   depends_on "node" => :build

@@ -1,22 +1,33 @@
 class Tbox < Formula
   desc "Glib-like multi-platform C library"
-  homepage "https://docs.tboox.org/"
-  url "https://github.com/tboox/tbox/archive/refs/tags/v1.7.6.tar.gz"
-  sha256 "2622de5473b8f2e94b800b86ff6ef4a535bc138c61c940c3ab84737bb94a126a"
+  homepage "https://github.com/tboox/tbox"
+  url "https://github.com/tboox/tbox/archive/refs/tags/v1.8.0.tar.gz"
+  sha256 "3b919f61055b75fe9cb3796477468f6fe7524801d429e6ac48933ddde9caafbd"
   license "Apache-2.0"
-  head "https://github.com/tboox/tbox.git", branch: "master"
+  head "https://github.com/tboox/tbox.git", branch: "dev"
+
+  livecheck do
+    url :stable
+    strategy :github_latest
+  end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c7947e45eec0391b3732ef28f7ef9fb0649eccee820613ed780cce5c80101a27"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6916f2df0cd8419ce91cabc711cdd273d2dde6efbc6ed3b9ca9e71c7d0eae20f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "dcdc2a92ff3cb0f2c8e4a05285f959fda6398b1862f5ec53114428dd13582560"
-    sha256 cellar: :any_skip_relocation, sonoma:        "70c1474ce62ec18b5a1b74e11a4ba24a4297231a6a142122880fcf30a331610e"
-    sha256 cellar: :any_skip_relocation, ventura:       "c88d154bbacefc84abe1e820ef715776da57469d8fd4016c25ef3c71ec17a129"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "06c79b38e83a3d7de103970975a89c6cc457180876338027035a55e2b599b598"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "42f219b5aba807212ce3b30463312c73d287031ce5f064e5f0b5f2006752cd2e"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "b2e54884a4e796cfcf80f0626c4709cfb2457a7f55322620087960dd3898dc43"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "191ed24e6b0df03c2f5d2de83f4fbae1f3471ef00ebd52e4fcad6cc8d49716e9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "78bc0408e71342dfbdd429ff61b6958bafb01dcb2fd243a29b52a5a1337e04d1"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d43414168d16c5dcc7b64f140cc6a6bdc1dff6284e6115267aea03d7a5982192"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "988c17883fa3616f79372ae9e8856ca03249c33a8feee0ccbcfceedcc3d33c01"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1cfd614c4c971f8b922e37ae936cb23625adc02c47c4f570587a5274ee357e26"
   end
 
   depends_on "xmake" => :build
+
+  # Fix an error for misleading indentation in wcscat.c
+  # PR ref: https://github.com/tboox/tbox/pull/309
+  patch do
+    url "https://github.com/tboox/tbox/commit/057b9247239ec930bb3b742b2c0ec96aec95fdc8.patch?full_index=1"
+    sha256 "d1384e7a285751777a73a24f1ca8de09bd1ff77f5e39049db6e6103220b3ae35"
+  end
 
   def install
     system "xmake", "config", "--charset=y", "--demo=n", "--small=y", "--xml=y"

@@ -1,9 +1,10 @@
 class Vips < Formula
   desc "Image processing library"
   homepage "https://github.com/libvips/libvips"
-  url "https://github.com/libvips/libvips/releases/download/v8.16.1/vips-8.16.1.tar.xz"
-  sha256 "d114d7c132ec5b45f116d654e17bb4af84561e3041183cd4bfd79abfb85cf724"
+  url "https://github.com/libvips/libvips/releases/download/v8.18.0/vips-8.18.0.tar.xz"
+  sha256 "b85ab92280c30d22f5c8fe2f68b809cddb7eaac437d8c33474475dac84ddc574"
   license "LGPL-2.1-or-later"
+  revision 2
 
   livecheck do
     url :stable
@@ -11,13 +12,13 @@ class Vips < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "a5c9ff3d50640de8bca6d78cb928d139c51999d484ea342cf864db3d86e27c97"
-    sha256 arm64_sonoma:  "013d0aab231b653fa3e2ee4251bda92c1e0eea1ed1a4baafbf444b3273a60375"
-    sha256 arm64_ventura: "47dc847d95d38abea41706e81d7009d57d176fa02b0c231513a032dcd3a23e16"
-    sha256 sonoma:        "362496337c54b8cce1b87f2835436ecbf328334ff7953417cf95b348123ac26f"
-    sha256 ventura:       "bbb669b3daf640b0e18306f6df0cdc3d27beb7fd7c20821d35cf2f09ac8579da"
-    sha256 arm64_linux:   "be574b0fe541e799244a7e34b1e5070c43d18f19ebc87f435eb4ca04ea772736"
-    sha256 x86_64_linux:  "5baeeb91cc40682eec26c3f06ba91a09e7c529e03ea2ff2314450791beb9f9fe"
+    rebuild 1
+    sha256 arm64_tahoe:   "689d37ea624080ec415c9c84a98a9f372367a3bba5bace54825df4cb63742a3a"
+    sha256 arm64_sequoia: "f657ae55aef6b377b4dc5c08fa6e23217ea80e2fd530d504df6ab427685f7754"
+    sha256 arm64_sonoma:  "0c734907acec118c93fe7a228c8ba399a58c5d0102af9e0befbfe45250539d15"
+    sha256 sonoma:        "c7a91bd09a35e5cd6ffee7870923cc78fbca06315e58951009b5d508dbece754"
+    sha256 arm64_linux:   "fe9c9c0f423ae78c7b6eb21a3b6421d6a897f47dc6b8afe874e1cf2330d83875"
+    sha256 x86_64_linux:  "29bb7ce9cf3af9949a67116db831534d7d5b9d12d0d190fb9ceae03da8d9c5a5"
   end
 
   depends_on "gobject-introspection" => :build
@@ -39,9 +40,11 @@ class Vips < Formula
   depends_on "libheif"
   depends_on "libimagequant"
   depends_on "libmatio"
+  depends_on "libpng"
+  depends_on "libraw"
   depends_on "librsvg"
-  depends_on "libspng"
   depends_on "libtiff"
+  depends_on "libultrahdr"
   depends_on "little-cms2"
   depends_on "mozjpeg"
   depends_on "openexr"
@@ -53,7 +56,10 @@ class Vips < Formula
 
   uses_from_macos "python" => :build
   uses_from_macos "expat"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     # mozjpeg needs to appear before libjpeg, otherwise it's not used

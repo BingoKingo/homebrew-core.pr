@@ -1,17 +1,17 @@
 class Smug < Formula
   desc "Automate your tmux workflow"
   homepage "https://github.com/ivaaaan/smug"
-  url "https://github.com/ivaaaan/smug/archive/refs/tags/v0.3.7.tar.gz"
-  sha256 "334c4f885674325dada3dc09c0a0608dc778af9e08377cb9afd3fc2dbf146be7"
+  url "https://github.com/ivaaaan/smug/archive/refs/tags/v0.3.17.tar.gz"
+  sha256 "9956b457b2cb6444844e1249aba49819d943663784953c9e1afd32c29acbc7ca"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c88e9162f9c3852ab55add3ef19c595488db86188d2e6ae3e999ba256a3d7281"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c88e9162f9c3852ab55add3ef19c595488db86188d2e6ae3e999ba256a3d7281"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c88e9162f9c3852ab55add3ef19c595488db86188d2e6ae3e999ba256a3d7281"
-    sha256 cellar: :any_skip_relocation, sonoma:        "7e13993f4a136cfeaf29ebd9fe8e0f0586e16fee26fe20b382b3a67310a0bf54"
-    sha256 cellar: :any_skip_relocation, ventura:       "7e13993f4a136cfeaf29ebd9fe8e0f0586e16fee26fe20b382b3a67310a0bf54"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "969f5675a11d65352c9bbf03ce0e0969886ba069c2ccfdad5ec83b853705e543"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "e5d28d8625885758a49473fa57d55727f3e28e19f399665fd23d861408bd88ff"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e5d28d8625885758a49473fa57d55727f3e28e19f399665fd23d861408bd88ff"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "e5d28d8625885758a49473fa57d55727f3e28e19f399665fd23d861408bd88ff"
+    sha256 cellar: :any_skip_relocation, sonoma:        "dd25986b3087e0709b4ce46ed8173b78cc3e64c82a95744fcf5e5f8d3d7227d5"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0ad223a17e1d55f9d4110162ac9c92d72f7a02dd17190100a7db61cc57a5736f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "0513b7c205b7126c09ceb741ad7f723820655c25c4fb57a6173a3429ded2d9a0"
   end
 
   depends_on "go" => :build

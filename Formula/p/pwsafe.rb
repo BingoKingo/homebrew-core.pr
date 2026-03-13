@@ -11,8 +11,11 @@ class Pwsafe < Formula
     regex(/href=.*?pwsafe[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
     rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:    "294f8a817d0eee693be29e24ea04c118f50a51d5f5d6c8531e994abf731f9041"
     sha256 cellar: :any,                 arm64_sequoia:  "fcd7dd6ac6b4755c4f6e165e8fad94838cb260a07b47a890f1f1e54ab6d04e3d"
     sha256 cellar: :any,                 arm64_sonoma:   "30fb31e5db711f3481af149a41ddc4dfe3957c0d94c4ee68ca7285aee57f6b19"
     sha256 cellar: :any,                 arm64_ventura:  "f2f69ecce57634d5a3911badcea213810fb8a25b7b2a242e7f342980760703d3"
@@ -60,13 +63,8 @@ class Pwsafe < Formula
     test_account_name = "testing"
     test_account_pass = "sg1rIWHL?WTOV=d#q~DmxiQq%_j-$f__U7EU"
 
-    resource("test-pwsafe-db").stage do
-      Utils.popen(
-        "#{bin}/pwsafe -f test.dat -p #{test_account_name}", "r+"
-      ) do |pipe|
-        pipe.puts test_db_passphrase
-        assert_match(/^#{Regexp.escape(test_account_pass)}$/, pipe.read)
-      end
-    end
+    resource("test-pwsafe-db").stage(testpath)
+    output = pipe_output("#{bin}/pwsafe -f test.dat -p #{test_account_name}", test_db_passphrase, 0)
+    assert_match(/^#{Regexp.escape(test_account_pass)}$/, output)
   end
 end

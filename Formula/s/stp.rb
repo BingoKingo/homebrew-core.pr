@@ -2,7 +2,7 @@ class Stp < Formula
   desc "Simple Theorem Prover, an efficient SMT solver for bitvectors"
   homepage "https://stp.github.io/"
   license "MIT"
-  revision 4
+  revision 8
   head "https://github.com/stp/stp.git", branch: "master"
 
   stable do
@@ -22,13 +22,12 @@ class Stp < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "14273492604bc38924086ea460c7aae0ec9d9443124f253d41ab69649ae348e8"
-    sha256 cellar: :any,                 arm64_sonoma:  "3a9ce2263d91eed3e8f6205e69b327f613dd767065ebed03c329ac26de7fc9be"
-    sha256 cellar: :any,                 arm64_ventura: "1627b2244a8c9510b46b0fdcfcaffdb5f55c21a528046a1988df5c2e4a10a33c"
-    sha256 cellar: :any,                 sonoma:        "5160e4ed8537ddd8646866b7f0ddf4722f0be010b898e1708d6f22c974c9a866"
-    sha256 cellar: :any,                 ventura:       "a3c9c4d00398271ec389ae631372e280d806dbdd6146e28d73417f71e7cd2bfe"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b3c927ba2276333d15e41be785894b0a65d1513f8e1932839564efc164fc6292"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9347d3517513e8d028b7fc993db150bc9d4751e1e450e97035339c007c4e0bd8"
+    sha256 cellar: :any,                 arm64_tahoe:   "aa08a02cc2bf05e0272644b9568aa861e7272a0368c98066c95a75877d2c303a"
+    sha256 cellar: :any,                 arm64_sequoia: "b3d18ec4ee1bfdda98b50cf653a3db4e76b83a88952bf8be3273ea50793dac9e"
+    sha256 cellar: :any,                 arm64_sonoma:  "30a4268486f368e5d2d3b232812afeba87b643f5eeca6f9fe3db6bc689ec6705"
+    sha256 cellar: :any,                 sonoma:        "ee33974fa9d80245ee1f586d6a7321a46d46ccbd8186aa57fa8eab6c17ce2bd4"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "5d349289acbbeba2c7f4184598d7fe1ddd974c3c34a1ffb1d3ee3f224be8ade8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7e8b01d46340707274e6cff8df7c1510d88f7f8ab42ae41721af62682fb52c79"
   end
 
   # stp refuses to build with system bison and flex
@@ -39,7 +38,7 @@ class Stp < Formula
   depends_on "cryptominisat"
   depends_on "gmp"
   depends_on "minisat"
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   uses_from_macos "perl"
 
@@ -50,7 +49,7 @@ class Stp < Formula
   end
 
   def install
-    python = "python3.13"
+    python = "python3.14"
     site_packages = prefix/Language::Python.site_packages(python)
     site_packages.mkpath
     inreplace "lib/Util/GitSHA1.cpp.in", "@CMAKE_CXX_COMPILER@", ENV.cxx
@@ -112,6 +111,6 @@ class Stp < Formula
       print(s.check())
     PYTHON
 
-    assert_equal "True\n", shell_output("python3.13 test.py")
+    assert_equal "True\n", shell_output("python3.14 test.py")
   end
 end

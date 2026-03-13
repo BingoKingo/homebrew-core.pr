@@ -1,18 +1,17 @@
 class Ugrep < Formula
   desc "Ultra fast grep with query UI, fuzzy search, archive search, and more"
   homepage "https://ugrep.com/"
-  url "https://github.com/Genivia/ugrep/archive/refs/tags/v7.4.3.tar.gz"
-  sha256 "105b495f4d2773802b5a71e2375ba07bca4e67fd6837e5fc1d00be5cf4938f16"
+  url "https://github.com/Genivia/ugrep/archive/refs/tags/v7.6.0.tar.gz"
+  sha256 "afe88bdf4062239df240aaa2b4c788bb4282f554dee0982010bb3d36ef29e1c0"
   license "BSD-3-Clause"
 
   bottle do
-    sha256                               arm64_sequoia: "e451587ccdfcc0a15454bebfca1a7f2cd0fc12a78e3491e443f1dc58372566f5"
-    sha256                               arm64_sonoma:  "7d4b883ee11da8b25b2f61ec5d026dbe77674339782064d133c1d6f1eee1d6ee"
-    sha256                               arm64_ventura: "1333f5203fad9861ad274d1889da6f49c962dfe321b9d6050ea10c8f32471a1a"
-    sha256                               sonoma:        "eee3d694c71c94412d2ca08f1feee134af9b47556cf6bf7a9d2bda93c7b7df26"
-    sha256                               ventura:       "d35a6c5b6af5957056b62c3a7a50e0bcdc9b95989bedbdbb36426829c85b7bdc"
-    sha256                               arm64_linux:   "d300b60a9392d49aefff176bc28bbbd9d40bdd98c932e52d20a59827c61d891c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ebea2ef0eec2b79f8a62cec80e50d32b27df9c461cb0222138943e58f200e70f"
+    sha256 arm64_tahoe:   "6f47d110903e10447c9ad8a00908f6a830722365ca4a91efaf52cff54ec0ee3e"
+    sha256 arm64_sequoia: "2b49e49e27a3b0164cc35ff34313ed647d7e8b2bbbb67ee5ef66a7c9350534a8"
+    sha256 arm64_sonoma:  "5dcbd6a3036d2ae8d757969ea76f9cacee9c8b5689af8519a4dc804d41df06f4"
+    sha256 sonoma:        "2c38a20711410770d5315f6c27bbe1b435f6ce04e34c15428b7057ba3e510eab"
+    sha256 arm64_linux:   "0aae020a5a0fe79bf62c1fa7ffe6cb1698f0060691c71bc99a367a845f56f0f0"
+    sha256 x86_64_linux:  "6cf97fe3b33ef1ef4f9ac70cb54085e66f462c4060eb35a0c16cbff7777689f4"
   end
 
   depends_on "brotli"
@@ -22,7 +21,10 @@ class Ugrep < Formula
   depends_on "zstd"
 
   uses_from_macos "bzip2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./configure", "--enable-color",

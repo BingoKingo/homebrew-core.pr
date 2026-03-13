@@ -13,16 +13,15 @@ class LlvmAT16 < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia:  "e1ce859ba79150008eaa5cab5aa6cd78da4e4955627c00c6f0f2b48779c379bc"
-    sha256 cellar: :any,                 arm64_sonoma:   "e799fe5056da9a07d79474f7a7290e0a465474eb004cfc614775f290197e10e5"
-    sha256 cellar: :any,                 arm64_ventura:  "1814e78f92d133918a597c4f7c30fef32f3665989951c1cefdda331eb4402ed1"
-    sha256 cellar: :any,                 arm64_monterey: "37035d480d967046905bc5e1cb71b96310a3096b4b066e7542c22cccc4abaf3f"
-    sha256 cellar: :any,                 sequoia:        "631414eb9a75735243d652e4efe8a0fd73eee014d3aa904f614ec0f3a216c988"
-    sha256 cellar: :any,                 sonoma:         "16844a4822d3afecf5783a368abf980636d8a3a110100ca4e8b06de383a44b56"
-    sha256 cellar: :any,                 ventura:        "eec48597281d704edb178eccb4180ffaba79418ff7e478b138097a1a9b3aaa62"
-    sha256 cellar: :any,                 monterey:       "332da3b9d1d8d75a82c77fc84802f72ba2e8f39db4728df3d4fa7c1dfb5bef08"
-    sha256 cellar: :any_skip_relocation, arm64_linux:    "51b310d34b3d1c14a603cce73761c682d747e42188fbb6a96510d54d4006d2ab"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8dc1596bb9da879a127448ef1811b6c093348139f0408c2f9b80cd55cf26ce4b"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "5e7fbf091d4da41cf9aca178cbb32549f290c2792af2efb24586f42809f95f5a"
+    sha256 cellar: :any,                 arm64_sequoia: "72e974bb3fc659063c90a66cf6b22c18b0d861230fed5b3e020e1c47a6a9a23e"
+    sha256 cellar: :any,                 arm64_sonoma:  "8f12acd71d106e55c0148324222e24b7dddc3810e8760ad14e301484888c180e"
+    sha256 cellar: :any,                 tahoe:         "733a0105a82360673318f3eb2f1d9414b5be983398be136562b1f764d4160ec9"
+    sha256 cellar: :any,                 sequoia:       "e240f9c95cc324d6b36296ac05e0e6993ef33a14b78aa8bb3e6345f85862918d"
+    sha256 cellar: :any,                 sonoma:        "cf5af69ab448081f9fd83eeb25572eb5796508196e28325181a6c1bcda0a2bbc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "c0e0ead92d47d078643b89d944d97a036695b0783e950b37ec8d4e6123a7ca10"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5ebc8a0e2d3d18b121568cec215e3d2a65b0a5f52072d54c92ac139fea8f08e2"
   end
 
   # Clang cannot find system headers if Xcode CLT is not installed
@@ -39,14 +38,18 @@ class LlvmAT16 < Formula
   depends_on "zstd"
 
   uses_from_macos "libedit"
-  uses_from_macos "libffi", since: :catalina
+  uses_from_macos "libffi"
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
+
+  on_sequoia do
+    depends_on xcode: ["16.4", :build]
+  end
 
   on_linux do
     depends_on "pkgconf" => :build
     depends_on "binutils" # needed for gold
     depends_on "elfutils" # openmp requires <gelf.h>
+    depends_on "zlib-ng-compat"
   end
 
   # Fixes https://github.com/mesonbuild/meson/issues/11642
@@ -96,9 +99,6 @@ class LlvmAT16 < Formula
                              .map { |py| py.delete_prefix("python@") }
     site_packages = Language::Python.site_packages(python3).delete_prefix("lib/")
 
-    # Apple's libstdc++ is too old to build LLVM
-    ENV.libcxx if ENV.compiler == :clang
-
     # compiler-rt has some iOS simulator features that require i386 symbols
     # I'm assuming the rest of clang needs support too for 32-bit compilation
     # to work correctly, but if not, perhaps universal binaries could be
@@ -143,10 +143,8 @@ class LlvmAT16 < Formula
 
     if OS.mac?
       macos_sdk = MacOS.sdk_path_if_needed
-      if MacOS.version >= :catalina
-        args << "-DFFI_INCLUDE_DIR=#{macos_sdk}/usr/include/ffi"
-        args << "-DFFI_LIBRARY_DIR=#{macos_sdk}/usr/lib"
-      end
+      args << "-DFFI_INCLUDE_DIR=#{macos_sdk}/usr/include/ffi"
+      args << "-DFFI_LIBRARY_DIR=#{macos_sdk}/usr/lib"
 
       args << "-DLLVM_BUILD_LLVM_C_DYLIB=ON"
       args << "-DLLVM_ENABLE_LIBCXX=ON"
@@ -154,6 +152,9 @@ class LlvmAT16 < Formula
       args << "-DLIBCXXABI_INSTALL_LIBRARY_DIR=#{lib}/c++"
       args << "-DDEFAULT_SYSROOT=#{macos_sdk}" if macos_sdk
       runtimes_cmake_args << "-DCMAKE_INSTALL_RPATH=#{loader_path}"
+      if DevelopmentTools.ld64_version >= "1221.4"
+        runtimes_cmake_args << "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-ld_classic"
+      end
 
       # Disable builds for OSes not supported by the CLT SDK.
       clt_sdk_support_flags = %w[I WATCH TV].map { |os| "-DCOMPILER_RT_ENABLE_#{os}OS=OFF" }

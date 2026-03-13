@@ -1,8 +1,8 @@
 class ImmichGo < Formula
   desc "Alternative to the official immich-CLI command written in Go"
   homepage "https://github.com/simulot/immich-go"
-  url "https://github.com/simulot/immich-go/archive/refs/tags/v0.26.3.tar.gz"
-  sha256 "092d895a5742a97519f5e16bc926bfcf5ac173716bea37a69c7fffe761dd40a3"
+  url "https://github.com/simulot/immich-go/archive/refs/tags/v0.31.0.tar.gz"
+  sha256 "b24fd12f28d9691853cae1f48ff846b33794a36a4d356912060d019314789fd4"
   license "AGPL-3.0-only"
   head "https://github.com/simulot/immich-go.git", branch: "main"
 
@@ -12,12 +12,13 @@ class ImmichGo < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e28370eb8527ec3d1c6c61e081d6d44269af7af988bceb1faffa15bf59b0e7cf"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "190a80a90e8f5118a96ca3ad1443390ee86c7310f7e72e741bef407e7ef52601"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "25ae75d3e393aff1d29d10e935d672838d5630be8eac2e0938bde18db5b4d12e"
-    sha256 cellar: :any_skip_relocation, sonoma:        "873e480f627c6d7cb51af88120458b66c73c7b334089082d773ad78f791e68bf"
-    sha256 cellar: :any_skip_relocation, ventura:       "9a4084012fb83640e41bfe2ab27e08f46d3976aac14dda930998197645b11903"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "44d454bdfebf515a6704fccee080174a0a400448e3ecfd266da337eb146c8d64"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "8cd369ad88194accffa3aaa3b0d3c269daf665470cab90169b9e4f087e9b8354"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8cd369ad88194accffa3aaa3b0d3c269daf665470cab90169b9e4f087e9b8354"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8cd369ad88194accffa3aaa3b0d3c269daf665470cab90169b9e4f087e9b8354"
+    sha256 cellar: :any_skip_relocation, sonoma:        "b1e766326a4a04710cf92ae2272fe40d0a512c56af09551a75efa8bd6afd13b6"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7d4ace8aebe26da57ac040fb5d668d9ce20168cabe57b60703ec490e33730acd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "00db9a4e128716bb2d8eb4d0aa8acb5da9d57c95a0900b6c1cfb21b1ddb9ac48"
   end
 
   depends_on "go" => :build
@@ -26,7 +27,7 @@ class ImmichGo < Formula
     ldflags = "-s -w -X github.com/simulot/immich-go/app.Version=#{version}"
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"immich-go", "completion")
+    generate_completions_from_executable(bin/"immich-go", shell_parameter_format: :cobra)
   end
 
   test do

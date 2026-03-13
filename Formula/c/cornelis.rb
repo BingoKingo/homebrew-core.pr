@@ -1,19 +1,19 @@
 class Cornelis < Formula
   desc "Neovim support for Agda"
   homepage "https://github.com/agda/cornelis"
-  url "https://github.com/agda/cornelis/archive/refs/tags/v2.7.1.tar.gz"
-  sha256 "b75d20ecf50b7a87108d9a9e343c863c2cf6fbf51323954827738ddc0081eff3"
+  url "https://github.com/agda/cornelis/archive/refs/tags/v2.8.0.tar.gz"
+  sha256 "41787428319dbde15b51ce427451d4a48f14d54a7c42902d004458e232ca3022"
   license "BSD-3-Clause"
   head "https://github.com/agda/cornelis.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "5469975994b43e45788ff4b27058dc3284fa90f63be85001603abc5228dd76d3"
-    sha256 cellar: :any,                 arm64_sonoma:  "845f96549a6d6c2937bedf9fb4031107f57b6b101275566702185b1625cfb733"
-    sha256 cellar: :any,                 arm64_ventura: "410c0032ecb66fb98642251a207bfad302f466c1334f317f02d641a3e353f9c8"
-    sha256 cellar: :any,                 sonoma:        "568be9e2acb19617e368400204f1664ed5b2839e6c96bf6adad497dd602b9511"
-    sha256 cellar: :any,                 ventura:       "218969d2f9bd9584c280135fd53704646386bcac869f77ffad1586c458095547"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "5323616822e8de7e0390a4f8ad65399e27810da6f12587cffabae1896663b712"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b9f0f3d6779acf8d5586343012554985bf180d316cdf9e58874e0a0b02913ec3"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "3ab116742d0b8c90533803a535510040520b1a90d8e0b68e9a9d10fc6ca065af"
+    sha256 cellar: :any,                 arm64_sequoia: "f539829b0e192eb0891a00b8a200ccf0e6c11002499662de544535214dbc3f2d"
+    sha256 cellar: :any,                 arm64_sonoma:  "4a907e326af68978aa8c5a1bca6bc3f29557e7d94a5397a0ceff6b5a1e63468b"
+    sha256 cellar: :any,                 sonoma:        "05c0bca472d34b3ab32a48d4e67005584e2be329c93996817029724ffb857547"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "681e3180af2e1f4bd4c88f2ecaf47b73c5cf3999bfbe61fe9497bc3e618ebef0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "26837b1b79f08ab9ed366fd425cabec1d927cea8ba6d3355480c8e324be9476f"
   end
 
   depends_on "cabal-install" => :build
@@ -22,12 +22,18 @@ class Cornelis < Formula
   depends_on "gmp"
 
   uses_from_macos "libffi"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
+    # Workaround to build aeson with GHC 9.14, https://github.com/haskell/aeson/issues/1155
+    args = ["--allow-newer=base,containers,template-haskell"]
+
     system "hpack"
     system "cabal", "v2-update"
-    system "cabal", "v2-install", ".", *std_cabal_v2_args
+    system "cabal", "v2-install", *args, *std_cabal_v2_args
   end
 
   test do

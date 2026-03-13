@@ -1,8 +1,8 @@
 class Swc < Formula
   desc "Super-fast Rust-based JavaScript/TypeScript compiler"
   homepage "https://swc.rs"
-  url "https://github.com/swc-project/swc/archive/refs/tags/v1.11.24.tar.gz"
-  sha256 "115386a63aa890df8ecee6dc3daaeced5baabc0b1e7620b591836ed7586b9cf0"
+  url "https://github.com/swc-project/swc/archive/refs/tags/v1.15.18.tar.gz"
+  sha256 "fd7ad6c44cccfe7ad1129ac1e88c0a09bab24b704ef418d92e3affa0fe00b3ae"
   license "Apache-2.0"
   head "https://github.com/swc-project/swc.git", branch: "main"
 
@@ -12,13 +12,12 @@ class Swc < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8c9d865dc01a5e39977ba398eb872ee5d13745f9c1f880cc72bd88840242c493"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "8b7e4bd74754cbdee2361cffcd506b320dc7320ee54f8022563816177e28b5df"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "7d19c4c3437a45752f9faa279e8abb533f4455e57da47239b3408ed0e71d0f28"
-    sha256 cellar: :any_skip_relocation, sonoma:        "8d49f0175024e7ce7a6e080a99259e1ec28315bd8887bb276c2dc726dabce56d"
-    sha256 cellar: :any_skip_relocation, ventura:       "1a545816ed53c64cf03a0a69d045714db9acf9b275d4be01b4da76b60065e7b9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "ed36f1ecc1d548e48229f0fb7bb45f2a35c837fe0d3cb3268ed3c05e6341abf4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4e300f564a9d808e054c0070abfec5da9ecc2034412bcc201b7b94bd060fb7b2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "a2849922031c85346b7fb90400e42cd959fa04d639dd6cf492d1f312d7726a15"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fb8a0495924d162336a1f76b9180621821476bd29422d933d5e48c094e9fff6c"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "6ae00de6d60a1dabe51934c63682b5fe60b6547745ebce32f0e0c92a92f79d08"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d4a2d46631afdcef21925b755b4dbdc7f3ebc9b62d59a6cb7a2a0edb949e6478"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "589760a048b5a6a4c6a62172aa55b0a8092e9ce2b17f8c817bb11cf54c35f6c3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "7d2633b1ca374615031a159790957765acbcd50ea4a4b48c504229626efb094c"
   end
 
   depends_on "rust" => :build
@@ -38,7 +37,7 @@ class Swc < Formula
     system bin/"swc", "compile", "test.js", "--out-file", "test.out.js"
     assert_path_exists testpath/"test.out.js"
 
-    output = shell_output("#{bin}/swc lint 2>&1", 101)
+    output = shell_output("#{bin}/swc lint 2>&1", 134)
     assert_match "Lint command is not yet implemented", output
   end
 end

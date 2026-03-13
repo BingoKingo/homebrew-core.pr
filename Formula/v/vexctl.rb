@@ -1,18 +1,18 @@
 class Vexctl < Formula
   desc "Tool to create, transform and attest VEX metadata"
   homepage "https://openssf.org/projects/openvex/"
-  url "https://github.com/openvex/vexctl/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "5a5904448ef1bf11bd8a165d737acc88afd9799618f6583c15cee5d99dd58e17"
+  url "https://github.com/openvex/vexctl/archive/refs/tags/v0.4.1.tar.gz"
+  sha256 "ed77b48de3ead71af608fb3ae5e5f4e19647d87fe9dfe38d4ffce4ee1c1e7c3b"
   license "Apache-2.0"
 
   bottle do
     rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "c8d3737e23f7d11f5fe749b5524f7f92a36654592f53caf22e81281ffe6614e4"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "c8d3737e23f7d11f5fe749b5524f7f92a36654592f53caf22e81281ffe6614e4"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c8d3737e23f7d11f5fe749b5524f7f92a36654592f53caf22e81281ffe6614e4"
-    sha256 cellar: :any_skip_relocation, sonoma:        "6b46198d549d57cb6d165dd4f4009308fd7ba5373e68ea3e6551ebbb7c3e5d1d"
-    sha256 cellar: :any_skip_relocation, ventura:       "cdfd7239a7588664765926a8a5e45dfbc50271017c625701c07d79ab78e67c2a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9129dd69cff712abe1ada640119124ac040263e31cb8ba1365e6e2edd54b7e5a"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f2c5b287cf8b296ef3e6d85b38212179eebea16f070bfce1baea6ac0d119e7cf"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f2c5b287cf8b296ef3e6d85b38212179eebea16f070bfce1baea6ac0d119e7cf"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f2c5b287cf8b296ef3e6d85b38212179eebea16f070bfce1baea6ac0d119e7cf"
+    sha256 cellar: :any_skip_relocation, sonoma:        "dcae34a87491e8efef1aa942274facd1fc985f36e76cf6b9671e4b0d66738335"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "1adeeacdaf6ad3a33abafc10856dc356bfab928a5a18de8cfa69a015ad18f7ff"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b9053ff8fcb65e7f520118e1d2a02dd377a0a9951b5dc3f4a667e640e81eb919"
   end
 
   depends_on "go" => :build
@@ -28,7 +28,7 @@ class Vexctl < Formula
 
     system "go", "build", *std_go_args(ldflags:)
 
-    generate_completions_from_executable(bin/"vexctl", "completion")
+    generate_completions_from_executable(bin/"vexctl", shell_parameter_format: :cobra)
   end
 
   test do

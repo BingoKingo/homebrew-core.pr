@@ -1,9 +1,10 @@
 class S2geometry < Formula
   desc "Computational geometry and spatial indexing on the sphere"
   homepage "https://github.com/google/s2geometry"
-  url "https://github.com/google/s2geometry/archive/refs/tags/v0.12.0.tar.gz"
-  sha256 "c09ec751c3043965a0d441e046a73c456c995e6063439a72290f661c1054d611"
+  url "https://github.com/google/s2geometry/archive/refs/tags/v0.13.1.tar.gz"
+  sha256 "df001f8352dce083a87b74646bcbc65fbbcd039646bda5b64adfda1e2ea32d47"
   license "Apache-2.0"
+  revision 1
 
   livecheck do
     url :homepage
@@ -11,29 +12,29 @@ class S2geometry < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "42509d7410e496dac516d3860660972ee3891b85539a709f552250cb67413b85"
-    sha256 cellar: :any,                 arm64_sonoma:  "497a78de8feeecc24682e19e09810b564706648ff28ee2b80eb5c27fbf1d6b1e"
-    sha256 cellar: :any,                 arm64_ventura: "13d05f9f88513c578e73b063b23f9f6a9df5174531f0217f7ae991677179ad38"
-    sha256 cellar: :any,                 sonoma:        "c88b904bd6591a0f13524e1e591eb5f8983f852c753636e7d84a516b9a1549eb"
-    sha256 cellar: :any,                 ventura:       "df84f8602037761b8285f3124a9e46648ba0d71bfa24b794ac3a6d740db0454d"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "10b96872a76fef5f47caf8bf94d8f92536927ce44256d9c7d216a4593b1903d3"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "669ca453ee0a13bf1d08e201a35633dd38bf95844069f46bf61d116640b3f25f"
+    sha256 cellar: :any,                 arm64_tahoe:   "8f79d0c4a802ebb6534abcf48d19ff6b23e7b3dd2f00bacab751be2795b17ee5"
+    sha256 cellar: :any,                 arm64_sequoia: "97278dc633347c47bdb0ab98b766f3e0d878ddb69ab42d07deae9d28222b7c0f"
+    sha256 cellar: :any,                 arm64_sonoma:  "04808ef92b7db6eb5f653296206f4e228136db79fea36ca811ea31d7e3a3b582"
+    sha256 cellar: :any,                 sonoma:        "e619f78302f4cf5ec4a2977fc7a1d7f3a03703a7f0d64ffd15190554afaa5b26"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "0134241899aea80e57425a5acc31198a3d43722551e523186ef9693786ba7c3a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "781a1286862396a5a038f772d972654fb61087bf9f7d1a872a6d05bcb4982bbe"
   end
 
   depends_on "cmake" => [:build, :test]
   depends_on "abseil"
-  depends_on "glog"
   depends_on "openssl@3"
 
   def install
+    # Keep C++ standard in sync with `abseil.rb`.
     args = %W[
-      -DOPENSSL_ROOT_DIR=#{Formula["openssl@3"].opt_prefix}
       -DBUILD_TESTS=OFF
-      -DWITH_GFLAGS=1
-      -DWITH_GLOG=1
       -DCMAKE_CXX_STANDARD=17
-      -DCMAKE_CXX_STANDARD_REQUIRED=TRUE
+      -DOPENSSL_ROOT_DIR=#{Formula["openssl@3"].opt_prefix}
     ]
+
+    # Fix missing include of unaligned.h
+    # Issue ref: https://github.com/google/s2geometry/issues/481
+    inreplace "CMakeLists.txt", "src/s2/util/gtl/requires.h", "\\0 src/s2/util/gtl/unaligned.h"
 
     system "cmake", "-S", ".", "-B", "build/shared", *args, *std_cmake_args
     system "cmake", "--build", "build/shared"

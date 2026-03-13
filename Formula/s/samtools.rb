@@ -1,23 +1,27 @@
 class Samtools < Formula
   desc "Tools for manipulating next-generation sequencing data"
   homepage "https://www.htslib.org/"
-  url "https://github.com/samtools/samtools/releases/download/1.22/samtools-1.22.tar.bz2"
-  sha256 "4911d01720f246cb97855870b410bbe4d2c2fd7fbf823ea0f7daf0f32545819d"
+  url "https://github.com/samtools/samtools/releases/download/1.23/samtools-1.23.tar.bz2"
+  sha256 "f228db57d25b724ea26fe55c1c91529f084ef564888865fb190dd87bd04ee74c"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "220446fda87460adab2eb115c4544317ac4efbd4fde226b912910500953de9f1"
-    sha256 cellar: :any,                 arm64_sonoma:  "2e5e85e52f71cc46f3a13deb0f1846fb878f24aec58f820d92f0ceb7214b6a11"
-    sha256 cellar: :any,                 arm64_ventura: "e22d88a95b2c57696e3d044023e8361a88e318815b541303b9306a33fce8c5fc"
-    sha256 cellar: :any,                 sonoma:        "ac88a58eed05adb2d30fcaec291456cdcd4ec4389ce6849e010440447279dd3e"
-    sha256 cellar: :any,                 ventura:       "585ae2c4165a6eb58e5ae1743fb0b2d0cdac37f0d49ef90ff1dad7a401c0a95b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "58b35560dde7b56963008cb3339d6636013058fc456b7bdb2115875675892a01"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cc61d5a65fc6f459e390a0b39bd2d3cb9b4d0fd8c074d7d0e059cd165d44ade4"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "9dace01b0700008a8d7e35976ec194476446b50f04014dfedffadb670e948622"
+    sha256 cellar: :any,                 arm64_sequoia: "285ddbc415e9fb2b4a1f2155fa36bfbee269ac2bb6020bb1b5314ef4247fe6c9"
+    sha256 cellar: :any,                 arm64_sonoma:  "3738129dfce564701c950ecd2102e0969b27bacb6aa08c0f5604c6c330951334"
+    sha256 cellar: :any,                 sonoma:        "95e4b92fac0ea9636086e37185ea9297f8a97924f2ee523ea1c3916ac561ac25"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b4ece12543cbdba33b6409698a3683f2148d6e35f27a19cda26f06a7a56181d2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "47c382f55855c466ff8283fbfd4f6f7571de3ae0cf9f1200499feab9d4710397"
   end
 
   depends_on "htslib"
 
   uses_from_macos "ncurses"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     system "./configure", "--prefix=#{prefix}",

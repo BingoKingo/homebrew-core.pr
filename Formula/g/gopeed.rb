@@ -1,19 +1,18 @@
 class Gopeed < Formula
   desc "Modern download manager that supports all platform"
   homepage "https://gopeed.com"
-  url "https://github.com/GopeedLab/gopeed/archive/refs/tags/v1.7.0.tar.gz"
-  sha256 "f7e0655bca4e414d1da26120b95ef2239556e9f23494fd76d23671264185cd03"
+  url "https://github.com/GopeedLab/gopeed/archive/refs/tags/v1.9.2.tar.gz"
+  sha256 "6fe338f933fc361cd924b0e14a4973532461520bb5664520928e0c4e34f0f5c0"
   license "GPL-3.0-or-later"
   head "https://github.com/GopeedLab/gopeed.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4d7814d33cb904f6c66f1ae69da92e1313b3e96d219d826331cf216ea19aba66"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "5f85ee328d204d1c55a2e5e77936070411ab0bfc2b5e2db56f73f8d9347f8710"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "6b2bbd886162fb0bfa92c820ce2e9655d6dd27f32528fd44f2707e920a1667c8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "09b0663cff83aa10bb35ce61b51ed1942e715e8458a3130df0b02e341da7b863"
-    sha256 cellar: :any_skip_relocation, ventura:       "07e9096aa3331e0f493d04dacad834fbcca174f3bfe55c74325415977a96c2c2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "3df97559f7bc80ec58370ea57eb310d67ab022b87423f30e5725597ea0b19dd7"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "04210ac095702086a532bfaa1a3d2c2f21ae52c66d28903f9ae97f0e21c53371"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "63bd804cb83bf64f439045dd44b7214f218d20a67f7a3724c182be2b12786f02"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "2d4d5b4f4605d55a802506bf26f905d1d6f3892edc696fc6bbf25d2ace2ef155"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bd86636304d11d4b81e3da4a0106def1592b1974dde20254295ee430c854acc7"
+    sha256 cellar: :any_skip_relocation, sonoma:        "d6436da8681fd9f1b68803fc3a51a0f0d6400680ced289886b2c5032e2866078"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a2a74a19f1cbab6f1ae81ea5b89395e03982d90430b954b0eca8115b2bac19e5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "343207f3b95eb3fd5f8eacffd3bc4a9f89f9441671173a87c740d48b3784439e"
   end
 
   depends_on "go" => :build

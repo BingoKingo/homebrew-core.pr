@@ -1,25 +1,35 @@
 class Fastga < Formula
   desc "Pairwise whole genome aligner"
   homepage "https://github.com/thegenemyers/FASTGA"
-  url "https://github.com/thegenemyers/FASTGA/archive/refs/tags/v1.2.tar.gz"
-  sha256 "35a264fc1f6c7db35d99879bebca91a32173bf835393e7311c082efb633b87da"
   license all_of: ["BSD-3-Clause", "MIT"]
   head "https://github.com/thegenemyers/FASTGA.git", branch: "main"
 
-  bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6cf6fbdcd9c0ddbfb7392104717c9d700919b919f96569839b69488b1c18771d"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1e41f37ccfc620233339a799213045969c5a6688eec7ed821d8a85e7b70c340a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "dc86a1bb437e55671025d7456ff8ed5628fa7bd0e8e2dd15b574d30a67e440ba"
-    sha256 cellar: :any_skip_relocation, sonoma:        "b687ad3af1c60cd453831a3a77facbd5ee53c86b13fa6ae875c9ff065ce0943f"
-    sha256 cellar: :any_skip_relocation, ventura:       "2b09e2caed16aff625d29878bbd8ce07c8e3902e5d54bf6bb4a8a76cf53aaa37"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "711a756168779b81e9024372ada2cda4bae5dc7b9c9b6a638a02e211b311bedc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c752402bb321d261b1e46d368eed6459a3d59ac3eb3000cc5dafbb6857e234c8"
+  stable do
+    url "https://github.com/thegenemyers/FASTGA/archive/refs/tags/v1.5.tar.gz"
+    sha256 "c12e8f54ff69f76e872a8878a5a2e68c4a7bce18f91e246d2e06b21871477a0e"
+
+    # Backport fix for bad free()
+    patch do
+      url "https://github.com/thegenemyers/FASTGA/commit/6de7b91e6ee92ff3973af63255e51f08d9f77e35.patch?full_index=1"
+      sha256 "3cf4c88286b7fe37fa3305c819b80aacb094da97cb30b8c227c62b7b79c0d1b0"
+    end
   end
 
-  uses_from_macos "zlib"
+  bottle do
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "dc7e3ef73e130726949e4e4634d3bd7aa78d1fb22c5fd9bde34123417ced18b4"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "fc1497b72cdebea582d06375aa7ececc525046644bf998556ca6079c059599aa"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "24ad4e0719c6e0989bde3418e81a4d351ff23e777a031f097366a26b9134614f"
+    sha256 cellar: :any_skip_relocation, sonoma:        "93ff80dce20906e24e09a813db8d110535e3e6c7ea7bfdd140023ab14dfb3d58"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "af70dcfdb57ed0d5da744ff2b4e436eda1a41d0c0280d0f173cd78b711393091"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "483d64fefe5df9f673614f9b122cd4326a3af4742780a03021ee3937cc1bce1f"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
-    mkdir bin
+    bin.mkpath
     system "make"
     system "make", "install", "DEST_DIR=#{bin}"
     pkgshare.install "EXAMPLE"

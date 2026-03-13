@@ -1,8 +1,8 @@
 class Kcgi < Formula
   desc "Minimal CGI and FastCGI library for C/C++"
   homepage "https://kristaps.bsd.lv/kcgi/"
-  url "https://kristaps.bsd.lv/kcgi/snapshots/kcgi-0.13.4.tgz"
-  sha256 "cc5f75ea75e42ed4f67e9ef831c0387717cedbc65c2261a828bee7956e46a259"
+  url "https://kristaps.bsd.lv/kcgi/snapshots/kcgi-1.0.1.tgz"
+  sha256 "bc1cc29bca48eace5df4ba0f1aa1dfc2fe7ac773f750d4af84d80c52cece3c45"
   license "ISC"
 
   livecheck do
@@ -11,21 +11,20 @@ class Kcgi < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1ede6da1f7d9ea340cc19bf6a539948dd87a0aa20bb179e4c669a7fa94a6bd99"
-    sha256 cellar: :any,                 arm64_sonoma:  "9da91cadc2de7c8b9736dd73a28f2e9f39f5d7fb25acae212efdb5d6e52a25ef"
-    sha256 cellar: :any,                 arm64_ventura: "0314195b4c86b877610fd9035b7906122316bddd3cfaa2982395797a4bb75912"
-    sha256 cellar: :any,                 sonoma:        "4bd93297c59a4102abb6ddb1ef0e1d53de162e7c71aeb53e8da29824d3a1dbbe"
-    sha256 cellar: :any,                 ventura:       "ea274424cd3b9f8b69bb7e7a78c89aeda17728716a4b4576b73bdfb8253f5ad1"
-    sha256                               arm64_linux:   "a4c08753b73661aee4fd7422ddc709a14bcdf9268a7e1243a20d70a8dafc2fdc"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "be1d317a28397ff207c48149f3b9d4241bbf44b88f6f712091dfcb5b1f6963a2"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe:   "191a0d3f1d112f9585774eddd41909e942affd5338e7c8144d38803e986acc66"
+    sha256 cellar: :any, arm64_sequoia: "709e821d80864c2780293caa51f078fdb3f900bff44e515fcf938564819e4d4f"
+    sha256 cellar: :any, arm64_sonoma:  "06fef37ce17eea27851fdc51b89191eb3363c849f6f8f47b65797a22fd1aba3f"
+    sha256 cellar: :any, sonoma:        "47d68ef9bc518eae514f46b1dcb7a1b25b5445fec3b67ba9eb00e58af2a62067"
+    sha256               arm64_linux:   "d2864c56de92d3996fe29fc5f3bd28e8cae3fc36e3823aee230b57b53c57952d"
+    sha256               x86_64_linux:  "884dac750cf8338c422c6fcd249002d42e77d2c9b6e332fea44ab048fff7c421"
   end
 
   depends_on "bmake" => :build
 
-  uses_from_macos "zlib"
-
   on_linux do
     depends_on "libseccomp"
+    depends_on "zlib-ng-compat"
   end
 
   def install

@@ -4,15 +4,15 @@ class ProtobufC < Formula
   url "https://github.com/protobuf-c/protobuf-c/releases/download/v1.5.2/protobuf-c-1.5.2.tar.gz"
   sha256 "e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24"
   license "BSD-2-Clause"
+  revision 12
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "a4c6dbe4ec1d26e23e6e64fcf119bf6b09c558fb4433a53be2e2de0e1ed6611a"
-    sha256 cellar: :any,                 arm64_sonoma:  "2c43aeeb810402ebfda6130aa5c542e039ef220430beff018ea5f882d2507ff9"
-    sha256 cellar: :any,                 arm64_ventura: "34f6256e4e965cb4feabad6f18797443f9b8828019e2a8952ae5e4d71a180b13"
-    sha256 cellar: :any,                 sonoma:        "3bf90fd0fb9e303a6c50b66e2ac116c30a81b45491b3345027f3ba6d0e87e841"
-    sha256 cellar: :any,                 ventura:       "7489118f2098d2374da1776d28924c0830a235ee20128383d0c7deae7ed7e04b"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "dae0763672aca79ff944c60ecb03b040c47f7e1f6be998f7c473977ba9d689fb"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b145453b03874422ac9c7890113ae68c34c07d679ba05f47e2bab90b093a59e9"
+    sha256 cellar: :any, arm64_tahoe:   "62765efeffc1718219c4b6ea9c8a89ac60bfea91033d96198e7339dfffcb39dd"
+    sha256 cellar: :any, arm64_sequoia: "512408e7a115af37693098cb9faffbf1683eea4d13e49232c8edfc6f8dbfb439"
+    sha256 cellar: :any, arm64_sonoma:  "f9f5f7aaf834abf0cb6970d9f9e362bfdb6d683ef47242a84013c743d067260c"
+    sha256 cellar: :any, sonoma:        "f5848c768685865a7cc555663ad6a6b1a884718ca7f5d6b871a1a1ebd33337a3"
+    sha256               arm64_linux:   "723ec26a710c65eafaa3bd28680dfba439adec33db21daf303981d08237c3710"
+    sha256               x86_64_linux:  "17d81688a3d374768a86411d0201af0f46a4fd0a62f2c102be5bbd1b7a9a4513"
   end
 
   head do
@@ -27,6 +27,13 @@ class ProtobufC < Formula
   depends_on "pkgconf" => :build
   depends_on "abseil"
   depends_on "protobuf"
+
+  # Apply commit from open PR to support Protobuf 34
+  # PR ref: https://github.com/protobuf-c/protobuf-c/pull/797
+  patch do
+    url "https://github.com/protobuf-c/protobuf-c/commit/d39f001b4578966600de0aaf7fc665eec6e057e5.patch?full_index=1"
+    sha256 "10b5ea9c08f62be10ceb1df24a3211118a94cb0d09efcdf043ac3542368915fb"
+  end
 
   def install
     system "autoreconf", "--force", "--install", "--verbose" if build.head?

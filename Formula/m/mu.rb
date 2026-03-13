@@ -4,8 +4,8 @@
 class Mu < Formula
   desc "Tool for searching e-mail messages stored in the maildir-format"
   homepage "https://www.djcbsoftware.nl/code/mu/"
-  url "https://github.com/djcb/mu/releases/download/v1.12.11/mu-1.12.11.tar.xz"
-  sha256 "c6e463f4936edc7f2c0a0b0d038183783b35430b35887b79301072bf1d5e9daf"
+  url "https://github.com/djcb/mu/releases/download/v1.12.15/mu-1.12.15.tar.xz"
+  sha256 "49d75622acff9d8a552622eba29d8abe49ae26d7fe80d835898f75f43e673ee3"
   license "GPL-3.0-or-later"
   head "https://github.com/djcb/mu.git", branch: "master"
 
@@ -18,13 +18,12 @@ class Mu < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "e49a9a1faec9d09e51fd82bd1428f536bab37ae41446c469b0db4f153c49cdf5"
-    sha256 cellar: :any, arm64_sonoma:  "444bfab5ed4d65febfd676d59e00b8de3b6b58418c1de8f5f6497a2869473d21"
-    sha256 cellar: :any, arm64_ventura: "ccc8d27a9f9303f1a276a63de329f09d51f6a5b6c8f401c101f416472909092b"
-    sha256 cellar: :any, sonoma:        "0bd5ed64c5018490820f6e665e42cced0b6a1c4f4b00aa97f355baf31b422185"
-    sha256 cellar: :any, ventura:       "28239f6e4b080a37103b0449219db681c1fb2c77adbeabbf751f7b36411fa9e6"
-    sha256               arm64_linux:   "691b2119acd7c04413b29a07de72c046e19dfa24b66f74b6a62e1f75edee4a9d"
-    sha256               x86_64_linux:  "de514ad234daf1ff4026f6cf26efd26b90dabb8f08a679124b9949ece069cb2f"
+    sha256 cellar: :any, arm64_tahoe:   "d41a63c2d083bcfbf264bb290ea2c626486ec1f96e95e517a38cd9d546a8bc69"
+    sha256 cellar: :any, arm64_sequoia: "bcafea00e75bb5c4b399cc5e556a4be48dd486eff5c7a466405a8bd872cc0c21"
+    sha256 cellar: :any, arm64_sonoma:  "68527c65523e8ab75e14ad9ecbc6b103f9f749d924c0d2636c45765b2b87c15a"
+    sha256 cellar: :any, sonoma:        "d0dda65867e2c7f59108f551e348435f419efa7a9ae5a0c420340aa10d1ca6fe"
+    sha256               arm64_linux:   "f9839a4361e4e5958db56173776257890ae63efd47c6fe7e718ab6326d5ed283"
+    sha256               x86_64_linux:  "a4e9fb2b08f36a0f1bd739b710bdc5e0113c91530bf5cd86fd6ddb1f15519f33"
   end
 
   depends_on "emacs" => :build

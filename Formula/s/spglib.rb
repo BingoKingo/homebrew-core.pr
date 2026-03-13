@@ -1,22 +1,20 @@
 class Spglib < Formula
   desc "C library for finding and handling crystal symmetries"
   homepage "https://spglib.readthedocs.io/en/latest/"
-  url "https://github.com/spglib/spglib/archive/refs/tags/v2.6.0.tar.gz"
-  sha256 "c65af71136c915352eb82444b165ec83289877eb8e46593033f199801b43dbf7"
+  url "https://github.com/spglib/spglib/archive/refs/tags/v2.7.0.tar.gz"
+  sha256 "b22fc9abae9716c574fbc6d55cfc53ed654a714fccc5657a26ff5d18114bd8bd"
   license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "1f70bfc567f1349913975ebe3a2173dfb68dd234dab1a6fd199f62b494a75919"
-    sha256 cellar: :any,                 arm64_sonoma:  "f4b1b449ad705a09d66de2d0b3868f7ed6d4cec38aea989e4639529e3bbf4f46"
-    sha256 cellar: :any,                 arm64_ventura: "ab9d0638a60bc897b4d3ce4f2f37e451df8470f15af4eb7e638253673b636622"
-    sha256 cellar: :any,                 sonoma:        "0c8d96842c11f26dcde4627aaec4d0a89739e65e7315f8b933162e88483ac2e6"
-    sha256 cellar: :any,                 ventura:       "d1cef9ba99ecafd8b47b46a1f1e00f4203f371a08943cd986e2469a07534e737"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "23b327e09f38b1b1a3b1e66a78502dd0f48019876b43f657bf5303f7d3db046f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b0e14500cec9a4a450740bd534d71ac558d58faf86b3ae893aa4b3ba33c09d44"
+    sha256 cellar: :any,                 arm64_tahoe:   "0ac52612168b066678114e398e0c280774a507fa7368dac07b1485b93c268846"
+    sha256 cellar: :any,                 arm64_sequoia: "98e08556202a78099fb3ef2677d981b9d45205f79ee5ec513c40585710fbfa08"
+    sha256 cellar: :any,                 arm64_sonoma:  "edecb2cca0fec6d88c7254a587a5a5d894d9780085614704cdb31d83cbb54e45"
+    sha256 cellar: :any,                 sonoma:        "b04a116c09270ca9d4a648abb13330250b7131eeb5927453780af847dd50903b"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "3af78dc77ef69efe7487239209ea4f4fb73d149dc03e8e140c89d71f91987b74"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "79a41e046b7f33096acbbc6018b0e23885cd732501dbc0083aa1c77ea5abfcce"
   end
 
   depends_on "cmake" => [:build, :test]
-  depends_on "gcc" # for gfortran
 
   def install
     # TODO: Fortran packaging is disabled for now because packaging does not pick it up properly
@@ -26,12 +24,14 @@ class Spglib < Formula
       -DSPGLIB_WITH_TESTS=OFF
     ]
     system "cmake", "-S", ".", "-B", "build_shared",
-                   *common_args, "-DSPGLIB_SHARED_LIBS=ON", *std_cmake_args
+                    "-DSPGLIB_SHARED_LIBS=ON",
+                    *common_args, *std_cmake_args
     system "cmake", "--build", "build_shared"
     system "cmake", "--install", "build_shared"
 
     system "cmake", "-S", ".", "-B", "build_static",
-                  *common_args, "-DSPGLIB_SHARED_LIBS=OFF", *std_cmake_args
+                    "-DSPGLIB_SHARED_LIBS=OFF",
+                    *common_args, *std_cmake_args
     system "cmake", "--build", "build_static"
     system "cmake", "--install", "build_static"
   end
@@ -47,7 +47,7 @@ class Spglib < Formula
     C
 
     (testpath / "CMakeLists.txt").write <<~CMAKE
-      cmake_minimum_required(VERSION 3.6)
+      cmake_minimum_required(VERSION 3.10)
       project(test_spglib LANGUAGES C)
       find_package(Spglib CONFIG REQUIRED COMPONENTS shared)
       add_executable(test_c test.c)
@@ -59,8 +59,8 @@ class Spglib < Formula
 
     (testpath / "CMakeLists.txt").delete
     (testpath / "CMakeLists.txt").write <<~CMAKE
-      cmake_minimum_required(VERSION 3.6)
-      project(test_spglib LANGUAGES C Fortran)
+      cmake_minimum_required(VERSION 3.10)
+      project(test_spglib LANGUAGES C)
       find_package(Spglib CONFIG REQUIRED COMPONENTS static)
       add_executable(test_c test.c)
       target_link_libraries(test_c PRIVATE Spglib::symspg)

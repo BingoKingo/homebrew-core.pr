@@ -1,8 +1,8 @@
 class Expat < Formula
   desc "XML 1.0 parser"
   homepage "https://libexpat.github.io/"
-  url "https://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.lz"
-  sha256 "baacdd8d98d5d3b753f2a2780d84b0bc7731be11cacdc1b98cb8ad73f0504e68"
+  url "https://github.com/libexpat/libexpat/releases/download/R_2_7_4/expat-2.7.4.tar.lz"
+  sha256 "882bb3c124cdfd6d594818276f3ea851b780473a722385150a5793277635fcae"
   license "MIT"
 
   livecheck do
@@ -13,14 +13,15 @@ class Expat < Formula
     end
   end
 
+  no_autobump! because: :incompatible_version_format
+
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "3e5392724170f8a1314c0db2077a1f30277e4941d1825554f1230092a483ef7c"
-    sha256 cellar: :any,                 arm64_sonoma:  "4e9eb804bd04ea10e82d38e1080670b61f067d79e36c6f854f77a8773bb8c41c"
-    sha256 cellar: :any,                 arm64_ventura: "55d44623dacceded1a48dd16b9107cab1a13036a7b251365fcf10a48f990d2d2"
-    sha256 cellar: :any,                 sonoma:        "ef5fdbf19ba77546257b3222d96c50fb12b560ef55278310f2924ccc783a384b"
-    sha256 cellar: :any,                 ventura:       "e6630e308b908b0cf9591223d03fd407356ea650ef4a68cb64c454a46397ebd2"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "d5d72c420ea82f5915e2ccf0f1ff569bb4501faca4ebe44901926cc78420fad6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "58ff2ade2b1d0b3de72558f92507b8bfc9bdcdc2fce5c5e33e080dfffff9b83c"
+    sha256 cellar: :any,                 arm64_tahoe:   "a3fbc5fb0909f92b7ea4dfaf1bbf539bab9601c5ece083706b63717835809a4b"
+    sha256 cellar: :any,                 arm64_sequoia: "4ae3b12a096133bbe5b0335ce1ba9e540a2e3f7258d3564d3acd30a496c859b9"
+    sha256 cellar: :any,                 arm64_sonoma:  "4a0a6cfb3d203a3a9f48eae5e9630060edaea0a0d88c96b637e10a3cbd07f2e9"
+    sha256 cellar: :any,                 sonoma:        "57abe74689ba80399ff73e144d5798b8aee8f17e4a8f9bec90fbfeb4dec6c66e"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "77a85b00651abbacd0c092a4b5a103524f2fc7b9527423b3d623c603565910e6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "64be96154732d144366f78afde810acc3c4d19ee550c972b5c98a3b6921f8cf9"
   end
 
   head do

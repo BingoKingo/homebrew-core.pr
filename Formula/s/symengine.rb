@@ -4,16 +4,15 @@ class Symengine < Formula
   url "https://github.com/symengine/symengine/archive/refs/tags/v0.14.0.tar.gz"
   sha256 "11c5f64e9eec998152437f288b8429ec001168277d55f3f5f1df78e3cf129707"
   license "MIT"
-  revision 2
+  revision 6
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "df79e834fa3f34d24c03f89e336595fca313ac465697889dfaf8ed5d91d16dbf"
-    sha256 cellar: :any,                 arm64_sonoma:  "e0662a8972639a72264fd3cc2d199e0b59a26f1b20675cb11082dd1b12ecf7ef"
-    sha256 cellar: :any,                 arm64_ventura: "d380c1be286bcbfd0fe734a4b010d7235fe222cecaa925f55d08375844eb9e34"
-    sha256 cellar: :any,                 sonoma:        "4e828156687bd21078763f13285a5198c6218ec4e0a8c9191d1ef93a32e5aca6"
-    sha256 cellar: :any,                 ventura:       "ca02e12f3aa8b4a5a5dd312bd5d6270e690266c428f5b437ffbd657cb6b36f76"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "1834d391bd9a7c56eeae26907398710c6b86ef8dd319dd3996ee0d66939185c4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e2542390b8ccd99af6c5957c75fd75e26908af774efcf59fe671b3bd7c1aa947"
+    sha256 cellar: :any,                 arm64_tahoe:   "823eb038dbf1ba5e9e85ef64ff2fc302b524680193cf1dbed61751a13088fd8a"
+    sha256 cellar: :any,                 arm64_sequoia: "6b132faf393f9b5b732cc1572df20ed1c4f2ba4efd630fbf7e9a232f46d8e3c8"
+    sha256 cellar: :any,                 arm64_sonoma:  "074b1aaaf904ae345b67bbe47247ce96a8192cd3a252b8c9634ebfbbf139541c"
+    sha256 cellar: :any,                 sonoma:        "60c3b1a39dc2ab5a9bec741d8554279d9483d7c1e6cfe387cedfbefb80183833"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "2b515cc936113c8f47356744b9164c0baae4ada6fc43150d89a4ecb5d7e4853f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d6439720c2e9e2b1553a81125a3985f7bcf9d9cff430bf5e85372c84762d0a36"
   end
 
   depends_on "cereal" => :build
@@ -26,10 +25,27 @@ class Symengine < Formula
   depends_on "zstd"
 
   uses_from_macos "ncurses"
-  uses_from_macos "zlib"
 
   on_macos do
     depends_on "z3"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
+
+  # Backport support for LLVM 22
+  patch do
+    url "https://github.com/symengine/symengine/commit/a498ff2eadac2032d7a3982fc6dc3f69c4cca319.patch?full_index=1"
+    sha256 "308abb8a03d8d132937f0340741030f6e8148030eef7fcfea12ab3e80b03d569"
+  end
+  patch do
+    url "https://github.com/symengine/symengine/commit/de7305e5e2fee97d80c25164a8f8c9f7ecfc9953.patch?full_index=1"
+    sha256 "09a5acf3043de18d5f09b2e28a6dc4edc127fe7e4b66e2656e3a0db4c26a5e6d"
+  end
+  patch do
+    url "https://github.com/symengine/symengine/commit/ea9868e64ced2cd2abb9cdc3ae97d965b892b974.patch?full_index=1"
+    sha256 "2a94699984ead1db45c024458783d13d70aa3b250bb72b1141502fb2287344ec"
   end
 
   def install

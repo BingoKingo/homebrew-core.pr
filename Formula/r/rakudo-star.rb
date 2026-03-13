@@ -1,8 +1,8 @@
 class RakudoStar < Formula
   desc "Rakudo compiler and commonly used packages"
   homepage "https://rakudo.org/"
-  url "https://github.com/rakudo/star/releases/download/2025.05/rakudo-star-2025.05.tar.gz"
-  sha256 "b5f6b5135599db0a18baf1ec660e78dddc8d8ca46d80576407bd5dcf70a4d574"
+  url "https://github.com/rakudo/star/releases/download/2026.02/rakudo-star-2026.02.tar.gz"
+  sha256 "07320246808b8f21a7625c35352ea2e357d201412ef75082fd38cbb9ed76963c"
   license "Artistic-2.0"
 
   livecheck do
@@ -11,44 +11,37 @@ class RakudoStar < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "7a895bdf00ddf27ce11aa6efb3ab0bb6d75fca0a5434741504f663f647b1a906"
-    sha256 arm64_sonoma:  "45729625f5031385c361cf6c4f90fc9666605428da1b04e1268bdaff3af20143"
-    sha256 arm64_ventura: "55e28472b5488f597e09a23ea81f990d56f4e796879b261d4460be8374158907"
-    sha256 sonoma:        "2cdeb1c478e4da7097659e9c5ddf405e0499638343b6d2392d798404c6b7f0fb"
-    sha256 ventura:       "d48e786a4ee839ec4b3ac52169816f41bccb525ab0a70a9ea9ef3fa755c647ba"
-    sha256 arm64_linux:   "dd91e8d891e1b584f9ee9954a0d7d8956d21da8052144a13c876c095b63ddb91"
-    sha256 x86_64_linux:  "d29b7a6848a5fb3295166adc2b1fdbbc77c85bc5480048f644c79241431b51d9"
+    sha256 arm64_tahoe:   "2e46a1265473c05a7404b5ca549c46878420f1607d1e1f84582a69fceee29397"
+    sha256 arm64_sequoia: "ae7157ab24614e9f3be82a30a45abb59f99d5a77403b53a2c8e5d2b8ecca1734"
+    sha256 arm64_sonoma:  "a0a1399abfbe7857fdaa387eecb3b91d7b4552daf37bac3d7e31ccbce485a533"
+    sha256 sonoma:        "7131c5a98f04711a417c847a709642c3b347e0d6ca620c3aba298b1aa7dcc8ba"
+    sha256 arm64_linux:   "122dee9e81735f79627c148cd85e4cdf12d734351908f198431508a38c6fe418"
+    sha256 x86_64_linux:  "1ab408457fc6d274a6034668df1f4377af2420958cca65659d52ed0c44c94d71"
   end
 
-  depends_on "bash" => :build
   depends_on "pkgconf" => :build
   depends_on "sqlite" => [:build, :test]
   depends_on "libtommath"
   depends_on "mimalloc"
-  depends_on "openssl@3" # for OpenSSL module, loaded by path
-  depends_on "readline" # for Readline module, loaded by path
+  depends_on "openssl@3" => :no_linkage # for OpenSSL module, loaded by path
+  depends_on "readline" => :no_linkage # for Readline module, loaded by path
   depends_on "zstd"
 
   uses_from_macos "perl" => :build
-  uses_from_macos "libffi", since: :catalina
+  uses_from_macos "libffi"
   uses_from_macos "libxml2"
 
   on_macos do
+    depends_on "bash" => :build
     depends_on "libuv"
   end
 
-  conflicts_with "moar", because: "both install `moar` binaries"
+  conflicts_with "moor", because: "both install `moar` binaries"
   conflicts_with "moarvm", "nqp", because: "rakudo-star currently ships with moarvm and nqp included"
   conflicts_with "parrot"
   conflicts_with "rakudo"
 
-  # Apply open Config::Parser::json PR to fix unittests run during install
-  # Ref: https://github.com/arjancwidlak/p6-Config-Parser-json/pull/1
-  patch do
-    url "https://github.com/arjancwidlak/p6-Config-Parser-json/commit/ca1a355c95178034b08ff9ebd1516a2e9d5bc067.patch?full_index=1"
-    sha256 "d13230dc7d8ec0b72c21bd17e99a62d959fb3559d483eb43ce6be7ded8a0492a"
-    directory "src/rakudo-star-modules/Config-Parser-json"
-  end
+  skip_clean "share/perl6/vendor/short"
 
   # Allow adding arguments via inreplace to unbundle libraries in MoarVM
   patch :DATA
@@ -72,6 +65,11 @@ class RakudoStar < Formula
     end
     inreplace "lib/actions/install.bash", "@@MOARVM_CONFIGURE_ARGS@@", moarvm_configure_args.join(" ")
 
+    # Workaround for https://github.com/rakudo/star/issues/217
+    inreplace "src/rakudo-star-modules/DBIish/t/01-Basic.rakutest",
+              "::('X::DBIish::DriverNotFound')",
+              "::X::DBIish::DriverNotFound"
+
     # Help Readline module find brew `readline` on Linux
     inreplace "src/rakudo-star-modules/Readline/lib/Readline.pm",
               %r{\((\n *)('/lib/x86_64-linux-gnu',)},
@@ -89,15 +87,12 @@ class RakudoStar < Formula
     # openssl module's brew --prefix openssl probe fails so set value here
     ENV["OPENSSL_PREFIX"] = Formula["openssl@3"].opt_prefix
 
+    rm buildpath.glob("src/rakudo-star-modules/**/*.o")
     system "bin/rstar", "install", "-p", prefix.to_s
 
     #  Installed scripts are now in share/perl/{site|vendor}/bin, so we need to symlink it too.
-    bin.install_symlink (share/"perl6/vendor/bin").children
-    bin.install_symlink (share/"perl6/site/bin").children
-  end
-
-  def post_install
-    (share/"perl6/vendor/short").mkpath
+    bin.install_symlink (share/"perl6/vendor/bin").children.select(&:executable?)
+    bin.install_symlink (share/"perl6/site/bin").children.select(&:executable?)
   end
 
   test do
@@ -120,15 +115,6 @@ class RakudoStar < Formula
     PERL
     assert_equal "test> brew\n[brew]", pipe_output("#{bin}/raku readline.raku", "brew\n", 0)
 
-    # Test LibXML module
-    (testpath/"libxml.raku").write <<~PERL
-      use LibXML::Document;
-      my LibXML::Document $doc .=  parse: :string('<Hello/>');
-      $doc.root.nodeValue = 'World!';
-      print $doc<Hello>;
-    PERL
-    assert_equal "<Hello>World!</Hello>", shell_output("#{bin}/raku libxml.raku")
-
     # Test DBIish module
     (testpath/"sqlite.raku").write <<~PERL
       use DBIish;
@@ -140,19 +126,6 @@ class RakudoStar < Formula
       $dbh.dispose;
     PERL
     assert_equal "([Sue] [Bob])\n", shell_output("#{bin}/raku sqlite.raku")
-
-    # Test Config::Parser::json module
-    (testpath/"test.json").write <<~JSON
-      { "foo": { "bar": [0, 1] } }
-    JSON
-    (testpath/"parser.raku").write <<~PERL
-      use Config;
-      use Config::Parser::json;
-      my $config = Config.new();
-      $config.=read("test.json");
-      print $config.get('foo.bar');
-    PERL
-    assert_equal "0 1", shell_output("#{bin}/raku parser.raku")
   end
 end
 

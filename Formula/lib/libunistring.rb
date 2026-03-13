@@ -1,20 +1,19 @@
 class Libunistring < Formula
   desc "C string library for manipulating Unicode strings"
   homepage "https://www.gnu.org/software/libunistring/"
-  url "https://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.gz"
-  mirror "https://ftpmirror.gnu.org/libunistring/libunistring-1.3.tar.gz"
-  mirror "http://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.gz"
-  sha256 "8ea8ccf86c09dd801c8cac19878e804e54f707cf69884371130d20bde68386b7"
+  url "https://ftpmirror.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.gz"
+  mirror "https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.gz"
+  mirror "http://ftp.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.gz"
+  sha256 "e82664b170064e62331962126b259d452d53b227bb4a93ab20040d846fec01d8"
   license any_of: ["GPL-2.0-only", "LGPL-3.0-or-later"]
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "3cd26bae2d5fcf61294f14c18e5e7ec773a59ed1bf710fb92055e0db0244e909"
-    sha256 cellar: :any,                 arm64_sonoma:  "38e44e319bfe11ec892bc6451d86b687d990ea01b4810b5d8ad1f794d531d82f"
-    sha256 cellar: :any,                 arm64_ventura: "b0d7a7078508070bd67589f5060a92100bd1c4aea2a41bf19e7ee8442f483df6"
-    sha256 cellar: :any,                 sonoma:        "e919f6ee2fe8a40addea1e1840eab8855e66812e18dfe05c130618ce517e2880"
-    sha256 cellar: :any,                 ventura:       "9aebb86a6fb622dd2699db2b1b65c82d1b5aaa35f81d0ae4335c57e9411c36e0"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b2bd48b651db50b0ad0205b27b38a21303b6a49b567dd5b682cc1b9562e9ea0a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "25ff65379463fe4a51008a36c45a963ebc8d13d054ce606e3fbb6635ea634311"
+    sha256 cellar: :any,                 arm64_tahoe:   "bae6d6d8dffc573c039a850a96e36f1b7fd846abd9ccada8260b7e888b5a3646"
+    sha256 cellar: :any,                 arm64_sequoia: "463b68c92d30d845df10b1b137aa8e41a744f1ce2d2cab024dd26c766335b797"
+    sha256 cellar: :any,                 arm64_sonoma:  "dc4d4b4406a2c7032dd838ae362ecaeba114d8ac9d9daaa18f760d1d71ba3577"
+    sha256 cellar: :any,                 sonoma:        "fbb3a7908a19f306823dbd51b417705c73f710a9a1fb1e34ba7aa67a3c966094"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "362f8bd62dc8a3db8ca85938b2bfc7ebd09bd3d4f676ae1491183239d576b7ea"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2491acf49407cf75d5f95a6296f2a1c0294646834022fdcad7e22471c0c9a6d4"
   end
 
   def install
@@ -22,10 +21,11 @@ class Libunistring < Formula
     # This is also why we skip `make check`.
     # https://github.com/coreutils/gnulib/commit/bab130878fe57086921fa7024d328341758ed453
     # https://savannah.gnu.org/bugs/?65686
-    ENV["am_cv_func_iconv_works"] = "yes" if OS.mac? && MacOS.version == :sequoia
+    use_iconv_workaround = OS.mac? && MacOS.version >= :sonoma
+    ENV["am_cv_func_iconv_works"] = "yes" if use_iconv_workaround
     system "./configure", "--disable-silent-rules", *std_configure_args
     system "make"
-    system "make", "check" if !OS.mac? || MacOS.version < :sonoma || MacOS.version > :sequoia
+    system "make", "check" unless use_iconv_workaround
     system "make", "install"
   end
 

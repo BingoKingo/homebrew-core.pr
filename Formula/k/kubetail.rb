@@ -1,8 +1,8 @@
 class Kubetail < Formula
   desc "Logging tool for Kubernetes with a real-time web dashboard"
   homepage "https://www.kubetail.com/"
-  url "https://github.com/kubetail-org/kubetail/archive/refs/tags/cli/v0.7.0.tar.gz"
-  sha256 "cce8d3aef284bb4426f31984d716b4de1a8facc1e9e47b5b8fcf15f49244611d"
+  url "https://github.com/kubetail-org/kubetail/archive/refs/tags/cli/v0.12.1.tar.gz"
+  sha256 "ff0d591fbe9352af6dc2f3035321f14d71449f7d09c7b3c918af3016c7c7979c"
   license "Apache-2.0"
   head "https://github.com/kubetail-org/kubetail.git", branch: "main"
 
@@ -12,24 +12,22 @@ class Kubetail < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f30c0148c83be700d8d82c10422a7a01ceb4148b90a867436c5eda764b5dd1b9"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "bf08fd7fb57ed8e43ff0a76f3b6032c74e0f55d97f403e8db74ca475c1f503bc"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "fc7351c16e403a408ecb8f137504524d66f3f1b43335ac742a20cd9e006da3f8"
-    sha256 cellar: :any_skip_relocation, sonoma:        "5ea4dbac2591147866dfcd26342454b0b5bdea06b3b7ab8ae4e894e3f9d8f57f"
-    sha256 cellar: :any_skip_relocation, ventura:       "8eed5c77f59b577fbd63c12e6807a34eb443d7047772b67d1bd7c5f16b4695f9"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "07b798367f616f1bd21e52aac26f89cc8beed76f34c3ce23081ec7418aaf3c61"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8b0b4b6a4a4e58f0725f4effc6c223d184b9d68c495af22db1aa6a48a6f0d204"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "717dd6e239a45e68ece97265688fea1c44b6a07529280085747b0e0db2e2c115"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "710079a6599de47d5126cab911b4f4b692b6f0213d1aed68edf2326349cb5038"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "194398b929ba8aa5af586102c4d040615200fff36cf2c712c8832008cf5decca"
+    sha256 cellar: :any_skip_relocation, sonoma:        "88201f21bb227b1cfbf8ae780a2e0e15c411951d14c63bca7cdc18fe636d7701"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "4f7eea257b39ad88a4b2566bf7bf32180aaf6ca5c514e01fbe62e45611abcea0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "749143efe2df6f2dab026faad224960e578be4bb56234b20f398d08330b333be"
   end
 
   depends_on "go" => :build
-  depends_on "make" => :build
   depends_on "node" => :build
   depends_on "pnpm" => :build
 
   def install
     system "make", "build", "VERSION=#{version}"
     bin.install "bin/kubetail"
-    generate_completions_from_executable(bin/"kubetail", "completion")
+    generate_completions_from_executable(bin/"kubetail", shell_parameter_format: :cobra)
   end
 
   test do

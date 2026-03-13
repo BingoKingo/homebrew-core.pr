@@ -1,30 +1,31 @@
 class Qdmr < Formula
   desc "Codeplug programming tool for DMR radios"
   homepage "https://dm3mat.darc.de/qdmr/"
-  url "https://github.com/hmatuschek/qdmr/archive/refs/tags/v0.12.3.tar.gz"
-  sha256 "1ee2adc912120025190eff65c78b1f8a153d1cab14909cbd5291403fb7b04643"
+  url "https://github.com/hmatuschek/qdmr/archive/refs/tags/v0.13.3.tar.gz"
+  sha256 "c4711c5062dd6477454f4aa481fd8c37497ec08b1a8fd5f56c85ca6559b86824"
   license "GPL-3.0-or-later"
+  revision 1
 
   bottle do
-    sha256 arm64_sequoia: "beb390820470fa2c825dc25a14c2d40de8770f9d513ca639085335773571a730"
-    sha256 arm64_sonoma:  "58d13f717ae94f13d6cdcef192691b031ea352b85bffd2c0948aa75831a3e59f"
-    sha256 arm64_ventura: "5c19013fde907534ed1e008086dd0af7e58f52091820a503058e6d155690a290"
-    sha256 sonoma:        "d80d900ac2c58bdc5d66d31e8c843f24809ceb8934688da4d5f08f9f2da755f4"
-    sha256 ventura:       "d272e84ab9b72bbff9e33fbf75983668a1cd2196e81e848a439a8ec57eafc1d4"
-    sha256 x86_64_linux:  "88fecf14b35168081be6da6a39e1b8326aa94429c2de4d12cd555220f66b2d67"
+    sha256 cellar: :any,                 arm64_tahoe:   "8bb68585191f4009a653ab95fa3042a0aa4cb06a8c5cd198b63edef566b9d07c"
+    sha256 cellar: :any,                 arm64_sequoia: "79cc5a83ecb8678bd8f82f3ef8e33a7cd328686486a8fe915c679073ce22eade"
+    sha256 cellar: :any,                 arm64_sonoma:  "936dd019aab13848ec04c05d9d6e1e75ac86a46fa7cd5afde816a87a01eb437c"
+    sha256 cellar: :any,                 sonoma:        "8208123daf6f7544102340aff790079ffaeeed49619e18386bd09158541f3989"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "288e776e37cc4e5f4c5950d713af17985146f80bddab5b7a74fc05014a6c37e5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "47caa6b44ca07af8905fed0022de83e030b2d2ea2119b0a16bb8b005704ff6e1"
   end
 
   depends_on "cmake" => :build
+  depends_on "librsvg"
   depends_on "libusb"
-  depends_on "qt@5"
+  depends_on "qtbase"
+  depends_on "qtpositioning"
+  depends_on "qtserialport"
+  depends_on "qttools"
   depends_on "yaml-cpp"
 
   def install
-    args = %w[
-      -DINSTALL_UDEV_RULES=OFF
-    ]
-    args << "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" # Cmake 4 workaround
-    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
+    system "cmake", "-S", ".", "-B", "build", "-DINSTALL_UDEV_RULES=OFF", *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
   end

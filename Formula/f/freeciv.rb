@@ -1,9 +1,23 @@
 class Freeciv < Formula
   desc "Free and Open Source empire-building strategy game"
   homepage "https://freeciv.org/"
-  url "https://downloads.sourceforge.net/project/freeciv/Freeciv%203.1/3.1.5/freeciv-3.1.5.tar.xz"
-  sha256 "0d9f687ff950a77a9fa0af66108a7f67da717fd40c3a0ca4c0a4f4a3f0214b33"
   license "GPL-2.0-or-later"
+  head "https://github.com/freeciv/freeciv.git", branch: "main"
+
+  stable do
+    url "https://downloads.sourceforge.net/project/freeciv/Freeciv%203.2/3.2.3/freeciv-3.2.3.tar.xz"
+    sha256 "989d6d58bd4cd97a4899e7e25afdee6c35fd03f87a379428a6e196d600d8d307"
+
+    # Backport support for Lua 5.5
+    patch do
+      url "https://github.com/freeciv/freeciv/commit/b427d038fab6c96983cef54cf618a4b07bd1a62f.patch?full_index=1"
+      sha256 "4a0665180ff33e733809ec1185d484e6cc1dfed38ef7acd88f0f4e8042e5349f"
+    end
+    patch do
+      url "https://github.com/freeciv/freeciv/commit/4718723428fc8009b7d46f9b6133d0fd76f056ab.patch?full_index=1"
+      sha256 "5d5cb19715488f34c0bb40b3379609a48454353d0aa1967b9c58ccbbff502faa"
+    end
+  end
 
   livecheck do
     url :stable
@@ -11,70 +25,64 @@ class Freeciv < Formula
   end
 
   bottle do
-    sha256 arm64_sequoia: "41b72392d0c7bda4ef87ebb4c3cb23a75437d47589e67947bc62429e53e86faa"
-    sha256 arm64_sonoma:  "d7d140af12010c0adc38d54cfdd9750803799a99ce5411a69d1c6e355c54a4e6"
-    sha256 arm64_ventura: "2694d772632c1c690fcb8398888753b44d06156ad79dd3c7dbccc1a63a6214e9"
-    sha256 sonoma:        "14192305f9802303a698451bef2b3985888ff2929b30754d1a4b4f4a90699db7"
-    sha256 ventura:       "5ea34567361cbccb36c9421ba3b8a10ce14579e25dc059181f4316d0760619ef"
-    sha256 arm64_linux:   "2bc1f434418b08b9fe66ef1c3b3d924559e4a99b7ffb4d9e6c68b709a2153b1c"
-    sha256 x86_64_linux:  "0da80ceb53a0bd7e464cab9b9a5806a57c3cdde7c408fdc6becd8b405822f0b4"
+    rebuild 1
+    sha256 arm64_tahoe:   "c248876231c9b02c566a8aa12960e125860bffe314ad6dffba9dba13f4847f26"
+    sha256 arm64_sequoia: "a72bf845ec9fc54b86da486a076f7238825e129bf6c638a6c3e71e1b9365f8c0"
+    sha256 arm64_sonoma:  "ce9074202497b9ebd998f7a35b6c9caeccb0e44faa2cf7cb3d58201d9bb5dac0"
+    sha256 sonoma:        "6a5af5f5be1cd978bc83414d965dbdaa4410f295419bf6c8afd22a268e0b7bb9"
+    sha256 arm64_linux:   "244b61daf923f461713047e950bbb34423d15002cacb0065919f885be1f35471"
+    sha256 x86_64_linux:  "04df5f3ffe30793204c735fcfb2bbe81038628a5c2981cc08fcac8874ac11264"
   end
 
-  head do
-    url "https://github.com/freeciv/freeciv.git", branch: "main"
-
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "gettext" => :build
-    depends_on "libtool" => :build
-  end
-
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
   depends_on "pkgconf" => :build
-  depends_on "adwaita-icon-theme"
-  depends_on "at-spi2-core"
+  depends_on "adwaita-icon-theme" => :no_linkage
   depends_on "cairo"
-  depends_on "freetype"
   depends_on "gdk-pixbuf"
-  depends_on "gettext"
   depends_on "glib"
-  depends_on "gtk+3"
-  depends_on "harfbuzz"
-  depends_on "icu4c@77"
+  depends_on "gtk4"
+  depends_on "icu4c@78"
+  depends_on "lua"
   depends_on "pango"
   depends_on "readline"
   depends_on "sdl2"
   depends_on "sdl2_mixer"
-  depends_on "sqlite" # try to change to uses_from_macos after python is not a dependency
+  depends_on "xz"
   depends_on "zstd"
 
   uses_from_macos "bzip2"
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+  uses_from_macos "sqlite"
+
+  on_macos do
+    depends_on "gettext"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
-    ENV["ac_cv_lib_lzma_lzma_code"] = "no"
+    ENV.cxx11
+    ENV.append "LDFLAGS", "-Wl,-rpath,#{rpath}" if OS.mac?
 
-    args = %W[
-      --disable-gtktest
-      --disable-sdl2framework
-      --disable-sdl2test
-      --disable-sdltest
-      --disable-silent-rules
-      --enable-client=gtk3.22
-      --enable-fcdb=sqlite3
-      --with-readline=#{Formula["readline"].opt_prefix}
-      CFLAGS=-I#{Formula["gettext"].include}
-      LDFLAGS=-L#{Formula["gettext"].lib}
+    # Remove bundled lua
+    lua = Formula["lua"]
+    rm_r(Dir["dependencies/lua-*"])
+    mkpath "dependencies/lua-#{lua.version.major_minor}/src"
+    ENV.append_to_cflags "-I#{lua.opt_include}/lua"
+
+    # ruledit removed from tools as needs Qt
+    args = %w[
+      -Dreadline=true
+      -Dsyslua=true
+      -Dtools=manual,ruleup
     ]
 
-    if build.head?
-      inreplace "./autogen.sh", "libtoolize", "glibtoolize"
-      system "./autogen.sh", *args, *std_configure_args
-    else
-      system "./configure", *args, *std_configure_args
-    end
-
-    system "make", "install"
+    system "meson", "setup", "build", *args, *std_meson_args
+    system "meson", "compile", "-C", "build", "--verbose"
+    system "meson", "install", "-C", "build"
   end
 
   test do

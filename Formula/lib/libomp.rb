@@ -1,8 +1,8 @@
 class Libomp < Formula
   desc "LLVM's OpenMP runtime library"
   homepage "https://openmp.llvm.org/"
-  url "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.6/openmp-20.1.6.src.tar.xz"
-  sha256 "ff8dabd89212cd41b4fc5c26433bcde368873e4f10ea0331792e6b6e7707eff9"
+  url "https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1/llvm-project-22.1.1.src.tar.xz"
+  sha256 "9c6f37f6f5f68d38f435d25f770fc48c62d92b2412205767a16dac2c942f0c95"
   license "MIT"
 
   livecheck do
@@ -11,53 +11,41 @@ class Libomp < Formula
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "e1fb1e8332d85c6d13192dfa59f7ca35a181285b11b0f16161f373ce68ff8cdc"
-    sha256 cellar: :any,                 arm64_sonoma:  "a71907c9a21978f9976fa254ee5b408d374249bf63222ebcb1aeea21aa271cef"
-    sha256 cellar: :any,                 arm64_ventura: "f8969e090ae2a5376f5d4758bfdeee6dc5bcc61db5e4b8c979377bcf714213b7"
-    sha256 cellar: :any,                 sonoma:        "84d7ae40495b53e9ba363e1482c0c72bd0ff159c9382070363643cc8103a58dc"
-    sha256 cellar: :any,                 ventura:       "6d0de17c559df28a7e979e8e163d218386b42f2d1ce05729fbbf35b016f31a9a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "b4ba5b242b0ed452c3e2ebdb348991076ba654c10676f4a8134f55722aa6bfa4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "071afda31d081137d741093d99ecb44f38e3728278b1351d3e24015d800e5ebc"
+    sha256 cellar: :any,                 arm64_tahoe:   "2e7a7b1fe7237895696c610657a184a4c1ba87dd7e8411d18e82075264c40024"
+    sha256 cellar: :any,                 arm64_sequoia: "dd3f5731b833e7c205bd918c4fff6716771b1ebfce176d46493f914443d452c5"
+    sha256 cellar: :any,                 arm64_sonoma:  "5dda69f7b0baf181a657a2c7588a24e699b5058e5d248728c63deda131e89fc0"
+    sha256 cellar: :any,                 sonoma:        "0048c15855555ba76d37871c824faa32b0a7275b5104717aa07fc101ca579e1a"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "23a5ea9ebf213e9ca70c88075f9d2ff6ec7f2e34487d936c9b7929520a9bb613"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "dd8f3373e55c1c45db05ca720581bcb4fbbda7e8ba180910bd6f7dffc20c82cc"
   end
 
   # Ref: https://github.com/Homebrew/homebrew-core/issues/112107
   keg_only "it can override GCC headers and result in broken builds"
 
   depends_on "cmake" => :build
-  depends_on "lit" => :build
   uses_from_macos "llvm" => :build
 
   on_linux do
-    depends_on "python@3.13"
-  end
-
-  resource "cmake" do
-    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.6/cmake-20.1.6.src.tar.xz"
-    sha256 "b4b3efa5d5b01b3f211f1ba326bb6f0c318331f828202d332c95b7f30fca5f8c"
-
-    livecheck do
-      formula :parent
-    end
+    depends_on "python@3.14"
   end
 
   def install
-    odie "cmake resource needs to be updated" if version != resource("cmake").version
-
-    (buildpath/"src").install buildpath.children
-    (buildpath/"cmake").install resource("cmake")
-
     # Disable LIBOMP_INSTALL_ALIASES, otherwise the library is installed as
     # libgomp alias which can conflict with GCC's libgomp.
-    args = ["-DLIBOMP_INSTALL_ALIASES=OFF"]
+    args = %w[
+      -DLIBOMP_INSTALL_ALIASES=OFF
+      -DLLVM_ENABLE_RUNTIMES=openmp
+      -DOPENMP_ENABLE_OMPT_TOOLS=OFF
+    ]
     args << "-DOPENMP_ENABLE_LIBOMPTARGET=OFF" if OS.linux?
 
-    system "cmake", "-S", "src", "-B", "build/shared", *std_cmake_args, *args
+    system "cmake", "-S", "runtimes", "-B", "build/shared", *args, *std_cmake_args
     system "cmake", "--build", "build/shared"
     system "cmake", "--install", "build/shared"
 
-    system "cmake", "-S", "src", "-B", "build/static",
+    system "cmake", "-S", "runtimes", "-B", "build/static",
                     "-DLIBOMP_ENABLE_SHARED=OFF",
-                    *std_cmake_args, *args
+                    *args, *std_cmake_args
     system "cmake", "--build", "build/static"
     system "cmake", "--install", "build/static"
   end

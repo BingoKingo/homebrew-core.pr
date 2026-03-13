@@ -1,18 +1,17 @@
 class Stylua < Formula
   desc "Opinionated Lua code formatter"
   homepage "https://github.com/JohnnyMorganz/StyLua"
-  url "https://github.com/JohnnyMorganz/StyLua/archive/refs/tags/v2.1.0.tar.gz"
-  sha256 "eeca8de825f7cd550a846bb2b0c409f112e8f16fe007863996cc49ca4b9641f9"
+  url "https://github.com/JohnnyMorganz/StyLua/archive/refs/tags/v2.4.0.tar.gz"
+  sha256 "e63130a0bc26d0825f99afcfb4d969516ab34dd1b397087bf564095766a16c2a"
   license "MPL-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "5cac08145d9bf7e5041b51bdb178656cc4f15b5c1d555057bf02554a014cae98"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "79bbf43376aa36eb8f798fde745a2e011efde94157ed9b8c957f61a22692e406"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "ec0963645a2459ed16b34550edfc97ad830b88ee90b7d5840ad761fa1cbb947e"
-    sha256 cellar: :any_skip_relocation, sonoma:        "1cd2e9825ff467a29740088973d4be7b2221ddeabc58fc6a1ed13cc5048e9ea0"
-    sha256 cellar: :any_skip_relocation, ventura:       "e5e563eb5db649aaa7682149254131d1bc80f52c400ebed3fd29ecdee60b9b7a"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "9de2f4882cb9315a3cac3184f0909e341666863718eb4951850de5c9fba07329"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ed74a1be8b98454ae54fac27dfdbba2437dd8ef89ccb55ce2b88eb54d36dd792"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "3e7cfefcc178b7f31de5fb95931d8461071ddf99fb7a10aa0a46e6657f2b30b8"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "7c9a823332f9a926f6997e2f9bf7c32d2b4dd85e4eb229ca2592af1121d8ba9f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "519236c7b6cbce2993396431fdbcdf8d9e240b0b78ead7e15840cd498d7bf302"
+    sha256 cellar: :any_skip_relocation, sonoma:        "726d3da99c6fc59d5408126070163233945da5111b63cc7182177d9a8a2263fc"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "bd7c5eb674630ee8a3b88965a96fe33253d80b51a5beee6b493daca981443623"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "97ceef0231c02a972d2d6594b67745d40698c28c5a1bf6f2f888484b46d8c4c3"
   end
 
   depends_on "rust" => :build

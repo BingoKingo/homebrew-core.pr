@@ -1,21 +1,22 @@
 class Alda < Formula
   desc "Music programming language for musicians"
   homepage "https://alda.io"
-  url "https://github.com/alda-lang/alda/archive/refs/tags/release-2.3.2.tar.gz"
-  sha256 "1dc4ad595a14a6c5a2f93dc30f2c340f68a9353bf2f8eaa5ec285b622a33260d"
+  url "https://github.com/alda-lang/alda/archive/refs/tags/release-2.4.1.tar.gz"
+  sha256 "0d55dc2cd3d9b7abb6a91ee117c0079e7a5d81fac5b8c8e30bb070f854696eaa"
   license "EPL-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e9ad08ff6305f79d36937d90a192a61f9843ee941b94b81983036ea885185cb7"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d7b43e3fcf177044bbf79bf1232e6e6b68515576ee984c4b387225f48ec92c6f"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "c5243492f9b3514302f73a0280191529a5c95b2c3b66b7da2ff032d2a23d9ce7"
-    sha256 cellar: :any_skip_relocation, sonoma:        "aed4c88c3860eaabe07b13438f8c94728900b3aaf7eb05707b03abc5ef6edc56"
-    sha256 cellar: :any_skip_relocation, ventura:       "2a8f6d59392a7cb4fe7909d70409937090e58071bc6e84273db45a6e082fe658"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ea20a8d43ff853c8851db04a6f0c5a083210ef57e2bf792e9c646665f14bc7ee"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "75c0b47d258e6e7913f766db0c22819679c4b5fe565d8b2e75817071a954a4c9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "24a57e98d6e29acb9ee3accc52a4a64fa54a3fb1e05de047568bda7bee60dd78"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "54045afb6fbb6e41b656361f5a8746f603d202f5b4a48914311af5f755d83219"
+    sha256 cellar: :any_skip_relocation, sonoma:        "6282e20ee062a9a29f7171d78509ae39db4f2c6a9b795b9cfcd5e75513880f56"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "43c9caa77b36a35e9a877d567e8b3137170bf1141aa959f174ff8d6ba20c5553"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e9971beaa735a115cda3d3b9ec2feff88025370c0712636d7ce0b7003e0e6a31"
   end
 
   depends_on "go" => :build
-  depends_on "gradle" => :build
+  # Issue ref: https://github.com/alda-lang/alda/issues/510
+  depends_on "gradle@8" => :build
   depends_on "openjdk"
 
   def install
@@ -29,6 +30,8 @@ class Alda < Formula
       libexec.install "build/libs/alda-player-fat.jar"
       bin.write_jar_script libexec/"alda-player-fat.jar", "alda-player"
     end
+
+    generate_completions_from_executable(bin/"alda", shell_parameter_format: :cobra)
   end
 
   test do

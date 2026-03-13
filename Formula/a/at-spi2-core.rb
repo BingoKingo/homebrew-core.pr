@@ -1,18 +1,17 @@
 class AtSpi2Core < Formula
   desc "Protocol definitions and daemon for D-Bus at-spi"
   homepage "https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/"
-  url "https://download.gnome.org/sources/at-spi2-core/2.56/at-spi2-core-2.56.2.tar.xz"
-  sha256 "e1b1c9836a8947852f7440c32e23179234c76bd98cd9cc4001f376405f8b783b"
+  url "https://download.gnome.org/sources/at-spi2-core/2.58/at-spi2-core-2.58.3.tar.xz"
+  sha256 "b0fabea6c9742eda8c9c675f9b8c1d1babba1da82da03ea1103710233717c1b0"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 arm64_sequoia: "1d42a8160a64d9e494c2cf98ab3cb7c976df17b88ed8bbf4f77926de4b4492a2"
-    sha256 arm64_sonoma:  "b182a1bd6305638f82352d23984b7e540d7b1be23a9afee3e0d6f60eb80b2a24"
-    sha256 arm64_ventura: "cc16230760a9d1c2f05467c775ebf2e2c8bf19b88bb55656a839c7125a6699e3"
-    sha256 sonoma:        "4ebbfb490a8492db0547a53b5f138b46912c13c6cd7de495a3462451a6392007"
-    sha256 ventura:       "fddc5565ddaabc2ee8bf8c432b1100a23faa1260e1c7bc01ecbfc17e5b7ac8b0"
-    sha256 arm64_linux:   "aa63615ce117a467355493b1b7f42390314d2af04651949e2834043d1765b5d0"
-    sha256 x86_64_linux:  "45cd2ef761364c1331d819db3730efecf3e6734f09fb34a1cf2699685be25445"
+    sha256 arm64_tahoe:   "09c80080a21bc80b354103d45a409125c46112aa8e918dd83ce79734013f8323"
+    sha256 arm64_sequoia: "3fd792b16f389ff08db307c858f2e9d111f0325fc993d3f1c7a5349c58805d35"
+    sha256 arm64_sonoma:  "37346f58a55b1482576449372f9c4d85f04426022a0ae4e34aadf82ed87cc31a"
+    sha256 sonoma:        "66f0f44ed5123d59b572c0c67e065702c8af288dcf95e17777b9a31e277769e1"
+    sha256 arm64_linux:   "f8d64bc9ebf1a231b026d4a37b08e0ebf850389d13ffc635d0f683f59ba7bcef"
+    sha256 x86_64_linux:  "7a979c2a1cea42f1025c3ccf4c089d6ba50c0ab16d84cb7ed5f0fc2658196418"
   end
 
   depends_on "gettext" => :build
@@ -20,15 +19,15 @@ class AtSpi2Core < Formula
   depends_on "meson" => :build
   depends_on "ninja" => :build
   depends_on "pkgconf" => [:build, :test]
+  depends_on "xorgproto" => :build
 
   depends_on "dbus"
   depends_on "glib"
   depends_on "libx11"
   depends_on "libxi"
   depends_on "libxtst"
-  depends_on "xorgproto"
 
-  uses_from_macos "libxml2"
+  uses_from_macos "libxml2" => :build
 
   on_macos do
     depends_on "gettext"

@@ -1,8 +1,8 @@
 class Graphicsmagick < Formula
   desc "Image processing tools collection"
-  homepage "http://www.graphicsmagick.org/"
-  url "https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.45/GraphicsMagick-1.3.45.tar.xz"
-  sha256 "dcea5167414f7c805557de2d7a47a9b3147bcbf617b91f5f0f4afe5e6543026b"
+  homepage "https://graphicsmagick.sourceforge.io/"
+  url "https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.46/GraphicsMagick-1.3.46.tar.xz"
+  sha256 "c7c706a505e9c6c3764156bb94a0c9644d79131785df15a89c9f8721d1abd061"
   license "MIT"
   revision 1
   head "http://hg.code.sf.net/p/graphicsmagick/code", using: :hg
@@ -13,13 +13,12 @@ class Graphicsmagick < Formula
 
   bottle do
     rebuild 1
-    sha256 arm64_sequoia: "f950843cfad9376677acb179ad6553531249d9e79b37a830eba929591beaac46"
-    sha256 arm64_sonoma:  "8b521ea1cf171f8fdb14b43f3b3d06699280569791a25d64aa73684062e06ed0"
-    sha256 arm64_ventura: "e0c9b6972e74fcc2d74037d907671ad6a2073553816beb11b8aacb9b554ec689"
-    sha256 sonoma:        "15ad3752ebc129fe21f9da7b729c2d90cf8c40ce824dc42f6725d31c139d2896"
-    sha256 ventura:       "104380c258558a7469b1b7133222740d00af867fe8d8a1dc36a419e6294a58b7"
-    sha256 arm64_linux:   "f02609d87790a12f30af1c7ed66f719570109def8775379307962735bcb153f6"
-    sha256 x86_64_linux:  "b6e2fea1abc3ea05bc6c9a7837b1e5fb2257a35155fe0c539d1e3008d257879d"
+    sha256 arm64_tahoe:   "6b65ffb0b494077277b0c9b654d1e2185cd88ed612a3ceac6f3c6ad5fc677cd2"
+    sha256 arm64_sequoia: "194bbe7820974cab77ef83a827efa00af0bc2fad86e1f076dc20cc53861f138f"
+    sha256 arm64_sonoma:  "a784999a5a54fe74fa72c6cc97c421993b3f22b6c54df621384a14269b4697e0"
+    sha256 sonoma:        "2c1d774a217f0dcd8951cff4e1e93f397a1e6f8040cd4c37ce4134443c68c5c6"
+    sha256 arm64_linux:   "c2769339084f247efba341dc9580863597526503ab5fc7ad96445e2531a54554"
+    sha256 x86_64_linux:  "8053553100e6ffbefe17bbf8cf563937ed988da6723ca8522d80bd261a096b63"
   end
 
   depends_on "pkgconf" => :build
@@ -38,7 +37,10 @@ class Graphicsmagick < Formula
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   skip_clean :la
 

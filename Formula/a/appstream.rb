@@ -1,18 +1,17 @@
 class Appstream < Formula
   desc "Tools and libraries to work with AppStream metadata"
   homepage "https://www.freedesktop.org/wiki/Distributions/AppStream/"
-  url "https://github.com/ximion/appstream/archive/refs/tags/v1.0.5.tar.gz"
-  sha256 "dd33b1375ba4221ffee060e2778c478e8150d7b1108c6309148f5fb1ca6e90c0"
+  url "https://github.com/ximion/appstream/archive/refs/tags/v1.1.2.tar.gz"
+  sha256 "564ec87b16e9e4ee81fb021e612250fd27f3a3ecd31c209a5dd1ff59def3022d"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 arm64_sequoia: "62af458e208bcd4469e9ecd149cbcc0ae6775fd3e42e61d3f75526e4340c8d3c"
-    sha256 arm64_sonoma:  "b802060c9d3ee181badb15af8c0167368f4639600d4a97a1b44a1cfd54061e12"
-    sha256 arm64_ventura: "d4ff9bd76af846d0f5bd81ac3520303b22f0702e207ab2b2bffcd1a713eaf84f"
-    sha256 sonoma:        "5ab8381af28d0b7872f445423ed5a42050f1a60df427e62c4836e9bf46131557"
-    sha256 ventura:       "d17ed0a5700fb7550edc54185e1735dac8cca1150ade8b7da78a005eac347818"
-    sha256 arm64_linux:   "c138a6b9a40af6fbfe764c0c76af622aa03853fd28aac2a42f1a3af06de64a49"
-    sha256 x86_64_linux:  "17ffe5258052484fdf85a3038b6df1ac21a2bf4f13eb3367dfe4480959182f88"
+    sha256 arm64_tahoe:   "f2c581be46ed6b1247e389b64e1ad6362873ab8c03302cbf0dedc0120ab92299"
+    sha256 arm64_sequoia: "796493bf50d9d0074104f9d531db5743535efd8331ca63e4f70cb1c5d4d37c91"
+    sha256 arm64_sonoma:  "cfa7613cb47ceeb7db8eddddc3a53e390aa765a2b94d8122bbfb4f9cfe7e7e0b"
+    sha256 sonoma:        "92b9ee15d004bc825753ae940b52a5ee6af25ff76baab576d7aacc5314515013"
+    sha256 arm64_linux:   "4570742f348cdfc3f3308550fdd3a87997f7b32a5f1cce32bf514989bcae08b6"
+    sha256 x86_64_linux:  "9739adf95825abbf49377ad78790e4878f40e871ead0f2f38dd547f021b97b9e"
   end
 
   depends_on "gobject-introspection" => :build
@@ -24,8 +23,8 @@ class Appstream < Formula
   depends_on "vala" => :build
 
   depends_on "glib"
+  depends_on "libfyaml"
   depends_on "libxmlb"
-  depends_on "libyaml"
   depends_on "zstd"
 
   uses_from_macos "libxslt" => :build # for xsltproc
@@ -61,6 +60,7 @@ class Appstream < Formula
       -Ddocs=false
       -Dapidocs=false
       -Dinstall-docs=false
+      -Dbash-completion=false
     ]
 
     args << "-Dsystemd=false" if OS.mac?

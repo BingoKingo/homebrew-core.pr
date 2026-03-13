@@ -1,18 +1,18 @@
 class Gator < Formula
   desc "CLI Utility for Open Policy Agent Gatekeeper"
   homepage "https://open-policy-agent.github.io/gatekeeper/"
-  url "https://github.com/open-policy-agent/gatekeeper/archive/refs/tags/v3.19.1.tar.gz"
-  sha256 "1ddf7f701185b53ee84601303eb6e845874986d623c21012963fc886b8452947"
+  url "https://github.com/open-policy-agent/gatekeeper/archive/refs/tags/v3.22.0.tar.gz"
+  sha256 "6c6d08272ade01794ab68fb77c40eda8a1b33b27c03c71db08000343ebda2642"
   license "Apache-2.0"
   head "https://github.com/open-policy-agent/gatekeeper.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "dda00833a480f1e881b063a535df2a616cc9b2d9656fe3f5cc85bb7c88aa58db"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0be8f6bd2b7f2e352e0c2c85c55961e638ceb94302e7bbbbac4fa29946ce5976"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "b7c0686f32dc7dfd6523474a820634c28da072ab4e703a3a90ec12557ce3da1e"
-    sha256 cellar: :any_skip_relocation, sonoma:        "977bf64a4673679756acfe5dd09810191acf48d3083d1274ce53005ad0d61062"
-    sha256 cellar: :any_skip_relocation, ventura:       "9e25ca0d79f1935bc4dca6108bb9c2e2d6be8a17884e1d6f1fe962ad7a029303"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "e3ca41458924356337af14aa5a5fe174ad6ffed08b6bebcc041437926027c803"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "aad5fd734ddbe37a706e8b7f15874bee17cb7530266865608188c0cd91e3eb7d"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d409c0b75bbb8071113c070f69475272c6bea36791ded736eea0184ca147fb2f"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0edc2dd9a3c3eb0771f3911aff10f5914f538dd62df6c58ff9d4fe12378076e9"
+    sha256 cellar: :any_skip_relocation, sonoma:        "ed9136975505ccf1cf40cb05b073682b03159e8a6344f3f4edb19486511a475f"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "7b55e89f9e10cadf216c093d40bf25909b6e3bf2947c4c36f34aae9a9671b6bd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "568a0a339387b73d3d593d5305798b105801c7f1bf9ffc0e0d13ab27b4d8dd4e"
   end
 
   depends_on "go" => :build
@@ -24,7 +24,7 @@ class Gator < Formula
     ]
     system "go", "build", *std_go_args(ldflags:), "./cmd/gator"
 
-    generate_completions_from_executable(bin/"gator", "completion")
+    generate_completions_from_executable(bin/"gator", shell_parameter_format: :cobra)
   end
 
   test do

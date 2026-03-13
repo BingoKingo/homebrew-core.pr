@@ -1,8 +1,8 @@
 class C3c < Formula
   desc "Compiler for the C3 language"
   homepage "https://github.com/c3lang/c3c"
-  url "https://github.com/c3lang/c3c/archive/refs/tags/v0.7.2.tar.gz"
-  sha256 "4c545fdd5756dba1619f4743609d7a0515a54ad6a2db961d1b44c1d0c3d47cf8"
+  url "https://github.com/c3lang/c3c/archive/refs/tags/v0.7.10.tar.gz"
+  sha256 "54bc00eb3ed69d89af80362ef3ee17d30dc7186eccd8b2f4fb9afbf616136115"
   license "LGPL-3.0-only"
   head "https://github.com/c3lang/c3c.git", branch: "master"
 
@@ -15,42 +15,39 @@ class C3c < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_sequoia: "c7972b7ec6d53e42670030cb5689c7b0b7f19005980096e19e7ef5185ed9671e"
-    sha256 cellar: :any, arm64_sonoma:  "cfdd72308a1dcb4ab148f25f950e59233f49d0691b2912ab3ee4640270f9aa04"
-    sha256 cellar: :any, arm64_ventura: "5599d652da682939a9626c236a7a7fd02191569e5e345dcafd44be9dccff1ad2"
-    sha256 cellar: :any, sonoma:        "1ddbfc4ea36a4684b84da4e5f6e35a65316cb521f89646d2c18cd74c4f0fd9fb"
-    sha256 cellar: :any, ventura:       "7df6d771e85fcfe15b6e1ce00ba589d74af07a0812d11af0220ff1a684b88333"
-    sha256               arm64_linux:   "5fb70d5ddee589bd109c7fb3ac74d01f9c23ee54880121794142344772da5078"
-    sha256               x86_64_linux:  "644dc17a8f016f323314c20271ed1224281b51dab549fa5584b986c01dff7396"
+    sha256 cellar: :any,                 arm64_tahoe:   "4caa65b939edc037622f75659a1326dec13691ea5b02778d63e090bd2ca8cb74"
+    sha256 cellar: :any,                 arm64_sequoia: "6ef52612f7e4dc257eb2cd5fe6b1454526ccdacaa06adb79b4bff06aef60fa6c"
+    sha256 cellar: :any,                 arm64_sonoma:  "711a9f68fa713ace15d502e51da183e599e30df50bdfbc87645b8d1a98dab1a1"
+    sha256 cellar: :any,                 sonoma:        "584b6aea037f54d68e1f26ce9c160de885be59243c36fcd897943522970cbea0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "081ae9dda67d0ff6a585974ecbdb27d76f28466684a891275253c92acb6ba3f4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "75f29f3cffb1f98e1e0b8cb9c4009a3dbb7c99b6e8f240e46513f287db8c43b5"
   end
 
   depends_on "cmake" => :build
-  depends_on "lld"
-  depends_on "llvm"
-  depends_on "zstd"
+  depends_on "lld@21"
+  depends_on "llvm@21"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
-
-  # Linking dynamically with LLVM fails with GCC.
-  fails_with :gcc
 
   def install
+    lld = Formula["lld@21"]
+    llvm = Formula["llvm@21"]
+
     args = [
       "-DC3_LINK_DYNAMIC=ON",
       "-DC3_USE_MIMALLOC=OFF",
       "-DC3_USE_TB=OFF",
       "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
-      "-DLLVM=#{Formula["llvm"].opt_lib/shared_library("libLLVM")}",
-      "-DLLD_COFF=#{Formula["lld"].opt_lib/shared_library("liblldCOFF")}",
-      "-DLLD_COMMON=#{Formula["lld"].opt_lib/shared_library("liblldCommon")}",
-      "-DLLD_ELF=#{Formula["lld"].opt_lib/shared_library("liblldELF")}",
-      "-DLLD_MACHO=#{Formula["lld"].opt_lib/shared_library("liblldMachO")}",
-      "-DLLD_MINGW=#{Formula["lld"].opt_lib/shared_library("liblldMinGW")}",
-      "-DLLD_WASM=#{Formula["lld"].opt_lib/shared_library("liblldWasm")}",
+      "-DLLVM=#{llvm.opt_lib/shared_library("libLLVM")}",
+      "-DLLD_COFF=#{lld.opt_lib/shared_library("liblldCOFF")}",
+      "-DLLD_COMMON=#{lld.opt_lib/shared_library("liblldCommon")}",
+      "-DLLD_ELF=#{lld.opt_lib/shared_library("liblldELF")}",
+      "-DLLD_MACHO=#{lld.opt_lib/shared_library("liblldMachO")}",
+      "-DLLD_MINGW=#{lld.opt_lib/shared_library("liblldMinGW")}",
+      "-DLLD_WASM=#{lld.opt_lib/shared_library("liblldWasm")}",
     ]
+    args << "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" if OS.linux?
 
-    ENV.append "LDFLAGS", "-lzstd -lz"
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
@@ -62,7 +59,6 @@ class C3c < Formula
     libexec.install bin.children
     bin.install_symlink libexec.children.select { |child| child.file? && child.executable? }
     rm_r libexec/"c3c_rt"
-    llvm = Formula["llvm"]
     libexec.install_symlink llvm.opt_lib/"clang"/llvm.version.major/"lib/darwin" => "c3c_rt"
   end
 

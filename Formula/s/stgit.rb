@@ -1,19 +1,19 @@
 class Stgit < Formula
   desc "Manage Git commits as a stack of patches"
   homepage "https://stacked-git.github.io"
-  url "https://github.com/stacked-git/stgit/releases/download/v2.5.3/stgit-2.5.3.tar.gz"
-  sha256 "637d9a5d435115a69f2dc5a0273b0c6564fdda7b9483268968fae531343c087f"
+  url "https://github.com/stacked-git/stgit/releases/download/v2.5.5/stgit-2.5.5.tar.gz"
+  sha256 "9d84329c84bbb3e84b97b57aa29a79aa69f13c896f05842cd3a0f46fff3afe57"
   license "GPL-2.0-only"
   head "https://github.com/stacked-git/stgit.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d4e745cfee06e0fc05f4fe6e3d74e932d309adffc9113d1fb66d7fe308982529"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1fbea2bf33eccc3922aa17a1e8902eaa34a04760d3a9637ad24fe581ac2024c1"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "de35d6a19a69bc1786c0d6490661805c5cd98701c6b96aa0b583f32143239d60"
-    sha256 cellar: :any_skip_relocation, sonoma:        "ad41f116204667b9bc1192da442908f1d7ce9196d144394a12a9f865fceb9138"
-    sha256 cellar: :any_skip_relocation, ventura:       "f28ac3b86b43402de27875ee7f30d9e1af3f0837572e61719aa57a4da15849ce"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0fa691fa71e1ea4758fafc0d3ea0c85eafbf09487d7a63da08d3b495aca56e55"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4be75f0fc9a7c398897966b5b6d1b128a61251b9c555091e770b67ba3fa9e5e7"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_tahoe:   "2245c222ebdc50df69174e08fca409001fa02cc99834cac0a475c1a3394c3f18"
+    sha256 cellar: :any,                 arm64_sequoia: "0ef7c40a70e9e127f869c3dfc533655d59dc8269118af2b3aeea7f9bcd952333"
+    sha256 cellar: :any,                 arm64_sonoma:  "b10ad29537f513ca8610cfad69ae4edc674a8cb6c357cb9c1144153803baa125"
+    sha256 cellar: :any,                 sonoma:        "ab4711c2838f32cbe2a605b5475b67026db843aec069749f08e280716d68df26"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "292c59af8ad6eece0537482b16abaf7e65b8ba7c56cd251e2aa3bf98fde34619"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "429022ab9a5b49d42b49966aec2a1dfec8049e50abda14c6b790da3028cf4a7b"
   end
 
   depends_on "asciidoc" => :build
@@ -23,7 +23,14 @@ class Stgit < Formula
   depends_on "git"
 
   uses_from_macos "curl"
-  uses_from_macos "zlib"
+
+  on_macos do
+    depends_on "libiconv"
+  end
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   def install
     ENV["XML_CATALOG_FILES"] = etc/"xml/catalog"

@@ -4,15 +4,15 @@ class Modsecurity < Formula
   url "https://github.com/owasp-modsecurity/ModSecurity/releases/download/v3.0.14/modsecurity-v3.0.14.tar.gz"
   sha256 "f7599057b35e67ab61764265daddf9ab03c35cee1e55527547afb073ce8f04e8"
   license "Apache-2.0"
+  revision 2
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia: "ef880da82b470f1bc5b1cce0c581ebeb87738b43f47d99928e7f90705a723d2c"
-    sha256 cellar: :any,                 arm64_sonoma:  "d35bb9b47ef663af1e0d66564f39a3f70e600a891ab82d30349208a2ce01e620"
-    sha256 cellar: :any,                 arm64_ventura: "fd6422cba66fea2a371e066e34a43ae75c2539ae7dc8d78c6e9198681a97e7cb"
-    sha256 cellar: :any,                 sonoma:        "84fc44c8c036e373762e66acf75e21caf5e97cdfa24c4b03f50082694078414d"
-    sha256 cellar: :any,                 ventura:       "f97fbde36e55908673885cae90d1bee0a5394f93fb97b10a8f3ad07acd061aee"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "2a5ceccfc1aba5a91872111ed16bb5dc8d562b248135dff55dda9447f417bfc9"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c7c83f85fb33704ab113e7f38f1cbc94d8105ed4ca0e5228ef524c73b04fd3e8"
+    sha256 cellar: :any,                 arm64_tahoe:   "903816449f1b48c8e20a657b978b80f93ee3f721ebb78a6c1216260983c60b67"
+    sha256 cellar: :any,                 arm64_sequoia: "1e5fb4a1da5ca02302211054c1222e58fe142f4e4b9d51a6abcbbd1e6e4f93c8"
+    sha256 cellar: :any,                 arm64_sonoma:  "128cab434340b33ad4ce2d710e02483d56bc7cf6a91e10dfb677f631f0c2b093"
+    sha256 cellar: :any,                 sonoma:        "c6e2865897da1cffe2d77764b905edd4c400af92385ffe32f9348cefea29f023"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "90659a4c8e50293d7415e09a0e79e9f25bdca5af7cb54eb1134714ce40cd564f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "81c9b619a94eff97ee7e49985eaf493b984130de34f608eda9b283a94b64c538"
   end
 
   depends_on "autoconf" => :build
@@ -20,7 +20,7 @@ class Modsecurity < Formula
   depends_on "libtool" => :build
   depends_on "pkgconf" => :build
   depends_on "libmaxminddb"
-  depends_on "lua"
+  depends_on "lua@5.4"
   depends_on "pcre2"
   depends_on "yajl"
 
@@ -46,7 +46,7 @@ class Modsecurity < Formula
       "--disable-examples",
       "--disable-silent-rules",
       "--with-libxml=#{libxml2}",
-      "--with-lua=#{Formula["lua"].opt_prefix}",
+      "--with-lua=#{Formula["lua@5.4"].opt_prefix}",
       "--with-pcre2=#{Formula["pcre2"].opt_prefix}",
       "--with-yajl=#{Formula["yajl"].opt_prefix}",
       "--without-geoip",

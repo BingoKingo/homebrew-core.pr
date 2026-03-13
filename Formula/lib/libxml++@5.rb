@@ -1,25 +1,22 @@
 class LibxmlxxAT5 < Formula
   desc "C++ wrapper for libxml"
   homepage "https://libxmlplusplus.github.io/libxmlplusplus/"
-  url "https://download.gnome.org/sources/libxml++/5.4/libxml++-5.4.0.tar.xz"
-  sha256 "e9a23c436686a94698d2138e6bcbaf849121d63bfa0f50dc34fefbfd79566848"
+  url "https://github.com/libxmlplusplus/libxmlplusplus/releases/download/5.6.0/libxml++-5.6.0.tar.xz"
+  sha256 "cd01ad15a5e44d5392c179ddf992891fb1ba94d33188d9198f9daf99e1bc4fec"
   license "LGPL-2.1-or-later"
 
   livecheck do
     url :stable
-    regex(/libxml\+\+[._-]v?(5\.([0-8]\d*?)?[02468](?:\.\d+)*?)\.t/i)
+    regex(/^v?(5\.([0-8]\d*?)?[02468](?:\.\d+)*?)$/i)
   end
 
   bottle do
-    sha256 cellar: :any,                 arm64_sequoia:  "8b1741fec20807f621a0565fad5b10fff46bdb5e092f7545ccbe7c776d394b5b"
-    sha256 cellar: :any,                 arm64_sonoma:   "5437f74e7361d06081dc6da97cd8f7726a0ae705e8157e1a0fc631214904eb37"
-    sha256 cellar: :any,                 arm64_ventura:  "4e43cbec05cadeb4a37ac6c820e23e83ab127c5b06660fb2942c3bb9f1bf2927"
-    sha256 cellar: :any,                 arm64_monterey: "ea823fac5dc9c1bb716221a7ebe7567e612ac76bb3b6d2a8c146d69f96b0492e"
-    sha256 cellar: :any,                 sonoma:         "d55199dafe752477e6db5375a0635b9ca76ae444288f6ef3d1de9c5ce6e58ddd"
-    sha256 cellar: :any,                 ventura:        "fc8d4eb8e4bd8d3eb20b7942557202b9628c5933058bb83c5621f93f4c0b047a"
-    sha256 cellar: :any,                 monterey:       "b38022f1cbc5d07e4c5969b98849c218823863f8ec97faf3680cb77545c4c343"
-    sha256                               arm64_linux:    "04bd576bd7befe5da3d2cc17ce5ab1f2232356228e033162aff468209222d9ff"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "7e0691b094a3ab56f2add27e4cf43a8d7f6d79a13a61d9fe97d243e2956c6fff"
+    sha256 cellar: :any, arm64_tahoe:   "d8f7af5b6ae22cf7f4ebc0cdcc6ff4c8da8948fed395c9ec78f70c945af17ef1"
+    sha256 cellar: :any, arm64_sequoia: "0de758278ded4db21000aef5e7e65ede12a06e98cb39bb031af13d6b1fc225f9"
+    sha256 cellar: :any, arm64_sonoma:  "21ed955b01f0d8bdd8108fe6b5ddffa0c90eb57e747bb0b2dc59c66ddd78f46e"
+    sha256 cellar: :any, sonoma:        "fda6da5a238721629336dc6136b3dd332a3ba9a1573ec3277709a03099b4a61e"
+    sha256               arm64_linux:   "b29e9a86607c16f976f10ed9c6674875e9c0261d465a4920191b68df1fb88da1"
+    sha256               x86_64_linux:  "555db96f572fb18e781cb8875bb73f3c595f2a36159dfd19350822d82e4a718a"
   end
 
   depends_on "meson" => :build

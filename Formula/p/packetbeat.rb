@@ -2,19 +2,18 @@ class Packetbeat < Formula
   desc "Lightweight Shipper for Network Data"
   homepage "https://www.elastic.co/products/beats/packetbeat"
   url "https://github.com/elastic/beats.git",
-      tag:      "v9.0.2",
-      revision: "26ce6f2d4c4de66c3b73a1acf3d1be01b817d791"
+      tag:      "v9.3.1",
+      revision: "e89803edacde0a21ae1b8aa315f68bee303cf943"
   license "Apache-2.0"
-  head "https://github.com/elastic/beats.git", branch: "master"
+  head "https://github.com/elastic/beats.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "506799b9cacf8bb24e94b54ad9ff191b2f1f388303961c0ee781295a2b1b5188"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0cc2d3d0e55e3a4847a68e0f88dd9932306bf3fd62d0ca9045bf7d489abdc3ca"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "f54dd6a6fa8a78047d3ba9e8777d311917c384fb6f3e442771dd567c8f1c8179"
-    sha256 cellar: :any_skip_relocation, sonoma:        "c7ebf893b95059665bf36087b083e3a813f9f344a265f08637f379b5826a5113"
-    sha256 cellar: :any_skip_relocation, ventura:       "34f50a8783523f9f8ea61a6dce204f5f283e30cd3054aff664d2b16754df72a5"
-    sha256 cellar: :any_skip_relocation, arm64_linux:   "0bcd85648ef10a41233cedebddd96dac29ae06664e496c0a14bc61109274363c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "24513ce6458f2e7fff59462f35fa4182ac7693c358ba909c2c5a5c2d8bfbb416"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "c5227f0339cf9cbbe3ea15d97468940c60df2b89f86700d83ee2f74fff0879c1"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1babec30de2e642733cac385cd05cdd6670835dad2aa5fed1953b31b61df9b85"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "4beba07f611ef3dcb6b5d17a06583c451260a36d6177c548fcf8e3859e3bfa61"
+    sha256 cellar: :any_skip_relocation, sonoma:        "5899133fec5fc5bd58f50024716bacfc6d6cc5eae18fbe7bca1a3f8a0adbd2f0"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "001d0b24c443106946bd165a4bcfead61c8e1f0f5f792c38fed9ef94259a9474"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "35090bac7b835bfd6fbbc6c4eba04dda0d3ca67657c36123c7a6bb7011e75151"
   end
 
   depends_on "go" => :build
@@ -23,6 +22,8 @@ class Packetbeat < Formula
   uses_from_macos "libpcap"
 
   def install
+    ENV["CGO_ENABLED"] = "1" if OS.linux? && Hardware::CPU.arm?
+
     # remove non open source files
     rm_r("x-pack")
 
